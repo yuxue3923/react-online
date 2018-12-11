@@ -19,9 +19,71 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #4bd0f1;
 }
+.Sider{
+  transition: all 0.2s;
+  position: relative;
+  background-color: #4bd0f1;
+ 
+ 
+  /* fix firefox can't set width smaller than content on flex item */
+  min-width:0;
+}
+.Content{
+  height: "100%";
+  flex: auto;
+  padding: '0 50px';
+  /* fix firefox can't set height smaller than content on flex item */
+  min-height: 0;
+}
+.flowbar{
+  overflow: hidden;
+  z-index: 99;
+	position: fixed;
+	padding:10px;
+  text-align:center;
+  border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-top-left-radius: 4px;	
+  border-top-right-radius: 4px;
+  
+}
+.flowbar-account{
+ display: table-cell;
+  
+}
+.search{
+  text-align:center;
+  margin: 0 auto;
+  width: 38%;
+  height: 100;
+  
 
+}
+.top-navigation{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+
+  
+}
+.mid-nav{
+  text-align:center;
+  background: rgba(0, 0, 0, 0.25);
+}
+.page_body{
+  padding-left: 6%;
+  padding-right: 6%;
+}
+.logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(0, 0, 0, 0.25);
+  margin: 16px 24px 16px 0;
+  float: left;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
