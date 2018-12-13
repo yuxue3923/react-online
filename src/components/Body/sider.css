@@ -1,0 +1,20 @@
+.divContent{
+    height: "100%";
+    flex: auto;
+    padding: '0 50px';
+    margin: 8px 8px 0px 16px;
+    /* fix firefox can't set height smaller than content on flex item */
+    min-height: 0;
+    overflow: 'visible';
+    height: '100vh'
+  }
+.inputstyle{
+    width: 200px;
+    margin: 0px 8px 0px 0;
+  }
+.cardstyle{
+    margin: 0px 8px 0px 0px;
+    height: "100%"; 
+    overflow: 'visible';
+    
+}

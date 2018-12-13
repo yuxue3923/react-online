@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Layout, Menu, Card, Input, Tag,Button,Drawer,Avatar, Badge,Icon,Dropdown,Popover} from 'antd';
 import './App.css';
-import {Link} from 'react-router-dom'
-import Editor from './components/Editor/canvaslib'
-const { SubMenu } = Menu;
-const { Header, Content, Footer, Sider } = Layout;
+import {Link} from 'react-router-dom';
+import Editor from './components/Editor/canvaslib';
+import Bodysider from './components/Body/sider';
+import DrawView from './components/Body/drawerview';
+
+const {  Content, Sider } = Layout;
 const text =<div><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >Tom</Avatar></Link><span>用户ID</span></div>;
 const menu = (
   <Menu>
@@ -43,15 +45,16 @@ const menu = (
       return (
         <Layout>
           <Sider 
+          width={700}
           collapsible
           collapsed={this.state.collapsed}
           onCollapse={this.onCollapse}
           collapsedWidth={0}
          
           className="Sider"
-          style={{overflow: 'visible', height: '100vh',}}
+          style={{overflow: 'visible', height: '100vh'}}
           >
-            left sidebar
+            <Bodysider/>
           </Sider>
          
          
@@ -73,15 +76,14 @@ const menu = (
                  视图
               </Button>
               <Drawer
-                title="Basic Drawer"
+                width={300}
+                title="幻灯片缩略图"
                 placement="right"
                 closable={false}
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
+                <DrawView/>
               </Drawer>
             
             </div>
@@ -90,8 +92,8 @@ const menu = (
                 <Badge count={1}><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Link></Badge>
               </span>
             </div>
-            <Layout>
-            <Content className="Content" style={{minHeight:"100vh", margin: '0 16px'}}>
+            <Layout className='Layoutstyle'>
+            <Content className="Content" style={{height: '100%',margin: '0 16px'}}>
             <div>Contentaaaaaaaaaaa</div>
             <Editor/>
             </Content>

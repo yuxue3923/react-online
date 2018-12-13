@@ -6,7 +6,9 @@
   animation: App-logo-spin infinite 20s linear;
   height: 40vmin;
 }
-
+.Layoutstyle {
+  height: 100%;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -24,8 +26,8 @@
 .Sider{
   transition: all 0.2s;
   position: relative;
-  background-color: #4bd0f1;
- 
+  background-color: #fff;
+  
  
   /* fix firefox can't set width smaller than content on flex item */
   min-width:0;
