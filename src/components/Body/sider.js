@@ -61,12 +61,11 @@ const props = {
             </div>
           );
           const cardBasic_pdf = (
-            <div >
+            <div>
               <Row gutter={16}>
                 <Col span={8}>
-                  
                     <Card
-                      style={{ width: 220,height:230 }}
+                      style={{ width:220 ,height:230}}
                       cover={
                         <img
                           alt="example"
@@ -76,7 +75,7 @@ const props = {
                     >
                       <Row>
                         <Col span={18}>
-                          <Meta title="解方程应用.pdf" />
+                          <Meta  title="解方程应用.pdf" />
                         </Col>
                         <Col span={6}>
                           <Icon type="star-o" /><span style={{fontSize:'1px'}}> 收藏</span>
@@ -91,18 +90,16 @@ const props = {
                         <Col span={9}><span style={{fontSize:'1px'}}>引用数：89</span></Col>
                       </Row>
                     </Card>
-                
                 </Col>
               </Row>
             </div>
           );
           const cardBasic_word = (
-            <div >
+            <div>
               <Row gutter={16}>
                 <Col span={8}>
-                  
                     <Card
-                      style={{ width:220,height:230}}
+                      style={{ width:220 ,height:230}}
                       cover={
                         <img
                           alt="example"
@@ -112,7 +109,7 @@ const props = {
                     >
                       <Row>
                         <Col span={18}>
-                          <Meta title="解方程应用.docx" />
+                          <Meta  title="解方程应用.docx" />
                         </Col>
                         <Col span={6}>
                           <Icon type="star-o" /><span style={{fontSize:'1px'}}> 收藏</span>
@@ -127,12 +124,11 @@ const props = {
                         <Col span={9}><span style={{fontSize:'1px'}}>引用数：89</span></Col>
                       </Row>
                     </Card>
-      
                 </Col>
               </Row>
             </div>
           );
-          const cardList_viedo = (
+         const cardList_viedo = (
             <div className='cardstyle'>
               <Row>
                 <Col span={8}>{cardBasic_viedo}</Col>
@@ -164,9 +160,9 @@ const props = {
                 <Col span={8}>{cardBasic_word}</Col>
                 <Col span={8}>{cardBasic_word}</Col>
                 {/* {/* <Col span={6}>{cardBasic_word}</Col> */}
-                <Col span={8}>{cardBasic_word}</Col>.
+                <Col span={8}>{cardBasic_word}</Col>
               </Row>
-              <Row style={{ textAlign: 'center' }}>
+              <Row style={{  margin: '8px 8px 8px 0',textAlign: 'center'  }}>
                 <Pagination  defaultCurrent={1} total={500} />
               </Row>
               </div>

@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import Editor from './components/Editor/canvaslib';
 import Bodysider from './components/Body/sider';
 import DrawView from './components/Body/drawerview';
+import Editbutton from './components/Body/editbutton';
 
 const {  Content, Sider } = Layout;
 const text =<div><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >Tom</Avatar></Link><span>用户ID</span></div>;
@@ -92,9 +93,10 @@ const menu = (
                 <Badge count={1}><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Link></Badge>
               </span>
             </div>
+            
             <Layout className='Layoutstyle'>
             <Content className="Content" style={{height: '100%',margin: '0 16px'}}>
-            <div>Contentaaaaaaaaaaa</div>
+            <Editbutton/>
             <Editor/>
             </Content>
             </Layout>

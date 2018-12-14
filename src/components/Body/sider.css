@@ -18,3 +18,15 @@
     overflow: 'visible';
     
 }
+.flowbutton{
+  position: relative;
+  top: 105px;
+  margin: 0.5px 0px 0px -16px;
+}
+.povercolor {
+  background-color: #00000000; 
+  border: 0;
+  border-radius: 4px;
+  background-clip: padding-box;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0) ;
+}
