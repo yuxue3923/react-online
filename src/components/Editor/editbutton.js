@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Popover,Button } from 'antd';
 import {Link} from 'react-router-dom'
-import './sider.css';
+import './editbutton.css';
 const content1 = (
     <div className="povercolor">
           <div style={{margin:'1px'}}>
@@ -31,8 +31,8 @@ const content1 = (
           <div style={{margin:'1px'}}>
                <Button type="primary" icon="search"></Button>
           </div>
-          <div style={{margin:'1px'}}>
-          <Popover placement="rightTop" content={content1}>
+          <div style={{margin:'1px'}} >
+          <Popover className="povercolor" placement="rightTop" content={content1}>
              <Button type="primary" icon="edit"></Button>
           </Popover>
           </div>

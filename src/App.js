@@ -3,9 +3,9 @@ import { Layout, Menu, Card, Input, Tag,Button,Drawer,Avatar, Badge,Icon,Dropdow
 import './App.css';
 import {Link} from 'react-router-dom';
 import Editor from './components/Editor/canvaslib';
-import Bodysider from './components/Body/sider';
-import DrawView from './components/Body/drawerview';
-import Editbutton from './components/Body/editbutton';
+import Bodysider from './components/Resource/sider';
+import DrawView from './components/ZoomPic/drawerview';
+import Editbutton from './components/Editor/editbutton';
 
 const {  Content, Sider } = Layout;
 const text =<div><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >Tom</Avatar></Link><span>用户ID</span></div>;
