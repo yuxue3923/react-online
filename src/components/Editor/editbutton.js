@@ -1,38 +1,38 @@
 import React, { Component } from 'react';
-import { Popover,Button } from 'antd';
+import { Popover,Button,Card,Row } from 'antd';
 import {Link} from 'react-router-dom'
 import './editbutton.css';
 const content1 = (
-    <div className="povercolor">
-          <div style={{margin:'1px'}}>
+    <div>
+          <Row style={{margin:'1px'}}>
                <Button type="primary" icon="align-center"></Button>
-          </div>
-          <div style={{margin:'1px'}}>
+          </Row>
+          <Row style={{margin:'1px'}}>
                <Button type="primary" icon="align-left"></Button>
-          </div>
-          <div style={{margin:'1px'}}>
+          </Row>
+          <Row style={{margin:'1px'}}>
                <Button type="primary" icon="align-right"></Button>
-          </div> 
-          <div style={{margin:'1px'}}>
+          </Row> 
+          <Row style={{margin:'1px'}}>
                <Button type="primary" icon="bold"></Button>
-          </div>
-          <div style={{margin:'1px'}}>
+          </Row>
+          <Row style={{margin:'1px'}}>
                <Button type="primary" icon="italic"></Button>
-          </div>
-          <div style={{margin:'1px'}}>
+          </Row>
+          <Row style={{margin:'1px'}}>
                <Button type="primary" icon="underline"></Button>
-          </div> 
+          </Row> 
     </div>
   );
   class editbutton extends Component {
     render() {
       return (
-          <div className="flowbutton"> 
+          <div className="flowbutton">
           <div style={{margin:'1px'}}>
-               <Button type="primary" icon="search"></Button>
+              <Button type="primary" icon="search"></Button>
           </div>
           <div style={{margin:'1px'}} >
-          <Popover className="povercolor" placement="rightTop" content={content1}>
+          <Popover placement="rightTop" content={content1} trigger="click">
              <Button type="primary" icon="edit"></Button>
           </Popover>
           </div>
@@ -50,7 +50,7 @@ const content1 = (
           </div>
           <div style={{margin:'1px'}}>
                <Button type="primary" icon="dash"></Button>
-          </div>
+          </div> 
           </div>
       );
     }

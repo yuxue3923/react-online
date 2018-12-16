@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Card, Input, Tag,Button,Drawer,Avatar, Badge,Icon,Dropdown,Popover} from 'antd';
+import { Layout, Menu, Row,Col,Button,Drawer,Avatar, Badge,Icon,Dropdown,Popover} from 'antd';
 import './App.css';
 import {Link} from 'react-router-dom';
 import Editor from './components/Editor/canvaslib';
@@ -96,8 +96,12 @@ const menu = (
             
             <Layout className='Layoutstyle'>
             <Content className="Content" style={{height: '100%',margin: '0 16px'}}>
-            <Editbutton/>
-            <Editor/>
+            <div>
+             <Row>
+               <Col span={1}><Editbutton/></Col>
+               <Col span={23}><Editor/></Col>
+             </Row>
+            </div>
             </Content>
             </Layout>
           </Layout>

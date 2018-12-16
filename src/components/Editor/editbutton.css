@@ -1,12 +1,22 @@
 .flowbutton{
+  width:50px;
   position: relative;
   top: 105px;
   margin: 0.5px 0px 0px -16px;
 }
-.povercolor {
+.ant-popover-inner {
   background-color: #00000000;
-  border: 0;
-  /* border-radius: 4px; */
   background-clip: padding-box;
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0) ;
+  border-radius: 0px;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+.ant-popover-placement-right, .ant-popover-placement-rightTop, .ant-popover-placement-rightBottom {
+  padding-left:0px;
+}
+.ant-popover-placement-rightTop > .ant-popover-content > .ant-popover-arrow, .ant-popover-placement-rightBottom > .ant-popover-content > .ant-popover-arrow {
+  background-color: #00000000;
+  left: 0px;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  width:0;
+  height: 0;
 }
