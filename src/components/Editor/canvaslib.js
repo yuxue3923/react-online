@@ -1,47 +1,40 @@
-//import zrender from 'zrender'
-import zrender from 'srenderlib'
+//import srender from 'srender'
+import srender from 'srenderlib'
 import React from 'react'
-export default class editor extends React.Component {
+import {Button} from 'antd'
 
+
+export default class editor extends React.Component {
+    constructor(props, context) {
+        super(props, context)
+       // this.initPie = this.initPie.bind(this)
+        this.state = {
+            add:false
+        }
+    }
+   add(){
+    alert("ll")
+    console.log("trig")
+       this.setState({
+           add:!this.state.add
+       })
+   // this.componentDidMount()
+   }
     componentDidMount() {
+        
         var dom = document.getElementsByClassName('container')[0]
-        var zr = zrender.init(dom)
-        var w = zr.getWidth();
-        var h = zr.getHeight();
+        var sr = srender.init(dom)
+        var w = sr.getWidth();
+        var h = sr.getHeight();
 
         var r = 30;
 
-        var elementStyle = {
-            stroke: '#ccc',
-            fill: 'white'
-        };
+       
 
 
 
-        var circleH = new zrender.Circle({
-            shape: {
-                cx: 0,
-                cy: 0,
-                r: 200
-            },
-            position: [
-                (w * 0.6 - r * 2) * Math.random() + r + w * 0.2,
-                (h * 0.6 - r * 2) * Math.random() + r + h * 0.2
-            ],
-            style: elementStyle,
-            draggable: true
-        })
-        circleH.on('click', function() {
-            alert("el的事件")
-
-        })
-        console.log(circleH._$handlers)
-        zr.add(circleH)
-        zr.addHover(circleH, {
-            fill: '#FF904F',
-            stroke: '#FF6EBE'
-        })
-        var circle = new zrender.Circle({
+       
+        var circle = new srender.Circle({
             shape: {
                 cx: r,
                 cy: h / 2,
@@ -53,7 +46,7 @@ export default class editor extends React.Component {
             },
             silent: true
         });
-        /*
+        
             circle.animate('shape', true)
                 .when(5000, {
                     cx: w - r
@@ -62,9 +55,9 @@ export default class editor extends React.Component {
                     cx: r
                 })
                 .start();
-        */
-        zr.add(circle);
-        var sun = new zrender.Circle({
+        
+        sr.add(circle);
+        var sun = new srender.Circle({
             shape: {
                 cx: 0,
                 cy: 0,
@@ -77,8 +70,8 @@ export default class editor extends React.Component {
             draggable: true,
         });
 
-        zr.add(sun);
-        var sun1 = new zrender.Circle({
+        sr.add(sun);
+        var sun1 = new srender.Circle({
             shape: {
                 cx: 0,
                 cy: 0,
@@ -90,8 +83,8 @@ export default class editor extends React.Component {
             position: [w / 2, h / 2],
             draggable: true,
         });
-        zr.add(sun1);
-        var rect = new zrender.Rect({
+        sr.add(sun1);
+        var rect = new srender.Rect({
             shape: {
                 r: 1,
                 x: 100,
@@ -100,21 +93,33 @@ export default class editor extends React.Component {
                 height: 100
             }
         })
-        zr.on('click', function() {
-            zr.add(rect)
-        })
-        console.log(zr)
+       
+        /////** */
+       function addShape(){
+            sr.add(rect)
+        }
+        if(this.state.add){
+            addShape()
+        }
+        /** */
+
+        console.log(sr)
 
 
 
-        console.log(zr.handler._$handlers)
-        console.log(zr.handler.proxy._$handlers)
+        console.log(sr.handler._$handlers)
+        console.log(sr.handler.proxy._$handlers)
     }
     render() {
         return (
 
-
+            <div>
+                <Button onClick={this.add.bind(this)}>
+                    {`buttonaaaaaa
+                    aaaaa`}
+                </Button>
             <div className="container" style={{height:'904px',width:'1418px'}}></div>
+            </div>
 
         )
     }
