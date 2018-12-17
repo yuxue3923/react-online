@@ -1,10 +1,75 @@
 //import srender from 'srender'
 import srender from 'srenderlib'
 import React from 'react'
-import {Button} from 'antd'
 
+const elementStyle={
+    stroke: '#ccc',
+    fill: 'white',
+   // lineDash: [5, 5, 10, 10],
+}
+var sr=null;
+/**这段较长的代码为画笔，由于作用域暂时无法封装为文件 */
+var lockFlag=false;
+var s; //定义路径对象
+var sL = []; //路径数组
+var isDraw = false;
+function pen1(e) {
+    isDraw = true; //表示正在画线了
+    s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke: 'rgba(220, 20, 60, 0.8)',lineWidth: 2},draggable:true,});//初始化线条
+    sr.add(s); //将线条添加到图层上
+    }
+function pen2(e) {
+    if (isDraw) { //判断是否是画线状态
+        var x = e.event.zrX;
+        var y = e.event.zrY; //获取鼠标位置
+        sL.push([x, y]); //将位置存入数组
+        s.attr({shape: {pointList: sL,}})
+        }
+    }
+function pen3(e) {
+    isDraw = false; //退出画线状态
+    sL = []; //清空线条路经,若不清空将会和上次画线连接到一起
+             // s=null;    //清空线条对象
+    }
+         
+function Pen(){
+    if(lockFlag){
+        lockFlag=false;
+        sr.off('mousedown',pen1);
+        sr.off('mousemove',pen2);
+        sr.off('mouseup',pen3);
+        return;
+    }
+    sr.on('mousedown',pen1);
+    sr.on('mousemove',pen2);
+    sr.on('mouseup',pen3);
+    lockFlag=true;
+}
+/**画笔 */
 
-export default class editor extends React.Component {
+function add(type){
+    switch(type){
+        case 'circle':
+            var circle=new srender.Circle({shape:{cx:70,cy: 90,r: 90},style: elementStyle,})
+            sr.add(circle)
+            break;
+        case 'rect':
+            var rect = new srender.Rect({shape: {r: 1,x: 100,y: 100,width: 100,height: 100},style: elementStyle,})
+            sr.add(rect);
+            break;
+        case 'pen':
+            Pen()
+            break;
+        case 'image':
+            console.log("Sorry,image module to be done")
+            break;
+        default:
+            console.log("Sorry,no shape to draw")
+    } 
+    
+   
+}
+export default class Editor extends React.Component {
     constructor(props, context) {
         super(props, context)
        // this.initPie = this.initPie.bind(this)
@@ -12,18 +77,11 @@ export default class editor extends React.Component {
             add:false
         }
     }
-   add(){
-    alert("ll")
-    console.log("trig")
-       this.setState({
-           add:!this.state.add
-       })
-   // this.componentDidMount()
-   }
+   
     componentDidMount() {
         
         var dom = document.getElementsByClassName('container')[0]
-        var sr = srender.init(dom)
+        sr = srender.init(dom)
         var w = sr.getWidth();
         var h = sr.getHeight();
 
@@ -47,14 +105,7 @@ export default class editor extends React.Component {
             silent: true
         });
         
-            circle.animate('shape', true)
-                .when(5000, {
-                    cx: w - r
-                })
-                .when(10000, {
-                    cx: r
-                })
-                .start();
+            
         
         sr.add(circle);
         var sun = new srender.Circle({
@@ -93,15 +144,6 @@ export default class editor extends React.Component {
                 height: 100
             }
         })
-       
-        /////** */
-       function addShape(){
-            sr.add(rect)
-        }
-        if(this.state.add){
-            addShape()
-        }
-        /** */
 
         console.log(sr)
 
@@ -110,14 +152,15 @@ export default class editor extends React.Component {
         console.log(sr.handler._$handlers)
         console.log(sr.handler.proxy._$handlers)
     }
+    componentDidUpdate(){
+        add(this.props.type);
+        console.log("??")
+    }
     render() {
         return (
 
             <div>
-                <Button onClick={this.add.bind(this)}>
-                    {`buttonaaaaaa
-                    aaaaa`}
-                </Button>
+                
             <div className="container" style={{height:'904px',width:'1418px'}}></div>
             </div>
 
