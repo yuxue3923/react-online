@@ -169,12 +169,16 @@ const props = {
           );
       return (
           <div className='divContent'>
+             
              <Input className='inputstyle' placeholder="输入搜索资源关键字" />
+             
+             
              <Upload {...props}>
                   <Button>
                      <Icon type="upload" /> 上传本地资源
                   </Button>
               </Upload>
+              
               <Tabs defaultActiveKey="2" onChange={callback} >
                   <TabPane tab="视频" key="1">{cardList_viedo}</TabPane>
                   <TabPane tab="图片" key="2">{cardList_viedo}</TabPane>
