@@ -8,17 +8,29 @@ import DrawView from './components/ZoomPic/drawerview';
 import Editbutton from './components/Editor/editbutton';
 import EditorWithBar from './components/Editor/EditorWithBar';
 const {  Content, Sider } = Layout;
-const text =<div><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >Tom</Avatar></Link><span>用户ID</span></div>;
+const text =<div><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >Tom</Avatar></Link><span>当前用户</span></div>;
 const menu = (
   <Menu>
     <Menu.Item key="0">
-      1st menu item
-    </Menu.Item>
-    <Menu.Item key="1">
-     2nd menu item
+      <div>
+       <Icon type="smile" theme="twoTone" twoToneColor="#eb2f96" />
+        梁静茹
+      </div>
     </Menu.Item>
     <Menu.Divider />
-    <Menu.Item key="3">3rd menu item</Menu.Item>
+    <Menu.Item key="1">
+      <div>
+       <Icon type="meh" theme="twoTone" twoToneColor="#52c41a"/>
+        王菲
+      </div>
+    </Menu.Item>
+    <Menu.Divider />
+    <Menu.Item key="3">
+      <div>
+       <Icon type="frown" theme="twoTone"/>
+        程奕迅
+      </div>
+    </Menu.Item>
   </Menu>
 );
 
@@ -53,7 +65,7 @@ const menu = (
           collapsedWidth={0}
          
           className="Sider"
-          style={{overflow: 'visible', height: '100vh'}}
+          style={{overflow: 'visible', height: '100%'}}
           >
             <Bodysider/>
           </Sider>
@@ -64,7 +76,7 @@ const menu = (
            
            <Popover placement="bottomLeft" title={text} content={menu} trigger="click">
            <Button type="dashed" shape="circle" >
-           <Icon type="ellipsis" />
+           <Icon type="usergroup-add" />
            </Button>
 
          </Popover>

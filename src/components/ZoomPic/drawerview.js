@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Avatar, Icon} from 'antd';
+import { List, Avatar, Icon, Button} from 'antd';
 import {Link} from 'react-router-dom'
 const listData = [];
 for (let i = 0; i < 23; i++) {
@@ -32,7 +32,7 @@ for (let i = 0; i < 23; i++) {
           pageSize: 3,
         }}
         dataSource={listData}
-        // footer={<div><b>ant design</b> footer part</div>}
+        footer={<div><Button type="primary" ghost icon="plus" ></Button><Button type="primary" ghost  icon="minus"></Button></div>}
         renderItem={item => (
           <List.Item
             key={item.title}

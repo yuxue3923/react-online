@@ -86,6 +86,27 @@
   margin: 16px 24px 16px 0;
   float: left;
 }
+.ant-popover-placement-bottom, .ant-popover-placement-bottomLeft, .ant-popover-placement-bottomRight {
+  padding-top: 0px;
+}
+.ant-popover-arrow {
+  background: #00000000;
+  width: 0;
+  height: 0;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
+  display: block;
+  border-color: transparent;
+  border-style: solid;
+  background-clip: padding-box;
+  border-radius: 0px;
+ 
+}
+.ant-popover-placement-bottomLeft > .ant-popover-content > .ant-popover-arrow, .ant-popover-placement-bottomRight > .ant-popover-content > .ant-popover-arrow {
+  top: 0px;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -11,9 +11,9 @@ export default class RouterIndex extends Component {
         return (
             <BrowserRouter>
             <Switch>
-                <Route exact path="/" component={App}></Route>
+                <Route exact path="/" component={Access}></Route>
                 <Route path="/Account" component={Account}></Route>
-                <Route path="/Access" component={Access}></Route>
+                <Route path="/APP" component={App}></Route>
             </Switch>
             </BrowserRouter>
         )
