@@ -7,7 +7,7 @@
   height: 40vmin;
 }
 .Layoutstyle {
-  height: 100%;
+  height: 100vh;
 }
 .App-header {
   background-color: #282c34;
@@ -33,7 +33,7 @@
   min-width:0;
 }
 .Content{
-  height: "100%";
+  height: "100vh";
   flex: auto;
   padding: '0 50px';
   /* fix firefox can't set height smaller than content on flex item */

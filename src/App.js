@@ -115,7 +115,7 @@ const ContentModal = (
     };
     render() {
       return (
-        <Layout>
+        <Layout style={{width: '100%', height: '100vh'}}>
           <Sider 
           width={700}
           collapsible
@@ -124,7 +124,7 @@ const ContentModal = (
           collapsedWidth={0}
          
           className="Sider"
-          style={{overflow: 'visible', height: '100%'}}
+          style={{width: '100%', height: '100vh'}}
           >
             <Bodysider/>
           </Sider>
@@ -170,8 +170,8 @@ const ContentModal = (
               </span>
             </div>
             
-            <Layout className='Layoutstyle'>
-            <Content className="Content" style={{height: '100%',margin: '0 16px'}}>
+            {/* <Layout className='Layoutstyle'> */}
+            <Content className="Content" style={{height: '100vh',margin: '0 16px'}}>
             <div>
             <EditorWithBar/>
             {/* <Row>
@@ -181,7 +181,7 @@ const ContentModal = (
             */}
             </div>
             </Content>
-            </Layout>
+            {/* </Layout> */}
           </Layout>
       );
     }
