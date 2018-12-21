@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { List, Avatar, Icon} from 'antd';
-import {Link} from 'react-router-dom'
+
 const listData = [];
 for (let i = 0; i < 23; i++) {
   listData.push({
@@ -19,8 +19,16 @@ for (let i = 0; i < 23; i++) {
 //   </span>
 // );
 
-  class drawerview extends Component {
+class Drawerview extends Component {
+    constructor(props, context) {
+      super(props, context)
+      
+  }
+  componentWillMount(){
+    listData[0].title=this.props.thumbnail
+  }
     render() {
+      
       return (
         <List
         itemLayout="vertical"
@@ -53,4 +61,4 @@ for (let i = 0; i < 23; i++) {
     }
   }
 
-  export default drawerview;
+  export default Drawerview;

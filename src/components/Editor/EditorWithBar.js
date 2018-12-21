@@ -30,16 +30,28 @@ const content1 = (
         super(props, context)
        // this.initPie = this.initPie.bind(this)
         this.state = {
-            addType:'none'
+            addType:'none',
+          //  fromSr:{},
         }
+        this.fromSr={}
+        this.handleThumbnail=this.handleThumbnail.bind(this)
     }
     add(type){
         this.setState({
             addType:type
         })
     }
+    handleThumbnail(pic){
+        this.fromSr=pic
+
+
+    }
+    componentDidUpdate(){
+        console.log(this.fromSr)
+    }
     render() {
         console.log("xuanran")
+        
       return (
         
         <div>
@@ -71,7 +83,7 @@ const content1 = (
           </div> 
           </div>
           </Col>
-          <Col span={23}> <Editor type={this.state.addType}/></Col>
+          <Col span={23}> <Editor type={this.state.addType} getThumbnail={this.handleThumbnail}/></Col>
         </Row>
         </div>
       );

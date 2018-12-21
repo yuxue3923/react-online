@@ -22,7 +22,13 @@ const menu = (
   </Menu>
 );
 
-  class App extends Component {
+class App extends Component {
+  constructor(props, context) {
+    super(props, context)
+     // this.initPie = this.initPie.bind(this)
+     
+   // this.thumbnail=this.thumbnail.bind(this)
+  }
     state = {
       collapsed: false,
       visible: false
@@ -60,18 +66,7 @@ const menu = (
          
          
          
-          <div className="flowbar" style={{right:170,top:20}}>
-           
-           <Popover placement="bottomLeft" title={text} content={menu} trigger="click">
-           <Button type="dashed" shape="circle" >
-           <Icon type="ellipsis" />
-           </Button>
-
-         </Popover>
-                
-            
-          </div>
-
+         
             <div className="flowbar" style={{right:90,top: 20}}>
                <Button type="primary" onClick={this.showDrawer}>
                  视图
@@ -84,25 +79,32 @@ const menu = (
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                <DrawView/>
+                <DrawView thumbnail={"当前幻灯片"}/>
               </Drawer>
             
             </div>
-            <div className="flowbar" style={{right:10,top:20}}>
-            <span style={{ marginRight: 24, }}>
-                <Badge count={1}><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Link></Badge>
-              </span>
-            </div>
+           
             
             <Layout className='Layoutstyle'>
             <Content className="Content" style={{height: '100%',margin: '0 16px'}}>
             <div>
+            <div className="flowbar" style={{right:170,top:20}}>
+           
+           <Popover placement="bottomLeft" title={text} content={menu} trigger="click">
+           <Button type="dashed" shape="circle" >
+           <Icon type="ellipsis" />
+           </Button>
+
+         </Popover>
+                
+            
+          </div>
+          <div className="flowbar" style={{right:10,top:20}}>
+            <span style={{ marginRight: 24, }}>
+                <Badge count={1}><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Badge>
+              </span>
+            </div>
             <EditorWithBar/>
-            {/* <Row>
-               <Col span={1}><Editbutton/></Col>
-               <Col span={23}><Editor/></Col>
-             </Row>
-            */}
             </div>
             </Content>
             </Layout>
