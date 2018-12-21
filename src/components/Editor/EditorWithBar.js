@@ -63,20 +63,20 @@ const content1 = (
           </div>
           <div style={{margin:'1px'}} >
           <Popover placement="rightTop" content={content1} trigger="click">
-             <Button type="primary" icon="edit" onClick={this.add.bind(this,'rect')}></Button>
+             <Button type="primary" icon="edit" ></Button>
           </Popover>
           </div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" icon="drag" onClick={this.add.bind(this,'pen')}></Button>
+               <Button type="primary" icon="drag" ></Button>
           </div>
           <div style={{margin:'1px'}}>
                <Button type="primary" icon="scissor"></Button>
           </div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" icon="redo"></Button>
+               <Button type="primary" icon="form" onClick={this.add.bind(this,'rect')}></Button>
           </div> 
           <div style={{margin:'1px'}}>
-               <Button type="primary" icon="highlight"></Button>
+               <Button type="primary" icon="highlight" onClick={this.add.bind(this,'pen')}></Button>
           </div>
           <div style={{margin:'1px'}}>
                <Button type="primary" icon="dash"></Button>

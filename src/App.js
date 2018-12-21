@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Row,Col,Button,Drawer,Avatar, Badge,Icon,Dropdown,Popover} from 'antd';
+import { Layout, Menu,Select, Row,Col,Button,Drawer,Avatar, Badge,Icon,Dropdown,Popover,Modal, Card} from 'antd';
 import './App.css';
 import {Link} from 'react-router-dom';
 import Editor from './components/Editor/canvaslib';
@@ -8,18 +8,71 @@ import DrawView from './components/ZoomPic/drawerview';
 import Editbutton from './components/Editor/editbutton';
 import EditorWithBar from './components/Editor/EditorWithBar';
 const {  Content, Sider } = Layout;
-const text =<div><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >Tom</Avatar></Link><span>用户ID</span></div>;
+const Option = Select.Option;
+function handleChange(value) {
+  console.log(`selected ${value}`);
+}
+const text =<div><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >Tom</Avatar></Link><span>当前用户</span></div>;
 const menu = (
   <Menu>
     <Menu.Item key="0">
-      1st menu item
-    </Menu.Item>
-    <Menu.Item key="1">
-     2nd menu item
+      <div>
+       <Icon type="smile" theme="twoTone" twoToneColor="#eb2f96" />
+        梁静茹
+      </div>
     </Menu.Item>
     <Menu.Divider />
-    <Menu.Item key="3">3rd menu item</Menu.Item>
+    <Menu.Item key="1" >
+      <div>
+       <Icon type="meh" theme="twoTone" twoToneColor="#52c41a"/>
+        王菲
+      </div>
+    </Menu.Item>
+    <Menu.Divider />
+    <Menu.Item key="2">
+      <div>
+       <Icon type="frown" theme="twoTone"/>
+        程奕迅
+      </div>
+    </Menu.Item>
   </Menu>
+);
+const ContentModal = (
+ <div>
+      <Row style={{margin: '8px 8px 8px 16px'}}> 
+        <a style={{float:"left"}}>加入</a>
+        <Button style={{float:"right"}} type="primary" ghost>JLFABSKA</Button>
+      </Row>
+      <Row style={{margin: '8px 8px 8px 16px'}}> 
+        <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
+        <Button style={{float:"right"}} type="primary" >分享</Button>
+      </Row>
+    <Row style={{margin: '8px 8px 8px 16px'}}>
+    <Menu.Divider />
+    </Row>
+    <Row style={{margin: '8px 8px 8px 16px'}}>
+    
+     <Select defaultValue="1" onChange={handleChange} style={{width:'100%'}}>
+      
+       <Option value="1"><Icon type="edit" theme="twoTone" twoToneColor="#52c41a"/>允许任何人进行编辑</Option>
+       <Option value="2"><Icon type="audio" theme="twoTone" twoToneColor="#eb2f96"/>只能查看浏览</Option>
+     </Select>
+     </Row>
+    <Row style={{margin: '8px 8px 8px 16px'}}>
+    <Menu.Divider />
+    </Row>
+      <Row style={{margin: '8px 8px 8px 16px'}}>
+      <Select defaultValue="1" style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={handleChange}>
+      
+      <Option value="1">查找成员</Option>
+      <Option value="2">胡歌</Option>
+      <Option value="2">李健</Option>
+      <Option value="2">周杰伦</Option>
+      </Select>
+      <Button style={{float:"right"}} type="primary" >添加</Button>
+      </Row>
+   </div> 
+
 );
 
 class App extends Component {
@@ -31,8 +84,26 @@ class App extends Component {
   }
     state = {
       collapsed: false,
-      visible: false
+      visible: false,
+      modalvisible:false,
     };
+    showModal = () => {
+      this.setState({
+        modalvisible: true,
+      });
+    }
+    handleOk = (e) => {
+      console.log(e);
+      this.setState({
+        modalvisible: false,
+      });
+    }
+    handleCancel = (e) => {
+      console.log(e);
+      this.setState({
+        modalvisible: false,
+      });
+    }
     onCollapse = (collapsed) => {
       console.log(collapsed);
       this.setState({ collapsed });
@@ -50,7 +121,7 @@ class App extends Component {
     };
     render() {
       return (
-        <Layout>
+        <Layout style={{width: '100%', height: '100vh'}}>
           <Sider 
           width={700}
           collapsible
@@ -59,15 +130,37 @@ class App extends Component {
           collapsedWidth={0}
          
           className="Sider"
-          style={{overflow: 'visible', height: '100vh'}}
+          style={{width: '100%', height: '100vh'}}
           >
             <Bodysider/>
           </Sider>
          
          
          
+<<<<<<< HEAD
          
             <div className="flowbar" style={{right:90,top: 20}}>
+=======
+          <div className="flowbar" style={{right:200,top:20}}>
+           <Popover placement="bottomLeft" title={text} content={menu} trigger="click">
+           <Button type="dashed" shape="circle" >
+           <Icon type="team" />
+           </Button>
+         </Popover>            
+          </div>
+           <div className="flowbar" style={{right:160,top:20}}>
+              <Button shape="circle" type="primary" ghost icon="share-alt" onClick={this.showModal}></Button>
+              <Modal
+                 title="邀请成员"
+                 visible={this.state.modalvisible}
+                 onOk={this.handleOk}
+                 onCancel={this.handleCancel}
+              >
+                {ContentModal}
+              </Modal>
+           </div>
+            <div className="flowbar" style={{right:80,top: 20}}>
+>>>>>>> 7f3f621b75331817b877092ee238e2e1c2f7372e
                <Button type="primary" onClick={this.showDrawer}>
                  视图
               </Button>
@@ -81,12 +174,19 @@ class App extends Component {
               >
                 <DrawView thumbnail={"当前幻灯片"}/>
               </Drawer>
-            
             </div>
+<<<<<<< HEAD
            
+=======
+            <div className="flowbar" style={{right:10,top:20}}>
+            <span style={{ marginRight: 24, }}>
+                <Badge count={3}><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Link></Badge>
+              </span>
+            </div>
+>>>>>>> 7f3f621b75331817b877092ee238e2e1c2f7372e
             
-            <Layout className='Layoutstyle'>
-            <Content className="Content" style={{height: '100%',margin: '0 16px'}}>
+            {/* <Layout className='Layoutstyle'> */}
+            <Content className="Content" style={{height: '100vh',margin: '0 16px'}}>
             <div>
             <div className="flowbar" style={{right:170,top:20}}>
            
@@ -107,7 +207,7 @@ class App extends Component {
             <EditorWithBar/>
             </div>
             </Content>
-            </Layout>
+            {/* </Layout> */}
           </Layout>
       );
     }

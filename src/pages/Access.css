@@ -1,0 +1,21 @@
+.divparent{
+    display:flex;
+    width:1000px;
+    height:600px;
+    margin: 0 auto;
+}
+.login-form {
+    max-width: 500px;
+    text-align:center;
+    align-self:center;
+    margin: 0 auto;
+  }
+.login-form-forgot {
+    float: right;
+  }
+.login-form-button {
+    width: 100%;
+  }
+.login-form-remember{
+    float: left;
+}

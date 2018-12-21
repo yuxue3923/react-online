@@ -153,8 +153,8 @@ export default class Editor extends React.Component {
         return (
 
             <div>
-                
-            <div className="container" style={{height:'904px',width:'1418px'}}></div>
+            <div className="container" style={{height:'100vh',width:'100%'}}></div>
+            {/* <div className="container" style={{height:'904px',width:'1418px'}}></div> */}
             </div>
 
         )

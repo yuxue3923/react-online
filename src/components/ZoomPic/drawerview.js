@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import { List, Avatar, Icon} from 'antd';
 
+=======
+import { List, Avatar, Icon, Button} from 'antd';
+import {Link} from 'react-router-dom'
+>>>>>>> 7f3f621b75331817b877092ee238e2e1c2f7372e
 const listData = [];
 for (let i = 0; i < 23; i++) {
   listData.push({
@@ -40,7 +45,7 @@ class Drawerview extends Component {
           pageSize: 3,
         }}
         dataSource={listData}
-        // footer={<div><b>ant design</b> footer part</div>}
+        footer={<div><Button type="primary" ghost icon="plus" ></Button><Button type="primary" ghost  icon="minus"></Button></div>}
         renderItem={item => (
           <List.Item
             key={item.title}
