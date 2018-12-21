@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { Layout, Menu,Select, Row,Col,Button,Drawer,Avatar, Badge,Icon,Dropdown,Popover,Modal, Card} from 'antd';
 import './App.css';
 import {Link} from 'react-router-dom';
-import Editor from './components/Editor/canvaslib';
+
 import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
-import Editbutton from './components/Editor/editbutton';
+
 import EditorWithBar from './components/Editor/EditorWithBar';
 const {  Content, Sider } = Layout;
 const Option = Select.Option;
@@ -137,24 +137,7 @@ class App extends Component {
          
          
          
-          <div className="flowbar" style={{right:200,top:20}}>
-           <Popover placement="bottomLeft" title={text} content={menu} trigger="click">
-           <Button type="dashed" shape="circle" >
-           <Icon type="team" />
-           </Button>
-         </Popover>            
-          </div>
-           <div className="flowbar" style={{right:160,top:20}}>
-              <Button shape="circle" type="primary" ghost icon="share-alt" onClick={this.showModal}></Button>
-              <Modal
-                 title="邀请成员"
-                 visible={this.state.modalvisible}
-                 onOk={this.handleOk}
-                 onCancel={this.handleCancel}
-              >
-                {ContentModal}
-              </Modal>
-           </div>
+          
             <div className="flowbar" style={{right:80,top: 20}}>
                <Button type="primary" onClick={this.showDrawer}>
                  视图

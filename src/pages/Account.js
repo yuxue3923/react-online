@@ -1,23 +1,23 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
-import { Layout, Menu, Card, Row,Input,Col, Tag,Button,Drawer,Avatar, Badge,Icon,Dropdown,Popover} from 'antd';
+import { Layout, Menu, Card, Row,Input,Col,Avatar, Icon,} from 'antd';
 import '../App.css'
 import './Account.css'
-const { SubMenu } = Menu;
-const { Header, Content, Footer, Sider } = Layout;
+
+const { Header, Content } = Layout;
 const {Meta} = Card;
 const suffix=<Icon type="close-circle"/>
 
   class Account extends Component {
-    // state = {
-    //     current: 'mail',
-    //   }
-    // handleClick = (e) => {
-    //     console.log('click ', e);
-    //     this.setState({
-    //       current: e.key,
-    //     });
-    //   }
+     state = {
+         current: 'mail',
+       }
+     handleClick = (e) => {
+         console.log('click ', e);
+         this.setState({
+           current: e.key,
+        });
+       }
     render() {
       return (
         <Layout style={{height:'100%'}}>
@@ -38,7 +38,7 @@ const suffix=<Icon type="close-circle"/>
        
      
         </Header>
-        {/* <nav className="mid-nav">
+        <nav className="mid-nav">
             <Menu
             onClick={this.handleClick}
              selectedKeys={[this.state.current]}
@@ -52,7 +52,7 @@ const suffix=<Icon type="close-circle"/>
             <Icon type="appstore" />Navigation Two
             </Menu.Item>
             </Menu>
-        </nav> */}
+        </nav>
         <Content className="page_body">
         {/* <div className="title">My Drive</div>
         <div className="controller"><Icon type="folder-add" /><Icon type="swap" /><Icon type="ordered-list" /></div> */}
