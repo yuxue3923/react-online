@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import { List, Avatar, Icon} from 'antd';
 
-=======
-import { List, Avatar, Icon, Button} from 'antd';
-import {Link} from 'react-router-dom'
->>>>>>> 7f3f621b75331817b877092ee238e2e1c2f7372e
 const listData = [];
 for (let i = 0; i < 23; i++) {
   listData.push({

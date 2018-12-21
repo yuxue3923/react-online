@@ -137,10 +137,6 @@ class App extends Component {
          
          
          
-<<<<<<< HEAD
-         
-            <div className="flowbar" style={{right:90,top: 20}}>
-=======
           <div className="flowbar" style={{right:200,top:20}}>
            <Popover placement="bottomLeft" title={text} content={menu} trigger="click">
            <Button type="dashed" shape="circle" >
@@ -160,7 +156,6 @@ class App extends Component {
               </Modal>
            </div>
             <div className="flowbar" style={{right:80,top: 20}}>
->>>>>>> 7f3f621b75331817b877092ee238e2e1c2f7372e
                <Button type="primary" onClick={this.showDrawer}>
                  视图
               </Button>
@@ -175,15 +170,11 @@ class App extends Component {
                 <DrawView thumbnail={"当前幻灯片"}/>
               </Drawer>
             </div>
-<<<<<<< HEAD
-           
-=======
             <div className="flowbar" style={{right:10,top:20}}>
             <span style={{ marginRight: 24, }}>
                 <Badge count={3}><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Link></Badge>
               </span>
             </div>
->>>>>>> 7f3f621b75331817b877092ee238e2e1c2f7372e
             
             {/* <Layout className='Layoutstyle'> */}
             <Content className="Content" style={{height: '100vh',margin: '0 16px'}}>
