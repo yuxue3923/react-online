@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { Popover,Button,Card,Row,Col } from 'antd';
 import Editor from './canvaslib'
 import './editbutton.css';
-const content1 = (
+var content1 = function(fn){
+   return (
     <div>
           <Row style={{margin:'1px'}}>
-               <Button type="primary" icon="align-center"></Button>
+               <Button type="primary" icon="align-center" onClick={fn}></Button>
           </Row>
           <Row style={{margin:'1px'}}>
                <Button type="primary" icon="align-left"></Button>
@@ -24,7 +25,7 @@ const content1 = (
           </Row> 
     </div>
   );
-  
+}
   class EditorWithBar extends Component {
     constructor(props, context) {
         super(props, context)
@@ -49,6 +50,9 @@ const content1 = (
     componentDidUpdate(){
         console.log(this.fromSr)
     }
+    componentWillUpdate(){
+       
+    }
     render() {
         console.log("xuanran")
         
@@ -62,7 +66,7 @@ const content1 = (
               <Button type="primary" icon="search" onClick={this.add.bind(this,'circle')}></Button>
           </div>
           <div style={{margin:'1px'}} >
-          <Popover placement="rightTop" content={content1} trigger="click">
+          <Popover placement="rightTop" content={ content1(this.add.bind(this,'circle'))} trigger="click">
              <Button type="primary" icon="edit" ></Button>
           </Popover>
           </div>

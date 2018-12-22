@@ -87,6 +87,7 @@ class App extends Component {
       visible: false,
       modalvisible:false,
     };
+    
     showModal = () => {
       this.setState({
         modalvisible: true,
