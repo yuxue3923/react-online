@@ -163,17 +163,29 @@ class App extends Component {
             {/* <Layout className='Layoutstyle'> */}
             <Content className="Content" style={{height: '100vh',margin: '0 16px'}}>
             <div>
-            <div className="flowbar" style={{right:170,top:20}}>
-           
+            {/* <div className="flowbar" style={{right:170,top:20}}> */}
+            <div className="flowbar" style={{right:200,top:20}}>
            <Popover placement="bottomLeft" title={text} content={menu} trigger="click">
            <Button type="dashed" shape="circle" >
-           <Icon type="ellipsis" />
+           {/* <Icon type="ellipsis" /> */}
+           <Icon type="team" /> 
            </Button>
 
          </Popover>
                 
             
           </div>
+          <div className="flowbar" style={{right:160,top:20}}>
+              <Button shape="circle" type="primary" ghost icon="share-alt" onClick={this.showModal}></Button>
+              <Modal
+                 title="邀请成员"
+                 visible={this.state.modalvisible}
+                 onOk={this.handleOk}
+                 onCancel={this.handleCancel}
+              >
+                {ContentModal}
+              </Modal>
+           </div>
           <div className="flowbar" style={{right:10,top:20}}>
             <span style={{ marginRight: 24, }}>
                 <Badge count={1}><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Badge>

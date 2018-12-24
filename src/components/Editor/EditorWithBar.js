@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
-import { Popover,Button,Card,Row,Col } from 'antd';
+import { Popover,Button,Row,Col ,Icon} from 'antd';
 import Editor from './canvaslib'
 import './editbutton.css';
-import btnsquare from "../../btnpic/btnsquare.png";
-import btncircle from "../../btnpic/btncircle.png";
-import btnstarf from "../../btnpic/btnstarf.png";
-import btnstars from "../../btnpic/btnstars.png";
-import btnstart from "../../btnpic/btnstart.png";
-
-import house from "../../btnpic/house.png";
-import apple from "../../btnpic/apple.png";
+const IconFont = Icon.createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/font_981127_sd9lxludw1o.js',
+  });
 var content1 = function(fn){
    return (
     <div>
@@ -39,19 +34,29 @@ const sgraph =function(fn){
     return (
     <div>
           <div style={{margin:'1px'}} >
-             <img src={btnsquare} alt=''  />
+            <Button type="primary">
+                 <IconFont type="anticon-xing"/>
+            </Button>
           </div>
-          <div style={{margin:'1px'}} onClick={fn}>
-             <img src={btncircle} alt='' />
-          </div>
-          <div style={{margin:'1px'}} >
-             <img src={btnstarf} alt=''  />
-          </div>
-          <div style={{margin:'1px'}} >
-             <img src={btnstars} alt=''  />
+          <div style={{margin:'1px'}}>
+           <Button type="primary">
+                 <IconFont type="anticon-xingzhuang-sanjiaoxing"/>
+            </Button>
           </div>
           <div style={{margin:'1px'}} >
-             <img src={btnstart} alt=''  />
+           <Button type="primary">
+                 <IconFont type="anticon-xingzhuang-juxing"/>
+            </Button>
+          </div>
+          <div style={{margin:'1px'}} >
+            <Button type="primary" onClick={fn}>
+                 <IconFont type="anticon-yuanhuan"/>
+            </Button>
+          </div>
+          <div style={{margin:'1px'}} >
+            <Button type="primary" >
+                 <IconFont type="anticon-icon-bianxing"/>
+            </Button>
           </div>
     </div>
    );
@@ -59,10 +64,14 @@ const sgraph =function(fn){
 const dgraph =(
     <div>
           <div style={{margin:'1px'}}>
-             <img src={house} alt='' width='50px' />
+            <Button type="primary" >
+                 <IconFont type="anticon-pingguo"/>
+            </Button>
           </div>
           <div style={{margin:'1px'}}>
-             <img src={apple} alt='' width='50px' />
+            <Button type="primary">
+                 <IconFont type="anticon-home"/>
+            </Button>
           </div>
     </div>
    );
