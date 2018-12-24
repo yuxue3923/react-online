@@ -38,7 +38,7 @@ const suffix=<Icon type="close-circle"/>
        
      
         </Header>
-        <nav className="mid-nav">
+        {/* <nav className="mid-nav">
             <Menu
             onClick={this.handleClick}
              selectedKeys={[this.state.current]}
@@ -52,7 +52,7 @@ const suffix=<Icon type="close-circle"/>
             <Icon type="appstore" />Navigation Two
             </Menu.Item>
             </Menu>
-        </nav>
+        </nav> */}
         <Content className="page_body">
         {/* <div className="title">My Drive</div>
         <div className="controller"><Icon type="folder-add" /><Icon type="swap" /><Icon type="ordered-list" /></div> */}
