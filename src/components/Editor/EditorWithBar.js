@@ -59,10 +59,10 @@ const sgraph =function(fn){
 const dgraph =(
     <div>
           <div style={{margin:'1px'}}>
-             <img src={house} alt='' width='100px' />
+             <img src={house} alt='' width='50px' />
           </div>
           <div style={{margin:'1px'}}>
-             <img src={apple} alt='' width='100px' />
+             <img src={apple} alt='' width='50px' />
           </div>
     </div>
    );
