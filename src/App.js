@@ -7,6 +7,9 @@ import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
 
 import EditorWithBar from './components/Editor/EditorWithBar';
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_981127_oee7kc1cksg.js',
+});
 const {  Content, Sider } = Layout;
 const Option = Select.Option;
 function handleChange(value) {
@@ -54,8 +57,8 @@ const ContentModal = (
     
      <Select defaultValue="1" onChange={handleChange} style={{width:'100%'}}>
       
-       <Option value="1"><Icon type="edit" theme="twoTone" twoToneColor="#52c41a"/>允许任何人进行编辑</Option>
-       <Option value="2"><Icon type="audio" theme="twoTone" twoToneColor="#eb2f96"/>只能查看浏览</Option>
+       <Option value="1"><IconFont type="anticon-piliangbianji" />允许任何人进行编辑</Option>
+       <Option value="2"> <IconFont type="anticon-iconkuozhan_liulanpre" />只能查看浏览</Option>
      </Select>
      </Row>
     <Row style={{margin: '8px 8px 8px 16px'}}>
@@ -163,21 +166,26 @@ class App extends Component {
             {/* <Layout className='Layoutstyle'> */}
             <Content className="Content" style={{height: '100vh',margin: '0 16px'}}>
             <div>
-            {/* <div className="flowbar" style={{right:170,top:20}}> */}
-            <div className="flowbar" style={{right:200,top:20}}>
+            <div className="flowbar" style={{right:170,top:20}}>
+            {/* <div className="flowbar" style={{right:200,top:20}}> */}
            <Popover placement="bottomLeft" title={text} content={menu} trigger="click">
            <Button type="dashed" shape="circle" >
-           {/* <Icon type="ellipsis" /> */}
-           <Icon type="team" /> 
+           <Icon type="ellipsis" />
+           {/* <Icon type="team" />  */}
            </Button>
 
          </Popover>
                 
             
           </div>
-          <div className="flowbar" style={{right:160,top:20}}>
-              <Button shape="circle" type="primary" ghost icon="share-alt" onClick={this.showModal}></Button>
-              <Modal
+          {/* <div className="flowbar" style={{right:160,top:20}}>
+              <Button shape="circle" type="primary" ghost icon="share-alt" onClick={this.showModal}></Button> */}
+              
+           {/* </div> */}
+          <div className="flowbar" style={{right:10,top:20}}>
+            <span style={{ marginRight: 24, }}>
+                <Badge count={1}><Avatar onClick={this.showModal} style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Badge>
+                <Modal
                  title="邀请成员"
                  visible={this.state.modalvisible}
                  onOk={this.handleOk}
@@ -185,10 +193,6 @@ class App extends Component {
               >
                 {ContentModal}
               </Modal>
-           </div>
-          <div className="flowbar" style={{right:10,top:20}}>
-            <span style={{ marginRight: 24, }}>
-                <Badge count={1}><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Badge>
               </span>
             </div>
             <EditorWithBar/>

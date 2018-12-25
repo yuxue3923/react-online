@@ -3,7 +3,7 @@ import { Popover,Button,Row,Col ,Icon} from 'antd';
 import Editor from './canvaslib'
 import './editbutton.css';
 const IconFont = Icon.createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_981127_sd9lxludw1o.js',
+    scriptUrl: '//at.alicdn.com/t/font_981127_oee7kc1cksg.js',
   });
 var content1 = function(fn){
    return (
