@@ -69,8 +69,8 @@ const ContentModal = (
       
       <Option value="1">查找成员</Option>
       <Option value="2">胡歌</Option>
-      <Option value="2">李健</Option>
-      <Option value="2">周杰伦</Option>
+      <Option value="3">李健</Option>
+      <Option value="4">周杰伦</Option>
       </Select>
       <Button style={{float:"right"}} type="primary" >添加</Button>
       </Row>
@@ -154,7 +154,7 @@ class App extends Component {
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                <DrawView thumbnail={"当前幻灯片"}/>
+                <DrawView />{/*thumbnail={"当前幻灯片"}*/}
               </Drawer>
             </div>
             <div className="flowbar" style={{right:10,top:20}}>

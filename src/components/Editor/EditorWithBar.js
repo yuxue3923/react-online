@@ -5,6 +5,8 @@ import './editbutton.css';
 const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_981127_oee7kc1cksg.js',
   });
+
+var isButton=false;
 var content1 = function(fn){
    return (
     <div>
@@ -81,30 +83,39 @@ const dgraph =(
        // this.initPie = this.initPie.bind(this)
         this.state = {
             addType:'none',
-          //  fromSr:{},
+            //fromSr:{},
         }
         this.fromSr={}
         this.handleThumbnail=this.handleThumbnail.bind(this)
     }
     add(type){
+        console.log("这个被调用了")
+        isButton=true;
         this.setState({
             addType:type
         })
+       
     }
     handleThumbnail(pic){
         this.fromSr=pic
 
 
     }
-    componentDidUpdate(){
-        console.log(this.fromSr)
-    }
     componentWillUpdate(){
-       
+
+     
+      
+     }
+    componentDidUpdate(){
+     
+        isButton=false
+        console.log(this.fromSr)
+
     }
+   
     render() {
         console.log("xuanran")
-        
+        console.log("xuanran后的state"+this.state.addType)
       return (
         
         <div>
@@ -140,7 +151,7 @@ const dgraph =(
           </div> 
           </div>
           </Col>
-          <Col span={23}> <Editor type={this.state.addType} getThumbnail={this.handleThumbnail}/></Col>
+          <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail}/></Col>{/*{}*/}
         </Row>
         </div>
       );
