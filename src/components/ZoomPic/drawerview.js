@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { List, Avatar, Icon,Button} from 'antd';
-
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_988038_ej9e5sv8svd.js',
+});
 const listData = [];
 for (let i = 0; i < 23; i++) {
   listData.push({
@@ -40,7 +42,14 @@ class Drawerview extends Component {
           pageSize: 3,
         }}
         dataSource={listData}
-        footer={<div><Button type="primary" ghost icon="plus" ></Button><Button type="primary" ghost  icon="minus"></Button></div>}
+        footer={<div>
+          <Button type="dashed"  shape="circle" >
+                 <IconFont type="anticon-plus-bold" />
+          </Button>
+          <Button type="dashed" shape="circle" >
+                 <IconFont type="anticon-jianshao"/>
+          </Button>
+          </div>}
         renderItem={item => (
           <List.Item
             key={item.title}
