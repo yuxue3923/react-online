@@ -32,7 +32,7 @@ var content1 = function(fn){
   );
 }
 
-const sgraph =function(fn,fp,fs){
+const sgraph =function(fn,fp,fs,ft,ff){
     return (
     <div>
           <div style={{margin:'1px'}} >
@@ -41,7 +41,7 @@ const sgraph =function(fn,fp,fs){
             </Button>
           </div>
           <div style={{margin:'1px'}}>
-           <Button type="primary">
+           <Button type="primary" onClick={ft}>
                  <IconFont type="anticon-xingzhuang-sanjiaoxing"/>
             </Button>
           </div>
@@ -56,27 +56,29 @@ const sgraph =function(fn,fp,fs){
             </Button>
           </div>
           <div style={{margin:'1px'}} >
-            <Button type="primary" >
+            <Button type="primary" onClick={ff}>
                  <IconFont type="anticon-icon-bianxing"/>
             </Button>
           </div>
     </div>
    );
 }
-const dgraph =(
+const dgraph=function(fh,fa){
+  return (
     <div>
           <div style={{margin:'1px'}}>
-            <Button type="primary" >
+            <Button type="primary" onClick={fa}>
                  <IconFont type="anticon-pingguo"/>
             </Button>
           </div>
           <div style={{margin:'1px'}}>
-            <Button type="primary">
+            <Button type="primary" >
                  <IconFont type="anticon-home"/>
             </Button>
           </div>
     </div>
    );
+  }
   class EditorWithBar extends Component {
     constructor(props, context) {
         super(props, context)
@@ -123,12 +125,12 @@ const dgraph =(
         <Col span={1}>
           <div className="flowbutton">
           <div style={{margin:'1px'}}>
-          <Popover placement="rightTop" content={dgraph} trigger="click">
+          <Popover placement="rightTop" content={dgraph(this.add.bind(this,'house'),this.add.bind(this,'heart'))} trigger="click">
               <Button type="primary" icon="appstore" ></Button>
           </Popover> 
           </div>
           <div style={{margin:'1px'}}>
-          <Popover placement="rightTop" content={ sgraph(this.add.bind(this,'circle'),this.add.bind(this,'rect'),this.add.bind(this,'star'))} trigger="click">
+          <Popover placement="rightTop" content={ sgraph(this.add.bind(this,'circle'),this.add.bind(this,'rect'),this.add.bind(this,'star'),this.add.bind(this,'tisogon'),this.add.bind(this,'fisogon'))} trigger="click">
              <Button type="primary" icon="form" ></Button>
           </Popover>
           </div> 

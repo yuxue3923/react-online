@@ -69,6 +69,26 @@ function add(type){
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,})
             sr.add(star);
             break;
+        case 'house':
+            Pen('house')
+            var house=new srender.House({shape:{cx:500,cy:300},style:{fill: 'none',stroke: 'green'}})
+            sr.add(house);
+            break;
+        case 'tisogon':
+            Pen('tisogon')
+            var tisogon=new srender.Isogon({shape:{x:300,y:300,r:50,n:3},style:{fill: 'none',stroke: 'green'}})
+            sr.add(tisogon);
+            break;
+        case 'fisogon':
+            Pen('fisogon')
+            var fisogon=new srender.Isogon({shape:{x:400,y:300,r:50,n:5},style:{fill: 'none',stroke: 'blue'}})
+            sr.add(fisogon);
+            break;
+        case 'heart':
+            Pen('heart')
+            var heart=new srender.Heart({shape:{cx:450,cy:300,width:50,height:50},style:{fill: 'red',stroke: 'none'}})
+            sr.add(heart);
+            break;
         default:
             Pen('none')
             console.log("Sorry,no shape to draw")
