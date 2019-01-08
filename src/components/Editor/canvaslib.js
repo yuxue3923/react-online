@@ -64,6 +64,11 @@ function add(type){
             Pen('image')
             console.log("Sorry,image module to be done")
             break;
+        case 'star':
+            Pen('star')
+            var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,})
+            sr.add(star);
+            break;
         default:
             Pen('none')
             console.log("Sorry,no shape to draw")

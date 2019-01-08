@@ -32,11 +32,11 @@ var content1 = function(fn){
   );
 }
 
-const sgraph =function(fn){
+const sgraph =function(fn,fp,fs){
     return (
     <div>
           <div style={{margin:'1px'}} >
-            <Button type="primary">
+            <Button type="primary" onClick={fs}>
                  <IconFont type="anticon-xing"/>
             </Button>
           </div>
@@ -46,7 +46,7 @@ const sgraph =function(fn){
             </Button>
           </div>
           <div style={{margin:'1px'}} >
-           <Button type="primary">
+           <Button type="primary" onClick={fp}>
                  <IconFont type="anticon-xingzhuang-juxing"/>
             </Button>
           </div>
@@ -128,7 +128,7 @@ const dgraph =(
           </Popover> 
           </div>
           <div style={{margin:'1px'}}>
-          <Popover placement="rightTop" content={ sgraph(this.add.bind(this,'circle'))} trigger="click">
+          <Popover placement="rightTop" content={ sgraph(this.add.bind(this,'circle'),this.add.bind(this,'rect'),this.add.bind(this,'star'))} trigger="click">
              <Button type="primary" icon="form" ></Button>
           </Popover>
           </div> 
