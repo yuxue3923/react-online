@@ -72,7 +72,7 @@ const dgraph=function(fh,fa){
             </Button>
           </div>
           <div style={{margin:'1px'}}>
-            <Button type="primary" >
+            <Button type="primary" onClick={fh}>
                  <IconFont type="anticon-home"/>
             </Button>
           </div>
