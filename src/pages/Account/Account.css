@@ -1,0 +1,57 @@
+.top-navigation{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+  
+    
+}
+.search{
+    text-align:center;
+    margin: 0 auto;
+    width: 38%;
+    height: 100;
+    
+  
+}
+.flowbar-account{
+    display: table-cell;
+     
+   }
+.mid-nav{
+    text-align:center;
+    background: rgba(0, 0, 0, 0.25);
+  }
+.page_body{
+    display:flex;
+    margin: 0 auto;
+    height: 100%;
+    min-height: 500PX;
+  }
+.Content{
+    height: "100%";
+    text-align:center;
+    margin: 50px auto;
+  }
+  .cardstyle{
+    margin: 0px 8px 0px 0px;
+    height: "100%"; 
+    overflow: 'visible';
+}
+.cardparent{
+    width:250px;
+    height:300px;
+
+}
+.cardself {
+    max-width: 250px;
+    text-align:center;
+    align-self:center;
+    margin:100px 0px 0px 0px; 
+  }
+  .pself {
+    max-width: 250px;
+    text-align:center;
+    align-self:center;
+    margin:10px 0px 0px 0px; 
+  }

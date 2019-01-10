@@ -39,7 +39,7 @@ const FormItem = Form.Item;
             <Checkbox className="login-form-remember">记住我</Checkbox>
           )}
           <a className="login-form-forgot" href="">忘记密码</a>
-          <Link to='/APP'><Button type="primary" htmlType="submit" className="login-form-button">
+          <Link to='/Account'><Button type="primary" htmlType="submit" className="login-form-button">
             登录
           </Button></Link>
           {/* Or <a href="">register now!</a> */}

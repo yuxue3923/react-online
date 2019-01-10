@@ -5,7 +5,7 @@ import './editbutton.css';
 const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_981127_oee7kc1cksg.js',
   });
-
+//at.alicdn.com/t/font_1006980_b7ueg4tyem5.js
 var isButton=false;
 var content1 = function(fn){
    return (
@@ -72,7 +72,7 @@ const dgraph=function(fh,fa){
             </Button>
           </div>
           <div style={{margin:'1px'}}>
-            <Button type="primary" onClick={fh}>
+            <Button type="primary" >
                  <IconFont type="anticon-home"/>
             </Button>
           </div>
@@ -149,7 +149,7 @@ const dgraph=function(fh,fa){
                <Button type="primary" icon="scissor"></Button>
           </div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" icon="dash"></Button>
+               <Button type="primary" icon="file-search"></Button>
           </div> 
           </div>
           </Col>

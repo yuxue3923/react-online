@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Menu,Select, Row,Col,Button,Drawer,Avatar, Badge,Icon,Dropdown,Popover,Modal, Card} from 'antd';
+import { Layout, Menu,Select, Row,Col,Input,Button,Drawer,Avatar, Badge,Icon,Dropdown,Popover,Modal, Card} from 'antd';
 import './App.css';
 import {Link} from 'react-router-dom';
 
@@ -10,12 +10,64 @@ import EditorWithBar from './components/Editor/EditorWithBar';
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_981127_oee7kc1cksg.js',
 });
+const IconAvator = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1009791_ev29rcbfmfr.js',
+});
+
 const {  Content, Sider } = Layout;
 const Option = Select.Option;
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
-const text =<div><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >Tom</Avatar></Link><span>当前用户</span></div>;
+
+const content=(
+  <div style={{ width: 500 }}>
+  <Card >
+  <div className="left">
+     <p style={{fontSize:'25px'}} >
+        <IconAvator type="icon-touxiangnvhai"/>
+        <Input placeholder="这个协同web真棒！"  style={{ width: 200 }}/>
+     </p> 
+  </div>
+  <div className="right">
+     <p style={{fontSize:'25px'}} >
+        <Input placeholder="我也觉得"  style={{ width: 200 }}/>
+        <IconAvator type="icon-icon-test3"/>
+     </p> 
+  </div>
+  <div className="left">
+     <p style={{fontSize:'25px'}} >
+        <IconAvator type="icon-icon-test2"/>
+        <Input placeholder="js继承大家听懂了吗？" style={{ width: 200 }}/>
+     </p> 
+  </div>
+  <div className="left">
+     <p style={{fontSize:'25px'}} >
+        <IconAvator type="icon-icon-test1"/>
+        <Input placeholder="只知道prototype这个属性很重要"  style={{ width: 300 }}/>
+     </p> 
+  </div>
+  <div className="right">
+     <p style={{fontSize:'25px'}} >
+        <Input placeholder="哈哈哈！"  style={{ width: 200 }}/>
+        <IconAvator type="icon-icon-test"/>
+     </p> 
+  </div>
+  <div className="right">
+    <Input placeholder="发送消息"  style={{ width: 300 }}/>
+     <Button type="primary">发送</Button>
+  </div>  
+  </Card>
+  </div>
+);
+const text =
+  <div>
+  <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >Tom</Avatar>
+  </Link><span>当前用户</span>
+  <Popover placement="bottomRight" content={content} trigger="click">
+      <Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
+  </Popover>
+  </div>;
 const menu = (
   <Menu>
     <Menu.Item key="0">
