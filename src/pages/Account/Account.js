@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
-import { Layout, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,} from 'antd';
+import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,} from 'antd';
 
 import TagSelect from '../../components/TagSelect';
 import '../../App.css'
@@ -18,8 +18,29 @@ const {Meta} = Card;
 const suffix=<Icon type="close-circle"/>
 const FormItem = Form.Item;
   class Account extends Component {
-    
+    state = { visible: false }
+    //Modal事件
+    showModal = () => {
+      this.setState({
+        visible: true,
+      });
+    }
+  
+    handleOk = (e) => {
+      console.log(e);
+      this.setState({
+        visible: false,
+      });
+    }
+  
+    handleCancel = (e) => {
+      console.log(e);
+      this.setState({
+        visible: false,
+      });
+    }
     render() {
+      
       const cardBasic_one = (
         <div>
           <Row gutter={16}>
@@ -27,7 +48,7 @@ const FormItem = Form.Item;
                 <Card
                   style={{ width:250 ,height:300}}
                   cover={
-                    <img
+                    <img onClick={this.showModal}
                       alt="example"
                       src="https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png" height="154"
                     />
@@ -61,7 +82,7 @@ const FormItem = Form.Item;
                 <Card
                   style={{ width:250 ,height:300}}
                   cover={
-                    <img
+                    <img onClick={this.showModal}
                       alt="example"
                       src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="154"
                     />
@@ -95,7 +116,7 @@ const FormItem = Form.Item;
                 <Card
                   style={{ width:250 ,height:300}}
                   cover={
-                    <img
+                    <img onClick={this.showModal}
                       alt="example"
                       src="https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png" height="154"
                     />
@@ -129,7 +150,7 @@ const FormItem = Form.Item;
                 <Card
                   style={{ width:250 ,height:300}}
                   cover={
-                    <img
+                    <img onClick={this.showModal}
                       alt="example"
                       src="https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png" height="154"
                     />
@@ -316,6 +337,18 @@ const FormItem = Form.Item;
        
      
         </Header>
+        <Modal
+          title="是否重新编辑课件"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={null}
+        >
+        <p className="right">
+           <Button key="return" onClick={this.handleCancel}>取消</Button>
+           <Link to='/APP'><Button key="next" type="primary"> 确定 </Button></Link>
+        </p>
+        </Modal>
         <Card bordered={false}>
             <Tabs defaultActiveKey="courseground" size="large">
               <TabPane tab="课件广场" key="courseground">
