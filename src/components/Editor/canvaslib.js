@@ -74,6 +74,11 @@ function add(type){
             var house=new srender.House({shape:{cx:500,cy:300},style:{fill: 'none',stroke: 'green'}})
             sr.add(house);
             break;
+        case 'apple':
+            Pen('apple')
+            var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill: 'red',stroke: 'none'}})
+            sr.add(apple);
+            break;
         case 'tisogon':
             Pen('tisogon')
             var tisogon=new srender.Isogon({shape:{x:300,y:300,r:50,n:3},style:{fill: 'none',stroke: 'green'}})
@@ -86,7 +91,7 @@ function add(type){
             break;
         case 'heart':
             Pen('heart')
-            var heart=new srender.Heart({shape:{cx:450,cy:300,width:50,height:50},style:{fill: 'red',stroke: 'none'}})
+            var heart=new srender.Heart({shape:{cx:200,cy:20,width:50,height:50},style:{fill: 'red',stroke: 'none'}})
             sr.add(heart);
             break;
         default:

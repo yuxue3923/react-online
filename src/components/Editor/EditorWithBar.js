@@ -3,7 +3,7 @@ import { Popover,Button,Row,Col ,Icon} from 'antd';
 import Editor from './canvaslib'
 import './editbutton.css';
 const IconFont = Icon.createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_981127_oee7kc1cksg.js',
+    scriptUrl: '//at.alicdn.com/t/font_981127_k7yilt2ebjs.js',
   });
 //at.alicdn.com/t/font_1006980_b7ueg4tyem5.js
 var isButton=false;
@@ -63,7 +63,7 @@ const sgraph =function(fn,fp,fs,ft,ff){
     </div>
    );
 }
-const dgraph=function(fh,fa){
+const dgraph=function(fh,fheart,fa){
   return (
     <div>
           <div style={{margin:'1px'}}>
@@ -72,6 +72,11 @@ const dgraph=function(fh,fa){
             </Button>
           </div>
           <div style={{margin:'1px'}}>
+            <Button type="primary" onClick={fheart}>
+                 <IconFont type="anticon-xin"/>
+            </Button>
+          </div>
+          <div style={{margin:'1px'}} onClick={fh}>
             <Button type="primary" >
                  <IconFont type="anticon-home"/>
             </Button>
@@ -125,7 +130,7 @@ const dgraph=function(fh,fa){
         <Col span={1}>
           <div className="flowbutton">
           <div style={{margin:'1px'}}>
-          <Popover placement="rightTop" content={dgraph(this.add.bind(this,'house'),this.add.bind(this,'heart'))} trigger="click">
+          <Popover placement="rightTop" content={dgraph(this.add.bind(this,'house'),this.add.bind(this,'heart'),this.add.bind(this,'apple'))} trigger="click">
               <Button type="primary" icon="appstore" ></Button>
           </Popover> 
           </div>
