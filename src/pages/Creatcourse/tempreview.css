@@ -1,0 +1,13 @@
+.ant-carousel .slick-slide {
+    text-align: center;
+    height:600px;
+    line-height: 600px;
+    background: rgb(228, 226, 226);
+    overflow: hidden;
+  }
+  .ant-carousel .slick-slide h3 {
+    color: #1DA57A;
+  }
+  .imgdiv{
+      margin: 0 auto;
+  }
