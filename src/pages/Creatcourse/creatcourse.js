@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {Form, Icon, Avatar,Input, Button, Checkbox,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
+import {Form, Icon, Avatar,Input, Button,Pagination, Checkbox,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
 import {Link} from 'react-router-dom'
 import './creatcourse.css'
 const { TextArea } = Input;
+const {Meta} = Card;
 const Option = Select.Option;
 const {  Content, Sider,Header, } = Layout;
 const TreeNode = Tree.TreeNode;
@@ -62,8 +63,9 @@ const formItemLayout = {
         super(props, context)
         this.state = {
           arrSize: 0,
-          collapsed: true,
+          collapsed: false,//控制sider折叠
           visible: false, //控制弹出框的呈现与隐藏
+          templatevisible:false,//控制课件模版弹出框
         }
         this.arr = [this.generateROW()]
       }
@@ -80,6 +82,30 @@ const formItemLayout = {
       saveFormRef = form => {
         this.form = form;
       };
+      //课件模版选择确认弹出框
+    showModal_template = () => {
+      this.setState({
+        templatevisible: true,
+      });
+    }
+  
+    handleOk_template = (e) => {
+      console.log(e);
+      this.setState({
+        templatevisible: false,
+      });
+      Modal.success({
+        title: '消息提示',
+        content: '成功选择该课件模版！',
+      });
+    }
+  
+    handleCancel_template = (e) => {
+      console.log(e);
+      this.setState({
+        templatevisible: false,
+      });
+    }
       //侧栏知识点弹出框事件
       toggle = () => {
         this.setState({
@@ -125,9 +151,122 @@ const formItemLayout = {
         )
       }
     render() {
+      const coursetemplate_one = (
+        <div>
+          <Row gutter={16}>
+            <Col span={8}>
+                <Card
+                  style={{ width:250 ,height:280}}
+                  cover={
+                    <img onClick={this.showModal_template}
+                      alt="example"
+                      src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="154"
+                    />
+                  }
+                >
+                  <Row>
+                    <Col span={20}>
+                    <Meta
+                        title="课件模版"
+                        description="适用于科技类、教育类"
+                     />
+                    </Col>
+                  </Row>
+                  <br/>
+                  <Row>
+                    <Col span={18}>
+                        <Link to='/Tempreview'><Icon type="eye"/> 预览模版</Link>
+                    </Col>
+                  </Row>
+                </Card>
+            </Col>
+          </Row>
+        </div>
+      );
+      const coursetemplate_two = (
+        <div>
+          <Row gutter={16}>
+            <Col span={8}>
+                <Card
+                  style={{ width:250 ,height:280}}
+                  cover={
+                    <img onClick={this.showModal_template}
+                      alt="example"
+                      src="https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png" height="154"
+                    />
+                  }
+                >
+                  <Row>
+                    <Col span={20}>
+                    <Meta
+                        title="课件模版"
+                        description="适用于动画、古风类"
+                     />
+                    </Col>
+                  </Row>
+                  <br/>
+                  <Row>
+                    <Col span={18}>
+                        <Link to='/Tempreview'><Icon type="eye"/> 预览模版</Link>
+                    </Col>
+                  </Row>
+                </Card>
+            </Col>
+          </Row>
+        </div>
+      );
+      const coursetemplate_three = (
+        <div>
+          <Row gutter={16}>
+            <Col span={8}>
+                <Card
+                  style={{ width:250 ,height:280}}
+                  cover={
+                    <img onClick={this.showModal_template}
+                      alt="example"
+                      src="https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png" height="154"
+                    />
+                  }
+                >
+                  <Row>
+                    <Col span={20}>
+                    <Meta
+                        title="课件模版"
+                        description="适用于新闻类、宣传类"
+                     />
+                    </Col>
+                  </Row>
+                  <br />
+                  <Row>
+                    <Col span={18}>
+                        <Link to='/Tempreview'><Icon type="eye"/> 预览模版</Link>
+                    </Col>
+                  </Row>
+                </Card>
+            </Col>
+          </Row>
+        </div>
+      );
+      const coursetemplate = (
+        <div>
+          <Row style={{ margin: '8px 8px 8px 0'}}>
+            <Col>{coursetemplate_one}</Col>
+          </Row>
+          <Row style={{ margin: '8px 8px 8px 0'}}>
+            <Col>{coursetemplate_two}</Col>
+          </Row>
+          <Row style={{ margin: '8px 8px 8px 0'}}>
+            <Col>{coursetemplate_three}</Col>
+          </Row>
+          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
+            <Pagination  defaultCurrent={1} total={500} />
+            {/* <Pagination showQuickJumper defaultCurrent={1} total={500} /> */}
+          </Row>
+        </div>
+      );
         const sidecontent=(
             <div>
-                <Card borderd={true} title="选择知识点" style={{ margin: '8px 8px 8px 8px'}}>
+                <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
                       <Tree showLine defaultExpandedKeys={['0-0-0', '0-1-2']} onSelect={this.onSelect}>
                         <TreeNode title="一次方程" key="0-0">
                           <TreeNode title="一次方程概念" key="0-0-0" />
@@ -147,13 +286,24 @@ const formItemLayout = {
                         <TreeNode title="分数" key="0-3" />
                         <TreeNode title="比值" key="0-4" />
                       </Tree>
-                    </Card>
+                    </div>
             </div>
         );
      
       return (
-        <Layout >
-           
+        <Layout style={{ backgroundColor: '#fff' }}>
+        <Modal
+          title="是否选用该模版"
+          visible={this.state.templatevisible}
+          onOk={this.handleOk_template}
+          onCancel={this.handleCancel_template}
+          footer={null}
+        >
+        <p className="right">
+           <Button key="return" onClick={this.handleCancel_template}>取消</Button>
+           <Button key="next" type="primary" onClick={this.handleOk_template}> 确定 </Button>
+        </p>
+        </Modal>   
         <Sider 
         width={300}
         trigger={null}
@@ -162,18 +312,19 @@ const formItemLayout = {
         collapsedWidth={0}
        
         className="Sider"
-        style={{width: '100%', height: '100vh'}}
+        style={{width: '100%', height: '700px'}}
         >
          {sidecontent}
         </Sider>
-      <div className="creatparent">
+      <Card style={{width: '100%', height: '100%'}}>
           <div className="flowbar" style={{right:10,top:20}}>
             <span style={{ marginRight: 24, }}>
             <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user"/></Link>
             </span>
           </div>
-        <div className="login-form" >
-         
+        <div>
+         <Row gutter={16}>
+         <Col span={12}>
         <div style={{ color: 'green', fontSize:'20px',margin:'10px 0px 30px 0px' }} >创建课件</div>
          
         <Form>
@@ -260,11 +411,11 @@ const formItemLayout = {
                 </Col>
             </Row>
             </Form.Item>
-          <Form.Item >
-            <Button onClick={this.showModal} type="primary" >
-              课件大纲
-            </Button>
-          </Form.Item>
+               <Form.Item label="课件大纲安排" {...formItemLayout}>
+                  <Button onClick={this.showModal} type="primary" >
+                    课件大纲
+                  </Button>
+               </Form.Item>
         </Form>
         <CourseLine
               ref={this.saveFormRef}
@@ -272,8 +423,15 @@ const formItemLayout = {
               onCancel={this.handleCancel}
               onCreate={this.handleCreate.bind(this)}
             />
+            </Col>
+            <Col span={12}>
+              <Card style={{margin:'50px 0px 30px 100px',width:320 }} >
+                 {coursetemplate}
+              </Card>
+            </Col>
+          </Row>
         </div>
-      </div>
+      </Card>
       </Layout>
       );
     }

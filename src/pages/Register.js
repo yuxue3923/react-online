@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import {Form, Icon, Input, Button, Checkbox, } from 'antd';
+import {Form, Icon, Input, Button, Checkbox,Modal } from 'antd';
 import {Link} from 'react-router-dom'
 import './Access.css'
 const FormItem = Form.Item;
-  class Access_child extends Component {
+  class Register_child extends Component {
     handleSubmit = (e) => {
       e.preventDefault();
       this.props.form.validateFields((err, values) => {
@@ -12,6 +12,12 @@ const FormItem = Form.Item;
         }
       });
     }
+    remind = () => {
+        Modal.success({
+          title: '消息提示',
+          content: '成功注册账号！',
+        });
+      }
     render() {
       const { getFieldDecorator } = this.props.form;
       return (
@@ -32,22 +38,22 @@ const FormItem = Form.Item;
           )}
         </FormItem>
         <FormItem>
-          {getFieldDecorator('remember', {
-            valuePropName: 'checked',
-            initialValue: true,
+          {getFieldDecorator('password', {
+            rules: [{ required: true, message: '请确认密码!' }],
           })(
-            <Checkbox className="login-form-remember">记住我</Checkbox>
+            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="再次确认" />
           )}
-          <a className="login-form-forgot" href="">忘记密码</a>
-          <Link to='/Account'><Button type="primary" htmlType="submit" className="login-form-button">
-            登录
+        </FormItem>
+        <FormItem>
+          <Link to='/'><Button onClick={this.remind} type="primary" htmlType="submit" className="login-form-button">
+            注册
           </Button></Link>
-           <a href="/Register">注册账户!</a>
+          <a href="/">使用已有账户登录</a>
         </FormItem>
       </Form>
       </div>
       );
     }
   }
-  const Access = Form.create()(Access_child);
-  export default Access;
+  const Register = Form.create()(Register_child);
+  export default Register;
