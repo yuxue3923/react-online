@@ -5,7 +5,8 @@
     margin: 0 auto;
 }
 .login-form {
-    max-width: 500px;
+    min-width: 250px;
+    max-width: 600px;
     text-align:center;
     align-self:center;
     margin: 0 auto;

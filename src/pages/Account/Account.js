@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,} from 'antd';
-
-import TagSelect from '../../components/TagSelect';
+import MyTag from './Tag';
 import '../../App.css'
 import './Account.css'
 const IconFont = Icon.createFromIconfontCN({
@@ -12,13 +11,26 @@ const Option = Select.Option;
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span:2 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+};
 const TabPane = Tabs.TabPane;
 const { Header, Content } = Layout;
 const {Meta} = Card;
 const suffix=<Icon type="close-circle"/>
 const FormItem = Form.Item;
   class Account extends Component {
-    state = { visible: false }
+    state = { 
+      visible: false ,
+      checked: true,//Tag状态
+    }
     //Modal事件
     showModal = () => {
       this.setState({
@@ -38,6 +50,9 @@ const FormItem = Form.Item;
       this.setState({
         visible: false,
       });
+    }
+    handleChange = (checked) => {
+      this.setState({ checked });
     }
     render() {
       
@@ -267,50 +282,47 @@ const FormItem = Form.Item;
       );
 
       const course_ground=(
-        <div style={{ margin: '8px 8px 8px 0'}}>
+        <div style={{ margin: '0px 0px 0px 0'}}>
         <Card bordered={false}>
-          <Form layout="inline" style={{ paddingBottom: 11 }}>
-              <FormItem label="K12教育">
-                  <TagSelect  expandable>
-                    <TagSelect.Option value="cat2">语文</TagSelect.Option>
-                    <TagSelect.Option value="cat3">数学</TagSelect.Option>
-                    <TagSelect.Option value="cat4">英语</TagSelect.Option>
-                    <TagSelect.Option value="cat5">物理</TagSelect.Option>
-                    <TagSelect.Option value="cat6">化学</TagSelect.Option>
-                    <TagSelect.Option value="cat7">生物</TagSelect.Option>
-                    <TagSelect.Option value="cat8">政治</TagSelect.Option>
-                    <TagSelect.Option value="cat9">历史</TagSelect.Option>
-                    <TagSelect.Option value="cat10">体育</TagSelect.Option>
-                    <TagSelect.Option value="cat11">艺术</TagSelect.Option>
-                  </TagSelect>
+          <Form >
+              <FormItem label="K12教育"  {...formItemLayout}>
+                    <MyTag>全部</MyTag>
+                    <MyTag>语文</MyTag>
+                    <MyTag>数学</MyTag>
+                    <MyTag>英语</MyTag>
+                    <MyTag>物理</MyTag>
+                    <MyTag>化学</MyTag>
+                    <MyTag>生物</MyTag>
+                    <MyTag>政治</MyTag>
+                    <MyTag>历史</MyTag>
+                    <MyTag>体育</MyTag>
+                    <MyTag>艺术</MyTag>
               </FormItem>
-              <FormItem label="IT教育">
-                  <TagSelect  expandable>
-                    <TagSelect.Option value="cat2">前端</TagSelect.Option>
-                    <TagSelect.Option value="cat3">小程序</TagSelect.Option>
-                    <TagSelect.Option value="cat4">区块链</TagSelect.Option>
-                    <TagSelect.Option value="cat5">人工智能</TagSelect.Option>
-                    <TagSelect.Option value="cat6">云计算</TagSelect.Option>
-                    <TagSelect.Option value="cat7">大数据</TagSelect.Option>
-                    <TagSelect.Option value="cat8">运维</TagSelect.Option>
-                    <TagSelect.Option value="cat9">测试</TagSelect.Option>
-                    <TagSelect.Option value="cat10">数据库</TagSelect.Option>
-                    <TagSelect.Option value="cat11">UI设计</TagSelect.Option>
-                  </TagSelect>
+              <FormItem label="IT教育"  {...formItemLayout}>
+                    <MyTag>全部</MyTag>
+                    <MyTag>前端</MyTag>
+                    <MyTag>小程序</MyTag>
+                    <MyTag>区块链</MyTag>
+                    <MyTag>人工智能</MyTag>
+                    <MyTag>云计算</MyTag>
+                    <MyTag>大数据</MyTag>
+                    <MyTag>运维</MyTag>
+                    <MyTag>测试</MyTag>
+                    <MyTag>数据库</MyTag>
+                    <MyTag>UI设计</MyTag>
               </FormItem>
-              <FormItem label="百科知识">
-                  <TagSelect  expandable>
-                    <TagSelect.Option value="cat2">建筑</TagSelect.Option>
-                    <TagSelect.Option value="cat3">艺术</TagSelect.Option>
-                    <TagSelect.Option value="cat4">心理</TagSelect.Option>
-                    <TagSelect.Option value="cat5">宗教</TagSelect.Option>
-                    <TagSelect.Option value="cat6">医学健康</TagSelect.Option>
-                    <TagSelect.Option value="cat7">商业管理</TagSelect.Option>
-                    <TagSelect.Option value="cat8">经济</TagSelect.Option>
-                    <TagSelect.Option value="cat9">金融</TagSelect.Option>
-                    <TagSelect.Option value="cat10">法律</TagSelect.Option>
-                    <TagSelect.Option value="cat11">伦理</TagSelect.Option>
-                  </TagSelect>
+              <FormItem label="百科知识" {...formItemLayout}>
+                    <MyTag>全部</MyTag>
+                    <MyTag>建筑</MyTag>
+                    <MyTag>艺术</MyTag>
+                    <MyTag>心理</MyTag>
+                    <MyTag>宗教</MyTag>
+                    <MyTag>医学健康</MyTag>
+                    <MyTag>商业管理</MyTag>
+                    <MyTag>经济</MyTag>
+                    <MyTag>金融</MyTag>
+                    <MyTag>法律</MyTag>
+                    <MyTag>伦理</MyTag>
               </FormItem>
           </Form>
         </Card>

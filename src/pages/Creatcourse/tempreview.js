@@ -8,17 +8,37 @@ import './tempreview.css'
     render() {
       
       return (
+        <div>
+        <div className="flowbar" style={{right:10,top:20}}>
+            <span style={{ marginRight: 24, }}>
+            <Link to='/Createcourse'><Icon style={{ color: '#f56a00',fontSize:'35px' }}  type="rollback"/></Link>
+            </span>
+        </div>
         <Carousel autoplay>
            <div>
              <h3>
              <img className="imgdiv"
-               src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="154"/>
+               src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="600"/>
             </h3>
            </div>
-           <div><h3>2</h3></div>
-           <div><h3>3</h3></div>
-           <div><h3>4</h3></div>
+           <div>
+             <h3>
+               <img className="imgdiv"
+               src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="600"/>
+             </h3>
+           </div>
+           <div>
+             <h3><img className="imgdiv"
+               src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="600"/>
+            </h3>
+          </div>
+           <div>
+             <h3><img className="imgdiv"
+               src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="600"/>
+            </h3>
+          </div>
         </Carousel>
+        </div>
       );
     }
   }
