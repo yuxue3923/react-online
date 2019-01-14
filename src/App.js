@@ -7,6 +7,74 @@ import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
 
 import EditorWithBar from './components/Editor/EditorWithBar';
+
+var MyDeck = [[{
+  "id":2312,
+  "type":"isogon",
+  "position":[700,500],
+  "rotation":[0,0],
+  "scale":[1,1],
+  "shape":{
+      "n":3,
+      "r":50,
+      "x":100,
+      "y":100
+  },
+  "style":{
+
+  }
+},
+{
+  "id":2313,
+  "type":"isogon",
+  "position":[300,500],
+  "rotation":[0,0],
+  "scale":[1,1],
+  "shape":{
+      "n":3,
+      "r":50,
+      "x":100,
+      "y":100
+  },
+  "style":{
+
+  }
+}],[{
+  "id":2314,
+  "type":"rect",
+  "position":[400,700],
+  "rotation":[0,0],
+  "scale":[1,1],
+  "shape":{
+      "height":50,
+      "r":0,
+      "width":50,
+      "x":100,
+      "y":100  //如果没有初始化值会被0覆盖，问题在于判断函数，待修改
+  },
+  "style":{
+
+  }
+},
+{
+  "id":2315,
+  "type":"house",
+  "position":[300,100],
+  "rotation":[0,0],
+  "scale":[1,1],
+  "shape":{
+      "n":3,
+      "r":40,
+      "r0":20,
+      "cx":100,
+      "cy":100
+  },
+  "style":{
+      "fill":"none",
+      "stroke":"green"
+  }
+}]];
+
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_981127_oee7kc1cksg.js',
 });
@@ -141,8 +209,14 @@ class App extends Component {
       collapsed: false,
       visible: false,
       modalvisible:false,
+      page:1,
     };
-    
+    pageChoose = (Xst) => {
+      this.setState({
+        page: Xst,
+      });
+      console.log(Xst)
+    }
     showModal = () => {
       this.setState({
         modalvisible: true,
@@ -206,7 +280,7 @@ class App extends Component {
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                <DrawView />{/*thumbnail={"当前幻灯片"}*/}
+                <DrawView pageChoose={this.pageChoose}/>{/*thumbnail={"当前幻灯片"}*/}
               </Drawer>
             </div>
             <div className="flowbar" style={{right:10,top:20}}>
@@ -247,7 +321,7 @@ class App extends Component {
               </Modal>
               </span>
             </div>
-            <EditorWithBar/>
+            <EditorWithBar initContent={MyDeck[this.state.page]}/>
             </div>
             </Content>
             {/* </Layout> */}

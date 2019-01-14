@@ -6,6 +6,7 @@ const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_981127_k7yilt2ebjs.js',
   });
 //at.alicdn.com/t/font_1006980_b7ueg4tyem5.js
+
 var isButton=false;
 var content1 = function(fn){
    return (
@@ -93,6 +94,7 @@ const dgraph=function(fh,fheart,fa){
             //fromSr:{},
         }
         this.fromSr={}
+        this.objectList = props || []
         this.handleThumbnail=this.handleThumbnail.bind(this)
     }
     add(type){
@@ -121,7 +123,7 @@ const dgraph=function(fh,fheart,fa){
     }
    
     render() {
-        console.log("xuanran")
+        console.log(this.props.initContent)
         console.log("xuanran后的state"+this.state.addType)
       return (
         

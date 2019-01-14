@@ -4,13 +4,13 @@ const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_988038_ej9e5sv8svd.js',
 });
 const listData = [];
-for (let i = 0; i < 23; i++) {
+for (let i = 0; i < 4; i++) {
   listData.push({
     href: 'http://ant.design',
     title: `幻灯片 ${i+1}`,
     // avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
     // description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content: '幻灯片具体内容幻灯片具体内容幻灯片具体内容幻灯片具体内容幻灯片具体内容幻灯片具体内容',
+    Xst:i+1
   });
 }
 
@@ -24,23 +24,27 @@ for (let i = 0; i < 23; i++) {
 class Drawerview extends Component {
     constructor(props, context) {
       super(props, context)
-      
+      this.pageChoose = this.pageChoose.bind(this)
+  }
+  pageChoose(Xst){
+    this.props.pageChoose(Xst)
   }
   componentWillMount(){
     listData[0].title=this.props.thumbnail
   }
+
     render() {
       
       return (
         <List
         itemLayout="vertical"
         size="large"
-        pagination={{
+        /*pagination={{
           onChange: (page) => {
             console.log(page);
           },
           pageSize: 3,
-        }}
+        }}*/
         dataSource={listData}
         footer={<div>
           <Button type="dashed"  shape="circle" >
@@ -55,14 +59,14 @@ class Drawerview extends Component {
             key={item.title}
             // actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
             // extra={<img width={200} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
+            
           >
             <List.Item.Meta
               avatar={<Avatar style={{ backgroundColor: '#fde3cf' }}> <Icon type='tags'/></Avatar>}
               title={<a href={item.href}>{item.title}</a>}
             //   description={item.description}
             />
-            {item.content}
-            <img width={150} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />
+            <img width={150} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" onClick={this.pageChoose.bind(this,item.Xst)}/>
           </List.Item>
         )}
       />
