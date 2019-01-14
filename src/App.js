@@ -130,8 +130,8 @@ const content=(
 );
 const text =
   <div>
-  <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >Tom</Avatar>
-  </Link><span>当前用户</span>
+  <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar>
+  </Link><span style={{fontSize:15}}> 当前用户</span>
   <Popover placement="bottomRight" content={content} trigger="click">
       <Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
   </Popover>
