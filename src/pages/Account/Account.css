@@ -59,3 +59,15 @@
     align-self:center;
     margin:10px 0px 0px 0px; 
   }
+  .parent{
+    display:flex;
+    height:154px;
+    margin: 0 auto;
+}
+.self {
+    max-width: 250px;
+    text-align:center;
+    align-self:center;
+    margin: 0 auto;
+    /* margin:40px 0px 0px 0px;  */
+  }

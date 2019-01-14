@@ -153,7 +153,7 @@ const formItemLayout = {
         );
      
       return (
-        <Layout style={{ backgroundColor: '#fff' }}> 
+        <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
         <Sider 
         width={300}
         trigger={null}
@@ -166,18 +166,25 @@ const formItemLayout = {
         >
          {sidecontent}
         </Sider>
-      <Card style={{width: '100%', height: '100%'}}>
-          <div className="flowbar" style={{right:10,top:20}}>
-            <span style={{ marginRight: 24, }}>
-            <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user"/></Link>
-            </span>
-          </div>
+        <Header className='top-navigation' style={{height:'8.2%'}}>
+        {/* <div className="logo" /> */}
+        
+        <div className='flowbar' style={{right:30,top:20}}>
+        <Link to='/User'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar></Link>
+        <span style={{padding:10,fontSize:15}}>当前用户</span>
+        </div>
+         
+       
+     
+        </Header>
+      <Card  style={{height:'100%',width:'100%'}}>
+         
         <div>
          <Row gutter={16}>
          <Col span={12}>
-        <div style={{ color: 'green', fontSize:'20px',margin:'10px 0px 30px 0px' }} >创建课件</div>
+        <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >创建课件</div>
          
-        <Form>
+        <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
             <Input placeholder="20字以内"  style={{ width: 300 }}/>
           </Form.Item>
@@ -272,7 +279,7 @@ const formItemLayout = {
            </Row>
             </Col>
             <Col span={12}>
-              <Card style={{margin:'50px 0px 30px 100px',width:360 }} title="课件大纲">
+              <Card style={{margin:'80px 0px 30px 80px',width:360 }} title="课件大纲">
               <CourseLine
                   ref={this.saveFormRef}
                   visible={this.state.visible}

@@ -30,3 +30,15 @@
     /* fix firefox can't set width smaller than content on flex item */
     min-width:0;
   }
+  .top-navigation{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+  
+    
+}
+.flowbar-account{
+  display: table-cell;
+   
+ }

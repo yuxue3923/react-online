@@ -1,10 +1,36 @@
 import React, { Component } from 'react';
-import {Form, Icon, Input, Button, Checkbox,Col,Row,Card } from 'antd';
+import {Form, Icon, Input, Button, Checkbox,Col,Row,Card ,Modal} from 'antd';
 import {Link} from 'react-router-dom'
+import './Account.css'
 const {Meta} = Card;
-
+const IconFont = Icon.createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/font_1015305_dn6cbev91qk.js',
+  });
   class ChoseTemplate extends Component {
+    state = { 
+        visible: false ,
+
+      }
+    //Modal事件
+    showModal = () => {
+        this.setState({
+          visible: true,
+        });
+      }
     
+      handleOk = (e) => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      }
+    
+      handleCancel = (e) => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      }
     render() {
         const coursetemplate_one = (
             <div>
@@ -13,7 +39,7 @@ const {Meta} = Card;
                     <Card
                       style={{ width:200 ,height:280}}
                       cover={
-                        <img
+                        <img onClick={this.showModal}
                           alt="example"
                           src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="154"
                         />
@@ -45,7 +71,7 @@ const {Meta} = Card;
                     <Card
                       style={{ width:200 ,height:280}}
                       cover={
-                        <img
+                        <img onClick={this.showModal}
                           alt="example"
                           src="https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png" height="154"
                         />
@@ -74,19 +100,20 @@ const {Meta} = Card;
             <div>
               <Row gutter={16}>
                 <Col span={8}>
-                    <Card
+                    <Card 
                       style={{ width:200 ,height:280}}
                       cover={
-                        <img
-                          alt="example"
-                          src="https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png" height="154"
-                        />
+                          <div className="parent" onClick={this.showModal}>
+                            <div className="self">
+                            <IconFont  style={{ fontSize:"50px"}} type="icon-kongbaiye" />
+                            </div>
+                          </div>
                       }
                     >
                       <Row>
                         <Col span={24}>
                         <Meta
-                            title="课件模版"
+                            title="空白模版"
                             description="适用于新闻类、宣传类"
                          />
                         </Col>
@@ -112,7 +139,19 @@ const {Meta} = Card;
             </div>
           );
       return (
-        <div> 
+        <div>
+            <Modal
+              title="是否选择该模版"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+              footer={null}
+            >
+             <p className="right">
+                <Button key="return" onClick={this.handleCancel}>取消</Button>
+                <Link to='/Createcourse'><Button key="next" type="primary"> 确定 </Button></Link>
+             </p>
+            </Modal> 
             {coursetemplate}
         </div>
       );
