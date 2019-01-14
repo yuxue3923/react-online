@@ -8,6 +8,7 @@ import Access from '../pages/Access'
 import Register from '../pages/Register'
 import Createcourse from '../pages/Creatcourse/creatcourse'
 import Tempreview from '../pages/Creatcourse/tempreview'
+import User from '../pages/User'
 
 export default class RouterIndex extends Component {
     render() {
@@ -20,6 +21,7 @@ export default class RouterIndex extends Component {
                 <Route path="/Createcourse" component={Createcourse}></Route>
                 <Route path="/Tempreview" component={Tempreview}></Route>
                 <Route path="/Register" component={Register}></Route>
+                <Route path="/User" component={User}></Route>
             </Switch>
             </BrowserRouter>
         )

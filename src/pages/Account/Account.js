@@ -343,7 +343,8 @@ const FormItem = Form.Item;
       />
      
         </div>
-        <div className='flowbar-account'><span style={{padding:10}}>用户名</span><Avatar style={{ backgroundColor:'#f56a00', verticalAlign: 'middle' }} size={50}>U</Avatar>
+        <div className='flowbar-account'><span style={{padding:10}}>用户名</span>
+        <Link to='/User'><Avatar style={{ backgroundColor:'#f56a00', verticalAlign: 'middle' }} size={50}>U</Avatar></Link>
         </div>
          
        
