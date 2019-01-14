@@ -7,9 +7,9 @@ import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
 
 import EditorWithBar from './components/Editor/EditorWithBar';
-
+var temp = 99999
 var MyDeck = [[{
-  "id":2312,
+  "id":temp,
   "type":"isogon",
   "position":[700,500],
   "rotation":[0,0],
@@ -25,7 +25,7 @@ var MyDeck = [[{
   }
 },
 {
-  "id":2313,
+  "id":temp,
   "type":"isogon",
   "position":[300,500],
   "rotation":[0,0],
@@ -40,7 +40,7 @@ var MyDeck = [[{
 
   }
 }],[{
-  "id":2314,
+  "id":temp,
   "type":"rect",
   "position":[400,700],
   "rotation":[0,0],
@@ -57,7 +57,7 @@ var MyDeck = [[{
   }
 },
 {
-  "id":2315,
+  "id":temp,
   "type":"house",
   "position":[300,100],
   "rotation":[0,0],
@@ -215,7 +215,7 @@ class App extends Component {
       this.setState({
         page: Xst,
       });
-      console.log(Xst)
+      console.log(this.state.page)
     }
     showModal = () => {
       this.setState({
@@ -321,7 +321,7 @@ class App extends Component {
               </Modal>
               </span>
             </div>
-            <EditorWithBar initContent={MyDeck[this.state.page]}/>
+            <EditorWithBar initContent={MyDeck[this.state.page-1]}/>
             </div>
             </Content>
             {/* </Layout> */}

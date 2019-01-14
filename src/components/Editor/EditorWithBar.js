@@ -94,7 +94,6 @@ const dgraph=function(fh,fheart,fa){
             //fromSr:{},
         }
         this.fromSr={}
-        this.objectList = props || []
         this.handleThumbnail=this.handleThumbnail.bind(this)
     }
     add(type){
@@ -123,8 +122,6 @@ const dgraph=function(fh,fheart,fa){
     }
    
     render() {
-        console.log(this.props.initContent)
-        console.log("xuanran后的state"+this.state.addType)
       return (
         
         <div>
@@ -160,7 +157,7 @@ const dgraph=function(fh,fheart,fa){
           </div> 
           </div>
           </Col>
-          <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail}/></Col>{/*{}*/}
+          <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={this.props.initContent||[]}/></Col>{/*{}*/}
         </Row>
         </div>
       );

@@ -119,63 +119,16 @@ export default class Editor extends React.Component {
         sr = srender.init(dom)
         var w = sr.getWidth();
         var h = sr.getHeight();
-
-        var r = 30;
-
-       
-
-
-
-       
-        var circle = new srender.Circle({
-            shape: {
-                cx: r,
-                cy: h / 2,
-                r: r
-            },
-            style: {
-                fill: 'transparent',
-                stroke: '#FF6EBE'
-            },
-            silent: true
-        });
-        
-            
-        
-        sr.add(circle);
-        var sun = new srender.Circle({
-            shape: {
-                cx: 0,
-                cy: 0,
-                r: 50
-            },
-            style: {
-                fill: '#FF904F'
-            },
-            position: [w / 2, h / 2],
-            draggable: true,
-        });
-
-        sr.add(sun);
-        var sun1 = new srender.Circle({
-            shape: {
-                cx: 0,
-                cy: 0,
-                r: 20
-            },
-            style: {
-                fill: '#FF9'
-            },
-            position: [w / 2, h / 2],
-            draggable: true,
-        });
-        sr.add(sun1);
-        console.log(sr)
-        console.log(sr.handler._$handlers)
-        console.log(sr.handler.proxy._$handlers)
+        sr.initWithOthers(this.props.objectList)
+    }
+    componentWillUpdate(){
+        sr.initWithOthers(this.props.objectList)
     }
     componentDidUpdate(){
+        console.log(this.props.objectList)
+       
         add(this.props.type);
+       
         this.props.type!=='none'&&this.handleGetThumbnail("某些信息")
         console.log("组建props改变触发")
     }
