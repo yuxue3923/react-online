@@ -11,7 +11,7 @@ import './tempreview.css'
         <div>
         <div className="flowbar" style={{right:10,top:20}}>
             <span style={{ marginRight: 24, }}>
-            <Link to='/Createcourse'><Icon style={{ color: '#f56a00',fontSize:'35px' }}  type="rollback"/></Link>
+            <Link to='/Account'><Icon style={{ color: '#f56a00',fontSize:'35px' }}  type="rollback"/></Link>
             </span>
         </div>
         <Carousel autoplay>

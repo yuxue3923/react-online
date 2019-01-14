@@ -94,30 +94,30 @@ const content=(
   <div className="left">
      <p style={{fontSize:'25px'}} >
         <IconAvator type="icon-touxiangnvhai"/>
-        <Input placeholder="这个协同web真棒！"  style={{ width: 200 }}/>
+        <Input value="这个协同web真棒！"  style={{ width: 200 }}/>
      </p> 
   </div>
   <div className="right">
      <p style={{fontSize:'25px'}} >
-        <Input placeholder="我也觉得"  style={{ width: 200 }}/>
+        <Input value="我也觉得"  style={{ width: 200 }}/>
         <IconAvator type="icon-icon-test3"/>
      </p> 
   </div>
   <div className="left">
      <p style={{fontSize:'25px'}} >
         <IconAvator type="icon-icon-test2"/>
-        <Input placeholder="js继承大家听懂了吗？" style={{ width: 200 }}/>
+        <Input value="js继承大家听懂了吗？" style={{ width: 200 }}/>
      </p> 
   </div>
   <div className="left">
      <p style={{fontSize:'25px'}} >
         <IconAvator type="icon-icon-test1"/>
-        <Input placeholder="只知道prototype这个属性很重要"  style={{ width: 300 }}/>
+        <Input value="只知道prototype这个属性很重要"  style={{ width: 300 }}/>
      </p> 
   </div>
   <div className="right">
      <p style={{fontSize:'25px'}} >
-        <Input placeholder="哈哈哈！"  style={{ width: 200 }}/>
+        <Input value="哈哈哈！"  style={{ width: 200 }}/>
         <IconAvator type="icon-icon-test"/>
      </p> 
   </div>
