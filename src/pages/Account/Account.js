@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,} from 'antd';
 import MyTag from './Tag';
+import ChoseTemplate from './ChoseTemplate'
 import '../../App.css'
 import './Account.css'
 const IconFont = Icon.createFromIconfontCN({
@@ -30,6 +31,7 @@ const FormItem = Form.Item;
     state = { 
       visible: false ,
       checked: true,//Tag状态
+      templatevisible:false,//控制课件模版弹出框
     }
     //Modal事件
     showModal = () => {
@@ -49,6 +51,30 @@ const FormItem = Form.Item;
       console.log(e);
       this.setState({
         visible: false,
+      });
+    }
+     //课件模版选择确认弹出框
+     showModal_template = () => {
+      this.setState({
+        templatevisible: true,
+      });
+    }
+  
+    handleOk_template = (e) => {
+      console.log(e);
+      this.setState({
+        templatevisible: false,
+      });
+      Modal.success({
+        title: '消息提示',
+        content: '成功选择该课件模版！',
+      });
+    }
+  
+    handleCancel_template = (e) => {
+      console.log(e);
+      this.setState({
+        templatevisible: false,
       });
     }
     handleChange = (checked) => {
@@ -198,7 +224,7 @@ const FormItem = Form.Item;
                   className="cardparent"
                 >
                   <Row className="cardself" >
-                    <Link to='/Createcourse'><p style={{fontSize:'35px'}} ><IconFont type="icon-jia" /></p></Link>
+                    <p style={{fontSize:'35px'}}><IconFont  onClick={this.showModal_template} type="icon-jia" /></p>
                     <p>创建新课件</p>
                   </Row>
                 </Card>
@@ -332,6 +358,16 @@ const FormItem = Form.Item;
 
       return (
         <Layout style={{height:'100%',width:'100%'}}>
+        <Modal
+          width="700px"
+          title="选择模版"
+          visible={this.state.templatevisible}
+          onOk={this.handleOk_template}
+          onCancel={this.handleCancel_template}
+          footer={null}
+        >
+          <ChoseTemplate/>
+        </Modal> 
         <Header className='top-navigation' style={{height:'8.2%'}}>
         {/* <div className="logo" /> */}
         <div className="search">
@@ -363,7 +399,7 @@ const FormItem = Form.Item;
         </p>
         </Modal>
         <Card bordered={false}>
-            <Tabs defaultActiveKey="courseground" size="large">
+            <Tabs defaultActiveKey="mycourse" size="large">
               <TabPane tab="课件广场" key="courseground">
               {course_ground}
               </TabPane>
