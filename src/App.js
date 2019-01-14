@@ -204,6 +204,7 @@ class App extends Component {
      // this.initPie = this.initPie.bind(this)
      
    // this.thumbnail=this.thumbnail.bind(this)
+   this.sync=this.sync.bind(this)
   }
     state = {
       collapsed: false,
@@ -211,6 +212,9 @@ class App extends Component {
       modalvisible:false,
       page:1,
     };
+    sync(objectList){
+      MyDeck = objectList; //浅复制不太对
+    }
     pageChoose = (Xst) => {
       this.setState({
         page: Xst,
@@ -321,7 +325,7 @@ class App extends Component {
               </Modal>
               </span>
             </div>
-            <EditorWithBar initContent={MyDeck[this.state.page-1]}/>
+            <EditorWithBar initContent={MyDeck[this.state.page-1]} sync={this.sync}/>
             </div>
             </Content>
             {/* </Layout> */}

@@ -109,9 +109,13 @@ export default class Editor extends React.Component {
             add:false
         }
         this.handleGetThumbnail=this.handleGetThumbnail.bind(this)
+        this.sync = this.sync.bind(this)
     }
     handleGetThumbnail(message){
         this.props.getThumbnail(message)
+    }
+    sync(objectList){
+        this.props.sync(objectList);
     }
     componentDidMount() {
         

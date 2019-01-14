@@ -157,7 +157,7 @@ const dgraph=function(fh,fheart,fa){
           </div> 
           </div>
           </Col>
-          <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={this.props.initContent||[]}/></Col>{/*{}*/}
+          <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={this.props.initContent||[]} sync = {this.props.sync}/></Col>{/*{}*/}
         </Row>
         </div>
       );
