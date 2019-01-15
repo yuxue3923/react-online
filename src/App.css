@@ -96,6 +96,9 @@
   text-align: left;
   /* margin: 8px 8px 8px 8px; */
 }
+.iconsize{
+  font-size: 25px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
