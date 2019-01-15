@@ -8,6 +8,7 @@ const IconFont = Icon.createFromIconfontCN({
 //at.alicdn.com/t/font_1006980_b7ueg4tyem5.js
 
 var isButton=false;
+var isflush = false;
 var content1 = function(fn){
    return (
     <div>
@@ -94,15 +95,17 @@ const dgraph=function(fh,fheart,fa){
             //fromSr:{},
         }
         this.fromSr={}
-        this.handleThumbnail=this.handleThumbnail.bind(this)
+        this.handleThumbnail=this.handleThumbnail.bind(this);
+      
     }
+   
     add(type){
         console.log("这个被调用了")
         isButton=true;
         this.setState({
             addType:type
         })
-       
+     //  this.flush(true)
     }
     handleThumbnail(pic){
         this.fromSr=pic
@@ -117,11 +120,13 @@ const dgraph=function(fh,fheart,fa){
     componentDidUpdate(){
      
         isButton=false
-        console.log(this.fromSr)
+        isflush = false
 
     }
    
     render() {
+      console.log("Barxuanran")
+      console.log(this.props.initContent)
       return (
         
         <div>
@@ -157,7 +162,7 @@ const dgraph=function(fh,fheart,fa){
           </div> 
           </div>
           </Col>
-          <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={this.props.initContent||[]} sync = {this.props.sync}/></Col>{/*{}*/}
+          <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} /></Col>{/*{}*/}
         </Row>
         </div>
       );

@@ -68,12 +68,12 @@ function add(type){
             Pen('star')
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,})
             sr.add(star);
-            break;
+            return true;
         case 'house':
             Pen('house')
             var house=new srender.House({shape:{cx:500,cy:300},style:{fill: 'none',stroke: 'green'}})
             sr.add(house);
-            break;
+            return true;
         case 'apple':
             Pen('apple')
             var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill: 'red',stroke: 'none'}})
@@ -97,6 +97,7 @@ function add(type){
         default:
             Pen('none')
             console.log("Sorry,no shape to draw")
+            return false
     } 
     
    
@@ -110,6 +111,7 @@ export default class Editor extends React.Component {
         }
         this.handleGetThumbnail=this.handleGetThumbnail.bind(this)
         this.sync = this.sync.bind(this)
+        this.flush = this.flush.bind(this)
     }
     handleGetThumbnail(message){
         this.props.getThumbnail(message)
@@ -117,24 +119,31 @@ export default class Editor extends React.Component {
     sync(objectList){
         this.props.sync(objectList);
     }
+    flush(state){
+        this.props.flush(state);
+    }
     componentDidMount() {
         
         var dom = document.getElementsByClassName('container')[0]
         sr = srender.init(dom)
         var w = sr.getWidth();
         var h = sr.getHeight();
-        sr.initWithOthers(this.props.objectList)
+        this.props.objectList&&sr.initWithOthers(this.props.objectList)
     }
     componentWillUpdate(){
-        sr.initWithOthers(this.props.objectList)
+       // sr.initWithOthers(this.props.objectList)
+       
+       // 
+       console.log(this.props.objectList)
     }
     componentDidUpdate(){
-        console.log(this.props.objectList)
        
+        this.props.objectList&&sr.initWithOthers(this.props.objectList)
         add(this.props.type);
+        this.sync(sr.getObjectList())
        
         this.props.type!=='none'&&this.handleGetThumbnail("某些信息")
-        console.log("组建props改变触发")
+      //  console.log("组建props改变触发")
     }
     render() {
         return (

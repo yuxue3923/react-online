@@ -197,23 +197,42 @@ const ContentModal = (
    </div> 
 
 );
-
+function deepClone(obj){
+  let _obj = JSON.stringify(obj);
+  return JSON.parse(_obj)
+}
+var flush = false;
 class App extends Component {
   constructor(props, context) {
     super(props, context)
      // this.initPie = this.initPie.bind(this)
      
    // this.thumbnail=this.thumbnail.bind(this)
-   this.sync=this.sync.bind(this)
+   this.sync=this.sync.bind(this);
+   this.flush=this.flush.bind(this)
   }
     state = {
       collapsed: false,
       visible: false,
       modalvisible:false,
       page:1,
+      MyDeck:MyDeck,
+      canvasFlush:false,
     };
+    flush(state){
+      this.setState({
+        canvasFlush:state
+      })
+    }
     sync(objectList){
-      MyDeck = objectList; //浅复制不太对
+
+    console.log(MyDeck) ; //浅复制不太对
+    let temp = deepClone(objectList)
+    let state=MyDeck[this.state.page-1]==objectList?false:true
+    state&&MyDeck.splice(this.state.page-1,1,temp)
+    return state
+    //  MyDeck.splice(this.state.page-1,1,objectList)
+    //  console.log(MyDeck)
     }
     pageChoose = (Xst) => {
       this.setState({
@@ -254,6 +273,7 @@ class App extends Component {
       });
     };
     render() {
+      console.log("Appxuanran")
       return (
         <Layout style={{width: '100%', height: '100vh'}}>
           <Sider 
@@ -325,7 +345,7 @@ class App extends Component {
               </Modal>
               </span>
             </div>
-            <EditorWithBar initContent={MyDeck[this.state.page-1]} sync={this.sync}/>
+            <EditorWithBar initContent={MyDeck[this.state.page-1]} sync={this.sync} flush={flush}/>
             </div>
             </Content>
             {/* </Layout> */}
