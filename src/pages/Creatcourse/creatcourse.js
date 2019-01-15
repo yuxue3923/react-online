@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import {Form, Icon, Avatar,Input, Button,Pagination, Checkbox,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
 import {Link} from 'react-router-dom'
 import './creatcourse.css'
+import 'jsmind/style/jsmind.css';
+// import './jsmind.js';
+// import './jsmind.draggable.js';
+// import './jsmind.screenshot.js';
 const { TextArea } = Input;
 
 const Option = Select.Option;
@@ -14,32 +18,32 @@ const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_1009429_5fzr0d23izi.js',
   });
 
-const CourseLine = Form.create()(props => {
-    const { visible, onCancel, onCreate, form } = props;
-    const { getFieldDecorator } = form;
-    return (
+// const CourseLine = Form.create()(props => {
+//     const { visible, onCancel, onCreate, form } = props;
+//     const { getFieldDecorator } = form;
+//     return (
       
-        <Form>
-        <Form.Item >
-        <p style={{fontSize:'16px'}} ><IconFont type="icon-mubiao" /> 学习目标</p>
-        <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-        </Form.Item >
-        <Form.Item >
-        <p style={{fontSize:'16px' }} ><IconFont type="icon-demand" /> 学习要求</p>
-        <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-        </Form.Item >
-        <Form.Item >
-        <p style={{fontSize:'16px' }} ><IconFont type="icon-xintubiao-" /> 考核标准</p>
-        <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-        </Form.Item >
-        <Form.Item >
-        <p style={{fontSize:'16px' }} ><IconFont type="icon-jiaocaixuanze" /> 教材教参</p>
-        <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-        </Form.Item >
-        </Form>
+//         <Form>
+//         <Form.Item >
+//         <p style={{fontSize:'16px'}} ><IconFont type="icon-mubiao" /> 学习目标</p>
+//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
+//         </Form.Item >
+//         <Form.Item >
+//         <p style={{fontSize:'16px' }} ><IconFont type="icon-demand" /> 学习要求</p>
+//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
+//         </Form.Item >
+//         <Form.Item >
+//         <p style={{fontSize:'16px' }} ><IconFont type="icon-xintubiao-" /> 考核标准</p>
+//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
+//         </Form.Item >
+//         <Form.Item >
+//         <p style={{fontSize:'16px' }} ><IconFont type="icon-jiaocaixuanze" /> 教材教参</p>
+//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
+//         </Form.Item >
+//         </Form>
      
-    );
-  });
+//     );
+//   });
 const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -155,7 +159,7 @@ const formItemLayout = {
       return (
         <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
         <Sider 
-        width={300}
+        width={250}
         trigger={null}
         collapsible
         collapsed={this.state.collapsed}
@@ -166,17 +170,17 @@ const formItemLayout = {
         >
          {sidecontent}
         </Sider>
-        <Header className='top-navigation' style={{height:'8.2%'}}>
+        {/* <Header className='top-navigation' style={{height:'8.2%'}}> */}
         {/* <div className="logo" /> */}
         
-        <div className='flowbar' style={{right:30,top:20}}>
+         <div className='flowbar' style={{right:30,top:20}}>
         <Link to='/User'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar></Link>
         <span style={{padding:10,fontSize:15}}>当前用户</span>
         </div>
          
        
      
-        </Header>
+        {/* </Header> */} 
       <Card  style={{height:'100%',width:'100%'}}>
          
         <div>
@@ -279,13 +283,14 @@ const formItemLayout = {
            </Row>
             </Col>
             <Col span={12}>
-              <Card style={{margin:'80px 0px 30px 80px',width:360 }} title="课件大纲">
-              <CourseLine
+              <Card style={{margin:'80px 0px 30px 80px',width:360 }} title="课件目录大纲">
+              {/* <CourseLine
                   ref={this.saveFormRef}
                   visible={this.state.visible}
                   onCancel={this.handleCancel}
                   onCreate={this.handleCreate.bind(this)}
-               />
+               /> */}
+
               </Card>
             </Col>
           </Row>

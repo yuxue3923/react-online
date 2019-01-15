@@ -266,7 +266,7 @@ class App extends Component {
               </Button>
               <Drawer
                 width={300}
-                title="幻灯片缩略图"
+                title="幻灯片结构"
                 placement="right"
                 closable={false}
                 onClose={this.onClose}

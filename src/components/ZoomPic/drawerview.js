@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { List, Avatar, Icon,Button} from 'antd';
+import { List, Avatar, Icon,Button,Tabs,Tree} from 'antd';
+const TabPane = Tabs.TabPane;
+const TreeNode = Tree.TreeNode;
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_988038_ej9e5sv8svd.js',
 });
@@ -26,6 +28,10 @@ class Drawerview extends Component {
       super(props, context)
       this.pageChoose = this.pageChoose.bind(this)
   }
+  //树状知识点点击事件
+  onSelect = (selectedKeys, info) => {
+    console.log('selected', selectedKeys, info);
+  }
   pageChoose(Xst){
     this.props.pageChoose(Xst)
   }
@@ -34,9 +40,8 @@ class Drawerview extends Component {
   }
 
     render() {
-      
-      return (
-        <List
+      const course_map=(
+          <List
         itemLayout="vertical"
         size="large"
         /*pagination={{
@@ -70,6 +75,44 @@ class Drawerview extends Component {
           </List.Item>
         )}
       />
+      );
+      const course_list=(
+        <div>
+                <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
+                      <Tree showLine defaultExpandedKeys={['0-0-0', '0-1-2']} onSelect={this.onSelect}>
+                        <TreeNode title="一次方程" key="0-0">
+                          <TreeNode title="一次方程概念" key="0-0-0" />
+                          <TreeNode title="一次方程特点" key="0-0-1" />
+                          <TreeNode title="一次方程应用" key="0-0-2">
+                            <TreeNode title="应用实例" key="0-0-2-0" />
+                          </TreeNode>
+                        </TreeNode>
+                        <TreeNode title="二次方程" key="0-1">
+                          <TreeNode title="二次方程概念" key="0-1-0" />
+                          <TreeNode title="二次方程特点" key="0-1-1" />
+                          <TreeNode title="二次方程应用" key="0-1-2">
+                            <TreeNode title="应用实例" key="0-1-2-0" />
+                          </TreeNode>
+                        </TreeNode>
+                        <TreeNode title="二次函数" key="0-2" />
+                        <TreeNode title="分数" key="0-3" />
+                        <TreeNode title="比值" key="0-4" />
+                      </Tree>
+                    </div>
+            </div>
+      );
+      return (
+        <div>
+          <Tabs defaultActiveKey="map" size="large">
+              <TabPane tab="缩略图" key="map">
+              {course_map}
+              </TabPane>
+              <TabPane tab="列表" key="list">
+                {course_list}
+              </TabPane>
+            </Tabs>
+        </div>
+      
       );
     }
   }
