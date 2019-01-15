@@ -106,10 +106,10 @@ const FormItem = Form.Item;
                   <br />
                   <Row >
                     <Col span={4}>
-                    <Link to='/APP'><IconFont type="icon-edit"/></Link>
+                    <Link to='/APP'><IconFont className="iconsize" type="icon-edit"/></Link>
                   </Col>
-                    <Col span={8}><IconFont type="icon-xin"/></Col>
-                    <Col span={12}><IconFont type="icon-icon-test"/><IconFont type="icon-icon-test2"/><IconFont type="icon-icon-test1"/><IconFont type="icon-icon-test-copy"/></Col>
+                    <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
+                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
                   </Row>
                 </Card>
             </Col>
@@ -140,10 +140,10 @@ const FormItem = Form.Item;
                   <br />
                   <Row >
                     <Col span={4}>
-                    <Link to='/APP'><IconFont type="icon-edit"/></Link>
+                    <Link to='/APP'><IconFont className="iconsize" type="icon-edit"/></Link>
                   </Col>
-                    <Col span={8}><IconFont type="icon-xin"/></Col>
-                    <Col span={12}><IconFont type="icon-icon-test"/><IconFont type="icon-icon-test2"/><IconFont type="icon-icon-test1"/><IconFont type="icon-icon-test-copy"/></Col>
+                    <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
+                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
                   </Row>
                 </Card>
             </Col>
@@ -174,10 +174,10 @@ const FormItem = Form.Item;
                   <br />
                   <Row >
                     <Col span={4}>
-                    <Link to='/APP'><IconFont type="icon-edit"/></Link>
+                    <Link to='/APP'><IconFont className="iconsize" type="icon-edit"/></Link>
                   </Col>
-                    <Col span={8}><IconFont type="icon-xin"/></Col>
-                    <Col span={12}><IconFont type="icon-icon-test"/><IconFont type="icon-icon-test2"/><IconFont type="icon-icon-test1"/><IconFont type="icon-icon-test-copy"/></Col>
+                    <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
+                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
                   </Row>
                 </Card>
             </Col>
@@ -208,10 +208,10 @@ const FormItem = Form.Item;
                   <br />
                   <Row >
                     <Col span={4}>
-                    <Link to='/APP'><IconFont type="icon-edit"/></Link>
+                    <Link to='/APP'><IconFont className="iconsize" type="icon-edit"/></Link>
                   </Col>
-                    <Col span={8}><IconFont type="icon-xin"/></Col>
-                    <Col span={12}><IconFont type="icon-icon-test"/><IconFont type="icon-icon-test2"/><IconFont type="icon-icon-test1"/><IconFont type="icon-icon-test-copy"/></Col>
+                    <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
+                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
                   </Row>
                 </Card>
             </Col>

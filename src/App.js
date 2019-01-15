@@ -137,28 +137,20 @@ const text =
   </Popover>
   </div>;
 const menu = (
-  <Menu>
-    <Menu.Item key="0">
-      <div>
-       <Icon type="smile" theme="twoTone" twoToneColor="#eb2f96" />
-        梁静茹
-      </div>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="1" >
-      <div>
-       <Icon type="meh" theme="twoTone" twoToneColor="#52c41a"/>
-        王菲
-      </div>
-    </Menu.Item>
-    <Menu.Divider />
-    <Menu.Item key="2">
-      <div>
-       <Icon type="frown" theme="twoTone"/>
-        程奕迅
-      </div>
-    </Menu.Item>
-  </Menu>
+  <Card title="当前在线协同者">
+          <div style={{margin:'2px'}} >
+            <Icon type="smile"  className="iconsize" theme="twoTone" twoToneColor="#eb2f96" />
+            <span style={{fontSize:15}}> 梁静茹</span>
+          </div>
+          <div style={{margin:'2px'}}>
+            <Icon type="meh"  className="iconsize" theme="twoTone" twoToneColor="#52c41a"/>
+            <span style={{fontSize:15}}> 王菲</span>
+          </div>
+          <div style={{margin:'2px'}} >
+            <Icon type="frown" className="iconsize" theme="twoTone"/>
+             <span style={{fontSize:15}}> 程奕迅</span>      
+          </div>
+    </Card>
 );
 const ContentModal = (
  <div>
@@ -293,7 +285,7 @@ class App extends Component {
          
           
             <div className="flowbar" style={{right:80,top: 20}}>
-               <Button type="primary" onClick={this.showDrawer}>
+               <Button style={{fontSize:15}} type="primary" onClick={this.showDrawer}>
                  视图
               </Button>
               <Drawer
@@ -319,9 +311,8 @@ class App extends Component {
             <div className="flowbar" style={{right:170,top:20}}>
             {/* <div className="flowbar" style={{right:200,top:20}}> */}
            <Popover placement="bottomLeft" title={text} content={menu} trigger="click">
-           <Button type="dashed" shape="circle" >
-           <Icon type="ellipsis" />
-           {/* <Icon type="team" />  */}
+           <Button type="dashed" shape="circle" className="iconsize" >
+            <Icon type="ellipsis" className="iconsize"/>
            </Button>
 
          </Popover>
@@ -334,7 +325,7 @@ class App extends Component {
            {/* </div> */}
           <div className="flowbar" style={{right:10,top:20}}>
             <span style={{ marginRight: 24, }}>
-                <Badge count={1}><Avatar onClick={this.showModal} style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Badge>
+                <Badge count={1}><Avatar className="iconsize" onClick={this.showModal} style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Badge>
                 <Modal
                  title="邀请成员"
                  visible={this.state.modalvisible}

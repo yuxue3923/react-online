@@ -39,27 +39,27 @@ const sgraph =function(fn,fp,fs,ft,ff){
     <div>
           <div style={{margin:'1px'}} >
             <Button type="primary" onClick={fs}>
-                 <IconFont type="anticon-xing"/>
+                 <IconFont className="subiconsize" type="anticon-xing"/>
             </Button>
           </div>
           <div style={{margin:'1px'}}>
            <Button type="primary" onClick={ft}>
-                 <IconFont type="anticon-xingzhuang-sanjiaoxing"/>
+                 <IconFont className="subiconsize" type="anticon-xingzhuang-sanjiaoxing"/>
             </Button>
           </div>
           <div style={{margin:'1px'}} >
            <Button type="primary" onClick={fp}>
-                 <IconFont type="anticon-xingzhuang-juxing"/>
+                 <IconFont  className="subiconsize" type="anticon-xingzhuang-juxing"/>
             </Button>
           </div>
           <div style={{margin:'1px'}} >
             <Button type="primary" onClick={fn}>
-                 <IconFont type="anticon-yuanhuan"/>
+                 <IconFont className="subiconsize" type="anticon-yuanhuan"/>
             </Button>
           </div>
           <div style={{margin:'1px'}} >
             <Button type="primary" onClick={ff}>
-                 <IconFont type="anticon-icon-bianxing"/>
+                 <IconFont className="subiconsize" type="anticon-icon-bianxing"/>
             </Button>
           </div>
     </div>
@@ -70,17 +70,17 @@ const dgraph=function(fh,fheart,fa){
     <div>
           <div style={{margin:'1px'}}>
             <Button type="primary" onClick={fa}>
-                 <IconFont type="anticon-pingguo"/>
+                 <IconFont className="subiconsize" type="anticon-pingguo"/>
             </Button>
           </div>
           <div style={{margin:'1px'}}>
             <Button type="primary" onClick={fheart}>
-                 <IconFont type="anticon-xin"/>
+                 <IconFont className="subiconsize" type="anticon-xin"/>
             </Button>
           </div>
           <div style={{margin:'1px'}} onClick={fh}>
             <Button type="primary" >
-                 <IconFont type="anticon-home"/>
+                 <IconFont className="subiconsize" type="anticon-home"/>
             </Button>
           </div>
     </div>
@@ -135,30 +135,44 @@ const dgraph=function(fh,fheart,fa){
           <div className="flowbutton">
           <div style={{margin:'1px'}}>
           <Popover placement="rightTop" content={dgraph(this.add.bind(this,'house'),this.add.bind(this,'heart'),this.add.bind(this,'apple'))} trigger="click">
-              <Button type="primary" icon="appstore" ></Button>
+              <Button type="primary">
+                 <Icon className="iconsize" type="appstore"/>
+              </Button>
           </Popover> 
           </div>
           <div style={{margin:'1px'}}>
           <Popover placement="rightTop" content={ sgraph(this.add.bind(this,'circle'),this.add.bind(this,'rect'),this.add.bind(this,'star'),this.add.bind(this,'tisogon'),this.add.bind(this,'fisogon'))} trigger="click">
-             <Button type="primary" icon="form" ></Button>
+              <Button type="primary">
+                 <Icon className="iconsize" type="form"/>
+              </Button>
           </Popover>
           </div> 
           <div style={{margin:'1px'}}>
-               <Button type="primary" icon="highlight" onClick={this.add.bind(this,'pen')}></Button>
+              <Button type="primary" onClick={this.add.bind(this,'pen')}>
+                 <Icon className="iconsize" type="highlight"/>
+               </Button>
           </div>
           <div style={{margin:'1px'}} >
           <Popover placement="rightTop" content={ content1(this.add.bind(this,'circle'))} trigger="click">
-             <Button type="primary" icon="edit" ></Button>
+               <Button type="primary" onClick={this.add.bind(this,'pen')}>
+                 <Icon className="iconsize" type="edit"/>
+               </Button>
           </Popover>
           </div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" icon="drag" ></Button>
+               <Button type="primary" onClick={this.add.bind(this,'pen')}>
+                 <Icon className="iconsize" type="drag"/>
+               </Button>
           </div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" icon="scissor"></Button>
+               <Button type="primary" onClick={this.add.bind(this,'pen')}>
+                 <Icon className="iconsize" type="scissor"/>
+               </Button>
           </div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" icon="file-search"></Button>
+               <Button type="primary" onClick={this.add.bind(this,'pen')}>
+                 <Icon className="iconsize" type="file-search"/>
+               </Button>
           </div> 
           </div>
           </Col>
