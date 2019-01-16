@@ -2,15 +2,62 @@ import React, { Component } from 'react';
 import {Form, Icon, Avatar,Input, Button,Pagination, Checkbox,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
 import {Link} from 'react-router-dom'
 import './creatcourse.css'
-import 'jsmind/style/jsmind.css';
-// import './jsmind.js';
-// import './jsmind.draggable.js';
-// import './jsmind.screenshot.js';
+import echarts from 'echarts/lib/echarts';
+import  'echarts/lib/chart/tree';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
 const { TextArea } = Input;
 
 const Option = Select.Option;
 const {  Content, Sider,Header, } = Layout;
 const TreeNode = Tree.TreeNode;
+const data= {
+  "children": [
+      {
+          "children": [
+              {
+                  "children": [
+                      {
+                          "children": [],
+                          "name": "三级目录"
+                      }
+                  ],
+                  "name": "二级目录"
+              }
+          ],
+          "name": "一级目录"
+      },
+      {
+          "children": [
+              {
+                  "children": [],
+                  "name": "二级目录"
+              }
+          ],
+          "name": "一级目录"
+      },
+      {
+        "children": [
+            {
+                "children": [],
+                "name": "二级目录"
+            }
+        ],
+        "name": "一级目录"
+    },
+    {
+      "children": [
+          {
+              "children": [],
+              "name": "二级目录"
+          }
+      ],
+      "name": "一级目录"
+  }
+  ],
+  "name": "课件总目录"
+}
+
 function handleChange(value) {
     console.log(`selected ${value}`);
 }
@@ -129,7 +176,65 @@ const formItemLayout = {
           </div>
         )
       }
+      componentDidMount() {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        // 绘制图表
+        // myChart.showLoading();    //显示Loading标志； var myChart = echarts.init(document.getElementById('页面中div的id')); 
+// $.get('./data.json', function (data) {
+    // myChart.hideLoading();    //得到数据后隐藏Loading标志
+ 
+    echarts.util.each(data.children, function (datum, index) {
+        index % 2 === 0 && (datum.collapsed = true);
+    });    //间隔展开子数据，animate，display，physics，scale，vis是展开的
+ 
+    myChart.setOption({
+        tooltip: {    //提示框组件
+            trigger: 'item',    //触发类型，默认：item（数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用）。可选：'axis'：坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用。'none':什么都不触发。
+            triggerOn: 'mousemove'    //提示框触发的条件，默认mousemove|click（鼠标点击和移动时触发）。可选mousemove：鼠标移动时，click：鼠标点击时，none：        
+        },
+        series: [    //系列列表
+            {
+                type: 'tree',    //树形结构
+ 
+                data: [data],    //上面从flare.json中得到的数据
+ 
+                top: '1%',       //距离上
+                left: '15%',      //左
+                bottom: '1%',    //下
+                right: '20%',    //右的距离
+ 
+                symbolSize: 7,   //标记的大小，就是那个小圆圈，默认7
+ 
+                label: {         //每个节点所对应的标签的样式
+                    normal: {
+                        position: 'left',       //标签的位置
+                        verticalAlign: 'middle',//文字垂直对齐方式，默认自动。可选：top，middle，bottom
+                        align: 'right',         //文字水平对齐方式，默认自动。可选：top，center，bottom
+                        fontSize: 9             //标签文字大小
+                    }
+                },
+ 
+                leaves: {    //叶子节点的特殊配置，如上面的树图示例中，叶子节点和非叶子节点的标签位置不同
+                    label: {
+                        normal: {
+                            position: 'right',
+                            verticalAlign: 'middle',
+                            align: 'left'
+                        }
+                    }
+                },
+ 
+                expandAndCollapse: true,    //子树折叠和展开的交互，默认打开
+                animationDuration: 550,     //初始动画的时长，支持回调函数,默认1000
+                animationDurationUpdate: 750//数据更新动画的时长，默认300
+            }
+        ]
+      });
+// });
+    }
     render() {
+      
         const sidecontent=(
             <div>
                 <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
@@ -185,7 +290,7 @@ const formItemLayout = {
          
         <div>
          <Row gutter={16}>
-         <Col span={12}>
+         <Col span={9}>
         <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >创建课件</div>
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
@@ -282,15 +387,15 @@ const formItemLayout = {
              <Link to="/APP"><Button type="primary" onClick={this.handleOk} style={{margin:'0px 0px 0px 100px'}}>确认创建</Button></Link>    
            </Row>
             </Col>
-            <Col span={12}>
-              <Card style={{margin:'80px 0px 30px 80px',width:360 }} title="课件目录大纲">
+            <Col span={15}>
+              <Card style={{margin:'80px 0px 30px 80px',width:550 }} title="课件目录大纲">
               {/* <CourseLine
                   ref={this.saveFormRef}
                   visible={this.state.visible}
                   onCancel={this.handleCancel}
                   onCreate={this.handleCreate.bind(this)}
                /> */}
-
+               <div id="main" style={{ width: 500, height: 500 }}></div>
               </Card>
             </Col>
           </Row>
