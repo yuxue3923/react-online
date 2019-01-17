@@ -90,44 +90,36 @@ const dgraph=function(fh,fheart,fa){
   class EditorWithBar extends Component {
     constructor() {
         super()
-       // this.initPie = this.initPie.bind(this)
         this.state = {
             addType:'none',
             //fromSr:{},
         }
         
-    //    this.handleThumbnail=this.handleThumbnail.bind(this);
+        this.handleThumbnail=this.handleThumbnail.bind(this);
       
     }
  
     add(type){
-        console.log("这个被调用了")
+        console.log("按钮")
         isButton=true;
         this.setState({addType:type})
      //  this.flush(true)
     }
-    handleThumbnail(pic){
-        this.fromSr=pic
+    handleThumbnail(src){
+        this.props.thumbnail(src)
 
 
     }
-    componentWillMount(){
-      console.log("WillMount")
-    }
-    componentWillUpdate(){
-
-      console.log("WillUpdate")
-      
-     }
+   
      shouldComponentUpdate(nextProps,nextState){
 
     //  console.log(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))
-     //  console.log("nextState:"+nextState.addType)
-       return true
+    //   console.log("nextState:"+nextState.addType)
+       return (isButton)||!(nextProps.page === this.props.page)
      }
  
     componentWillReceiveProps(nextProps){
-      console.log(nextProps)
+   //   console.log(nextProps)
       isflush = true
     }
    
@@ -139,7 +131,7 @@ const dgraph=function(fh,fheart,fa){
     render() {
     
       console.log("Barxuanran")
-      console.log(this.props.initContent)
+    
       
     return (
       

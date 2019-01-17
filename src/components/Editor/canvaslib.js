@@ -109,12 +109,12 @@ export default class Editor extends React.Component {
         this.state = {
             add:false
         }
-    //    this.handleGetThumbnail=this.handleGetThumbnail.bind(this)
+        this.handleGetThumbnail=this.handleGetThumbnail.bind(this)
         this.sync = this.sync.bind(this)
      //   this.flush = this.flush.bind(this)
     }
     handleGetThumbnail(message){
-    //    this.props.getThumbnail(message)
+        this.props.getThumbnail(message)
     }
     sync(objectList){
         this.props.sync(objectList);
@@ -126,12 +126,19 @@ export default class Editor extends React.Component {
         var dom = document.getElementsByClassName('container')[0]
         sr = srender.init(dom)
         this.props.objectList&&sr.initWithOthers(this.props.objectList)
+        sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
+            var url = URL.createObjectURL(blob);
+            var newImg = new Image();
+            newImg.src=url;
+            this.props.type!=='none'&&this.handleGetThumbnail(newImg.src)
+        },'image/png')
     }
     componentWillUpdate(){
     //   console.log(this.props.objectList)
     }
     
     shouldComponentUpdate(nextProps,nextState){
+       
         isFlush=this.props.type!=='none'?false:true
         return true
       }
@@ -142,8 +149,18 @@ export default class Editor extends React.Component {
         add(this.props.type);
         this.sync(sr.getObjectList())
        
-        this.props.type!=='none'&&this.handleGetThumbnail("某些信息")
-        console.log("组建props改变触发")
+
+        sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
+            var url = URL.createObjectURL(blob);
+            var newImg = new Image();
+        //    newImg.onload = function() {URL.revokeObjectURL(url)};
+            newImg.src=url;
+            this.props.type!=='none'&&this.handleGetThumbnail(newImg.src)
+        },'image/png')
+      //  console.log(Image)
+     //   console.log(URL)
+       
+       
     }
     render() {
         return (

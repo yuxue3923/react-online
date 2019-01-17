@@ -30,11 +30,10 @@ class Drawerview extends Component {
     this.props.pageChoose(Xst)
   }
   componentWillMount(){
-    listData[0].title=this.props.thumbnail
+   // listData[0].title=this.props.thumbnail
   }
 
     render() {
-      
       return (
         <List
         itemLayout="vertical"
@@ -66,7 +65,7 @@ class Drawerview extends Component {
               title={<a href={item.href}>{item.title}</a>}
             //   description={item.description}
             />
-            <img width={150} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" onClick={this.pageChoose.bind(this,item.Xst)}/>
+            <img width={150} alt="logo" src={this.props.thumbnail[item.Xst-1]} onClick={this.pageChoose.bind(this,item.Xst)}/>
           </List.Item>
         )}
       />

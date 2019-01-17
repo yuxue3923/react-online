@@ -199,7 +199,7 @@ class App extends Component {
     super(props, context)
      // this.initPie = this.initPie.bind(this)
      
-   // this.thumbnail=this.thumbnail.bind(this)
+   this.thumbnail=this.thumbnail.bind(this)
    this.sync=this.sync.bind(this);
    this.flush=this.flush.bind(this)
   }
@@ -210,6 +210,7 @@ class App extends Component {
       page:1,
       MyDeck:MyDeck,
       canvasFlush:false,
+      thumbnail:[],
     };
     flush(state){
       this.setState({
@@ -223,10 +224,15 @@ class App extends Component {
   //  let state=MyDeck[this.state.page-1]==objectList?false:true
    // state&&MyDeck.splice(this.state.page-1,1,temp)
    MyDeck.splice(this.state.page-1,1,objectList) //先浅复制
-    console.log(MyDeck)
+  
    // return state
     //  MyDeck.splice(this.state.page-1,1,objectList)
     
+    }
+    thumbnail = (src) =>{
+      let thumbnail = this.state.thumbnail
+      thumbnail.splice(this.state.page-1,1,src)
+      this.setState({thumbnail})
     }
     pageChoose = (Xst) => {
       this.setState({
@@ -267,11 +273,10 @@ class App extends Component {
       });
     };
    componentDidUpdate(){
-     console.log("AppDidUpdate")
    }
     render() {
       console.log("Appxuanran")
-      console.log(MyDeck)
+      console.log(this.state.thumbnail)
       return (
         <Layout style={{width: '100%', height: '100vh'}}>
        
@@ -303,7 +308,7 @@ class App extends Component {
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                <DrawView pageChoose={this.pageChoose}/>{/*thumbnail={"当前幻灯片"}*/}
+                <DrawView pageChoose={this.pageChoose} thumbnail={this.state.thumbnail}/>{/**/}
               </Drawer>
             </div>
             <div className="flowbar" style={{right:10,top:20}}>
@@ -343,7 +348,7 @@ class App extends Component {
               </Modal>
               </span>
             </div>
-            <EditorWithBar initContent={MyDeck[this.state.page-1]} sync={this.sync} />
+            <EditorWithBar initContent={MyDeck[this.state.page-1]} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail}/>
             </div>
             </Content>
             {/* </Layout> */}
