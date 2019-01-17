@@ -99,7 +99,7 @@ const dgraph=function(fh,fheart,fa){
     //    this.handleThumbnail=this.handleThumbnail.bind(this);
       
     }
-   /*
+ 
     add(type){
         console.log("这个被调用了")
         isButton=true;
@@ -121,32 +121,28 @@ const dgraph=function(fh,fheart,fa){
      }
      shouldComponentUpdate(nextProps,nextState){
 
-       console.log(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))
+    //  console.log(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))
      //  console.log("nextState:"+nextState.addType)
        return true
      }
-  /*
+ 
     componentWillReceiveProps(nextProps){
-      console.log("aa")
       console.log(nextProps)
       isflush = true
     }
-    */
-    /*
+   
     componentDidUpdate(){
-        console.log("DidUpdate")
         isButton=false
         isflush = false
-
     }
-   */
+  
     render() {
-      console.log(count++)
+    
       console.log("Barxuanran")
-   //   console.log(this.props.initContent)
+      console.log(this.props.initContent)
       
-    return <div>hh</div>
-      /*
+    return (
+      
         <div>
         <Row >
         <Col span={1}>
@@ -197,11 +193,11 @@ const dgraph=function(fh,fheart,fa){
        <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} /></Col>   
       </Row> 
         </div>
-     */
+     
    
     
      
-      ;
+    );
     
     }
   }

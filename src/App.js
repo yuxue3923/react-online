@@ -218,13 +218,15 @@ class App extends Component {
     }
     sync(objectList){
 
-    console.log(MyDeck) ; //浅复制不太对
-    let temp = deepClone(objectList)
-    let state=MyDeck[this.state.page-1]==objectList?false:true
-    state&&MyDeck.splice(this.state.page-1,1,temp)
-    return state
+   // console.log(MyDeck) ; //浅复制不太对
+  //  let temp = deepClone(objectList)
+  //  let state=MyDeck[this.state.page-1]==objectList?false:true
+   // state&&MyDeck.splice(this.state.page-1,1,temp)
+   MyDeck.splice(this.state.page-1,1,objectList) //先浅复制
+    console.log(MyDeck)
+   // return state
     //  MyDeck.splice(this.state.page-1,1,objectList)
-    //  console.log(MyDeck)
+    
     }
     pageChoose = (Xst) => {
       this.setState({
@@ -269,6 +271,7 @@ class App extends Component {
    }
     render() {
       console.log("Appxuanran")
+      console.log(MyDeck)
       return (
         <Layout style={{width: '100%', height: '100vh'}}>
        

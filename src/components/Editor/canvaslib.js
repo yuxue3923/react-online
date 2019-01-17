@@ -110,25 +110,22 @@ export default class Editor extends React.Component {
             add:false
         }
     //    this.handleGetThumbnail=this.handleGetThumbnail.bind(this)
-    //    this.sync = this.sync.bind(this)
+        this.sync = this.sync.bind(this)
      //   this.flush = this.flush.bind(this)
     }
     handleGetThumbnail(message){
     //    this.props.getThumbnail(message)
     }
     sync(objectList){
-     //   this.props.sync(objectList);
+        this.props.sync(objectList);
     }
     flush(state){
      //   this.props.flush(state);
     }
     componentDidMount() {
-        
         var dom = document.getElementsByClassName('container')[0]
         sr = srender.init(dom)
-        var w = sr.getWidth();
-        var h = sr.getHeight();
-    //    this.props.objectList&&sr.initWithOthers(this.props.objectList)
+        this.props.objectList&&sr.initWithOthers(this.props.objectList)
     }
     componentWillUpdate(){
     //   console.log(this.props.objectList)
@@ -141,12 +138,12 @@ export default class Editor extends React.Component {
       
     componentDidUpdate(){
        
-      //  this.props.objectList&&sr.initWithOthers(this.props.objectList)
-     //   add(this.props.type);
-    //    this.sync(sr.getObjectList())
+        this.props.objectList&&sr.initWithOthers(this.props.objectList)
+        add(this.props.type);
+        this.sync(sr.getObjectList())
        
-    //    this.props.type!=='none'&&this.handleGetThumbnail("某些信息")
-      //  console.log("组建props改变触发")
+        this.props.type!=='none'&&this.handleGetThumbnail("某些信息")
+        console.log("组建props改变触发")
     }
     render() {
         return (
