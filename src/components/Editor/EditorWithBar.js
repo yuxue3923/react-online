@@ -8,7 +8,8 @@ const IconFont = Icon.createFromIconfontCN({
 //at.alicdn.com/t/font_1006980_b7ueg4tyem5.js
 
 var isButton=false;
-var isflush = false;
+var isflush = true;
+var count = 0;
 var content1 = function(fn){
    return (
     <div>
@@ -87,24 +88,22 @@ const dgraph=function(fh,fheart,fa){
    );
   }
   class EditorWithBar extends Component {
-    constructor(props, context) {
-        super(props, context)
+    constructor() {
+        super()
        // this.initPie = this.initPie.bind(this)
         this.state = {
             addType:'none',
             //fromSr:{},
         }
-        this.fromSr={}
-        this.handleThumbnail=this.handleThumbnail.bind(this);
+        
+    //    this.handleThumbnail=this.handleThumbnail.bind(this);
       
     }
-   
+   /*
     add(type){
         console.log("这个被调用了")
         isButton=true;
-        this.setState({
-            addType:type
-        })
+        this.setState({addType:type})
      //  this.flush(true)
     }
     handleThumbnail(pic){
@@ -112,23 +111,42 @@ const dgraph=function(fh,fheart,fa){
 
 
     }
+    componentWillMount(){
+      console.log("WillMount")
+    }
     componentWillUpdate(){
 
-     
+      console.log("WillUpdate")
       
      }
+     shouldComponentUpdate(nextProps,nextState){
+
+       console.log(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))
+     //  console.log("nextState:"+nextState.addType)
+       return true
+     }
+  /*
+    componentWillReceiveProps(nextProps){
+      console.log("aa")
+      console.log(nextProps)
+      isflush = true
+    }
+    */
+    /*
     componentDidUpdate(){
-     
+        console.log("DidUpdate")
         isButton=false
         isflush = false
 
     }
-   
+   */
     render() {
+      console.log(count++)
       console.log("Barxuanran")
-      console.log(this.props.initContent)
-      return (
-        
+   //   console.log(this.props.initContent)
+      
+    return <div>hh</div>
+      /*
         <div>
         <Row >
         <Col span={1}>
@@ -176,10 +194,15 @@ const dgraph=function(fh,fheart,fa){
           </div> 
           </div>
           </Col>
-          <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} /></Col>{/*{}*/}
-        </Row>
+       <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} /></Col>   
+      </Row> 
         </div>
-      );
+     */
+   
+    
+     
+      ;
+    
     }
   }
 

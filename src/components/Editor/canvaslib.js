@@ -1,7 +1,7 @@
 //import srender from 'srender'
 import srender from 'srenderlib'
 import React from 'react'
-
+var isFlush = false;
 const elementStyle={
     stroke: '#ccc',
     fill: 'white',
@@ -109,18 +109,18 @@ export default class Editor extends React.Component {
         this.state = {
             add:false
         }
-        this.handleGetThumbnail=this.handleGetThumbnail.bind(this)
-        this.sync = this.sync.bind(this)
-        this.flush = this.flush.bind(this)
+    //    this.handleGetThumbnail=this.handleGetThumbnail.bind(this)
+    //    this.sync = this.sync.bind(this)
+     //   this.flush = this.flush.bind(this)
     }
     handleGetThumbnail(message){
-        this.props.getThumbnail(message)
+    //    this.props.getThumbnail(message)
     }
     sync(objectList){
-        this.props.sync(objectList);
+     //   this.props.sync(objectList);
     }
     flush(state){
-        this.props.flush(state);
+     //   this.props.flush(state);
     }
     componentDidMount() {
         
@@ -128,21 +128,24 @@ export default class Editor extends React.Component {
         sr = srender.init(dom)
         var w = sr.getWidth();
         var h = sr.getHeight();
-        this.props.objectList&&sr.initWithOthers(this.props.objectList)
+    //    this.props.objectList&&sr.initWithOthers(this.props.objectList)
     }
     componentWillUpdate(){
-       // sr.initWithOthers(this.props.objectList)
-       
-       // 
-       console.log(this.props.objectList)
+    //   console.log(this.props.objectList)
     }
+    
+    shouldComponentUpdate(nextProps,nextState){
+        isFlush=this.props.type!=='none'?false:true
+        return true
+      }
+      
     componentDidUpdate(){
        
-        this.props.objectList&&sr.initWithOthers(this.props.objectList)
-        add(this.props.type);
-        this.sync(sr.getObjectList())
+      //  this.props.objectList&&sr.initWithOthers(this.props.objectList)
+     //   add(this.props.type);
+    //    this.sync(sr.getObjectList())
        
-        this.props.type!=='none'&&this.handleGetThumbnail("某些信息")
+    //    this.props.type!=='none'&&this.handleGetThumbnail("某些信息")
       //  console.log("组建props改变触发")
     }
     render() {
@@ -150,7 +153,7 @@ export default class Editor extends React.Component {
 
             <div>
             <div className="container" style={{height:'100vh',width:'100%',padding:"0px 0px 0px 20px"}}></div>
-            {/* <div className="container" style={{height:'904px',width:'1418px'}}></div> */}
+          
             </div>
 
         )

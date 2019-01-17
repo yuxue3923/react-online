@@ -204,7 +204,7 @@ class App extends Component {
    this.flush=this.flush.bind(this)
   }
     state = {
-      collapsed: false,
+      collapsed: true,
       visible: false,
       modalvisible:false,
       page:1,
@@ -264,11 +264,15 @@ class App extends Component {
         visible: false,
       });
     };
+   componentDidUpdate(){
+     console.log("AppDidUpdate")
+   }
     render() {
       console.log("Appxuanran")
       return (
         <Layout style={{width: '100%', height: '100vh'}}>
-          <Sider 
+       
+        <Sider 
           width={700}
           collapsible
           collapsed={this.state.collapsed}
@@ -278,10 +282,10 @@ class App extends Component {
           className="Sider"
           style={{width: '100%', height: '100vh'}}
           >
-            <Bodysider/>
+             <Bodysider/>
           </Sider>
          
-         
+        
          
           
             <div className="flowbar" style={{right:80,top: 20}}>
@@ -336,7 +340,7 @@ class App extends Component {
               </Modal>
               </span>
             </div>
-            <EditorWithBar initContent={MyDeck[this.state.page-1]} sync={this.sync} flush={flush}/>
+            <EditorWithBar initContent={MyDeck[this.state.page-1]} sync={this.sync} />
             </div>
             </Content>
             {/* </Layout> */}
