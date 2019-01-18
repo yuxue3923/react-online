@@ -238,7 +238,7 @@ class App extends Component {
       this.setState({
         page: Xst,
       });
-      console.log(this.state.page)
+      console.log(Xst)
     }
     showModal = () => {
       this.setState({

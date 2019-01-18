@@ -144,7 +144,7 @@ export default class Editor extends React.Component {
       }
       
     componentDidUpdate(){
-       
+       !this.props.objectList&&sr.clear()
         this.props.objectList&&sr.initWithOthers(this.props.objectList)
         add(this.props.type);
         this.sync(sr.getObjectList())

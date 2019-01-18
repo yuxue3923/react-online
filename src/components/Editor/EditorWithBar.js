@@ -129,7 +129,7 @@ const dgraph=function(fh,fheart,fa){
     }
   
     render() {
-    
+      console.log(this.props.initContent)
       console.log("Barxuanran")
     
       
