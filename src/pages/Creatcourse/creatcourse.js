@@ -2,11 +2,62 @@ import React, { Component } from 'react';
 import {Form, Icon, Avatar,Input, Button,Pagination, Checkbox,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
 import {Link} from 'react-router-dom'
 import './creatcourse.css'
+import echarts from 'echarts/lib/echarts';
+import  'echarts/lib/chart/tree';
+import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/title';
 const { TextArea } = Input;
 
 const Option = Select.Option;
 const {  Content, Sider,Header, } = Layout;
 const TreeNode = Tree.TreeNode;
+const data= {
+  "children": [
+      {
+          "children": [
+              {
+                  "children": [
+                      {
+                          "children": [],
+                          "name": "三级目录"
+                      }
+                  ],
+                  "name": "二级目录"
+              }
+          ],
+          "name": "一级目录"
+      },
+      {
+          "children": [
+              {
+                  "children": [],
+                  "name": "二级目录"
+              }
+          ],
+          "name": "一级目录"
+      },
+      {
+        "children": [
+            {
+                "children": [],
+                "name": "二级目录"
+            }
+        ],
+        "name": "一级目录"
+    },
+    {
+      "children": [
+          {
+              "children": [],
+              "name": "二级目录"
+          }
+      ],
+      "name": "一级目录"
+  }
+  ],
+  "name": "课件总目录"
+}
+
 function handleChange(value) {
     console.log(`selected ${value}`);
 }
@@ -14,32 +65,32 @@ const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_1009429_5fzr0d23izi.js',
   });
 
-const CourseLine = Form.create()(props => {
-    const { visible, onCancel, onCreate, form } = props;
-    const { getFieldDecorator } = form;
-    return (
+// const CourseLine = Form.create()(props => {
+//     const { visible, onCancel, onCreate, form } = props;
+//     const { getFieldDecorator } = form;
+//     return (
       
-        <Form>
-        <Form.Item >
-        <p style={{fontSize:'16px'}} ><IconFont type="icon-mubiao" /> 学习目标</p>
-        <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-        </Form.Item >
-        <Form.Item >
-        <p style={{fontSize:'16px' }} ><IconFont type="icon-demand" /> 学习要求</p>
-        <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-        </Form.Item >
-        <Form.Item >
-        <p style={{fontSize:'16px' }} ><IconFont type="icon-xintubiao-" /> 考核标准</p>
-        <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-        </Form.Item >
-        <Form.Item >
-        <p style={{fontSize:'16px' }} ><IconFont type="icon-jiaocaixuanze" /> 教材教参</p>
-        <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-        </Form.Item >
-        </Form>
+//         <Form>
+//         <Form.Item >
+//         <p style={{fontSize:'16px'}} ><IconFont type="icon-mubiao" /> 学习目标</p>
+//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
+//         </Form.Item >
+//         <Form.Item >
+//         <p style={{fontSize:'16px' }} ><IconFont type="icon-demand" /> 学习要求</p>
+//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
+//         </Form.Item >
+//         <Form.Item >
+//         <p style={{fontSize:'16px' }} ><IconFont type="icon-xintubiao-" /> 考核标准</p>
+//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
+//         </Form.Item >
+//         <Form.Item >
+//         <p style={{fontSize:'16px' }} ><IconFont type="icon-jiaocaixuanze" /> 教材教参</p>
+//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
+//         </Form.Item >
+//         </Form>
      
-    );
-  });
+//     );
+//   });
 const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -125,7 +176,65 @@ const formItemLayout = {
           </div>
         )
       }
+      componentDidMount() {
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        // 绘制图表
+        // myChart.showLoading();    //显示Loading标志； var myChart = echarts.init(document.getElementById('页面中div的id')); 
+// $.get('./data.json', function (data) {
+    // myChart.hideLoading();    //得到数据后隐藏Loading标志
+ 
+    echarts.util.each(data.children, function (datum, index) {
+        index % 2 === 0 && (datum.collapsed = true);
+    });    //间隔展开子数据，animate，display，physics，scale，vis是展开的
+ 
+    myChart.setOption({
+        tooltip: {    //提示框组件
+            trigger: 'item',    //触发类型，默认：item（数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用）。可选：'axis'：坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用。'none':什么都不触发。
+            triggerOn: 'mousemove'    //提示框触发的条件，默认mousemove|click（鼠标点击和移动时触发）。可选mousemove：鼠标移动时，click：鼠标点击时，none：        
+        },
+        series: [    //系列列表
+            {
+                type: 'tree',    //树形结构
+ 
+                data: [data],    //上面从flare.json中得到的数据
+ 
+                top: '1%',       //距离上
+                left: '15%',      //左
+                bottom: '1%',    //下
+                right: '20%',    //右的距离
+ 
+                symbolSize: 7,   //标记的大小，就是那个小圆圈，默认7
+ 
+                label: {         //每个节点所对应的标签的样式
+                    normal: {
+                        position: 'left',       //标签的位置
+                        verticalAlign: 'middle',//文字垂直对齐方式，默认自动。可选：top，middle，bottom
+                        align: 'right',         //文字水平对齐方式，默认自动。可选：top，center，bottom
+                        fontSize: 9             //标签文字大小
+                    }
+                },
+ 
+                leaves: {    //叶子节点的特殊配置，如上面的树图示例中，叶子节点和非叶子节点的标签位置不同
+                    label: {
+                        normal: {
+                            position: 'right',
+                            verticalAlign: 'middle',
+                            align: 'left'
+                        }
+                    }
+                },
+ 
+                expandAndCollapse: true,    //子树折叠和展开的交互，默认打开
+                animationDuration: 550,     //初始动画的时长，支持回调函数,默认1000
+                animationDurationUpdate: 750//数据更新动画的时长，默认300
+            }
+        ]
+      });
+// });
+    }
     render() {
+      
         const sidecontent=(
             <div>
                 <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
@@ -155,7 +264,7 @@ const formItemLayout = {
       return (
         <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
         <Sider 
-        width={300}
+        width={250}
         trigger={null}
         collapsible
         collapsed={this.state.collapsed}
@@ -166,22 +275,22 @@ const formItemLayout = {
         >
          {sidecontent}
         </Sider>
-        <Header className='top-navigation' style={{height:'8.2%'}}>
+        {/* <Header className='top-navigation' style={{height:'8.2%'}}> */}
         {/* <div className="logo" /> */}
         
-        <div className='flowbar' style={{right:30,top:20}}>
+         <div className='flowbar' style={{right:30,top:20}}>
         <Link to='/User'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar></Link>
         <span style={{padding:10,fontSize:15}}>当前用户</span>
         </div>
          
        
      
-        </Header>
+        {/* </Header> */} 
       <Card  style={{height:'100%',width:'100%'}}>
          
         <div>
          <Row gutter={16}>
-         <Col span={12}>
+         <Col span={9}>
         <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >创建课件</div>
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
@@ -235,12 +344,12 @@ const formItemLayout = {
           </Col> 
           </Row>
           </Form.Item>
-          <Form.Item label="是否可编辑" {...formItemLayout}>
+          {/* <Form.Item label="是否可编辑" {...formItemLayout}>
           <Select defaultValue="1" onChange={handleChange} style={{width:"100%"}}>
                     <Option value="1">可编辑</Option>
                     <Option value="2">不可编辑</Option>
           </Select> 
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="课件目录" {...formItemLayout}>
           <Row gutter={16}>
            <Col span={12}>
@@ -278,14 +387,15 @@ const formItemLayout = {
              <Link to="/APP"><Button type="primary" onClick={this.handleOk} style={{margin:'0px 0px 0px 100px'}}>确认创建</Button></Link>    
            </Row>
             </Col>
-            <Col span={12}>
-              <Card style={{margin:'80px 0px 30px 80px',width:360 }} title="课件大纲">
-              <CourseLine
+            <Col span={15}>
+              <Card style={{margin:'80px 0px 30px 80px',width:550 }} title="课件目录大纲">
+              {/* <CourseLine
                   ref={this.saveFormRef}
                   visible={this.state.visible}
                   onCancel={this.handleCancel}
                   onCreate={this.handleCreate.bind(this)}
-               />
+               /> */}
+               <div id="main" style={{ width: 500, height: 500 }}></div>
               </Card>
             </Col>
           </Row>

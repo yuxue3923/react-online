@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import {Form, Icon, Input, Button, Radio,Avatar,Card,Row,Col,Modal} from 'antd';
 import {Link} from 'react-router-dom'
 import './User.css'
+import { connect } from 'react-redux';
+import $ from 'jquery';
+import PropTypes from "prop-types"
 import echarts from 'echarts/lib/echarts';
 import  'echarts/lib/chart/radar';
 import 'echarts/lib/component/tooltip';
@@ -18,10 +21,16 @@ const formItemLayout = {
       sm: { span: 16 },
     },
   };
-  class User extends Component {
-    state = {
+  class User extends React.Component {
+    static contextTypes={
+      router:PropTypes.object
+    }
+    constructor(props,context){
+      super(props,context);
+      this.state={
         value: 2,
       }
+    }
       onChange = (e) => {
         console.log('radio checked', e.target.value);
         this.setState({
@@ -83,6 +92,7 @@ const formItemLayout = {
         });
     }
     render() {
+      const { login_info }=this.props;
         const pageHeaderContent = (
             <Row gutter={16}>
               <Col span={2}>
@@ -92,7 +102,7 @@ const formItemLayout = {
                 /></Link>
               </Col>
               <Col span={12}>
-                <div className="head_one">早安，曲丽丽，祝你开心每一天！</div>
+                <div className="head_one">早安，{login_info}，祝你开心每一天！</div>
                 <div className="head_two">交互专家 | 蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED</div>
               </Col>
             </Row>
@@ -171,4 +181,18 @@ const formItemLayout = {
       );
     }
   }
-  export default User;
+  const User_index=Form.create()(User);
+  function  mapStateToProps(state) {
+    return{
+       login_info:state.reducer_login.login_info,
+    };
+  }
+  function mapDispatchToProps(dispatch){
+    return{
+      //  setLoginState:(state)=>dispatch(state)
+    };
+  }
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(User_index);

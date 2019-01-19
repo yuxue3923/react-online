@@ -1,53 +1,79 @@
 import React, { Component } from 'react';
-import {Form, Icon, Input, Button, Checkbox, } from 'antd';
+import {Form, Icon, Input, Button, Checkbox,message } from 'antd';
 import {Link} from 'react-router-dom'
 import './Access.css'
+import { connect } from 'react-redux';
+import $ from 'jquery';
+import PropTypes from "prop-types"
 const FormItem = Form.Item;
   class Access_child extends Component {
-    handleSubmit = (e) => {
-      e.preventDefault();
-      this.props.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values);
-        }
+    static contextTypes={
+      router:PropTypes.object
+    }
+    constructor(props,context){
+      super(props,context);
+      this.state={
+        username:"",
+        password:"",
+      }
+    }
+    changeUsername(e){
+      let uname=e.target.value;
+      this.setState({
+        username:uname,
       });
     }
+    changePassword(e){
+      let pword=e.target.value;
+      this.setState({
+        password:pword,
+      });
+    }
+    handleClick(){
+      const {setLoginState} = this.props;
+      if (this.state.username===""||this.state.username===null||this.state.password===""||this.state.password===null) {
+        message.error("用户名或密码不能为空");
+      } else {
+        setLoginState({
+          type:'LoginSuccess',
+          payload:this.state.username,
+        });
+        this.context.router.history.push("/Account");
+      }
+    }
     render() {
-      const { getFieldDecorator } = this.props.form;
       return (
         <div className="divparent">
-        <Form onSubmit={this.handleSubmit} className="login-form">
+        <Form className="login-form">
         <FormItem>
-          {getFieldDecorator('userName', {
-            rules: [{ required: true, message: '请输入用户名!' }],
-          })(
-            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="用户名" />
-          )}
-        </FormItem>
-        <FormItem>
-          {getFieldDecorator('password', {
-            rules: [{ required: true, message: '请输入密码!' }],
-          })(
-            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="密码" />
-          )}
-        </FormItem>
-        <FormItem>
-          {getFieldDecorator('remember', {
-            valuePropName: 'checked',
-            initialValue: true,
-          })(
-            <Checkbox className="login-form-remember">记住我</Checkbox>
-          )}
-          <a className="login-form-forgot" href="">忘记密码</a>
-          <Link to='/Account'><Button type="primary" htmlType="submit" className="login-form-button">
-            登录
-          </Button></Link>
+            <Input onChange={this.changeUsername.bind(this)} prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="用户名" />
+          </FormItem>
+          <FormItem>
+            <Input onChange={this.changePassword.bind(this)} prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="密码" />
+          </FormItem>
+          <FormItem>
+            <Button onClick={this.handleClick.bind(this)} type="primary" htmlType="submit" className="login-form-button">
+              登录
+            </Button>
            <a href="/Register">注册账户!</a>
-        </FormItem>
+          </FormItem>
       </Form>
       </div>
       );
     }
   }
   const Access = Form.create()(Access_child);
-  export default Access;
+  function  mapStateToProps(state) {
+    return{
+        
+    };
+  }
+  function mapDispatchToProps(dispatch){
+    return{
+       setLoginState: (state) => dispatch(state),
+    };
+  }
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(Access);

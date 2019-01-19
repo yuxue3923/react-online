@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-
-import { Link, HashRouter,BrowserRouter,Route,Switch} from 'react-router-dom';
-
+import {Route,Switch} from 'react-router';
+import { Link, HashRouter,BrowserRouter} from 'react-router-dom';
+import {createStore} from 'redux';
+import {Provider}from 'react-redux';
+import Reducer from '../reducers/index.js';
 import App from '../App'
 import Account from '../pages/Account/Account'
 import Access from '../pages/Access'
@@ -9,10 +11,11 @@ import Register from '../pages/Register'
 import Createcourse from '../pages/Creatcourse/creatcourse'
 import Tempreview from '../pages/Creatcourse/tempreview'
 import User from '../pages/User'
-
+const store=createStore(Reducer)
 export default class RouterIndex extends Component {
     render() {
         return (
+            <Provider store={store}>
             <BrowserRouter>
             <Switch>
                 <Route exact path="/" component={Access}></Route>
@@ -24,6 +27,7 @@ export default class RouterIndex extends Component {
                 <Route path="/User" component={User}></Route>
             </Switch>
             </BrowserRouter>
+            </Provider>
         )
     }
 }
