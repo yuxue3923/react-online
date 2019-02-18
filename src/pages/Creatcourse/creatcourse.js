@@ -14,46 +14,26 @@ const TreeNode = Tree.TreeNode;
 const data= {
   "children": [
       {
-          "children": [
-              {
-                  "children": [
-                      {
-                          "children": [],
-                          "name": "三级目录"
-                      }
-                  ],
-                  "name": "二级目录"
-              }
-          ],
+          "children": [],
           "name": "一级目录"
       },
       {
-          "children": [
-              {
-                  "children": [],
-                  "name": "二级目录"
-              }
-          ],
-          "name": "一级目录"
+        "children": [],
+        "name": "一级目录"
+      },
+      {
+        "children": [],
+        "name": "一级目录"
       },
       {
         "children": [
-            {
-                "children": [],
-                "name": "二级目录"
-            }
-        ],
-        "name": "一级目录"
-    },
-    {
-      "children": [
-          {
-              "children": [],
-              "name": "二级目录"
-          }
+          // {
+          //     "children": [],
+          //     "name": "二级目录"
+          // }
       ],
       "name": "一级目录"
-  }
+      }
   ],
   "name": "课件总目录"
 }
@@ -108,6 +88,7 @@ const formItemLayout = {
           arrSize: 0,
           collapsed: false,//控制sider折叠
           visible: true, //控制弹出框的呈现与隐藏
+          coursecatalog:[],//课件目录
         }
         this.arr = [this.generateROW()]
       }
@@ -131,6 +112,7 @@ const formItemLayout = {
         title: '消息提示',
         content: '成功创建课件！',
       });
+      console.log(this.state.coursecatalog);
     }
       //侧栏知识点弹出框事件
       toggle = () => {
@@ -368,7 +350,7 @@ const formItemLayout = {
                       return (
                         <Row gutter={8} key={i}>
                            <Col span={10}>
-                          <Input placeholder="课件目录名称"  style={{ width: 300 }}/>
+                          <Input onChange={(e)=>{this.state.coursecatalog[i]=e.target.value}} placeholder="课件目录名称"  style={{ width: 300 }}/>
                            </Col>
                         </Row>
                       )
