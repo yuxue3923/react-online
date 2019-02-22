@@ -15,6 +15,7 @@ const FormItem = Form.Item;
       this.state={
         username:"",
         password:"",
+        accessdata:[],
       }
     }
     changeUsername(e){
@@ -34,11 +35,36 @@ const FormItem = Form.Item;
       if (this.state.username===""||this.state.username===null||this.state.password===""||this.state.password===null) {
         message.error("用户名或密码不能为空");
       } else {
-        setLoginState({
-          type:'LoginSuccess',
-          payload:this.state.username,
+        console.log('进入ajax');
+        $.ajax({
+            url: "http://localhost:3000/api/oauth/token",
+            type: "POST",
+            dataType: "json",
+            data:"grant_type=password&"+"username="+this.state.username+"&password="+this.state.password+"&client_id=A10&client_secret=xiaomi",
+            success: function (data) {
+                if (data.error == "server_error") {
+                    console.log("没有登录权限");
+                    console.log(data); 
+                }
+                else {
+                    console.log('登录成功');
+                    console.log(data);
+                    console.log(data.access_token);
+                    setLoginState({
+                      type:'LoginSuccess',
+                      payload:{
+                        username:this.state.username,
+                        access_token:data.access_token,
+                      }
+                    });
+                    this.context.router.history.push("/Account");
+                }
+            }.bind(this),
+            error: function (xhr, status, err) {
+              message.error("用户名或密码错误");
+            }.bind(this)
         });
-        this.context.router.history.push("/Account");
+        
       }
     }
     render() {
