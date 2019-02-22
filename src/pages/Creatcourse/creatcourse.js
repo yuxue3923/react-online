@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import {Form, Icon, Avatar,Input, Button,Pagination, Checkbox,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
 import {Link} from 'react-router-dom'
 import './creatcourse.css'
+import $ from 'jquery';
+import PropTypes from "prop-types"
 import echarts from 'echarts/lib/echarts';
 import  'echarts/lib/chart/tree';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
+import { ObjectID } from 'rxjs';
 const { TextArea } = Input;
 
 const Option = Select.Option;
@@ -14,46 +17,26 @@ const TreeNode = Tree.TreeNode;
 const data= {
   "children": [
       {
-          "children": [
-              {
-                  "children": [
-                      {
-                          "children": [],
-                          "name": "三级目录"
-                      }
-                  ],
-                  "name": "二级目录"
-              }
-          ],
-          "name": "一级目录"
+          "children": [],
+          "name": "一级目录",
       },
       {
-          "children": [
-              {
-                  "children": [],
-                  "name": "二级目录"
-              }
-          ],
-          "name": "一级目录"
+        "children": [],
+        "name": "一级目录"
+      },
+      {
+        "children": [],
+        "name": "一级目录"
       },
       {
         "children": [
-            {
-                "children": [],
-                "name": "二级目录"
-            }
-        ],
-        "name": "一级目录"
-    },
-    {
-      "children": [
-          {
-              "children": [],
-              "name": "二级目录"
-          }
+          // {
+          //     "children": [],
+          //     "name": "二级目录"
+          // }
       ],
       "name": "一级目录"
-  }
+      }
   ],
   "name": "课件总目录"
 }
@@ -102,12 +85,59 @@ const formItemLayout = {
     },
   };
   class Creatcourse extends Component {
+    static contextTypes={
+      router:PropTypes.object
+    }
     constructor(props, context) {
         super(props, context)
         this.state = {
           arrSize: 0,
           collapsed: false,//控制sider折叠
           visible: true, //控制弹出框的呈现与隐藏
+          coursecatalog:[],//课件目录
+          coursedata:{
+              "courseName": "一年级数学",
+              "grade": "一年级",
+              "subject": "数学",
+              "descript": "除法",
+              "knowledges": ["除法", "加法", "乘法"],
+              "isOpen": 1,
+              "isEdit": 1,
+              "name": "课件目录",
+              "children": [{
+                "children": [],
+                "name": "子目录1"
+              }],
+              "templateId": 1,
+              "slide": [{
+                "pageId": 1,
+                "pageThumbnail": {
+                  "pageurl": "./1.png",
+                  "style": {
+                    "pagewidth": "100px",
+                    "pageheight": "100px"
+                  }
+                },
+                "media":[
+                  {
+                    "id":2314,
+                    "position":[0,0],
+                    "rotation":0,
+                    "scale":[1,1],
+                    "shape":{"cx":100,"cy":100,"n":30,"z":40},
+                    "style":{"fill":"none"},
+                    "type":"house"
+                  }
+                ]
+              }],		
+              "fileSize": "100M",
+              "scope": "k12教育",
+              "addTime": 20190124,
+              "views": 300,
+              "url": "D:/Graduate/11.jpg",
+              "width": "30px",
+              "height": "40px"
+          },
         }
         this.arr = [this.generateROW()]
       }
@@ -131,6 +161,9 @@ const formItemLayout = {
         title: '消息提示',
         content: '成功创建课件！',
       });
+      console.log(this.state.coursecatalog);
+      this.creatcourse();
+      
     }
       //侧栏知识点弹出框事件
       toggle = () => {
@@ -176,6 +209,30 @@ const formItemLayout = {
           </div>
         )
       }
+      creatcourse = () =>{
+        //创建课件
+        $.ajax({
+            url: "http://localhost:3000/api/createCourse",
+            type: "POST",
+            dataType: "json",
+            data: this.state.coursedata,
+            success: function (data) {
+                if (data.errorCode == '0') {
+                    console.log('成功保存课件');
+                    console.log(data.msg);
+                    console.log(data.msg._id);
+                    // this.context.router.history.push("/APP");
+                }
+                else {
+                    console.log('成功获取搜索资源');
+                    // this.setState({ resource: data.msg });
+                    console.log(data.msg);
+                }
+            }.bind(this),
+            error: function (xhr, status, err) {
+            }.bind(this)
+        });
+    }
       componentDidMount() {
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
@@ -368,7 +425,7 @@ const formItemLayout = {
                       return (
                         <Row gutter={8} key={i}>
                            <Col span={10}>
-                          <Input placeholder="课件目录名称"  style={{ width: 300 }}/>
+                          <Input onChange={(e)=>{this.state.coursecatalog[i]=e.target.value}} placeholder="课件目录名称"  style={{ width: 300 }}/>
                            </Col>
                         </Row>
                       )
@@ -384,7 +441,7 @@ const formItemLayout = {
                </Form.Item> */}
         </Form>
            <Row>
-             <Link to="/APP"><Button type="primary" onClick={this.handleOk} style={{margin:'0px 0px 0px 100px'}}>确认创建</Button></Link>    
+             <Button type="primary" onClick={this.handleOk} style={{margin:'0px 0px 0px 100px'}}>确认创建</Button>
            </Row>
             </Col>
             <Col span={15}>

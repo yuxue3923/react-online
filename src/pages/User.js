@@ -29,6 +29,14 @@ const formItemLayout = {
       super(props,context);
       this.state={
         value: 2,
+        email:"",
+        username:"",
+        phone_num:"",
+        works:"",
+        mark:"",
+        download:"",
+        visit:"",
+        contribution:[],
       }
     }
       onChange = (e) => {
@@ -43,7 +51,60 @@ const formItemLayout = {
           content: '成功修改信息',
         });
       }
+      //Token获取数据
+      getdata() {
+        const { login_info }=this.props;
+        console.log(login_info.username);
+        console.log('进入ajax');
+        console.log(login_info.access_token);
+        $.ajax({
+          url: "http://localhost:3000/api/queryUserinfo",
+          data:"username="+login_info.username,
+          beforeSend:function(request){
+            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+          },
+          type: "GET",
+          dataType: "json",
+          async:false,
+          success: function (data) {
+            if (data.errorCode == '0') {
+              console.log('获取查询权限1111');
+              console.log(data);
+              this.setState({
+                username:login_info.username,
+                email:data.msg.email,
+                phone_num:data.msg.phone_num,
+                works:data.msg.works,
+                mark:data.msg.mark,
+                download:data.msg.download,
+                visit:data.msg.visit,
+                contribution:[data.msg.works,data.msg.download,data.msg.mark,data.msg.visit]
+              })
+            }
+            else {   
+              console.log('获取查询权限2222');
+               
+            }
+          }.bind(this),
+          error: function (xhr, status, err) {
+          }.bind(this)
+        });
+      }
+      // getcontribution(){
+      //   const contribution1=this.state.contribution; 
+      //   contribution1.push(this.state.visit) ;
+      //   contribution1.push(this.state.mark) ;
+      //   console.log(contribution1);
+      //   this.setState({
+      //     contribution:contribution1
+      //   });
+      // }
+      componentWillMount(){
+        this.getdata();
+      }
     componentDidMount() {
+        // this.getdata();
+        // this.getcontribution();
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
         // 绘制图表
@@ -66,12 +127,12 @@ const formItemLayout = {
                    }
                 },
                 indicator: [
-                   { name: '制作课件', max: 6500},
-                   { name: '协同课件', max: 16000},
-                   { name: '发布课件', max: 30000},
-                   { name: '分享课件', max: 38000},
-                   { name: '研发课件', max: 52000},
-                   { name: '涉猎范围', max: 25000}
+                   { name: 'works', max: 6500},
+                   { name: 'download', max: 800},
+                   { name: 'mark', max: 35000},
+                   { name: 'visit', max: 20000},
+                  //  { name: '研发课件', max: 52000},
+                  //  { name: '涉猎范围', max: 25000}
                 ]
             },
             series: [{
@@ -80,7 +141,7 @@ const formItemLayout = {
                 // areaStyle: {normal: {}},
                 data : [
                     {
-                        value : [4300, 10000, 28000, 35000, 50000, 19000],
+                        value : this.state.contribution,
                         name : '贡献领域'
                     },
                     //  {
@@ -102,8 +163,8 @@ const formItemLayout = {
                 /></Link>
               </Col>
               <Col span={12}>
-                <div className="head_one">早安，{login_info}，祝你开心每一天！</div>
-                <div className="head_two">交互专家 | 蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED</div>
+                <div className="head_one">早安，{login_info.username}，祝你开心每一天！</div>
+                {/* <div className="head_two">交互专家 | 蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED</div> */}
               </Col>
             </Row>
           );
@@ -122,14 +183,17 @@ const formItemLayout = {
                  <Card title="个人信息" style={{  height: 600 }}>
                     <div>
                     <Form >
-                      <FormItem label="姓名" {...formItemLayout} >
+                      {/* <FormItem label="姓名" {...formItemLayout} >
                            曲丽丽
-                      </FormItem>
+                      </FormItem> */}
                       <FormItem label="登录名"  {...formItemLayout}>
-                           千与木夕
+                           {this.state.username}
+                      </FormItem>
+                      <FormItem label="邮箱"  {...formItemLayout}>
+                           {this.state.email}
                       </FormItem>
                       <FormItem label="联系电话" {...formItemLayout} >
-                           15555778909
+                           {this.state.phone_num}
                       </FormItem>
                       <FormItem label="性别" {...formItemLayout} >
                            女
@@ -145,14 +209,17 @@ const formItemLayout = {
                <Card title="修改信息" style={{  height: 600 }}>
                     <Row>
                     <Form >
-                      <FormItem label="姓名" {...formItemLayout} >
+                      {/* <FormItem label="姓名" {...formItemLayout} >
                          <Input placeholder="曲丽丽"/> 
-                      </FormItem>
+                      </FormItem> */}
                       <FormItem label="登录名"  {...formItemLayout}>
-                         <Input placeholder="千与木夕"/>   
+                         <Input placeholder={this.state.username}/>   
+                      </FormItem>
+                      <FormItem label="邮箱"  {...formItemLayout}>
+                         <Input placeholder={this.state.email}/>   
                       </FormItem>
                       <FormItem label="联系电话" {...formItemLayout} >
-                         <Input placeholder="15555778909"/>
+                         <Input placeholder= {this.state.phone_num}/>
                       </FormItem>
                       <FormItem label="性别" {...formItemLayout} >
                       <RadioGroup onChange={this.onChange} value={this.state.value}>
