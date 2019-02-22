@@ -229,7 +229,7 @@ const formItemLayout = {
                       content: '成功创建课件！',
                     });
                     console.log(this.state.coursecatalog);
-                    // this.context.router.history.push("/APP");
+                    this.context.router.history.push("/APP");
                 }
                 else {
                     console.log('成功获取搜索资源');
