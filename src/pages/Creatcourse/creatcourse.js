@@ -96,48 +96,49 @@ const formItemLayout = {
           visible: true, //控制弹出框的呈现与隐藏
           coursecatalog:[],//课件目录
           coursedata:{
-              "courseName": "一年级数学",
-              "grade": "一年级",
-              "subject": "数学",
-              "descript": "除法",
-              "knowledges": ["除法", "加法", "乘法"],
-              "isOpen": 1,
-              "isEdit": 1,
-              "name": "课件目录",
-              "children": [{
+            "user_id":2,
+            "courseName": "一年级数学111",
+            "grade": "一年级",
+            "subject": "数学",
+            "descript": "除法",
+            "knowledges": ["除法", "加法", "乘法"],
+            "isOpen": 1,
+            "isEdit": 1,
+            "name": "课件目录",
+            "children": [{
                 "children": [],
                 "name": "子目录1"
-              }],
-              "templateId": 1,
-              "slide": [{
+            }],
+            "templateId": 1,
+            "slide": [{
                 "pageId": 1,
                 "pageThumbnail": {
-                  "pageurl": "./1.png",
-                  "style": {
-                    "pagewidth": "100px",
-                    "pageheight": "100px"
-                  }
+                    "pageurl": "./1.png",
+                    "style": {
+                        "pagewidth": "100px",
+                        "pageheight": "100px"
+                    }
                 },
                 "media":[
-                  {
-                    "id":2314,
-                    "position":[0,0],
-                    "rotation":0,
-                    "scale":[1,1],
-                    "shape":{"cx":100,"cy":100,"n":30,"z":40},
-                    "style":{"fill":"none"},
-                    "type":"house"
-                  }
+                    {
+                        "id":2314,
+                        "position":[0,0],
+                        "rotation":0,
+                        "scale":[1,1],
+                        "shape":{"cx":100,"cy":100,"n":30,"z":40},
+                        "style":{"fill":"none"},
+                        "type":"house"
+                    }
                 ]
-              }],		
-              "fileSize": "100M",
-              "scope": "k12教育",
-              "addTime": 20190124,
-              "views": 300,
-              "url": "D:/Graduate/11.jpg",
-              "width": "30px",
-              "height": "40px"
-          },
+            }],     
+            "fileSize": "100M",
+            "scope": "k12教育",
+            "addTime": 20190124,
+            "views": 300,
+            "url": "D:/Graduate/11.jpg",
+            "width": "30px",
+            "height": "40px"
+        },
         }
         this.arr = [this.generateROW()]
       }
@@ -155,16 +156,16 @@ const formItemLayout = {
         this.form = form;
       };
      
-    //创建成功提示
-    handleOk = (e) => {
-      Modal.success({
-        title: '消息提示',
-        content: '成功创建课件！',
-      });
-      console.log(this.state.coursecatalog);
-      this.creatcourse();
+    // //创建成功提示
+    // handleOk = (e) => {
+    //   Modal.success({
+    //     title: '消息提示',
+    //     content: '成功创建课件！',
+    //   });
+    //   console.log(this.state.coursecatalog);
+    //   this.creatcourse();
       
-    }
+    // }
       //侧栏知识点弹出框事件
       toggle = () => {
         this.setState({
@@ -211,16 +212,23 @@ const formItemLayout = {
       }
       creatcourse = () =>{
         //创建课件
+        console.log("进入ajax")
+        console.log(this.state.coursedata)
         $.ajax({
             url: "http://localhost:3000/api/createCourse",
             type: "POST",
             dataType: "json",
-            data: this.state.coursedata,
+            data: [this.state.coursedata],
             success: function (data) {
-                if (data.errorCode == '0') {
+                if (data.errorCode == 0) {
                     console.log('成功保存课件');
                     console.log(data.msg);
                     console.log(data.msg._id);
+                    Modal.success({
+                      title: '消息提示',
+                      content: '成功创建课件！',
+                    });
+                    console.log(this.state.coursecatalog);
                     // this.context.router.history.push("/APP");
                 }
                 else {
@@ -441,7 +449,7 @@ const formItemLayout = {
                </Form.Item> */}
         </Form>
            <Row>
-             <Button type="primary" onClick={this.handleOk} style={{margin:'0px 0px 0px 100px'}}>确认创建</Button>
+             <Button type="primary" onClick={this.creatcourse} style={{margin:'0px 0px 0px 100px'}}>确认创建</Button>
            </Row>
             </Col>
             <Col span={15}>
