@@ -44,7 +44,6 @@ const FormItem = Form.Item;
             success: function (data) {
                 if (data.error == "server_error") {
                     console.log("没有登录权限");
-                    console.log(data); 
                 }
                 else {
                     console.log('登录成功');

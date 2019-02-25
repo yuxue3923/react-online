@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom'
 import './creatcourse.css'
 import $ from 'jquery';
 import PropTypes from "prop-types"
+import { connect } from 'react-redux';
 import echarts from 'echarts/lib/echarts';
 import  'echarts/lib/chart/tree';
 import 'echarts/lib/component/tooltip';
@@ -213,7 +214,9 @@ const formItemLayout = {
       creatcourse = () =>{
         //创建课件
         console.log("进入ajax")
-        console.log(this.state.coursedata)
+        
+        const {setCreatecourseState} = this.props;
+        
         $.ajax({
             url: "http://localhost:3000/api/createCourse",
             type: "POST",
@@ -229,7 +232,14 @@ const formItemLayout = {
                       content: '成功创建课件！',
                     });
                     console.log(this.state.coursecatalog);
+                    setCreatecourseState({
+                      type:'createcourseSuccess',
+                      payload:{
+                        createCourse_info:this.state.coursedata.slide,
+                      }
+                    });
                     this.context.router.history.push("/APP");
+
                 }
                 else {
                     console.log('成功获取搜索资源');
@@ -471,4 +481,20 @@ const formItemLayout = {
     }
   }
   
-  export default Creatcourse;
+  
+
+  const creatcourse_index = Form.create()(Creatcourse);
+  function  mapStateToProps(state) {
+    return{
+        
+    };
+  }
+  function mapDispatchToProps(dispatch){
+    return{
+      setCreatecourseState: (state) => dispatch(state),
+    };
+  }
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(creatcourse_index);
