@@ -249,7 +249,7 @@ const formItemLayout = {
         console.log("进入ajax")
         
         const {setCreatecourseState} = this.props;
-        
+        const { login_info }=this.props;
         $.ajax({
             url: "http://localhost:3000/api/createCourse",
             async:false,
@@ -258,6 +258,9 @@ const formItemLayout = {
             accepts:"application/json;charset=UTF-8",
             dataType: "json",
             data:JSON.stringify(data),
+            beforeSend:function(request){
+              request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+            },
             success: function (data) {
                 if (data.errorCode == 0) {
                     console.log('成功保存课件');
@@ -271,7 +274,7 @@ const formItemLayout = {
                     setCreatecourseState({
                       type:'createcourseSuccess',
                       payload:{
-                        createCourse_info:data.msg.coursedata.slide,
+                        createCourse_info:data.msg.slides,
                       }
                     });
                     this.context.router.history.push("/APP");
@@ -532,6 +535,7 @@ const formItemLayout = {
   const Creatcourse_Index=Form.create()(Creatcourse);
   function  mapStateToProps(state) {
     return{
+       login_info:state.reducer_login.login_info,
        user_info:state.reducer_user.user_info,
     };
   }

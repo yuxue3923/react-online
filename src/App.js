@@ -364,7 +364,7 @@ class App extends Component {
   const App_Index=Form.create()(App);
   function  mapStateToProps(state) {
     return{
-      createCourse_info:state.reducer_user.createCourse_info,
+      createCourse_info:state.reducer_createcourse.createCourse_info,
     };
   }
   function mapDispatchToProps(dispatch){
