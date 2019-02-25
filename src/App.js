@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Layout, Menu,Select, Row,Col,Input,Button,Drawer,Avatar, Badge,Icon,Dropdown,Popover,Modal, Card} from 'antd';
+import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card} from 'antd';
 import './App.css';
 import {Link} from 'react-router-dom';
-
+import { connect } from 'react-redux';
 import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
 
@@ -275,7 +275,9 @@ class App extends Component {
    componentDidUpdate(){
    }
     render() {
+      const {createCourse_info} = this.props;
       console.log("Appxuanran")
+      console.log(createCourse_info)
       console.log(this.state.thumbnail)
       return (
         <Layout style={{width: '100%', height: '100vh'}}>
@@ -357,4 +359,20 @@ class App extends Component {
     }
   }
 
-  export default App;
+  
+
+  const App_Index=Form.create()(App);
+  function  mapStateToProps(state) {
+    return{
+      createCourse_info:state.reducer_user.createCourse_info,
+    };
+  }
+  function mapDispatchToProps(dispatch){
+    return{
+      setCreatecourseState: (state) => dispatch(state),
+    };
+  }
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(App_Index);

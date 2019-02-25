@@ -11,6 +11,7 @@ import Register from '../pages/Register'
 import Createcourse from '../pages/Creatcourse/creatcourse'
 import Tempreview from '../pages/Creatcourse/tempreview'
 import User from '../pages/User'
+import Updatecourse from '../pages/Updatecourse'
 const store=createStore(Reducer)
 export default class RouterIndex extends Component {
     render() {
@@ -21,6 +22,7 @@ export default class RouterIndex extends Component {
                 <Route exact path="/" component={Access}></Route>
                 <Route path="/Account" component={Account}></Route>
                 <Route path="/APP" component={App}></Route>
+                <Route path="/Updatecourse" component={Updatecourse}></Route>
                 <Route path="/Createcourse" component={Createcourse}></Route>
                 <Route path="/Tempreview" component={Tempreview}></Route>
                 <Route path="/Register" component={Register}></Route>
