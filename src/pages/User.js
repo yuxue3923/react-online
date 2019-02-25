@@ -53,6 +53,7 @@ const formItemLayout = {
       }
       //Token获取数据
       getdata() {
+        const {SetUserSuccess} = this.props;
         const { login_info }=this.props;
         console.log(login_info.username);
         console.log('进入ajax');
@@ -79,7 +80,13 @@ const formItemLayout = {
                 download:data.msg.download,
                 visit:data.msg.visit,
                 contribution:[data.msg.works,data.msg.download,data.msg.mark,data.msg.visit]
-              })
+              });
+              SetUserSuccess({
+                type:'GetUserSuccess',
+                payload:{
+                  user_id:data.msg.user_id,
+                }
+              });
             }
             else {   
               console.log('获取查询权限2222');
@@ -256,7 +263,7 @@ const formItemLayout = {
   }
   function mapDispatchToProps(dispatch){
     return{
-      //  setLoginState:(state)=>dispatch(state)
+      SetUserSuccess: (state) => dispatch(state),
     };
   }
   export default connect(

@@ -6,7 +6,7 @@ import ChoseTemplate from './ChoseTemplate'
 import '../../App.css'
 import './Account.css'
 const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1006980_or3kowafoh.js',
+  scriptUrl: '//at.alicdn.com/t/font_1006980_yyo6e4860m.js',
 });
 const Option = Select.Option;
 function handleChange(value) {
@@ -207,10 +207,13 @@ const FormItem = Form.Item;
                   </Row>
                   <br />
                   <Row >
-                    <Col span={4}>
+                  <Col span={4}>
                     <Link to='/APP'><IconFont className="iconsize" type="icon-edit"/></Link>
                   </Col>
-                    <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
+                    <Col span={4}><IconFont className="iconsize" type="icon-xin"/></Col>
+                  <Col span={4}>
+                    <Link to='/Updatecourse'><IconFont className="iconsize" type="icon-xiugai"/></Link>
+                  </Col>
                     <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
                   </Row>
                 </Card>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Form, Icon, Avatar,Input, Button,Pagination, Checkbox,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
 import {Link} from 'react-router-dom'
-import './creatcourse.css'
+import './Creatcourse/creatcourse.css'
 import $ from 'jquery';
 import PropTypes from "prop-types"
 import { connect } from 'react-redux';
@@ -11,65 +11,19 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 
 const { TextArea } = Input;
-
+const data= {
+    "children": [
+        {
+            "children": [],
+            "name": "一级目录",
+        },
+    ],
+    "name": "课件总目录"
+  }
 const Option = Select.Option;
 const {  Content, Sider,Header, } = Layout;
 const TreeNode = Tree.TreeNode;
-const data= {
-  "children": [
-      {
-          "children": [],
-          "name": "一级目录",
-      },
-      {
-        "children": [],
-        "name": "一级目录"
-      },
-      {
-        "children": [],
-        "name": "一级目录"
-      },
-      {
-        "children": [],
-      "name": "一级目录"
-      }
-  ],
-  "name": "课件总目录"
-}
 
-function handleChange(value) {
-    console.log(`selected ${value}`);
-}
-const IconFont = Icon.createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_1009429_5fzr0d23izi.js',
-  });
-
-// const CourseLine = Form.create()(props => {
-//     const { visible, onCancel, onCreate, form } = props;
-//     const { getFieldDecorator } = form;
-//     return (
-      
-//         <Form>
-//         <Form.Item >
-//         <p style={{fontSize:'16px'}} ><IconFont type="icon-mubiao" /> 学习目标</p>
-//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-//         </Form.Item >
-//         <Form.Item >
-//         <p style={{fontSize:'16px' }} ><IconFont type="icon-demand" /> 学习要求</p>
-//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-//         </Form.Item >
-//         <Form.Item >
-//         <p style={{fontSize:'16px' }} ><IconFont type="icon-xintubiao-" /> 考核标准</p>
-//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-//         </Form.Item >
-//         <Form.Item >
-//         <p style={{fontSize:'16px' }} ><IconFont type="icon-jiaocaixuanze" /> 教材教参</p>
-//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-//         </Form.Item >
-//         </Form>
-     
-//     );
-//   });
 const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -80,7 +34,7 @@ const formItemLayout = {
       sm: { span: 16 },
     },
   };
-  class Creatcourse extends Component {
+  class Updatecourse extends Component {
     static contextTypes={
       router:PropTypes.object
     }
@@ -132,19 +86,6 @@ const formItemLayout = {
           });
         }
       }
-      //课件大纲弹出框事件
-      showModal = () => {
-        this.setState({ visible: true });
-      };
-      handleCancel = () => {
-        this.setState({ visible: false });
-      };
-      handleCreate() {
-        this.setState({ visible: false });
-      }
-      saveFormRef = form => {
-        this.form = form;
-      };
       //侧栏知识点弹出框事件
       toggle = () => {
         this.setState({
@@ -197,65 +138,60 @@ const formItemLayout = {
       }
       creatcourse = () =>{
         const { user_info }=this.props;
-        var data={
-          // "user_id":2,
-          "user_id":user_info.user_id,
-          "courseName":this.state.courseName,
-          "grade": this.state.grade,
-          "subject": this.state.subject,
-          "descript":  this.state.descript,
-          "knowledges":this.state.knowledges,
-          "isOpen": this.state.isOpen,
-          "isEdit": 1,
-          "name": "课件目录",
-          "children":this.state.coursecatalog,
-        //   "children": [{
-        //     "children": [],
-        //     "name": "数学知识点1"
-        // }],
-    
-          "templateId": 1,
-          "slide": [{
-              "pageId": 1,
-              "pageThumbnail": {
-                  "pageurl": "./1.png",
-                  "style": {
-                      "pagewidth": "100px",
-                      "pageheight": "100px"
-                  }
-              },
-              "media":[
-                  {
-                      "id":2314,
-                      "position":[0,0],
-                      "rotation":0,
-                      "scale":[1,1],
-                      "shape":{"cx":100,"cy":100,"n":30,"z":40},
-                      "style":{"fill":"none"},
-                      "type":"house"
-                  }
-              ]
-          }],     
-          "fileSize": "100M",
-          "scope": "k12教育",
-          "addTime": 20190124,
-          "views": 300,
-          "url": "D:/Graduate/11.jpg",
-          "width": "30px",
-          "height": "40px"
-      };
-       
         //创建课件
         console.log("进入ajax")
         console.log(JSON.stringify(this.state.coursecatalog))
         $.ajax({
             url: "http://localhost:3000/api/createCourse",
-            async:false,
             type: "POST",
-            contentType:"application/json;charset=UTF-8",
-            accepts:"application/json;charset=UTF-8",
             dataType: "json",
-            data:JSON.stringify(data),
+            data:{
+              // "user_id":2,
+              "user_id":user_info.user_id,
+              "courseName":this.state.courseName,
+              "grade": this.state.grade,
+              "subject": this.state.subject,
+              "descript":  this.state.descript,
+              "knowledges":JSON.stringify(this.state.knowledges),
+              "isOpen": this.state.isOpen,
+              "isEdit": 1,
+              "name": "课件目录",
+              "children":this.state.coursecatalog,
+            //   "children": [{
+            //     "children": [],
+            //     "name": "数学知识点1"
+            // }],
+        
+              "templateId": 1,
+              "slide": [{
+                  "pageId": 1,
+                  "pageThumbnail": {
+                      "pageurl": "./1.png",
+                      "style": {
+                          "pagewidth": "100px",
+                          "pageheight": "100px"
+                      }
+                  },
+                  "media":[
+                      {
+                          "id":2314,
+                          "position":[0,0],
+                          "rotation":0,
+                          "scale":[1,1],
+                          "shape":{"cx":100,"cy":100,"n":30,"z":40},
+                          "style":{"fill":"none"},
+                          "type":"house"
+                      }
+                  ]
+              }],     
+              "fileSize": "100M",
+              "scope": "k12教育",
+              "addTime": 20190124,
+              "views": 300,
+              "url": "D:/Graduate/11.jpg",
+              "width": "30px",
+              "height": "40px"
+          },
             success: function (data) {
                 if (data.errorCode == 0) {
                     console.log('成功保存课件');
@@ -278,6 +214,43 @@ const formItemLayout = {
             }.bind(this)
         });
     }
+    getdata() {
+        var a="5c70e9ade4f246349c86b270";
+        var data = {
+            "_id" :a.toString(),
+        };
+        var db={"_id":a.toString()};
+        console.log('进入researchByCourseId接口');
+        console.log(JSON.stringify(data));
+        $.ajax({
+          url: "http://localhost:3000/api/researchByCourseId",
+          async:false,
+          type: "GET",
+          contentType:"application/json;charset=UTF-8",
+        //   accepts:"application/json;charset=UTF-8",
+          dataType: "json",
+          data:data,
+          context:document.body,
+        //   data:"_id="+a.toString(),
+          
+          success: function(data) {
+            if (data.errorCode == 0) {
+              console.log('获取查询权限111');
+              console.log(data);
+              
+            }
+            else {   
+              console.log('获取查询权限2222');
+               
+            }
+          }.bind(this),
+          error: function (xhr, status, err) {
+          }.bind(this)
+        });
+      }
+      componentWillMount(){
+        this.getdata();
+      }
       CourseAppear() {
         console.log("课件展示区")
         console.log(JSON.stringify(this.state.coursecatalog))
@@ -384,9 +357,6 @@ const formItemLayout = {
         >
          {sidecontent}
         </Sider>
-        {/* <Header className='top-navigation' style={{height:'8.2%'}}> */}
-        {/* <div className="logo" /> */}
-        
          <div className='flowbar' style={{right:30,top:20}}>
         <Link to='/User'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar></Link>
         <span style={{padding:10,fontSize:15}}>当前用户</span>
@@ -400,7 +370,7 @@ const formItemLayout = {
         <div>
          <Row gutter={16}>
          <Col span={9}>
-        <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >创建课件</div>
+        <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >修改课件</div>
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
@@ -451,12 +421,6 @@ const formItemLayout = {
           </Col> 
           </Row>
           </Form.Item>
-          {/* <Form.Item label="是否可编辑" {...formItemLayout}>
-          <Select defaultValue="1" onChange={handleChange} style={{width:"100%"}}>
-                    <Option value="1">可编辑</Option>
-                    <Option value="2">不可编辑</Option>
-          </Select> 
-          </Form.Item> */}
           <Form.Item label="课件目录" {...formItemLayout}>
           <Row gutter={16}>
            <Col span={12}>
@@ -491,24 +455,13 @@ const formItemLayout = {
                 </Col>
             </Row>
             </Form.Item>
-               {/* <Form.Item label="课件大纲安排" {...formItemLayout}>
-                  <Button onClick={this.showModal} type="primary" >
-                    课件大纲
-                  </Button>
-               </Form.Item> */}
         </Form>
            <Row>
-             <Button type="primary" onClick={this.creatcourse} style={{margin:'0px 0px 0px 100px'}}>确认创建</Button>
+             <Button type="primary" onClick={this.getdata} style={{margin:'0px 0px 0px 100px'}}>确认修改</Button>
            </Row>
             </Col>
             <Col span={15}>
               <Card style={{margin:'80px 0px 30px 80px',width:550 }} title="课件目录大纲">
-              {/* <CourseLine
-                  ref={this.saveFormRef}
-                  visible={this.state.visible}
-                  onCancel={this.handleCancel}
-                  onCreate={this.handleCreate.bind(this)}
-               /> */}
                <div id="main" style={{ width: 500, height: 500 }}></div>
               </Card>
             </Col>
@@ -519,7 +472,7 @@ const formItemLayout = {
       );
     }
   }
-  const Creatcourse_Index=Form.create()(Creatcourse);
+  const Updatecourse_Index=Form.create()(Updatecourse);
   function  mapStateToProps(state) {
     return{
        user_info:state.reducer_user.user_info,
@@ -533,4 +486,4 @@ const formItemLayout = {
   export default connect(
     mapStateToProps,
     mapDispatchToProps,
-  )(Creatcourse_Index);
+  )(Updatecourse_Index);
