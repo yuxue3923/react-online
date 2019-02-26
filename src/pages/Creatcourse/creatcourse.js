@@ -94,7 +94,6 @@ const formItemLayout = {
           coursecatalog:[],//课件目录
           knowledges:[],
         }
-        this.arr = [this.generateROW()]
       }
       // 传入课件名称
       Inputcoursename(e){
@@ -167,11 +166,14 @@ const formItemLayout = {
       }
       handlePlus() {
         if (this.state.arrSize < 7) {
-          this.arr.push(this.generateROW())
+            const coursecatalog1 = {}; 
+            coursecatalog1['children'] =[];   
+            coursecatalog1['name'] = "";
+            this.state.coursecatalog.push(coursecatalog1);
           this.setState({ 
-            arrSize: this.state.arrSize + 1 ,
-            coursecatalog:[],
-          })
+              arrSize: this.state.arrSize + 1 ,
+        })
+        this.CourseAppear(); 
         } else {
           Modal.warning({
             title: '注意：',
@@ -182,11 +184,11 @@ const formItemLayout = {
     
       handleMinus() {
         if (this.state.arrSize > 0) {
-          this.arr.pop()
+            this.state.coursecatalog.pop()
           this.setState({ 
-            arrSize: this.state.arrSize - 1 ,
-            coursecatalog:[],
-          })
+              arrSize: this.state.arrSize - 1 ,
+        })
+        this.CourseAppear(); 
         } else {
           Modal.warning({
             title: '注意：',
@@ -194,18 +196,10 @@ const formItemLayout = {
           });
         }
       }
-      generateROW() {
-        return (
-          <div>
-              <Input placeholder="课件目录名称"  style={{ width: 300 }}/>
-          </div>
-        )
-      }
       creatcourse = () =>{
         const { login_info }=this.props;
         var data={
-          "user_id":666,
-       //   "user_id":user_info.user_id,
+         "user_id":login_info.user_id,
           "courseName":this.state.courseName,
           "grade": this.state.grade,
           "subject": this.state.subject,
@@ -215,11 +209,6 @@ const formItemLayout = {
           "isEdit": 1,
           "name": "课件目录",
           "children":this.state.coursecatalog,
-        //   "children": [{
-        //     "children": [],
-        //     "name": "数学知识点1"
-        // }],
-    
           "templateId": 1,
           "slide": [{
               "pageId": 1,
@@ -489,22 +478,19 @@ const formItemLayout = {
           <Row key={this.state.arrSize}>
                 <Col span={8}>
                   {
-                    this.arr.map((v, i) => {
-                      return (
-                        <Row gutter={8} key={i}>
-                           <Col span={10}>
-                          <Input onPressEnter={(e)=>{
-                                const coursecatalog1 = {}; 
-                                coursecatalog1['children'] =[];   
-                                coursecatalog1['name'] = e.target.value; 
-                                this.state.coursecatalog.push(coursecatalog1);
-                                this.CourseAppear();  
-                            }} 
-                            placeholder="课件目录名称"  style={{ width: 300 }}/>
-                           </Col>
-                        </Row>
-                      )
-                    })
+                   this.state.coursecatalog.map((v,i ) => {
+                    return (
+                      <Row gutter={8} key={i}>
+                         <Col span={10}>
+                        <Input onPressEnter={(e)=>{
+                              v.name = e.target.value; 
+                              this.CourseAppear();  
+                          }} 
+                          placeholder={v.name}  style={{ width: 300 }}/>
+                         </Col>
+                      </Row>
+                    )
+              })
                   }
                 </Col>
             </Row>
