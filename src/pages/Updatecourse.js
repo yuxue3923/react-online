@@ -49,7 +49,6 @@ const formItemLayout = {
           knowledges:[],
           coursedata:{},//课件信息
         }
-        this.arr = [this.generateROW()]
       }
       // 传入课件名称
       Inputcoursename(e){
@@ -109,10 +108,13 @@ const formItemLayout = {
       }
       handlePlus() {
         if (this.state.arrSize < 7) {
-          this.arr.push(this.generateROW())
+            const coursecatalog1 = {}; 
+            coursecatalog1['children'] =[];   
+            coursecatalog1['name'] = "";
+            this.state.coursecatalog.push(coursecatalog1);
           this.setState({ 
               arrSize: this.state.arrSize + 1 ,
-              coursecatalog:[],
+            //   coursecatalog:[],
 
         })
         } else {
@@ -125,10 +127,9 @@ const formItemLayout = {
     
       handleMinus() {
         if (this.state.arrSize > 0) {
-          this.arr.pop()
+            this.state.coursecatalog.pop()
           this.setState({ 
               arrSize: this.state.arrSize - 1 ,
-              coursecatalog:[],
         })
         } else {
           Modal.warning({
@@ -224,7 +225,7 @@ const formItemLayout = {
     }
     getdata() {
         const { login_info }=this.props;
-        var a="5c6f67e482fe1b11f077042f";
+        var a="5c74a7c147ba150e5c4f2233";
         var data = {
             "_id" :a.toString(),
         };
@@ -263,7 +264,10 @@ const formItemLayout = {
       componentWillMount(){
         this.getdata();
       }
-     componentDidMount() {
+      componentDidMount(){
+          this.CourseAppear();
+      }
+      CourseAppear() {
         console.log("课件展示区")
         console.log(JSON.stringify(this.state.coursecatalog))
         // 基于准备好的dom，初始化echarts实例
@@ -447,22 +451,19 @@ const formItemLayout = {
           <Row key={this.state.arrSize}>
                 <Col span={8}>
                   {
-                    this.arr.map((v, i) => {
+                    this.state.coursecatalog.map((v,i ) => {
                       return (
                         <Row gutter={8} key={i}>
                            <Col span={10}>
                           <Input onPressEnter={(e)=>{
-                                const coursecatalog1 = {}; 
-                                coursecatalog1['children'] =[];   
-                                coursecatalog1['name'] = e.target.value; 
-                                this.state.coursecatalog.push(coursecatalog1);
+                                v.name = e.target.value; 
                                 this.CourseAppear();  
                             }} 
-                            placeholder={v}  style={{ width: 300 }}/>
+                            placeholder={v.name}  style={{ width: 300 }}/>
                            </Col>
                         </Row>
                       )
-                    })
+                })
                   }
                 </Col>
             </Row>
