@@ -114,9 +114,8 @@ const formItemLayout = {
             this.state.coursecatalog.push(coursecatalog1);
           this.setState({ 
               arrSize: this.state.arrSize + 1 ,
-            //   coursecatalog:[],
-
         })
+        this.CourseAppear(); 
         } else {
           Modal.warning({
             title: '注意：',
@@ -131,6 +130,7 @@ const formItemLayout = {
           this.setState({ 
               arrSize: this.state.arrSize - 1 ,
         })
+        this.CourseAppear(); 
         } else {
           Modal.warning({
             title: '注意：',
@@ -138,88 +138,80 @@ const formItemLayout = {
           });
         }
       }
-      generateROW() {
-        return (
-          <div>
-              <Input placeholder="课件目录名称"  style={{ width: 300 }}/>
-          </div>
-        )
-      }
-      creatcourse = () =>{
-        const { user_info }=this.props;
-        //创建课件
-        console.log("进入ajax")
-        console.log(JSON.stringify(this.state.coursecatalog))
+      updatecourse = () =>{
+        const { login_info }=this.props;
+        var data={
+         "_id":"5c74a7c147ba150e5c4f2233",
+          "courseName":this.state.courseName,
+          "grade": this.state.grade,
+          "subject": this.state.subject,
+          "descript":  this.state.descript,
+          "knowledges":this.state.knowledges,
+          "isOpen": this.state.isOpen,
+          "isEdit": 1,
+          "name": "课件目录",
+          "children":this.state.coursecatalog,
+          "templateId": 1,
+          "slide": [{
+              "pageId": 1,
+              "pageThumbnail": {
+                  "pageurl": "./1.png",
+                  "style": {
+                      "pagewidth": "100px",
+                      "pageheight": "100px"
+                  }
+              },
+              "media":[
+                  {
+                      "id":2314,
+                      "position":[0,0],
+                      "rotation":0,
+                      "scale":[1,1],
+                      "shape":{"cx":100,"cy":100,"n":30,"z":40},
+                      "style":{"fill":"none"},
+                      "type":"house"
+                  }
+              ]
+          }],     
+          "fileSize": "100M",
+          "scope": "k12教育",
+          "addTime": 20190124,
+          "views": 300,
+          "url": "D:/Graduate/11.jpg",
+          "width": "30px",
+          "height": "40px"
+      };
+       
+        //更新课件
+        console.log("进入更新课件ajax");
         $.ajax({
-            url: "http://localhost:3000/api/createCourse",
-            type: "POST",
+            url: "http://localhost:3000/api/updateCourse",
+            async:false,
+            type: "PUT",
+            contentType:"application/json;charset=UTF-8",
+            accepts:"application/json;charset=UTF-8",
             dataType: "json",
-            data:{
-              // "user_id":2,
-              "user_id":user_info.user_id,
-              "courseName":this.state.courseName,
-              "grade": this.state.grade,
-              "subject": this.state.subject,
-              "descript":  this.state.descript,
-              "knowledges":JSON.stringify(this.state.knowledges),
-              "isOpen": this.state.isOpen,
-              "isEdit": 1,
-              "name": "课件目录",
-              "children":this.state.coursecatalog,
-            //   "children": [{
-            //     "children": [],
-            //     "name": "数学知识点1"
-            // }],
-        
-              "templateId": 1,
-              "slide": [{
-                  "pageId": 1,
-                  "pageThumbnail": {
-                      "pageurl": "./1.png",
-                      "style": {
-                          "pagewidth": "100px",
-                          "pageheight": "100px"
-                      }
-                  },
-                  "media":[
-                      {
-                          "id":2314,
-                          "position":[0,0],
-                          "rotation":0,
-                          "scale":[1,1],
-                          "shape":{"cx":100,"cy":100,"n":30,"z":40},
-                          "style":{"fill":"none"},
-                          "type":"house"
-                      }
-                  ]
-              }],     
-              "fileSize": "100M",
-              "scope": "k12教育",
-              "addTime": 20190124,
-              "views": 300,
-              "url": "D:/Graduate/11.jpg",
-              "width": "30px",
-              "height": "40px"
-          },
+            data:JSON.stringify(data),
+            beforeSend:function(request){
+              request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+            },
             success: function (data) {
                 if (data.errorCode == 0) {
-                    console.log('成功保存课件');
-                    console.log(data.msg);
-                    console.log(data.msg._id);
+                    console.log('成功更新课件');
                     Modal.success({
                       title: '消息提示',
-                      content: '成功创建课件！',
+                      content: '成功更新课件！',
                     });
-                    console.log(JSON.stringify(this.state.coursecatalog));
-                    this.context.router.history.push("/APP");
+                    console.log(this.state.coursecatalog);
+                    this.context.router.history.push("/Account");
                 }
                 else {
-                    console.log('成功获取搜索资源');
-                    // this.setState({ resource: data.msg });
+                    console.log('成功更新课件');
                     console.log(data.msg);
                 }
             }.bind(this),
             error: function (xhr, status, err) {
+              console.log("更新课件操作错误")
             }.bind(this)
         });
     }
@@ -390,19 +382,19 @@ const formItemLayout = {
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
-            <Input value={this.state.coursedata.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
+            <Input placeholdere={this.state.coursedata.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
           </Form.Item>
           <Form.Item label="年级科目" {...formItemLayout}>
           <Row gutter={16}>
           <Col span={12}>
-          <Select onChange={this.Inputgrade.bind(this)} style={{width:'100%'}} value={this.state.coursedata.grade}>
+          <Select onChange={this.Inputgrade.bind(this)} style={{width:'100%'}} placeholder={this.state.coursedata.grade}>
                     <Option value="小学">小学</Option>
                     <Option value="初中"> 初中</Option>
                     <Option value="高中">高中</Option>
           </Select> 
           </Col> 
           <Col span={12}>
-           <Select onChange={this.Inputsubject.bind(this)} style={{width:'100%'}} value={this.state.coursedata.subject}>
+           <Select onChange={this.Inputsubject.bind(this)} style={{width:'100%'}} placeholder={this.state.coursedata.subject}>
                     <Option value="语文">语文</Option>
                     <Option value="数学">数学</Option>
                     <Option value="英语">英语</Option>
@@ -417,7 +409,7 @@ const formItemLayout = {
             </Row>                 
           </Form.Item>
           <Form.Item label="课件简介" {...formItemLayout}>
-           <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} value={this.state.coursedata.descript} rows={4} />
+           <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} placeholder={this.state.coursedata.descript} rows={4} />
           </Form.Item>
 
           <Form.Item label="知识点" {...formItemLayout}>
@@ -470,7 +462,7 @@ const formItemLayout = {
             </Form.Item>
         </Form>
            <Row>
-             <Button type="primary" onClick={this.getdata} style={{margin:'0px 0px 0px 100px'}}>确认修改</Button>
+             <Button type="primary" onClick={this.updatecourse} style={{margin:'0px 0px 0px 100px'}}>确认修改</Button>
            </Row>
             </Col>
             <Col span={15}>
