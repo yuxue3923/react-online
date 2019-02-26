@@ -9,7 +9,7 @@ const IconFont = Icon.createFromIconfontCN({
 
 var isButton=false;
 var isflush = true;
-var count = 0;
+
 var content1 = function(fn){
    return (
     <div>

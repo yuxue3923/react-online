@@ -274,10 +274,15 @@ class App extends Component {
     };
    componentDidUpdate(){
    }
+   componentDidMount(){
+    
+  }
     render() {
       const {createCourse_info} = this.props;
-      console.log("Appxuanran")
-      console.log(createCourse_info)
+       MyDeck = createCourse_info.createCourse_info.slide
+   //    console.log()
+      console.log(MyDeck)
+     
       console.log(this.state.thumbnail)
       return (
         <Layout style={{width: '100%', height: '100vh'}}>
@@ -350,7 +355,7 @@ class App extends Component {
               </Modal>
               </span>
             </div>
-            <EditorWithBar initContent={MyDeck[this.state.page-1]} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail}/>
+            <EditorWithBar initContent={MyDeck[this.state.page-1].media} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail}/>
             </div>
             </Content>
             {/* </Layout> */}

@@ -147,7 +147,7 @@ export default class Editor extends React.Component {
        !this.props.objectList&&sr.clear()
         this.props.objectList&&sr.initWithOthers(this.props.objectList)
         add(this.props.type);
-        this.sync(sr.getObjectList())
+        this.sync({media:sr.getObjectList()})
        
 
         sr.painter.getRenderedCanvas('black').toBlob((blob)=>{

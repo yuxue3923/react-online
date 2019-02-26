@@ -198,7 +198,7 @@ const formItemLayout = {
       creatcourse = () =>{
         const { user_info }=this.props;
         var data={
-          "user_id":2,
+          "user_id":666,
        //   "user_id":user_info.user_id,
           "courseName":this.state.courseName,
           "grade": this.state.grade,

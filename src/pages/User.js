@@ -71,6 +71,7 @@ const formItemLayout = {
             if (data.errorCode == '0') {
               console.log('获取查询权限1111');
               console.log(data);
+              console.log("userid:"+data.msg.user_id);
               this.setState({
                 username:login_info.username,
                 email:data.msg.email,
