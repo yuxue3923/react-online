@@ -8,6 +8,7 @@ import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
 
 import EditorWithBar from './components/Editor/EditorWithBar';
+
 var temp = 99999
 var MyDeck = [[{
   "id":temp,
@@ -230,30 +231,41 @@ class App extends Component {
     }
     save(){
       const {createCourse_info,login_info} = this.props;
-      console.log(createCourse_info)
 
+      var temp = deepClone(createCourse_info)
+
+   //  temp.createCourse_info.user_id = login_info.user_id
+
+     var formData = deepClone(temp.createCourse_info)
+
+      delete formData.slides
+    
+      formData.slide =  deepClone(temp.createCourse_info.slides.slide)
+
+      formData.templateId = deepClone(temp.createCourse_info.slides.templateId) 
+
+     console.log(formData)
       $.ajax({
-        url: "http://localhost:3000/api/createCourse",
-        type: "POST",
+        url: "http://localhost:3000/api/updateCourse",
+        type: "PUT",
         dataType: "json",
-        data:JSON.stringify(createCourse_info),
+        data:formData,
         beforeSend:function(request){
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function (data) {
-            if (data.error == "server_error") {
-                console.log("没有登录权限");
+            if (data.errorCode !== 0) {
+                console.log("保存失败1");
             }
             else {
                 console.log('保存成功');
                 console.log(data);
-                console.log(data.access_token);
                 
                
             }
         },
         error: function (xhr, status, err) {
-          message.error("保存失败");
+          message.error("保存失败2");
         }
     });
     
@@ -321,7 +333,7 @@ class App extends Component {
 
     render() {
       const {createCourse_info} = this.props;
-       MyDeck = createCourse_info.createCourse_info.slide
+       MyDeck = createCourse_info.createCourse_info.slides.slide
    //    console.log()
       console.log(MyDeck)
      

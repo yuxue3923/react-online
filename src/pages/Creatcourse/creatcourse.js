@@ -278,7 +278,8 @@ const formItemLayout = {
                     setCreatecourseState({
                       type:'createcourseSuccess',
                       payload:{
-                        createCourse_info:data.msg.slides,
+                        createCourse_info:data.msg,
+                        course_id:data.msg._id
                       }
                     });
                     this.context.router.history.push("/APP");
