@@ -5,6 +5,9 @@ import MyTag from './Tag';
 import ChoseTemplate from './ChoseTemplate'
 import '../../App.css'
 import './Account.css'
+import $ from 'jquery';
+import PropTypes from "prop-types"
+import { connect } from 'react-redux';
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1006980_yyo6e4860m.js',
 });
@@ -28,10 +31,18 @@ const {Meta} = Card;
 const suffix=<Icon type="close-circle"/>
 const FormItem = Form.Item;
   class Account extends Component {
-    state = { 
-      visible: false ,
-      checked: true,//Tag状态
-      templatevisible:false,//控制课件模版弹出框
+    static contextTypes={
+      router:PropTypes.object
+    }
+    constructor(props, context) {
+        super(props, context)
+        this.state = {
+          visible: false ,
+          current:1,
+          checked: true,//Tag状态
+          templatevisible:false,//控制课件模版弹出框
+          imgurl:["https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png","https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png","https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png","https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png" ]
+        }
     }
     //Modal事件
     showModal = () => {
@@ -70,7 +81,13 @@ const FormItem = Form.Item;
         content: '成功选择该课件模版！',
       });
     }
-  
+  onChange=(page)=>{
+    this.setState(
+      {
+        current:page,
+      }
+    )
+  }
     handleCancel_template = (e) => {
       console.log(e);
       this.setState({
@@ -80,8 +97,82 @@ const FormItem = Form.Item;
     handleChange = (checked) => {
       this.setState({ checked });
     }
+    sendupdatecourseid(id){ 
+      const { setSsendupdatecourseid } = this.props;
+      setSsendupdatecourseid({
+        type: 'GetuserupdatecourseidSuccess',
+        payload: id,
+      });
+    }
+    getdata() {
+      const { login_info }=this.props;
+      console.log('进入researchByUserId接口');
+      $.ajax({
+        url: "http://localhost:3000/api/researchByUserId",
+        async:false,
+        type: "GET",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:{"user_id":login_info.user_id},
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode == 0) {
+            console.log('获取查询权限111');
+            console.log(data.msg);
+            this.setState({
+              usercoursedata:data.msg,
+            });
+          }
+          else {   
+            console.log('获取查询权限2222');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
+      });
+    }
+    componentWillMount(){
+      this.getdata();
+    }
     render() {
-      
+      const courseList = this.state.usercoursedata.map((v, i) => {
+          return (
+            <div>
+                 <Row gutter={16}>
+               <Col span={8}>
+                <Card
+                  style={{ width:250 ,height:300}}
+                  cover={
+                    <img onClick={this.showModal}
+                      alt="example"
+                      src={this.state.imgurl[i%4]} height="154"
+                    />
+                  }
+                >
+                  <Row>
+                    <Col span={18}>
+                    <Meta
+                        title={v.courseName}
+                        description={v.descript}
+                     />
+                    </Col>
+                  </Row>
+                  <br />
+                  <Row >
+                    <Col span={4}>
+                    <Link to='/Updatecourse'><IconFont className="iconsize" type="icon-xiugai" onClick={this.sendupdatecourseid.bind(this,v._id)}/></Link>
+                  </Col>
+                    <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
+                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
+                  </Row>
+                </Card>
+            </Col>
+            </Row>
+            </div>
+          );}
+        );
       const cardBasic_one = (
         <div>
           <Row gutter={16}>
@@ -91,7 +182,7 @@ const FormItem = Form.Item;
                   cover={
                     <img onClick={this.showModal}
                       alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png" height="154"
+                      src={this.state.imgurl[0]} height="154"
                     />
                   }
                 >
@@ -125,7 +216,7 @@ const FormItem = Form.Item;
                   cover={
                     <img onClick={this.showModal}
                       alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="154"
+                      src={this.state.imgurl[1]} height="154"
                     />
                   }
                 >
@@ -248,32 +339,35 @@ const FormItem = Form.Item;
             <Col span={6}>{cardBasic_three}</Col>
             <Col span={6}>{cardBasic_four}</Col> 
           </Row>
-          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-            <Pagination  defaultCurrent={1} total={500} />
-            {/* <Pagination showQuickJumper defaultCurrent={1} total={500} /> */}
-          </Row>
+          {/* <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
+            <Pagination current={this.state.current} onChange={this.onChange} total={500} />
+          </Row> */}
         </div>
       );
-      const cardList_course = (
-        <div>
-          <Row style={{ margin: '8px 8px 8px 0'}}>
-            <Col span={6}>{cardBasic_creat}</Col>
-            <Col span={6}>{cardBasic_four}</Col>
-            <Col span={6}>{cardBasic_two}</Col>
-            <Col span={6}>{cardBasic_three}</Col> 
-          </Row>
-          <Row style={{ margin: '8px 8px 8px 0'}}>
-            <Col span={6}>{cardBasic_two}</Col>
-            <Col span={6}>{cardBasic_one}</Col>
-            <Col span={6}>{cardBasic_three}</Col>
-            <Col span={6}>{cardBasic_four}</Col> 
-          </Row>
-          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-            <Pagination  defaultCurrent={1} total={500} />
-            {/* <Pagination showQuickJumper defaultCurrent={1} total={500} /> */}
-          </Row>
-        </div>
-      );
+      var ownMap=(list,current)=>{
+       for(let i=(current-1)*7;i<list.length;){
+         return  <div>
+         <Row style={{ margin: '8px 8px 8px 0'}}>
+           <Col span={6}>{cardBasic_creat}</Col>
+            <Col span={6}>{list[i]}</Col>
+           <Col span={6}>{list[i+1]}</Col>
+           <Col span={6}>{list[i+2]}</Col> 
+         </Row>
+         <Row style={{ margin: '8px 8px 8px 0'}}>
+           <Col span={6}>{list[i+3]}</Col>
+           <Col span={6}>{list[i+4]}</Col>
+           <Col span={6}>{list[i+5]}</Col>
+           <Col span={6}>{list[i+6]}</Col> 
+         </Row>
+         <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
+         <Pagination current={this.state.current} onChange={this.onChange} total={500} />
+         </Row>
+       </div>
+ 
+       }
+      }
+      const cardList_course = ownMap(courseList,this.state.current)
+     
       const mycourse_ground=(
         <div style={{ margin: '8px 8px 8px 0'}}>
         <Card bordered={false}>
@@ -419,4 +513,18 @@ const FormItem = Form.Item;
     }
   }
 
-  export default Account;
+  const Account_Index=Form.create()(Account);
+  function  mapStateToProps(state) {
+    return{
+       login_info:state.reducer_login.login_info,
+    };
+  }
+  function mapDispatchToProps(dispatch){
+    return{
+      setSsendupdatecourseid: (state) => dispatch(state),
+    };
+  }
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(Account_Index);

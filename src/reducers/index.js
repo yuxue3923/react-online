@@ -15,10 +15,10 @@ function  reducer_createcourse(state = {},action) {
             return state;  
     }  
 }      
-function  reducer_user(state = {},action) {
+function  reducer_userupdatecourseid(state = {},action) {
     switch (action.type) {
-        case 'GetUserSuccess':
-            return { user_info: action.payload};          
+        case 'GetuserupdatecourseidSuccess':
+            return { updatecourseid: action.payload};          
         default:
             return state;
     }
@@ -27,5 +27,5 @@ function  reducer_user(state = {},action) {
 export default combineReducers({
     reducer_login,
     reducer_createcourse,
-    reducer_user,
+    reducer_userupdatecourseid,
 })

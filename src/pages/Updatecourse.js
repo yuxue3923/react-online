@@ -139,9 +139,9 @@ const formItemLayout = {
         }
       }
       updatecourse = () =>{
-        const { login_info }=this.props;
+        const { login_info ,updatecourseid}=this.props;
         var data={
-         "_id":"5c74efc4aa2a50b2cb1c113c",
+         "_id":updatecourseid,
           "courseName":this.state.courseName,
           "grade": this.state.grade,
           "subject": this.state.subject,
@@ -217,8 +217,8 @@ const formItemLayout = {
         });
     }
     getdata() {
-        const { login_info }=this.props;
-        var a="5c74efc4aa2a50b2cb1c113c";
+        const { login_info ,updatecourseid}=this.props;
+        var a=updatecourseid;
         var data = {
             "_id" :a.toString(),
         };
@@ -487,7 +487,7 @@ const formItemLayout = {
   function  mapStateToProps(state) {
     return{
        login_info:state.reducer_login.login_info,
-       user_info:state.reducer_user.user_info,
+       updatecourseid:state.reducer_userupdatecourseid.updatecourseid,
     };
   }
   function mapDispatchToProps(dispatch){
