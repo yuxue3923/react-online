@@ -141,7 +141,7 @@ const formItemLayout = {
       updatecourse = () =>{
         const { login_info }=this.props;
         var data={
-         "_id":"5c74a7c147ba150e5c4f2233",
+         "_id":"5c74efc4aa2a50b2cb1c113c",
           "courseName":this.state.courseName,
           "grade": this.state.grade,
           "subject": this.state.subject,
@@ -184,6 +184,7 @@ const formItemLayout = {
        
         //更新课件
         console.log("进入更新课件ajax");
+        console.log(JSON.stringify(data));
         $.ajax({
             url: "http://localhost:3000/api/updateCourse",
             async:false,
@@ -217,7 +218,7 @@ const formItemLayout = {
     }
     getdata() {
         const { login_info }=this.props;
-        var a="5c74a7c147ba150e5c4f2233";
+        var a="5c74efc4aa2a50b2cb1c113c";
         var data = {
             "_id" :a.toString(),
         };
@@ -242,6 +243,11 @@ const formItemLayout = {
                 arrSize: data.msg[0].catalog.children.length,
                 isOpen:data.msg[0].isOpen,
                 coursecatalog:data.msg[0].catalog.children,
+                courseName:data.msg[0].courseName,
+                grade: data.msg[0].grade,
+                subject: data.msg[0].subject,
+                descript: data.msg[0].descript,
+                // knowledges:data.msg[0].knowledges,
               });
             }
             else {   
@@ -382,7 +388,7 @@ const formItemLayout = {
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
-            <Input placeholdere={this.state.coursedata.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
+            <Input placeholder={this.state.coursedata.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
           </Form.Item>
           <Form.Item label="年级科目" {...formItemLayout}>
           <Row gutter={16}>
