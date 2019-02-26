@@ -54,6 +54,7 @@ const FormItem = Form.Item;
                       payload:{
                         username:this.state.username,
                         access_token:data.access_token,
+                        user_id:data.user_id,
                       }
                     });
                     this.context.router.history.push("/Account");

@@ -47,6 +47,7 @@ const formItemLayout = {
           visible: true, //控制弹出框的呈现与隐藏
           coursecatalog:[],//课件目录
           knowledges:[],
+          coursedata:{},//课件信息
         }
         this.arr = [this.generateROW()]
       }
@@ -109,7 +110,11 @@ const formItemLayout = {
       handlePlus() {
         if (this.state.arrSize < 7) {
           this.arr.push(this.generateROW())
-          this.setState({ arrSize: this.state.arrSize + 1 })
+          this.setState({ 
+              arrSize: this.state.arrSize + 1 ,
+              coursecatalog:[],
+
+        })
         } else {
           Modal.warning({
             title: '注意：',
@@ -121,7 +126,10 @@ const formItemLayout = {
       handleMinus() {
         if (this.state.arrSize > 0) {
           this.arr.pop()
-          this.setState({ arrSize: this.state.arrSize - 1 })
+          this.setState({ 
+              arrSize: this.state.arrSize - 1 ,
+              coursecatalog:[],
+        })
         } else {
           Modal.warning({
             title: '注意：',
@@ -215,11 +223,11 @@ const formItemLayout = {
         });
     }
     getdata() {
-        var a="5c70e9ade4f246349c86b270";
+        const { login_info }=this.props;
+        var a="5c6f67e482fe1b11f077042f";
         var data = {
             "_id" :a.toString(),
         };
-        var db={"_id":a.toString()};
         console.log('进入researchByCourseId接口');
         console.log(JSON.stringify(data));
         $.ajax({
@@ -227,17 +235,21 @@ const formItemLayout = {
           async:false,
           type: "GET",
           contentType:"application/json;charset=UTF-8",
-        //   accepts:"application/json;charset=UTF-8",
           dataType: "json",
           data:data,
-          context:document.body,
-        //   data:"_id="+a.toString(),
-          
+          beforeSend:function(request){
+            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+          },
           success: function(data) {
             if (data.errorCode == 0) {
               console.log('获取查询权限111');
               console.log(data);
-              
+              this.setState({
+                coursedata:data.msg[0],
+                arrSize: data.msg[0].catalog.children.length,
+                isOpen:data.msg[0].isOpen,
+                coursecatalog:data.msg[0].catalog.children,
+              });
             }
             else {   
               console.log('获取查询权限2222');
@@ -251,7 +263,7 @@ const formItemLayout = {
       componentWillMount(){
         this.getdata();
       }
-      CourseAppear() {
+     componentDidMount() {
         console.log("课件展示区")
         console.log(JSON.stringify(this.state.coursecatalog))
         // 基于准备好的dom，初始化echarts实例
@@ -374,19 +386,19 @@ const formItemLayout = {
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
-            <Input placeholder="20字以内" onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
+            <Input value={this.state.coursedata.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
           </Form.Item>
           <Form.Item label="年级科目" {...formItemLayout}>
           <Row gutter={16}>
           <Col span={12}>
-          <Select onChange={this.Inputgrade.bind(this)} style={{width:'100%'}} placeholder="请选择年级">
+          <Select onChange={this.Inputgrade.bind(this)} style={{width:'100%'}} value={this.state.coursedata.grade}>
                     <Option value="小学">小学</Option>
                     <Option value="初中"> 初中</Option>
                     <Option value="高中">高中</Option>
           </Select> 
           </Col> 
           <Col span={12}>
-           <Select onChange={this.Inputsubject.bind(this)} style={{width:'100%'}} placeholder="请选择科目">
+           <Select onChange={this.Inputsubject.bind(this)} style={{width:'100%'}} value={this.state.coursedata.subject}>
                     <Option value="语文">语文</Option>
                     <Option value="数学">数学</Option>
                     <Option value="英语">英语</Option>
@@ -401,13 +413,13 @@ const formItemLayout = {
             </Row>                 
           </Form.Item>
           <Form.Item label="课件简介" {...formItemLayout}>
-           <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
+           <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} value={this.state.coursedata.descript} rows={4} />
           </Form.Item>
 
           <Form.Item label="知识点" {...formItemLayout}>
           <Row gutter={16}>
           <Col span={20}>
-             <TextArea placeholder="在这里写下你的知识点" value={this.state.knowledges} style={{ width:'100%'}} rows={4}/>
+             <TextArea placeholder={this.state.coursedata.knowledges} value={this.state.knowledges} style={{ width:'100%'}} rows={4}/>
           </Col> 
            <Col span={4}>
               <Button onClick={this.toggle}>选择知识点</Button>
@@ -417,7 +429,7 @@ const formItemLayout = {
           <Form.Item label="公开/私密" {...formItemLayout}>
           <Row gutter={8}>
           <Col span={10}>
-             <Switch onChange={this.Inputisopen.bind(this)} checkedChildren="公开" unCheckedChildren="私密" />
+             <Switch onChange={this.Inputisopen.bind(this)} checkedChildren="公开" unCheckedChildren="私密" defaultChecked={this.state.coursedata.isOpen}/>
           </Col> 
           </Row>
           </Form.Item>
@@ -446,7 +458,7 @@ const formItemLayout = {
                                 this.state.coursecatalog.push(coursecatalog1);
                                 this.CourseAppear();  
                             }} 
-                            placeholder="课件目录名称"  style={{ width: 300 }}/>
+                            placeholder={v}  style={{ width: 300 }}/>
                            </Col>
                         </Row>
                       )
@@ -475,6 +487,7 @@ const formItemLayout = {
   const Updatecourse_Index=Form.create()(Updatecourse);
   function  mapStateToProps(state) {
     return{
+       login_info:state.reducer_login.login_info,
        user_info:state.reducer_user.user_info,
     };
   }
