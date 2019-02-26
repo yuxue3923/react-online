@@ -233,23 +233,23 @@ class App extends Component {
       const {createCourse_info,login_info} = this.props;
 
       var temp = deepClone(createCourse_info)
-
+      var passbydata = createCourse_info.createCourse_info
    //  temp.createCourse_info.user_id = login_info.user_id
 
      var formData = deepClone(temp.createCourse_info)
 
       delete formData.slides
     
-      formData.slide =  deepClone(temp.createCourse_info.slides.slide)
+      formData.slide =  JSON.stringify([...temp.createCourse_info.slides.slide])
 
       formData.templateId = deepClone(temp.createCourse_info.slides.templateId) 
 
-     console.log(formData)
+  //   console.log(passbydata)
       $.ajax({
         url: "http://localhost:3000/api/updateCourse",
         type: "PUT",
         dataType: "json",
-        data:formData,
+        data:JSON.stringify(formData),
         beforeSend:function(request){
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
