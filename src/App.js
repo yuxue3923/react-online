@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card} from 'antd';
+import $ from 'jquery';
+import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card,message} from 'antd';
 import './App.css';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -201,7 +202,9 @@ class App extends Component {
      
    this.thumbnail=this.thumbnail.bind(this)
    this.sync=this.sync.bind(this);
-   this.flush=this.flush.bind(this)
+   this.flush=this.flush.bind(this);
+   this.save = this.save.bind(this)
+   this.passbyJudge = this.passbyJudge.bind(this)
   }
     state = {
       collapsed: true,
@@ -216,6 +219,44 @@ class App extends Component {
       this.setState({
         canvasFlush:state
       })
+    }
+    passbyJudge(){
+      if(typeof MyDeck[this.state.page-1] !== "undefined"){
+        return MyDeck[this.state.page-1].media
+      }
+      else{
+        return null
+      }
+    }
+    save(){
+      const {createCourse_info,login_info} = this.props;
+      console.log(createCourse_info)
+
+      $.ajax({
+        url: "http://localhost:3000/api/createCourse",
+        type: "POST",
+        dataType: "json",
+        data:JSON.stringify(createCourse_info),
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function (data) {
+            if (data.error == "server_error") {
+                console.log("没有登录权限");
+            }
+            else {
+                console.log('保存成功');
+                console.log(data);
+                console.log(data.access_token);
+                
+               
+            }
+        },
+        error: function (xhr, status, err) {
+          message.error("保存失败");
+        }
+    });
+    
     }
     sync(objectList){
 
@@ -277,6 +318,7 @@ class App extends Component {
    componentDidMount(){
     
   }
+
     render() {
       const {createCourse_info} = this.props;
        MyDeck = createCourse_info.createCourse_info.slide
@@ -355,7 +397,7 @@ class App extends Component {
               </Modal>
               </span>
             </div>
-            <EditorWithBar initContent={MyDeck[this.state.page-1].media} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail}/>
+            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save}/>
             </div>
             </Content>
             {/* </Layout> */}
@@ -369,6 +411,7 @@ class App extends Component {
   const App_Index=Form.create()(App);
   function  mapStateToProps(state) {
     return{
+      login_info:state.reducer_login.login_info,
       createCourse_info:state.reducer_createcourse.createCourse_info,
     };
   }

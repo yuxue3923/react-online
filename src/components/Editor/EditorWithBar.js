@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Popover,Button,Row,Col ,Icon} from 'antd';
 import Editor from './canvaslib'
 import './editbutton.css';
+
 const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_981127_k7yilt2ebjs.js',
   });
@@ -96,7 +97,7 @@ const dgraph=function(fh,fheart,fa){
         }
         
         this.handleThumbnail=this.handleThumbnail.bind(this);
-      
+        this.save = this.save.bind(this)
     }
  
     add(type){
@@ -109,6 +110,9 @@ const dgraph=function(fh,fheart,fa){
         this.props.thumbnail(src)
 
 
+    }
+    save(){
+      this.props.save()
     }
    
      shouldComponentUpdate(nextProps,nextState){
@@ -181,7 +185,7 @@ const dgraph=function(fh,fheart,fa){
                </Button>
           </div> 
           <div style={{margin:'1px'}}>
-               <Button type="primary" >
+               <Button type="primary" onClick={this.save}>
                  <Icon className="iconsize" type="save"/>
                </Button>
           </div> 
