@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Avatar,Input, Button,Pagination, Checkbox,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
+import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
 import {Link} from 'react-router-dom'
 import './creatcourse.css'
 import $ from 'jquery';
@@ -13,7 +13,7 @@ import 'echarts/lib/component/title';
 const { TextArea } = Input;
 
 const Option = Select.Option;
-const {  Content, Sider,Header, } = Layout;
+const {  Sider } = Layout;
 const TreeNode = Tree.TreeNode;
 const data= {
   "children": [
@@ -168,7 +168,10 @@ const formItemLayout = {
       handlePlus() {
         if (this.state.arrSize < 7) {
           this.arr.push(this.generateROW())
-          this.setState({ arrSize: this.state.arrSize + 1 })
+          this.setState({ 
+            arrSize: this.state.arrSize + 1 ,
+            coursecatalog:[],
+          })
         } else {
           Modal.warning({
             title: '注意：',
@@ -180,7 +183,10 @@ const formItemLayout = {
       handleMinus() {
         if (this.state.arrSize > 0) {
           this.arr.pop()
-          this.setState({ arrSize: this.state.arrSize - 1 })
+          this.setState({ 
+            arrSize: this.state.arrSize - 1 ,
+            coursecatalog:[],
+          })
         } else {
           Modal.warning({
             title: '注意：',
@@ -196,7 +202,7 @@ const formItemLayout = {
         )
       }
       creatcourse = () =>{
-        const { user_info }=this.props;
+        const { login_info }=this.props;
         var data={
           "user_id":666,
        //   "user_id":user_info.user_id,
@@ -246,10 +252,8 @@ const formItemLayout = {
       };
        
         //创建课件
-        console.log("进入ajax")
-        
+        console.log("进入ajax") 
         const {setCreatecourseState} = this.props;
-        const { login_info }=this.props;
         $.ajax({
             url: "http://localhost:3000/api/createCourse",
             async:false,

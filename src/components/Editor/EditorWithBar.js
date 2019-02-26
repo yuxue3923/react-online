@@ -180,6 +180,26 @@ const dgraph=function(fh,fheart,fa){
                  <Icon className="iconsize" type="file-search"/>
                </Button>
           </div> 
+          <div style={{margin:'1px'}}>
+               <Button type="primary" >
+                 <Icon className="iconsize" type="save"/>
+               </Button>
+          </div> 
+          <div style={{margin:'1px'}}>
+               <Button type="primary" >
+                 <Icon className="iconsize" type="eye"/>
+               </Button>
+          </div> 
+          <div style={{margin:'1px'}}>
+               <Button type="primary" >
+                 <Icon className="iconsize" type="redo"/>
+               </Button>
+          </div> 
+          <div style={{margin:'1px'}}>
+               <Button type="primary" >
+                 <Icon className="iconsize" type="undo"/>
+               </Button>
+          </div> 
           </div>
           </Col>
        <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} /></Col>   
