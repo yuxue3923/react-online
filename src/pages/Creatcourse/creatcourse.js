@@ -527,7 +527,7 @@ const formItemLayout = {
   function  mapStateToProps(state) {
     return{
        login_info:state.reducer_login.login_info,
-       user_info:state.reducer_user.user_info,
+     //  user_info:state.reducer_user.user_info,
     };
   }
   function mapDispatchToProps(dispatch){

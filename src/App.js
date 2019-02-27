@@ -236,29 +236,40 @@ class App extends Component {
       var passbydata = createCourse_info.createCourse_info
    //  temp.createCourse_info.user_id = login_info.user_id
 
-     var formData = deepClone(temp.createCourse_info)
+     var formData = deepClone(passbydata)
 
       delete formData.slides
+
+      delete formData.thumbnail
+
+      formData.width = temp.createCourse_info.thumbnail.style.width
+
+      formData.height = temp.createCourse_info.thumbnail.style.height
+
+      formData.url = temp.createCourse_info.thumbnail.url
     
-      formData.slide =  JSON.stringify([...temp.createCourse_info.slides.slide])
+      formData.slide =  [...temp.createCourse_info.slides.slide]
 
       formData.templateId = deepClone(temp.createCourse_info.slides.templateId) 
 
-  //   console.log(passbydata)
+       console.log(JSON.stringify(formData))
       $.ajax({
         url: "http://localhost:3000/api/updateCourse",
         type: "PUT",
+        async:false,
         dataType: "json",
-        data:JSON.stringify(formData),
+        contentType:"application/json;charset=UTF-8",
+        accepts:"application/json;charset=UTF-8",
+        data:JSON.stringify(formData),//如果直接传会发生this.extend的错误
         beforeSend:function(request){
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function (data) {
             if (data.errorCode !== 0) {
-                console.log("保存失败1");
+              message.error("保存失败1");
             }
             else {
-                console.log('保存成功');
+              message.success('保存成功');
                 console.log(data);
                 
                
