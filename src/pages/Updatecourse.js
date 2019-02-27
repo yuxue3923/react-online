@@ -151,7 +151,7 @@ const formItemLayout = {
           "isEdit": 1,
           "name": "课件目录",
           "children":this.state.coursecatalog,
-          "templateId": 1,
+          "templateId":this.state.templateId,
           "slide": [{
               "pageId": 1,
               "pageThumbnail": {
@@ -248,6 +248,35 @@ const formItemLayout = {
                 subject: data.msg[0].subject,
                 descript: data.msg[0].descript,
                 // knowledges:data.msg[0].knowledges,
+                templateId:data.msg[0].slides.templateId,
+                "slide": [{
+                    "pageId": 1,
+                    "pageThumbnail": {
+                        "pageurl": "./1.png",
+                        "style": {
+                            "pagewidth": "100px",
+                            "pageheight": "100px"
+                        }
+                    },
+                    "media":[
+                        {
+                            "id":2314,
+                            "position":[0,0],
+                            "rotation":0,
+                            "scale":[1,1],
+                            "shape":{"cx":100,"cy":100,"n":30,"z":40},
+                            "style":{"fill":"none"},
+                            "type":"house"
+                        }
+                    ]
+                }],     
+                "fileSize": "100M",
+                "scope": "k12教育",
+                "addTime": 20190124,
+                "views": 300,
+                "url": "D:/Graduate/11.jpg",
+                "width": "30px",
+                "height": "40px"
               });
             }
             else {   

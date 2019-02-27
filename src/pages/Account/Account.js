@@ -38,7 +38,8 @@ const FormItem = Form.Item;
         super(props, context)
         this.state = {
           visible: false ,
-          current:1,
+          current:1,//我的课件当前页
+          pagecurrent:1,//总课件当前页
           checked: true,//Tag状态
           templatevisible:false,//控制课件模版弹出框
           imgurl:["https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png","https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png","https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png","https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png" ]
@@ -88,6 +89,13 @@ const FormItem = Form.Item;
       }
     )
   }
+  onChangepage=(page)=>{
+    this.setState(
+      {
+        pagecurrent:page,
+      }
+    )
+  }
     handleCancel_template = (e) => {
       console.log(e);
       this.setState({
@@ -102,6 +110,38 @@ const FormItem = Form.Item;
       setSsendupdatecourseid({
         type: 'GetuserupdatecourseidSuccess',
         payload: id,
+      });
+    }
+    deletecourseid(id){ 
+      const { login_info}=this.props;
+      var data = {
+          "_id" :id.toString(),
+      };
+      console.log('进入deleteCourse接口');
+      console.log(JSON.stringify(data));
+      $.ajax({
+        url: "http://localhost:3000/api/deleteCourse",
+        async:false,
+        type: "DELETE",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:JSON.stringify(data),
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode == 0) {
+            console.log('删除课件id成功111');
+            console.log(data);
+            this.getdata();
+          }
+          else {   
+            console.log('删除课件id成功2222');
+             
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
       });
     }
     getdata() {
@@ -133,11 +173,78 @@ const FormItem = Form.Item;
         }.bind(this)
       });
     }
+    getallcoursedata() {
+      const { login_info }=this.props;
+      console.log('进入allCouse接口');
+      $.ajax({
+        url: "http://localhost:3000/api/allCourses",
+        async:false,
+        type: "GET",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:{},
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode == 0) {
+            console.log('获取查询权限111');
+            console.log(data.msg);
+            this.setState({
+              allcoursedata:data.msg,
+            });
+          }
+          else {   
+            console.log('获取查询权限2222');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
+      });
+    }
     componentWillMount(){
       this.getdata();
+      this.getallcoursedata();
     }
     render() {
       const courseList = this.state.usercoursedata.map((v, i) => {
+          return (
+            <div>
+                 <Row gutter={16}>
+               <Col span={8}>
+                <Card
+                  style={{ width:250 ,height:300}}
+                  cover={
+                    <img onClick={this.showModal}
+                      alt="example"
+                      src={this.state.imgurl[i%4]} height="154"
+                    />
+                  }
+                >
+                  <Row>
+                    <Col span={18}>
+                    <Meta
+                        title={v.courseName}
+                        description={v.descript}
+                     />
+                    </Col>
+                  </Row>
+                  <br />
+                  <Row >
+                    <Col span={4}>
+                    <Link to='/Updatecourse'><IconFont className="iconsize" type="icon-xiugai" onClick={this.sendupdatecourseid.bind(this,v._id)}/></Link>
+                  </Col>
+                    <Col span={4}><IconFont className="iconsize" type="icon-xin"/></Col>
+                    <Col span={4}><Icon className="iconsize" type="delete" onClick={this.deletecourseid.bind(this,v._id)}/></Col>
+                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
+                  </Row>
+                </Card>
+            </Col>
+            </Row>
+            </div>
+          );}
+        );
+        const allcourseList = this.state.allcoursedata.map((v, i) => {
           return (
             <div>
                  <Row gutter={16}>
@@ -173,145 +280,6 @@ const FormItem = Form.Item;
             </div>
           );}
         );
-      const cardBasic_one = (
-        <div>
-          <Row gutter={16}>
-            <Col span={8}>
-                <Card
-                  style={{ width:250 ,height:300}}
-                  cover={
-                    <img onClick={this.showModal}
-                      alt="example"
-                      src={this.state.imgurl[0]} height="154"
-                    />
-                  }
-                >
-                  <Row>
-                    <Col span={18}>
-                    <Meta
-                        title="React"
-                        description="React 可以非常轻松地创建用户交互界面。"
-                     />
-                    </Col>
-                  </Row>
-                  <br />
-                  <Row >
-                    <Col span={4}>
-                    <Link to='/APP'><IconFont className="iconsize" type="icon-edit"/></Link>
-                  </Col>
-                    <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
-                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
-                  </Row>
-                </Card>
-            </Col>
-          </Row>
-        </div>
-      );
-      const cardBasic_two = (
-        <div>
-          <Row gutter={16}>
-            <Col span={8}>
-                <Card
-                  style={{ width:250 ,height:300}}
-                  cover={
-                    <img onClick={this.showModal}
-                      alt="example"
-                      src={this.state.imgurl[1]} height="154"
-                    />
-                  }
-                >
-                  <Row>
-                    <Col span={18}>
-                    <Meta
-                        title="React"
-                        description="React 可以非常轻松地创建用户交互界面。"
-                     />
-                    </Col>
-                  </Row>
-                  <br />
-                  <Row >
-                    <Col span={4}>
-                    <Link to='/APP'><IconFont className="iconsize" type="icon-edit"/></Link>
-                  </Col>
-                    <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
-                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
-                  </Row>
-                </Card>
-            </Col>
-          </Row>
-        </div>
-      );
-      const cardBasic_three = (
-        <div>
-          <Row gutter={16}>
-            <Col span={8}>
-                <Card
-                  style={{ width:250 ,height:300}}
-                  cover={
-                    <img onClick={this.showModal}
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png" height="154"
-                    />
-                  }
-                >
-                  <Row>
-                    <Col span={18}>
-                    <Meta
-                        title="React"
-                        description="React 可以非常轻松地创建用户交互界面。"
-                     />
-                    </Col>
-                  </Row>
-                  <br />
-                  <Row >
-                    <Col span={4}>
-                    <Link to='/APP'><IconFont className="iconsize" type="icon-edit"/></Link>
-                  </Col>
-                    <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
-                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
-                  </Row>
-                </Card>
-            </Col>
-          </Row>
-        </div>
-      );
-      const cardBasic_four = (
-        <div>
-          <Row gutter={16}>
-            <Col span={8}>
-                <Card
-                  style={{ width:250 ,height:300}}
-                  cover={
-                    <img onClick={this.showModal}
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png" height="154"
-                    />
-                  }
-                >
-                  <Row>
-                    <Col span={18}>
-                    <Meta
-                        title="React"
-                        description="React 可以非常轻松地创建用户交互界面。"
-                     />
-                    </Col>
-                  </Row>
-                  <br />
-                  <Row >
-                  <Col span={4}>
-                    <Link to='/APP'><IconFont className="iconsize" type="icon-edit"/></Link>
-                  </Col>
-                    <Col span={4}><IconFont className="iconsize" type="icon-xin"/></Col>
-                  <Col span={4}>
-                    <Link to='/Updatecourse'><IconFont className="iconsize" type="icon-xiugai"/></Link>
-                  </Col>
-                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
-                  </Row>
-                </Card>
-            </Col>
-          </Row>
-        </div>
-      );
       const cardBasic_creat = (
         <div>
                 <Card
@@ -325,25 +293,28 @@ const FormItem = Form.Item;
         </div>
       );
 
-      const cardList_viedo = (
-        <div>
+     
+      var ownMapallcourse=(list,current)=>{
+        for(let i=(current-1)*8;i<list.length;){
+          return  <div>
           <Row style={{ margin: '8px 8px 8px 0'}}>
-            <Col span={6}>{cardBasic_one}</Col>
-            <Col span={6}>{cardBasic_four}</Col>
-            <Col span={6}>{cardBasic_two}</Col>
-            <Col span={6}>{cardBasic_three}</Col> 
+             <Col span={6}>{list[i]}</Col>
+            <Col span={6}>{list[i+1]}</Col>
+            <Col span={6}>{list[i+2]}</Col> 
+            <Col span={6}>{list[i+3]}</Col>
           </Row>
           <Row style={{ margin: '8px 8px 8px 0'}}>
-            <Col span={6}>{cardBasic_two}</Col>
-            <Col span={6}>{cardBasic_one}</Col>
-            <Col span={6}>{cardBasic_three}</Col>
-            <Col span={6}>{cardBasic_four}</Col> 
+            <Col span={6}>{list[i+4]}</Col>
+            <Col span={6}>{list[i+5]}</Col>
+            <Col span={6}>{list[i+6]}</Col> 
+            <Col span={6}>{list[i+7]}</Col> 
           </Row>
-          {/* <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-            <Pagination current={this.state.current} onChange={this.onChange} total={500} />
-          </Row> */}
+          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
+          <Pagination current={this.state.pagecurrent} onChange={this.onChangepage} total={500} />
+          </Row>
         </div>
-      );
+        }
+       }
       var ownMap=(list,current)=>{
        for(let i=(current-1)*7;i<list.length;){
          return  <div>
@@ -363,11 +334,10 @@ const FormItem = Form.Item;
          <Pagination current={this.state.current} onChange={this.onChange} total={500} />
          </Row>
        </div>
- 
        }
       }
       const cardList_course = ownMap(courseList,this.state.current)
-     
+      const cardList_viedo = ownMapallcourse(allcourseList,this.state.pagecurrent)
       const mycourse_ground=(
         <div style={{ margin: '8px 8px 8px 0'}}>
         <Card bordered={false}>

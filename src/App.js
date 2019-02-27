@@ -244,12 +244,12 @@ class App extends Component {
 
       formData.templateId = deepClone(temp.createCourse_info.slides.templateId) 
 
-  //   console.log(passbydata)
+     console.log(formData)
       $.ajax({
         url: "http://localhost:3000/api/updateCourse",
         type: "PUT",
         dataType: "json",
-        data:JSON.stringify(formData),
+        data:formData,
         beforeSend:function(request){
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
