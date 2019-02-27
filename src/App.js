@@ -230,6 +230,7 @@ class App extends Component {
       }
     }
     save(){
+      console.log(createCourse_info);
       const {createCourse_info,login_info} = this.props;
 
       var temp = deepClone(createCourse_info)

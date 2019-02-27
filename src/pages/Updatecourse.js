@@ -140,7 +140,7 @@ const formItemLayout = {
       }
       updatecourse = () =>{
         const { login_info ,updatecourseid}=this.props;
-        var data={
+        var datamsg={
          "_id":updatecourseid,
           "courseName":this.state.courseName,
           "grade": this.state.grade,
@@ -152,39 +152,20 @@ const formItemLayout = {
           "name": "课件目录",
           "children":this.state.coursecatalog,
           "templateId":this.state.templateId,
-          "slide": [{
-              "pageId": 1,
-              "pageThumbnail": {
-                  "pageurl": "./1.png",
-                  "style": {
-                      "pagewidth": "100px",
-                      "pageheight": "100px"
-                  }
-              },
-              "media":[
-                  {
-                      "id":2314,
-                      "position":[0,0],
-                      "rotation":0,
-                      "scale":[1,1],
-                      "shape":{"cx":100,"cy":100,"n":30,"z":40},
-                      "style":{"fill":"none"},
-                      "type":"house"
-                  }
-              ]
-          }],     
-          "fileSize": "100M",
-          "scope": "k12教育",
-          "addTime": 20190124,
-          "views": 300,
-          "url": "D:/Graduate/11.jpg",
-          "width": "30px",
-          "height": "40px"
+          "slide": this.state.slide,     
+          "fileSize": this.state.fileSize,
+          "scope":this.state.scope,
+          "addTime":this.state.addTime,
+          "views":this.state.views,
+          "url": this.state.url,
+          "width": this.state.width,
+          "height":this.state.height
       };
        
         //更新课件
         console.log("进入更新课件ajax");
-        console.log(JSON.stringify(data));
+        const {setCreatecourseState} = this.props;
+        console.log(JSON.stringify(datamsg));
         $.ajax({
             url: "http://localhost:3000/api/updateCourse",
             async:false,
@@ -192,19 +173,26 @@ const formItemLayout = {
             contentType:"application/json;charset=UTF-8",
             accepts:"application/json;charset=UTF-8",
             dataType: "json",
-            data:JSON.stringify(data),
+            data:JSON.stringify(datamsg),
             beforeSend:function(request){
               request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
             },
             success: function (data) {
                 if (data.errorCode == 0) {
-                    console.log('成功更新课件');
+                    console.log('成功更新课件'+data.msg[0]);
                     Modal.success({
                       title: '消息提示',
                       content: '成功更新课件！',
                     });
                     console.log(this.state.coursecatalog);
-                    this.context.router.history.push("/Account");
+                    setCreatecourseState({
+                        type:'createcourseSuccess',
+                        payload:{
+                            createCourse_info:data.msg[0],
+                            course_id:data.msg[0]._id
+                        }
+                      });
+                      this.context.router.history.push("/APP");
                 }
                 else {
                     console.log('成功更新课件');
@@ -247,36 +235,16 @@ const formItemLayout = {
                 grade: data.msg[0].grade,
                 subject: data.msg[0].subject,
                 descript: data.msg[0].descript,
-                // knowledges:data.msg[0].knowledges,
+                knowledges:data.msg[0].knowledges,
                 templateId:data.msg[0].slides.templateId,
-                "slide": [{
-                    "pageId": 1,
-                    "pageThumbnail": {
-                        "pageurl": "./1.png",
-                        "style": {
-                            "pagewidth": "100px",
-                            "pageheight": "100px"
-                        }
-                    },
-                    "media":[
-                        {
-                            "id":2314,
-                            "position":[0,0],
-                            "rotation":0,
-                            "scale":[1,1],
-                            "shape":{"cx":100,"cy":100,"n":30,"z":40},
-                            "style":{"fill":"none"},
-                            "type":"house"
-                        }
-                    ]
-                }],     
-                "fileSize": "100M",
-                "scope": "k12教育",
-                "addTime": 20190124,
-                "views": 300,
-                "url": "D:/Graduate/11.jpg",
-                "width": "30px",
-                "height": "40px"
+                slide: data.msg[0].slides.slide,     
+                fileSize:data.msg[0].fileSize,
+                scope:data.msg[0].scope,
+                addTime:data.msg[0].addTime,
+                views: data.msg[0].views,
+                url:data.msg[0].thumbnail.url,
+                width:data.msg[0].thumbnail.style.width,
+                height:data.msg[0].thumbnail.style.height
               });
             }
             else {   
@@ -521,7 +489,7 @@ const formItemLayout = {
   }
   function mapDispatchToProps(dispatch){
     return{
-
+        setCreatecourseState: (state) => dispatch(state),
     };
   }
   export default connect(
