@@ -201,7 +201,7 @@ const formItemLayout = {
             }.bind(this),
             error: function (xhr, status, err) {
               console.log("更新课件操作错误")
-            }.bind(this)
+            }
         });
     }
     getdata() {
@@ -226,7 +226,7 @@ const formItemLayout = {
             if (data.errorCode == 0) {
               console.log('获取查询权限111');
               console.log(data);
-              this.setState({
+             data.msg&&data.msg[0]&&data.msg[0].catalog&&data.msg[0].catalog.children&&this.setState({
                 coursedata:data.msg[0],
                 arrSize: data.msg[0].catalog.children.length,
                 isOpen:data.msg[0].isOpen,
