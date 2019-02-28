@@ -154,48 +154,51 @@ const menu = (
           </div>
     </Card>
 );
-const ContentModal = (
- <div>
-      <Row style={{margin: '8px 8px 8px 16px'}}> 
-        <a style={{float:"left"}}>加入</a>
-        <Button style={{float:"right"}} type="primary" ghost>JLFABSKA</Button>
-      </Row>
-      <Row style={{margin: '8px 8px 8px 16px'}}> 
-        <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
-        <Button style={{float:"right"}} type="primary" >分享</Button>
-      </Row>
-    <Row style={{margin: '8px 8px 8px 16px'}}>
-    <Menu.Divider />
-    </Row>
-    <Row style={{margin: '8px 8px 8px 16px'}}>
-    
-     <Select defaultValue="1" onChange={handleChange} style={{width:'100%'}}>
-      
-       <Option value="1"><IconFont type="anticon-piliangbianji" />允许任何人进行编辑</Option>
-       <Option value="2"> <IconFont type="anticon-iconkuozhan_liulanpre" />只能查看浏览</Option>
-     </Select>
-     </Row>
-    <Row style={{margin: '8px 8px 8px 16px'}}>
-    <Menu.Divider />
-    </Row>
-      <Row style={{margin: '8px 8px 8px 16px'}}>
-      <Select defaultValue="1" style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={handleChange}>
-      
-      <Option value="1">查找成员</Option>
-      <Option value="2">胡歌</Option>
-      <Option value="3">李健</Option>
-      <Option value="4">周杰伦</Option>
-      </Select>
-      <Button style={{float:"right"}} type="primary" >添加</Button>
-      </Row>
-   </div> 
+var ContentModal =function(code){
+  return <div>
+  <Row style={{margin: '8px 8px 8px 16px'}}> 
+    <a style={{float:"left"}}>加入</a>
+    <Button style={{float:"right"}} type="primary" ghost>{code}</Button>
+  </Row>
+  <Row style={{margin: '8px 8px 8px 16px'}}> 
+    <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
+    <Button style={{float:"right"}} type="primary" >分享</Button>
+  </Row>
+<Row style={{margin: '8px 8px 8px 16px'}}>
+<Menu.Divider />
+</Row>
+<Row style={{margin: '8px 8px 8px 16px'}}>
 
-);
+ <Select defaultValue="1" onChange={handleChange} style={{width:'100%'}}>
+  
+   <Option value="1"><IconFont type="anticon-piliangbianji" />允许任何人进行编辑</Option>
+   <Option value="2"> <IconFont type="anticon-iconkuozhan_liulanpre" />只能查看浏览</Option>
+ </Select>
+ </Row>
+<Row style={{margin: '8px 8px 8px 16px'}}>
+<Menu.Divider />
+</Row>
+  <Row style={{margin: '8px 8px 8px 16px'}}>
+  <Select defaultValue="1" style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={handleChange}>
+  
+  <Option value="1">查找成员</Option>
+  <Option value="2">胡歌</Option>
+  <Option value="3">李健</Option>
+  <Option value="4">周杰伦</Option>
+  </Select>
+  <Button style={{float:"right"}} type="primary" >添加</Button>
+  </Row>
+</div> 
+
+}
+ 
+
 function deepClone(obj){
   let _obj = JSON.stringify(obj);
   return JSON.parse(_obj)
 }
-var flush = false;
+var project_id_now = 0;
+var share_code_now = 0;
 class App extends Component {
   constructor(props, context) {
     super(props, context)
@@ -208,6 +211,7 @@ class App extends Component {
    this.passbyJudge = this.passbyJudge.bind(this)
   }
     state = {
+      code:0,
       collapsed: true,
       visible: false,
       modalvisible:false,
@@ -305,8 +309,39 @@ class App extends Component {
       });
       console.log(Xst)
     }
-    showModal = () => {
-      this.setState({
+    showModal = (type) => {
+      const { createCourse_info,login_info } = this.props;
+      const course_id = createCourse_info.createCourse_info._id;
+      if(project_id_now !== course_id){
+        project_id_now = course_id;
+        if(type === "invite"){
+          $.ajax({
+            url: "http://localhost:3000/api/generateTinyCode?project_id="+course_id,
+            async:false,
+            type: "GET",
+            contentType:"application/json;charset=UTF-8",
+            accepts:"application/json;charset=UTF-8",
+            dataType: "json",
+            beforeSend:function(request){
+              request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+            },
+            success: function (data) {
+                if (data) {
+                    console.log('成功生成短码'+data);
+                    share_code_now = data;
+                }
+                else {
+                    console.log('生成短码失败');
+                }
+            },
+            error: function (xhr, status, err) {
+              console.log("分享失败")
+            }
+        });
+        }
+      }
+      share_code_now&&this.setState({
+        code:share_code_now,
         modalvisible: true,
       });
     }
@@ -410,14 +445,14 @@ class App extends Component {
            {/* </div> */}
           <div className="flowbar" style={{right:10,top:20}}>
             <span style={{ marginRight: 24, }}>
-                <Badge count={1}><Avatar className="iconsize" onClick={this.showModal} style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Badge>
+                <Badge count={1}><Avatar className="iconsize" onClick={this.showModal.bind(this,"invite")} style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Badge>
                 <Modal
                  title="邀请成员"
                  visible={this.state.modalvisible}
                  onOk={this.handleOk}
                  onCancel={this.handleCancel}
               >
-                {ContentModal}
+                {ContentModal(this.state.code)}
               </Modal>
               </span>
             </div>

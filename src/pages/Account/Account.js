@@ -101,6 +101,35 @@ const FormItem = Form.Item;
       }
     )
   }
+  onChangeSearch = (e) => {
+    this.setState({ searchContent: e.target.value });
+    
+  }
+  searchCode(code){
+    const { login_info } = this.props;
+    $.ajax({
+      url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+this.state.searchContent,
+      async:false,
+      type: "GET",
+      contentType:"application/json;charset=UTF-8",
+      accepts:"application/json;charset=UTF-8",
+      dataType: "json",
+      beforeSend:function(request){
+        request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+      },
+      success: function (data) {
+          if (data) {
+              console.log('返回对应项目id'+data);
+          }
+          else {
+              console.log('找不到项目');
+          }
+      },
+      error: function (xhr, status, err) {
+        console.log("请求项目失败")
+      }
+  });
+  }
   onChangepage=(page)=>{
     this.setState(
       {
@@ -259,7 +288,7 @@ const FormItem = Form.Item;
           }
         }.bind(this),
         error: function (xhr, status, err) {
-        }.bind(this)
+        }
       });
     }
     getdata() {
@@ -288,7 +317,7 @@ const FormItem = Form.Item;
           }
         }.bind(this),
         error: function (xhr, status, err) {
-        }.bind(this)
+        }
       });
     }
     getcoursenamedata(e) {
@@ -346,7 +375,7 @@ const FormItem = Form.Item;
           }
         }.bind(this),
         error: function (xhr, status, err) {
-        }.bind(this)
+        }
       });
     }
     componentWillMount(){
@@ -597,8 +626,9 @@ const FormItem = Form.Item;
         <div className="search">
         <Input onPressEnter={this.getcoursenamedata.bind(this)}
         size='large'
-        placeholder="搜索课件标题"
-        prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />}
+        placeholder="搜索项目"
+        onChange={this.onChangeSearch}
+        prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} onClick={()=>this.searchCode()}/>}
         suffix={suffix}
       />
      
