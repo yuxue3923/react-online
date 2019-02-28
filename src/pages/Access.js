@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Form, Icon, Input, Button, Checkbox,message } from 'antd';
-import {Link} from 'react-router-dom'
 import './Access.css'
 import { connect } from 'react-redux';
 import $ from 'jquery';

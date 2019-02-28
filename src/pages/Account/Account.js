@@ -97,7 +97,7 @@ const FormItem = Form.Item;
   searchCode(code){
     const { login_info } = this.props;
     $.ajax({
-      url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+this.state,
+      url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+this.state.searchContent,
       async:false,
       type: "GET",
       contentType:"application/json;charset=UTF-8",

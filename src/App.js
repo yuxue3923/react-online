@@ -197,7 +197,8 @@ function deepClone(obj){
   let _obj = JSON.stringify(obj);
   return JSON.parse(_obj)
 }
-var flush = false;
+var project_id_now = 0;
+var share_code_now = 0;
 class App extends Component {
   constructor(props, context) {
     super(props, context)
@@ -311,35 +312,36 @@ class App extends Component {
     showModal = (type) => {
       const { createCourse_info,login_info } = this.props;
       const course_id = createCourse_info.createCourse_info._id;
-      let shareCode = null;
-      if(type === "invite"){
-        console.log("ok")
-        $.ajax({
-          url: "http://localhost:3000/api/generateTinyCode?"+course_id,
-          async:false,
-          type: "GET",
-          contentType:"application/json;charset=UTF-8",
-          accepts:"application/json;charset=UTF-8",
-          dataType: "json",
-          beforeSend:function(request){
-            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
-          },
-          success: function (data) {
-              if (data) {
-                  console.log('成功生成短码'+data);
-                  shareCode = data;
-              }
-              else {
-                  console.log('生成短码失败');
-              }
-          },
-          error: function (xhr, status, err) {
-            console.log("分享失败")
-          }
-      });
+      if(project_id_now !== course_id){
+        project_id_now = course_id;
+        if(type === "invite"){
+          $.ajax({
+            url: "http://localhost:3000/api/generateTinyCode?project_id="+course_id,
+            async:false,
+            type: "GET",
+            contentType:"application/json;charset=UTF-8",
+            accepts:"application/json;charset=UTF-8",
+            dataType: "json",
+            beforeSend:function(request){
+              request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+            },
+            success: function (data) {
+                if (data) {
+                    console.log('成功生成短码'+data);
+                    share_code_now = data;
+                }
+                else {
+                    console.log('生成短码失败');
+                }
+            },
+            error: function (xhr, status, err) {
+              console.log("分享失败")
+            }
+        });
+        }
       }
-      shareCode&&this.setState({
-        code:shareCode,
+      share_code_now&&this.setState({
+        code:share_code_now,
         modalvisible: true,
       });
     }
