@@ -50,6 +50,8 @@ const FormItem = Form.Item;
     handleChangecreat=(value)=> {
       if(value==2){
         this.collectCourseByuser();
+      }else{
+        this.getdata();
       }
     }
     //Modal事件
@@ -102,13 +104,9 @@ const FormItem = Form.Item;
     )
   }
   onChangeSearch = (e) => {
-    this.setState({ searchContent: e.target.value });
-    
-  }
-  searchCode(code){
     const { login_info } = this.props;
     $.ajax({
-      url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+this.state.searchContent,
+      url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+e.target.value,
       async:false,
       type: "GET",
       contentType:"application/json;charset=UTF-8",
@@ -117,18 +115,60 @@ const FormItem = Form.Item;
       beforeSend:function(request){
         request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
       },
-      success: function (data) {
+      success: function(data) {
           if (data) {
               console.log('返回对应项目id'+data);
+              this.setState({ searchContent: data});
           }
           else {
               console.log('找不到项目');
           }
-      },
+      }.bind(this),
       error: function (xhr, status, err) {
         console.log("请求项目失败")
-      }
+      }.bind(this)
   });
+   
+  }
+  searchCode(){
+    const {setCreatecourseState} = this.props;
+    const { login_info}=this.props;
+      var data = {
+          "_id" :this.state.searchContent,
+      };
+      console.log('进入researchByCourseId接口');
+      console.log(JSON.stringify(data));
+      $.ajax({
+        url: "http://localhost:3000/api/researchByCourseId",
+        async:false,
+        type: "GET",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:data,
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode == 0) {
+            console.log('获取查询权限111');
+            console.log(data);
+            setCreatecourseState({
+              type:'createcourseSuccess',
+              payload:{
+                createCourse_info:data.msg[0],
+                course_id:this.state.searchContent
+              }
+            });
+            this.context.router.history.push("/APP");
+          }
+          else {   
+            console.log('获取查询权限2222');
+             
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
+      });
   }
   onChangepage=(page)=>{
     this.setState(
@@ -184,8 +224,9 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode == 0) {
             console.log('收藏课件成功111');
-            this.setState({
-              collectcourseinfo:"已收藏",
+            Modal.success({
+              title: '消息提示',
+              content: '成功收藏该课件',
             });
           }
           else {   
@@ -246,8 +287,9 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode == 0) {
             console.log('取消收藏课件成功111');
-            this.setState({
-              collectcourseinfo:"未收藏",
+            Modal.success({
+              title: '消息提示',
+              content: '取消收藏该课件',
             });
           }
           else {   
@@ -320,6 +362,7 @@ const FormItem = Form.Item;
         }
       });
     }
+
     getcoursenamedata(e) {
       const { login_info }=this.props;
       console.log('进入researchByCourseName接口');
@@ -349,6 +392,7 @@ const FormItem = Form.Item;
         }.bind(this)
       });
     }
+     
     getallcoursedata() {
       const { login_info }=this.props;
       console.log('进入allCouse接口');
@@ -627,8 +671,8 @@ const FormItem = Form.Item;
         <Input onPressEnter={this.getcoursenamedata.bind(this)}
         size='large'
         placeholder="搜索项目"
-        onChange={this.onChangeSearch}
-        prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} onClick={()=>this.searchCode()}/>}
+        onChange={this.onChangeSearch.bind(this)}
+        prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} onClick={this.searchCode.bind(this)}/>}
         suffix={suffix}
       />
      
@@ -679,6 +723,7 @@ const FormItem = Form.Item;
   function mapDispatchToProps(dispatch){
     return{
       setSsendupdatecourseid: (state) => dispatch(state),
+      setCreatecourseState: (state) => dispatch(state),
     };
   }
   export default connect(
