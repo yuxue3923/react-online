@@ -138,59 +138,8 @@ const text =
       <Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
   </Popover>
   </div>;
-const menu = (
-  <Card title="当前在线协同者">
-          <div style={{margin:'2px'}} >
-            <Icon type="smile"  className="iconsize" theme="twoTone" twoToneColor="#eb2f96" />
-            <span style={{fontSize:15}}> 梁静茹</span>
-          </div>
-          <div style={{margin:'2px'}}>
-            <Icon type="meh"  className="iconsize" theme="twoTone" twoToneColor="#52c41a"/>
-            <span style={{fontSize:15}}> 王菲</span>
-          </div>
-          <div style={{margin:'2px'}} >
-            <Icon type="frown" className="iconsize" theme="twoTone"/>
-             <span style={{fontSize:15}}> 程奕迅</span>      
-          </div>
-    </Card>
-);
-var ContentModal =function(code){
-  return <div>
-  <Row style={{margin: '8px 8px 8px 16px'}}> 
-    <a style={{float:"left"}}>加入</a>
-    <Button style={{float:"right"}} type="primary" ghost>{code}</Button>
-  </Row>
-  <Row style={{margin: '8px 8px 8px 16px'}}> 
-    <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
-    <Button style={{float:"right"}} type="primary" >分享</Button>
-  </Row>
-<Row style={{margin: '8px 8px 8px 16px'}}>
-<Menu.Divider />
-</Row>
-<Row style={{margin: '8px 8px 8px 16px'}}>
 
- <Select defaultValue="1" onChange={handleChange} style={{width:'100%'}}>
-  
-   <Option value="1"><IconFont type="anticon-piliangbianji" />允许任何人进行编辑</Option>
-   <Option value="2"> <IconFont type="anticon-iconkuozhan_liulanpre" />只能查看浏览</Option>
- </Select>
- </Row>
-<Row style={{margin: '8px 8px 8px 16px'}}>
-<Menu.Divider />
-</Row>
-  <Row style={{margin: '8px 8px 8px 16px'}}>
-  <Select defaultValue="1" style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={handleChange}>
-  
-  <Option value="1">查找成员</Option>
-  <Option value="2">胡歌</Option>
-  <Option value="3">李健</Option>
-  <Option value="4">周杰伦</Option>
-  </Select>
-  <Button style={{float:"right"}} type="primary" >添加</Button>
-  </Row>
-</div> 
 
-}
  
 
 function deepClone(obj){
@@ -211,6 +160,7 @@ class App extends Component {
    this.passbyJudge = this.passbyJudge.bind(this)
   }
     state = {
+      cooperationuserid:10,
       code:0,
       collapsed: true,
       visible: false,
@@ -219,6 +169,8 @@ class App extends Component {
       MyDeck:MyDeck,
       canvasFlush:false,
       thumbnail:[],
+      cooperuserlist:[],
+      Avatartype:["icon-touxiangnvhai","icon-icon-test3","icon-icon-test1","icon-icon-test","icon-icon-test2"],
     };
     flush(state){
       this.setState({
@@ -232,6 +184,68 @@ class App extends Component {
       else{
         return null
       }
+    }
+    getProjectUserList(){
+      const { login_info ,createCourse_info}=this.props;
+      console.log('进入ajax');
+      $.ajax({
+        url: "http://localhost:3000/api/getProjectUsersList",
+        data:{
+          "project_id":createCourse_info.course_id,
+        },
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        type: "GET",
+        dataType: "json",
+        async:false,
+        success: function (data) {
+          if (data.errorCode == 0) {
+            console.log('查找协同成功111');
+            console.log(data);
+           this.setState({
+             cooperuserlist:data.msg,
+           });
+          }
+          else {   
+            console.log('查找协同失败');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
+      });
+    }
+    createrelationship(){
+      const { login_info ,createCourse_info}=this.props;
+      console.log('进入ajax');
+      $.ajax({
+        url: "http://localhost:3000/api/joinProjectRelationShip",
+        data:{
+          "user_id":this.state.cooperationuserid,
+          "project_id":createCourse_info.course_id,
+        },
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        type: "POST",
+        dataType: "json",
+        async:false,
+        success: function (data) {
+          if (data.errorCode == 0) {
+            console.log('建立联系111');
+            Modal.success({
+              title: '消息提示',
+              content: '成功建立联系',
+            });
+            this.getProjectUserList();
+          }
+          else {   
+            console.log('建立连接失败');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
+      });
     }
     save(){
       console.log(createCourse_info);
@@ -377,8 +391,61 @@ class App extends Component {
    componentDidMount(){
     
   }
+  componentWillMount(){
+    this.getProjectUserList();
+  }
 
     render() {
+      const userList = this.state.cooperuserlist.map((v, i) => {
+        return (
+          <div style={{margin:'2px'}} >
+               <IconAvator type={this.state.Avatartype[i%5]}/>
+              <span style={{fontSize:15}}>{v.user_name}</span>
+          </div>
+        );}
+      );
+      const menu = (
+        <Card title="当前在线协同者">
+                {userList}
+        </Card>
+      );
+      const ContentModal =(code)=>{
+        return <div>
+        <Row style={{margin: '8px 8px 8px 16px'}}> 
+          <a style={{float:"left"}}>加入</a>
+          <Button style={{float:"right"}} type="primary" ghost>{code}</Button>
+        </Row>
+        <Row style={{margin: '8px 8px 8px 16px'}}> 
+          <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
+          <Button style={{float:"right"}} type="primary" >分享</Button>
+        </Row>
+      <Row style={{margin: '8px 8px 8px 16px'}}>
+      <Menu.Divider />
+      </Row>
+      <Row style={{margin: '8px 8px 8px 16px'}}>
+      
+       <Select defaultValue="1" onChange={handleChange} style={{width:'100%'}}>
+        
+         <Option value="1"><IconFont type="anticon-piliangbianji" />允许任何人进行编辑</Option>
+         <Option value="2"> <IconFont type="anticon-iconkuozhan_liulanpre" />只能查看浏览</Option>
+       </Select>
+       </Row>
+      <Row style={{margin: '8px 8px 8px 16px'}}>
+      <Menu.Divider />
+      </Row>
+        <Row style={{margin: '8px 8px 8px 16px'}}>
+        <Select defaultValue="1" style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={handleChange}>
+        
+        <Option value="1">查找成员</Option>
+        <Option value="2">胡歌</Option>
+        <Option value="3">李健</Option>
+        <Option value="4">周杰伦</Option>
+        </Select>
+        <Button onClick={this.createrelationship.bind(this)} style={{float:"right"}} type="primary">添加</Button>
+        </Row>
+      </div> 
+      
+      }
       const {createCourse_info} = this.props;
        MyDeck = createCourse_info.createCourse_info.slides.slide
    //    console.log()
@@ -451,6 +518,7 @@ class App extends Component {
                  visible={this.state.modalvisible}
                  onOk={this.handleOk}
                  onCancel={this.handleCancel}
+                 footer={null}
               >
                 {ContentModal(this.state.code)}
               </Modal>

@@ -151,7 +151,6 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode == 0) {
             console.log('获取查询权限111');
-            console.log(data);
             setCreatecourseState({
               type:'createcourseSuccess',
               payload:{
@@ -349,7 +348,6 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode == 0) {
             console.log('获取查询权限111');
-            console.log(data.msg);
             this.setState({
               usercoursedata:data.msg,
             });
@@ -379,7 +377,6 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode == 0) {
             console.log('成功查找课件111');
-            console.log(data.msg);
             this.setState({
               allcoursedata:data.msg,
             });
@@ -409,7 +406,6 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode == 0) {
             console.log('获取查询权限111');
-            console.log(data.msg);
             this.setState({
               allcoursedata:data.msg,
             });
@@ -434,7 +430,6 @@ const FormItem = Form.Item;
           result.push(obj);
         }
       }
-      console.log(result);
       const courseList = result.map((v, i) => {
           return (
             <div>
@@ -540,7 +535,7 @@ const FormItem = Form.Item;
             <Col span={6}>{list[i+7]}</Col> 
           </Row>
           <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-          <Pagination current={this.state.pagecurrent} onChange={this.onChangepage} total={500} />
+          <Pagination current={this.state.pagecurrent} onChange={this.onChangepage} total={list.length} />
           </Row>
         </div>
         }
@@ -561,7 +556,7 @@ const FormItem = Form.Item;
            <Col span={6}>{list[i+6]}</Col> 
          </Row>
          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-         <Pagination current={this.state.current} onChange={this.onChange} total={500} />
+         <Pagination current={this.state.current} onChange={this.onChange} total={list.length} />
          </Row>
        </div>
        }
