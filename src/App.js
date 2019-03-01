@@ -138,22 +138,26 @@ const text =
       <Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
   </Popover>
   </div>;
-const menu = (
-  <Card title="当前在线协同者">
-          <div style={{margin:'2px'}} >
-            <Icon type="smile"  className="iconsize" theme="twoTone" twoToneColor="#eb2f96" />
-            <span style={{fontSize:15}}> 梁静茹</span>
-          </div>
-          <div style={{margin:'2px'}}>
-            <Icon type="meh"  className="iconsize" theme="twoTone" twoToneColor="#52c41a"/>
-            <span style={{fontSize:15}}> 王菲</span>
-          </div>
-          <div style={{margin:'2px'}} >
-            <Icon type="frown" className="iconsize" theme="twoTone"/>
-             <span style={{fontSize:15}}> 程奕迅</span>      
-          </div>
-    </Card>
-);
+const menu = function(param){
+  const {func1,func2,func3} = param
+  return <Card title="当前在线协同者">
+  <div style={{margin:'2px'}} >
+    <Icon type="smile"  className="iconsize" theme="twoTone" twoToneColor="#eb2f96" />
+    <span style={{fontSize:15}}> 梁静茹</span>
+  </div>
+  <div style={{margin:'2px'}}>
+    <Icon type="meh"  className="iconsize" theme="twoTone" twoToneColor="#52c41a"/>
+    <span style={{fontSize:15}}> 王菲</span>
+  </div>
+  <div style={{margin:'2px'}} onClick={param}>
+    <Icon type="frown" className="iconsize" theme="twoTone"/>
+     <span style={{fontSize:15}}> Join</span>   
+  </div>
+</Card>
+} 
+  
+
+
 var ContentModal =function(code){
   return <div>
   <Row style={{margin: '8px 8px 8px 16px'}}> 
@@ -215,10 +219,13 @@ class App extends Component {
       collapsed: true,
       visible: false,
       modalvisible:false,
+      modal2Visible:false,
       page:1,
       MyDeck:MyDeck,
       canvasFlush:false,
       thumbnail:[],
+      PopoverVisible:false,
+      isSingle:true //判断是否处于协同模式
     };
     flush(state){
       this.setState({
@@ -233,14 +240,77 @@ class App extends Component {
         return null
       }
     }
+    searchCode(code){
+      const callBack = this.getInviteData.bind(this)
+      const { login_info } = this.props;
+      $.ajax({
+        url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+code,
+        async:false,
+        type: "GET",
+        contentType:"application/json;charset=UTF-8",
+        accepts:"application/json;charset=UTF-8",
+        dataType: "json",
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function (data) {
+            if (data) {
+                console.log('返回对应项目id'+data);
+                callBack(data)
+            }
+            else {
+              message.error("无法找到对应项目");
+            }
+        },
+        error: function (xhr, status, err) {
+          message.error("进入项目失败");
+        }
+    });
+    }
+    getInviteData(invite_project_id){
+      const { login_info}=this.props;
+      const data = {
+        "_id" :invite_project_id.toString(),
+      }
+      console.log('进入researchByCourseId接口');
+      console.log(data);
+      $.ajax({
+        url: "http://localhost:3000/api/researchByCourseId",
+        async:false,
+        type: "GET",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:data,
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode === 0) {
+            console.log('返回课件项目信息');
+            console.log(data);
+            MyDeck = deepClone(data.msg[0].slides.slide)
+        
+            this.setState({ MyDeck:MyDeck,isSingle:false })
+            this.setModal2Visible(false)
+
+          }
+          else {   
+            message.error("找不到对应项目");
+             
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+          message.error("无法获取项目数据");
+        }
+      });
+    }
     save(){
-      console.log(createCourse_info);
+      
       const {createCourse_info,login_info} = this.props;
 
       var temp = deepClone(createCourse_info)
       var passbydata = createCourse_info.createCourse_info
-   //  temp.createCourse_info.user_id = login_info.user_id
-
+     
      var formData = deepClone(passbydata)
 
       delete formData.slides
@@ -287,13 +357,13 @@ class App extends Component {
     
     }
     sync(objectList){
-
+      console.log(objectList)
    // console.log(MyDeck) ; //浅复制不太对
   //  let temp = deepClone(objectList)
   //  let state=MyDeck[this.state.page-1]==objectList?false:true
    // state&&MyDeck.splice(this.state.page-1,1,temp)
    MyDeck.splice(this.state.page-1,1,objectList) //先浅复制
-  
+//  console.log("MyDeck:",MyDeck)
    // return state
     //  MyDeck.splice(this.state.page-1,1,objectList)
     
@@ -346,13 +416,47 @@ class App extends Component {
       });
     }
     handleOk = (e) => {
+      const { login_info } = this.props;
       console.log(e);
+      $.ajax({
+        url: "http://localhost:3000/api/createWebSocketServer",
+        async:false,
+        type: "POST",
+        contentType:"application/json;charset=UTF-8",
+        accepts:"application/json;charset=UTF-8",
+        dataType: "json",
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function (data) {
+            if (data.errorCode === 0) {
+                console.log('已创建协同链接');
+            }
+            else {
+                console.log('协同失败');
+            }
+        },
+        error: function (xhr, status, err) {
+          console.log("无法协同项目")
+        }
+    });
       this.setState({
         modalvisible: false,
       });
     }
+    
+    popoverVisibleChange = (popoverVisible) => {
+      this.setState({ popoverVisible });
+    }
+    setModal2Visible(modal2Visible) {
+      this.setState({ 
+        modal2Visible:modal2Visible,
+        popoverVisible:false //选择后让气泡框消失
+      });
+    }
     handleCancel = (e) => {
       console.log(e);
+      //这里应该调用一个接口，让数据库取消映射
       this.setState({
         modalvisible: false,
       });
@@ -372,18 +476,14 @@ class App extends Component {
         visible: false,
       });
     };
-   componentDidUpdate(){
-   }
-   componentDidMount(){
-    
-  }
-
+    componentWillUpdate(){
+      
+    }
     render() {
       const {createCourse_info} = this.props;
-       MyDeck = createCourse_info.createCourse_info.slides.slide
+      MyDeck=this.state.isSingle?createCourse_info.createCourse_info.slides.slide:MyDeck
    //    console.log()
-      console.log(MyDeck)
-     
+    //  console.log(MyDeck)
       console.log(this.state.thumbnail)
       return (
         <Layout style={{width: '100%', height: '100vh'}}>
@@ -430,7 +530,7 @@ class App extends Component {
             <div>
             <div className="flowbar" style={{right:170,top:20}}>
             {/* <div className="flowbar" style={{right:200,top:20}}> */}
-           <Popover placement="bottomLeft" title={text} content={menu} trigger="click">
+           <Popover placement="bottomLeft" title={text} content={menu(this.setModal2Visible.bind(this,true))} trigger="click"  visible={this.state.popoverVisible} onVisibleChange={this.popoverVisibleChange}>
            <Button type="dashed" shape="circle" className="iconsize" >
             <Icon type="ellipsis" className="iconsize"/>
            </Button>
@@ -439,6 +539,15 @@ class App extends Component {
                 
             
           </div>
+          <Modal
+            title="填写项目邀请码"
+            centered
+            visible={this.state.modal2Visible}
+            footer={null}
+          //  onOk={() => this.setModal2Visible(false)}
+            onCancel={() => this.setModal2Visible(false)}
+            ><Input placeholder="input" onPressEnter = {(e) =>this.searchCode(e.target.value)}  />
+          </Modal>
           {/* <div className="flowbar" style={{right:160,top:20}}>
               <Button shape="circle" type="primary" ghost icon="share-alt" onClick={this.showModal}></Button> */}
               

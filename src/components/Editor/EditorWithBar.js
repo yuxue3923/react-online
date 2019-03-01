@@ -118,8 +118,8 @@ const dgraph=function(fh,fheart,fa){
      shouldComponentUpdate(nextProps,nextState){
 
     //  console.log(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))
-    //   console.log("nextState:"+nextState.addType)
-       return (isButton)||!(nextProps.page === this.props.page)
+   // console.log(nextProps.initContent === this.props.initContent)
+       return (isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))
      }
  
     componentWillReceiveProps(nextProps){
@@ -128,17 +128,18 @@ const dgraph=function(fh,fheart,fa){
     }
    
     componentDidUpdate(){
-        isButton=false
+      //  if(this.state.addType!=="pen"){isButton=false} //按下画笔键时，还没开始画，就重新渲染
+      isButton=false
         isflush = false
     }
   
     render() {
-      console.log(this.props.initContent)
       console.log("Barxuanran")
-    
+      console.log(this.props.initContent)
+     
       
     return (
-      
+
         <div>
         <Row >
         <Col span={1}>

@@ -45,7 +45,7 @@ function Pen(flag){
 }
 /**画笔 */
 
-function add(type){
+function add(type,callback){
     switch(type){
         case 'circle':
             Pen('circle')
@@ -59,6 +59,7 @@ function add(type){
             break;
         case 'pen':
             Pen('pen')
+        //    callback()
             break;
         case 'image':
             Pen('image')
@@ -123,6 +124,7 @@ export default class Editor extends React.Component {
      //   this.props.flush(state);
     }
     componentDidMount() {
+      
         var dom = document.getElementsByClassName('container')[0]
         sr = srender.init(dom)
         this.props.objectList&&sr.initWithOthers(this.props.objectList)
@@ -133,9 +135,7 @@ export default class Editor extends React.Component {
             this.props.type!=='none'&&this.handleGetThumbnail(newImg.src)
         },'image/png')
     }
-    componentWillUpdate(){
-    //   console.log(this.props.objectList)
-    }
+    
     
     shouldComponentUpdate(nextProps,nextState){
        
@@ -144,9 +144,12 @@ export default class Editor extends React.Component {
       }
       
     componentDidUpdate(){
+        
        !this.props.objectList&&sr.clear()
         this.props.objectList&&sr.initWithOthers(this.props.objectList)
+        
         add(this.props.type);
+       
         this.sync({media:sr.getObjectList()})
        
 

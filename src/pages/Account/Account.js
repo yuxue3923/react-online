@@ -94,7 +94,7 @@ const FormItem = Form.Item;
     this.setState({ searchContent: e.target.value });
     
   }
-  searchCode(code){
+  searchCode(){
     const { login_info } = this.props;
     $.ajax({
       url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+this.state.searchContent,
