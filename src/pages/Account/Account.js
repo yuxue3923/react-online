@@ -9,7 +9,7 @@ import $ from 'jquery';
 import PropTypes from "prop-types"
 import { connect } from 'react-redux';
 const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_1006980_yyo6e4860m.js',
+  scriptUrl: '//at.alicdn.com/t/font_1006980_3sv6ir3jo3x.js',
 });
 const Option = Select.Option;
 function handleChange(value) {
@@ -37,7 +37,8 @@ const FormItem = Form.Item;
     constructor(props, context) {
         super(props, context)
         this.state = {
-          searchContent: null,
+          collectinfo:false,
+          collectcourseinfo:"未收藏",
           visible: false ,
           current:1,//我的课件当前页
           pagecurrent:1,//总课件当前页
@@ -46,10 +47,22 @@ const FormItem = Form.Item;
           imgurl:["https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png","https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png","https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png","https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png" ]
         }
     }
+    handleChangecreat=(value)=> {
+      if(value==2){
+        this.collectCourseByuser();
+      }else{
+        this.getdata();
+      }
+    }
     //Modal事件
-    showModal = () => {
+    showModal = (id) => {
       this.setState({
         visible: true,
+      });
+      const { setSsendupdatecourseid } = this.props;
+      setSsendupdatecourseid({
+        type: 'GetuserupdatecourseidSuccess',
+        payload: id,
       });
     }
   
@@ -94,10 +107,14 @@ const FormItem = Form.Item;
     this.setState({ searchContent: e.target.value });
     
   }
-  searchCode(){
+  
+  searchCode(e,callBack){
+    
+    var data = this.state.searchContent;
+  
     const { login_info } = this.props;
     $.ajax({
-      url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+this.state.searchContent,
+      url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+data,
       async:false,
       type: "GET",
       contentType:"application/json;charset=UTF-8",
@@ -106,19 +123,68 @@ const FormItem = Form.Item;
       beforeSend:function(request){
         request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
       },
-      success: function (data) {
+      success: function(data) {
           if (data) {
               console.log('返回对应项目id'+data);
+            //  this.setState({ searchContent: data});
+              callBack(data)
           }
           else {
               console.log('找不到项目');
           }
-      },
+      }.bind(this),
       error: function (xhr, status, err) {
         console.log("请求项目失败")
-      }
+      }.bind(this)
   });
+   
   }
+  
+  
+  gotoSearchProject(projectId){
+    const {setCreatecourseState} = this.props;
+    const { login_info}=this.props;
+      
+      var data = projectId?{
+        "_id" :projectId,
+      }:{
+        "_id" :this.state.searchContent,
+      };
+      console.log('进入researchByCourseId接口');
+      console.log(JSON.stringify(data));
+      $.ajax({
+        url: "http://localhost:3000/api/researchByCourseId",
+        async:false,
+        type: "GET",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:data,
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode == 0) {
+            console.log('获取查询权限111');
+            console.log(data.msg[0])
+            setCreatecourseState({
+              type:'createcourseSuccess',
+              payload:{
+                createCourse_info:data.msg[0],
+                course_id:projectId || this.state.searchContent
+              }
+            });
+            this.context.router.history.push("/APP");
+          }
+          else {   
+            console.log('获取查询权限2222');
+             
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
+      });
+  }
+  
   onChangepage=(page)=>{
     this.setState(
       {
@@ -126,20 +192,129 @@ const FormItem = Form.Item;
       }
     )
   }
+  //控制收藏按钮
+  collect=(id)=>{
+    this.setState({
+      collectinfo:!this.state.collectinfo,
+    });
+    if(!this.state.collectinfo){
+      console.log("打印收藏"+this.state.collectinfo)
+      this.collectCourse(id);
+    }
+    else{
+      this.cancelcollectCourse(id);
+    }
+  }
+
     handleCancel_template = (e) => {
       console.log(e);
       this.setState({
         templatevisible: false,
       });
     }
-    handleChange = (checked) => {
-      this.setState({ checked });
-    }
     sendupdatecourseid(id){ 
       const { setSsendupdatecourseid } = this.props;
       setSsendupdatecourseid({
         type: 'GetuserupdatecourseidSuccess',
         payload: id,
+      });
+    }
+    collectCourse(id){ 
+      const { login_info}=this.props;
+      var data = {
+          "_id" :id.toString(),
+          "user_id":login_info.user_id,
+      };
+      console.log('进入collectCourse接口');
+      $.ajax({
+        url: "http://localhost:3000/api/collectCourse",
+        async:false,
+        type: "POST",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:JSON.stringify(data),
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode == 0) {
+            console.log('收藏课件成功111');
+            Modal.success({
+              title: '消息提示',
+              content: '成功收藏该课件',
+            });
+          }
+          else {   
+            console.log('收藏课件成功222');
+             
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
+      });
+    }
+    //收藏课件
+    collectCourseByuser=()=>{ 
+      const { login_info}=this.props;
+      console.log('进入收藏用户课件接口');
+      $.ajax({
+        url: "http://localhost:3000/api/allCollectCourses",
+        async:false,
+        type: "GET",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:{"user_id":login_info.user_id},
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode == 0) {
+            console.log('收藏课件成功111');
+            this.setState({
+              usercoursedata:data.msg,
+            });
+          }
+          else {   
+            console.log('收藏课件成功222');
+             
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
+      });
+    }
+    cancelcollectCourse(id){ 
+      const { login_info}=this.props;
+      var data = {
+          "_id" :id.toString(),
+      };
+      console.log('进入cancelcollectCourse接口');
+      $.ajax({
+        url: "http://localhost:3000/api/cancelCollect",
+        async:false,
+        type: "DELETE",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:JSON.stringify(data),
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode == 0) {
+            console.log('取消收藏课件成功111');
+            Modal.success({
+              title: '消息提示',
+              content: '取消收藏该课件',
+            });
+          }
+          else {   
+            console.log('取消收藏课件成功222');
+             
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.log('无法收藏课件');
+        }.bind(this)
       });
     }
     deletecourseid(id){ 
@@ -190,7 +365,6 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode == 0) {
             console.log('获取查询权限111');
-            console.log(data.msg);
             this.setState({
               usercoursedata:data.msg,
             });
@@ -203,6 +377,36 @@ const FormItem = Form.Item;
         }
       });
     }
+
+    getcoursenamedata(e) {
+      const { login_info }=this.props;
+      console.log('进入researchByCourseName接口');
+      $.ajax({
+        url: "http://localhost:3000/api/researchByCourseName",
+        async:false,
+        type: "GET",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:{"courseName":e.target.value},
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode == 0) {
+            console.log('成功查找课件111');
+            this.setState({
+              allcoursedata:data.msg,
+            });
+          }
+          else {   
+            console.log('获取查询权限2222');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
+      });
+    }
+     
     getallcoursedata() {
       const { login_info }=this.props;
       console.log('进入allCouse接口');
@@ -219,7 +423,6 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode == 0) {
             console.log('获取查询权限111');
-            console.log(data.msg);
             this.setState({
               allcoursedata:data.msg,
             });
@@ -237,7 +440,14 @@ const FormItem = Form.Item;
       this.getallcoursedata();
     }
     render() {
-      const courseList = this.state.usercoursedata.map((v, i) => {
+      var result=[];
+      for(var i=0;i<this.state.usercoursedata.length;i++){
+        var obj=this.state.usercoursedata[i];
+        if(obj!==null){
+          result.push(obj);
+        }
+      }
+      const courseList = result.map((v, i) => {
           return (
             <div>
                  <Row gutter={16}>
@@ -245,7 +455,7 @@ const FormItem = Form.Item;
                 <Card
                   style={{ width:250 ,height:300}}
                   cover={
-                    <img onClick={this.showModal}
+                    <img onClick={this.showModal.bind(this,v._id)}
                       alt="example"
                       src={this.state.imgurl[i%4]} height="154"
                     />
@@ -261,11 +471,13 @@ const FormItem = Form.Item;
                   </Row>
                   <br />
                   <Row >
-                    <Col span={4}>
-                    <Link to='/Updatecourse'><IconFont className="iconsize" type="icon-xiugai" onClick={this.sendupdatecourseid.bind(this,v._id)}/></Link>
+                    <Col span={3}>
+                    <IconFont className="iconsize" type="icon-xiugai" onClick={this.showModal.bind(this,v._id)}/>
                   </Col>
-                    <Col span={4}><IconFont className="iconsize" type="icon-xin"/></Col>
-                    <Col span={4}><Icon className="iconsize" type="delete" onClick={this.deletecourseid.bind(this,v._id)}/></Col>
+                    {/* <Col span={4}><IconFont className="iconsize" type="icon-xin" onClick={this.collect.bind(this,v._id)}/>{v.isEdit?"已收藏":"未收藏"}</Col> */}
+                    <Col span={3}><IconFont className="iconsize" type="icon-xin" onClick={this.collectCourse.bind(this,v._id)}/></Col>
+                    <Col span={3}><IconFont className="iconsize" type="icon-shoucang" onClick={this.cancelcollectCourse.bind(this,v._id)}/></Col>
+                    <Col span={3}><Icon className="iconsize" type="delete" onClick={this.deletecourseid.bind(this,v._id)}/></Col>
                     <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
                   </Row>
                 </Card>
@@ -282,7 +494,7 @@ const FormItem = Form.Item;
                 <Card
                   style={{ width:250 ,height:300}}
                   cover={
-                    <img onClick={this.showModal}
+                    <img onClick={this.showModal.bind(this,v._id)}
                       alt="example"
                       src={this.state.imgurl[i%4]} height="154"
                     />
@@ -299,7 +511,7 @@ const FormItem = Form.Item;
                   <br />
                   <Row >
                     <Col span={4}>
-                    <Link to='/Updatecourse'><IconFont className="iconsize" type="icon-xiugai" onClick={this.sendupdatecourseid.bind(this,v._id)}/></Link>
+                    <IconFont className="iconsize" type="icon-xiugai" onClick={this.showModal.bind(this,v._id)}/>
                   </Col>
                     <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
                     <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
@@ -340,7 +552,7 @@ const FormItem = Form.Item;
             <Col span={6}>{list[i+7]}</Col> 
           </Row>
           <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-          <Pagination current={this.state.pagecurrent} onChange={this.onChangepage} total={500} />
+          <Pagination current={this.state.pagecurrent} onChange={this.onChangepage} total={list.length} />
           </Row>
         </div>
         }
@@ -361,7 +573,7 @@ const FormItem = Form.Item;
            <Col span={6}>{list[i+6]}</Col> 
          </Row>
          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-         <Pagination current={this.state.current} onChange={this.onChange} total={500} />
+         <Pagination current={this.state.current} onChange={this.onChange} total={list.length} />
          </Row>
        </div>
        }
@@ -374,7 +586,7 @@ const FormItem = Form.Item;
           <Form layout="inline" style={{ paddingBottom: 11 }}>
               <Row gutter={16}>
               <Col span={5}>                  
-                  <Select defaultValue="1" onChange={handleChange} style={{width:'100%'}}>
+                  <Select defaultValue="1" onChange={this.handleChangecreat} style={{width:'100%'}}>
                      <Option value="1">我创建的课件</Option>
                     <Option value="2"> 我收藏的课件</Option>
                  </Select>                  
@@ -468,11 +680,11 @@ const FormItem = Form.Item;
         <Header className='top-navigation' style={{height:'8.2%'}}>
         {/* <div className="logo" /> */}
         <div className="search">
-        <Input 
+        <Input onPressEnter={this.getcoursenamedata.bind(this)}
         size='large'
         placeholder="搜索项目"
-        onChange={this.onChangeSearch}
-        prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} onClick={()=>this.searchCode()}/>}
+        onChange={this.onChangeSearch.bind(this)}
+        prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} onClick={(value) =>this.searchCode(value,this.gotoSearchProject.bind(this))}/>}
         suffix={suffix}
       />
      
@@ -486,7 +698,7 @@ const FormItem = Form.Item;
      
         </Header>
         <Modal
-          title="是否重新编辑课件"
+          title="是否查看课件"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
@@ -494,7 +706,7 @@ const FormItem = Form.Item;
         >
         <p className="right">
            <Button key="return" onClick={this.handleCancel}>取消</Button>
-           <Link to='/APP'><Button key="next" type="primary"> 确定 </Button></Link>
+           <Link to='/Updatecourse'><Button key="next" type="primary"> 确定 </Button></Link>
         </p>
         </Modal>
         <Card bordered={false}>
@@ -523,6 +735,7 @@ const FormItem = Form.Item;
   function mapDispatchToProps(dispatch){
     return{
       setSsendupdatecourseid: (state) => dispatch(state),
+      setCreatecourseState: (state) => dispatch(state),
     };
   }
   export default connect(

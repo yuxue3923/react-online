@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card,message} from 'antd';
+import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card,message,Dropdown} from 'antd';
 import './App.css';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -154,47 +154,33 @@ const menu = function(param){
      <span style={{fontSize:15}}> Join</span>   
   </div>
 </Card>
-} 
-  
-
-
-var ContentModal =function(code){
-  return <div>
-  <Row style={{margin: '8px 8px 8px 16px'}}> 
-    <a style={{float:"left"}}>加入</a>
-    <Button style={{float:"right"}} type="primary" ghost>{code}</Button>
-  </Row>
-  <Row style={{margin: '8px 8px 8px 16px'}}> 
-    <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
-    <Button style={{float:"right"}} type="primary" >分享</Button>
-  </Row>
-<Row style={{margin: '8px 8px 8px 16px'}}>
-<Menu.Divider />
-</Row>
-<Row style={{margin: '8px 8px 8px 16px'}}>
-
- <Select defaultValue="1" onChange={handleChange} style={{width:'100%'}}>
-  
-   <Option value="1"><IconFont type="anticon-piliangbianji" />允许任何人进行编辑</Option>
-   <Option value="2"> <IconFont type="anticon-iconkuozhan_liulanpre" />只能查看浏览</Option>
- </Select>
- </Row>
-<Row style={{margin: '8px 8px 8px 16px'}}>
-<Menu.Divider />
-</Row>
-  <Row style={{margin: '8px 8px 8px 16px'}}>
-  <Select defaultValue="1" style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={handleChange}>
-  
-  <Option value="1">查找成员</Option>
-  <Option value="2">胡歌</Option>
-  <Option value="3">李健</Option>
-  <Option value="4">周杰伦</Option>
-  </Select>
-  <Button style={{float:"right"}} type="primary" >添加</Button>
-  </Row>
-</div> 
-
 }
+  
+
+
+var ContentModal = function(code){
+  return (
+    <div>
+    <Row style={{margin: '8px 8px 8px 16px'}}> 
+      <a style={{float:"left"}}>加入</a>
+      <Button style={{float:"right"}} type="primary" ghost>{code}</Button>
+    </Row>
+    <Row style={{margin: '8px 8px 8px 16px'}}> 
+      <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
+      <Button style={{float:"right"}} type="primary" >分享</Button>
+    </Row>
+  <Row style={{margin: '8px 8px 8px 16px'}}>
+  <Menu.Divider />
+  </Row>
+  
+  </div>
+  )
+}
+  
+
+
+
+
  
 
 function deepClone(obj){
@@ -215,6 +201,7 @@ class App extends Component {
    this.passbyJudge = this.passbyJudge.bind(this)
   }
     state = {
+      cooperationuserid:10,
       code:0,
       collapsed: true,
       visible: false,
@@ -225,7 +212,9 @@ class App extends Component {
       canvasFlush:false,
       thumbnail:[],
       PopoverVisible:false,
-      isSingle:true //判断是否处于协同模式
+      isSingle:true, //判断是否处于协同模式
+      cooperuserlist:[],
+      Avatartype:["icon-touxiangnvhai","icon-icon-test3","icon-icon-test1","icon-icon-test","icon-icon-test2"],
     };
     flush(state){
       this.setState({
@@ -302,6 +291,69 @@ class App extends Component {
         error: function (xhr, status, err) {
           message.error("无法获取项目数据");
         }
+      })
+    }
+    getProjectUserList(){
+      const { login_info ,createCourse_info}=this.props;
+      console.log('进入ajax');
+      $.ajax({
+        url: "http://localhost:3000/api/getProjectUsersList",
+        data:{
+          "project_id":createCourse_info.course_id,
+        },
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        type: "GET",
+        dataType: "json",
+        async:false,
+        success: function (data) {
+          if (data.errorCode == 0) {
+            console.log('获取协作者成功');
+            console.log(data);
+           this.setState({
+             cooperuserlist:data.msg,
+           });
+          }
+          else {   
+            console.log('获取协作者失败');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.log('无法获取协作者');
+        }.bind(this)
+      });
+    }
+    createrelationship(){
+      const { login_info ,createCourse_info}=this.props;
+      console.log('进入ajax');
+      $.ajax({
+        url: "http://localhost:3000/api/joinProjectRelationShip",
+        data:{
+          "user_id":this.state.cooperationuserid,
+          "project_id":createCourse_info.course_id,
+        },
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        type: "POST",
+        dataType: "json",
+        async:false,
+        success: function (data) {
+          if (data.errorCode == 0) {
+            console.log('建立联系111');
+            Modal.success({
+              title: '消息提示',
+              content: '成功建立联系',
+            });
+            this.getProjectUserList();
+          }
+          else {   
+            console.log('建立连接失败');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }.bind(this)
       });
     }
     save(){
@@ -366,8 +418,8 @@ class App extends Component {
 //  console.log("MyDeck:",MyDeck)
    // return state
     //  MyDeck.splice(this.state.page-1,1,objectList)
-    
     }
+    
     thumbnail = (src) =>{
       let thumbnail = this.state.thumbnail
       thumbnail.splice(this.state.page-1,1,src)
@@ -410,6 +462,8 @@ class App extends Component {
         });
         }
       }
+    
+      
       share_code_now&&this.setState({
         code:share_code_now,
         modalvisible: true,
@@ -448,7 +502,7 @@ class App extends Component {
     popoverVisibleChange = (popoverVisible) => {
       this.setState({ popoverVisible });
     }
-    setModal2Visible(modal2Visible) {
+    setModal2Visible = (modal2Visible)=> {
       this.setState({ 
         modal2Visible:modal2Visible,
         popoverVisible:false //选择后让气泡框消失
@@ -476,11 +530,67 @@ class App extends Component {
         visible: false,
       });
     };
-    componentWillUpdate(){
-      
-    }
+   componentWillUpdate(){
+      this.getProjectUserList();
+   }
+  
+  componentWillMount(){
+    this.getProjectUserList();
+  }
+
     render() {
+      const userList = this.state.cooperuserlist.map((v, i) => {
+        return (
+          <div style={{margin:'2px'}} >
+               <IconAvator type={this.state.Avatartype[i%5]}/>
+              <span style={{fontSize:15}}>{v.user_name}</span>
+          </div>
+        );}
+      )
+      const menu1 = (
+        <Card title="当前在线协同者">
+                {userList}
+        </Card>
+      );
+      const ContentModal =(code)=>{
+        return <div>
+        <Row style={{margin: '8px 8px 8px 16px'}}> 
+          <a style={{float:"left"}}>加入</a>
+          <Button style={{float:"right"}} type="primary" ghost>{code}</Button>
+        </Row>
+        <Row style={{margin: '8px 8px 8px 16px'}}> 
+          <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
+          <Button style={{float:"right"}} type="primary" >分享</Button>
+        </Row>
+      <Row style={{margin: '8px 8px 8px 16px'}}>
+      <Menu.Divider />
+      </Row>
+      <Row style={{margin: '8px 8px 8px 16px'}}>
+      
+       <Select defaultValue="1" onChange={handleChange} style={{width:'100%'}}>
+        
+         <Option value="1"><IconFont type="anticon-piliangbianji" />允许任何人进行编辑</Option>
+         <Option value="2"> <IconFont type="anticon-iconkuozhan_liulanpre" />只能查看浏览</Option>
+       </Select>
+       </Row>
+      <Row style={{margin: '8px 8px 8px 16px'}}>
+      <Menu.Divider />
+      </Row>
+        <Row style={{margin: '8px 8px 8px 16px'}}>
+        <Select defaultValue="1" style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={handleChange}>
+        
+        <Option value="1">查找成员</Option>
+        <Option value="2">胡歌</Option>
+        <Option value="3">李健</Option>
+        <Option value="4">周杰伦</Option>
+        </Select>
+        <Button onClick={this.createrelationship.bind(this)} style={{float:"right"}} type="primary">添加</Button>
+        </Row>
+      </div> 
+      
+      }
       const {createCourse_info} = this.props;
+      console.log(createCourse_info)
       MyDeck=this.state.isSingle?createCourse_info.createCourse_info.slides.slide:MyDeck
    //    console.log()
     //  console.log(MyDeck)
@@ -560,10 +670,18 @@ class App extends Component {
                  visible={this.state.modalvisible}
                  onOk={this.handleOk}
                  onCancel={this.handleCancel}
+                 footer={null}
               >
                 {ContentModal(this.state.code)}
               </Modal>
               </span>
+            </div>
+            <div className="flowbar" style={{right:10,top:80}}>
+            <span style={{ marginRight: 24, }}>
+            <Dropdown overlay={menu1} placement="bottomLeft" trigger={['click']}>
+            <Button type="primary" shape="circle"><Icon type="sync" /></Button>
+            </Dropdown>
+            </span>
             </div>
             <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save}/>
             </div>
@@ -572,9 +690,8 @@ class App extends Component {
           </Layout>
       );
     }
+    
   }
-
-  
 
   const App_Index=Form.create()(App);
   function  mapStateToProps(state) {
