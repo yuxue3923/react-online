@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
-
+import io from 'socket.io-client'
 import EditorWithBar from './components/Editor/EditorWithBar';
 
 var temp = 99999
@@ -187,6 +187,8 @@ function deepClone(obj){
   let _obj = JSON.stringify(obj);
   return JSON.parse(_obj)
 }
+
+var toServe = null;
 var project_id_now = 0;
 var share_code_now = 0;
 class App extends Component {
@@ -201,6 +203,8 @@ class App extends Component {
    this.passbyJudge = this.passbyJudge.bind(this)
   }
     state = {
+      toServe:null,
+      message:null,
       cooperationuserid:10,
       code:0,
       collapsed: true,
@@ -278,7 +282,8 @@ class App extends Component {
             console.log('返回课件项目信息');
             console.log(data);
             MyDeck = deepClone(data.msg[0].slides.slide)
-        
+            this.createSocket()
+            this.handleOk()
             this.setState({ MyDeck:MyDeck,isSingle:false })
             this.setModal2Visible(false)
 
@@ -530,14 +535,59 @@ class App extends Component {
         visible: false,
       });
     };
+  createSocket=()=>{
+    var socket = io();
+    
+    toServe = function(msg){
+      console.log("socket-client")
+      socket.emit('update data', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
+    }
+    var self = this;
+    var username = 'bing';
+    var connected = false;
+    var editting = true;
+   
+      socket.emit('add user', username);
+    
+      socket.on('login',(data)=>{
+            connected = true;
+            console.log("numOfUsers is "+JSON.stringify(data));
+            console.log("socket.id is"+socket.id);
+        });
+    
+        socket.on('user joined',(data)=>{
+            console.log(data.username+" come in");
+        });
+       
+        socket.on('update data',(data)=>{
+           
+        var msg = JSON.parse(data);
+        self.setState({message:msg})
+        });
+      
+  }
    componentWillUpdate(){
-      this.getProjectUserList();
+    //  this.getProjectUserList();
    }
   
   componentWillMount(){
     this.getProjectUserList();
   }
-
+  /*
+  shouldComponentUpdate(nextProps,nextState){
+    if(nextProps.isSingle!==this.props.isSingle&&this.props.isSingle===false){
+      this.createSocket()
+      
+    }
+    return true
+  }
+  */
+  componentDidMount(){   //我们希望这块代码不会被频繁执行，仅当用户切换整个编辑页面时
+    if(this.props.isSingle){
+      this.createSocket()
+  }
+  }
+  
     render() {
       const userList = this.state.cooperuserlist.map((v, i) => {
         return (
@@ -670,7 +720,7 @@ class App extends Component {
                  visible={this.state.modalvisible}
                  onOk={this.handleOk}
                  onCancel={this.handleCancel}
-                 footer={null}
+               //  footer={null}
               >
                 {ContentModal(this.state.code)}
               </Modal>
@@ -683,7 +733,7 @@ class App extends Component {
             </Dropdown>
             </span>
             </div>
-            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save}/>
+            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {this.state.isSingle} message ={!this.state.isSingle&&this.props.message} toServe={toServe}/>
             </div>
             </Content>
             {/* </Layout> */}

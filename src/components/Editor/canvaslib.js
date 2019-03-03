@@ -1,12 +1,43 @@
 //import srender from 'srender'
 import srender from 'srenderlib'
 import React from 'react'
-var isFlush = false;
+
+
+
 const elementStyle={
     stroke: '#ccc',
     fill: 'white',
    // lineDash: [5, 5, 10, 10],
 }
+
+function resolve(msg){
+    if(!msg) return
+    let el = msg.el;
+    let tag = msg.tag;
+    switch(msg.type){
+        case 'attr':
+            switch(tag){
+                case 'position':
+                    sr.attr(el,tag)
+                    break;
+                case 'shape':
+                    sr.attr(el,tag,true)
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case 'add':
+            sr.add(el)
+            break;
+        case 'delete':
+            sr.remove(el)
+            break;
+        default:
+            break;
+    }
+}
+
 var sr=null;
 /**这段较长的代码为画笔，由于作用域暂时无法封装为文件 */
 var s; //定义路径对象
@@ -126,7 +157,12 @@ export default class Editor extends React.Component {
     componentDidMount() {
       
         var dom = document.getElementsByClassName('container')[0]
-        sr = srender.init(dom)
+      
+        sr=srender.init(dom,{},!this.props.isSinleMode)
+      //  sr=srender.init(dom)
+        
+        sr.initWithCb(this.props.toServe)
+
         this.props.objectList&&sr.initWithOthers(this.props.objectList)
         sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
             var url = URL.createObjectURL(blob);
@@ -137,17 +173,24 @@ export default class Editor extends React.Component {
     }
     
     
-    shouldComponentUpdate(nextProps,nextState){
-       
-        isFlush=this.props.type!=='none'?false:true
-        return true
-      }
+   
       
     componentDidUpdate(){
-        
-       !this.props.objectList&&sr.clear()
-        this.props.objectList&&sr.initWithOthers(this.props.objectList)
-        
+        if(this.props.isSingleMode){
+           
+            !this.props.objectList&&sr.clear()
+           
+            this.props.objectList&&sr.initWithOthers(this.props.objectList)
+        }
+        else{
+            console.log("toServe",this.props.toServe)
+            var dom = document.getElementsByClassName('container')[0]
+            sr=srender.init(dom,{},true)
+            sr.initWithCb(this.props.toServe)
+            this.props.objectList&&sr.initWithOthers(this.props.objectList)
+            resolve(this.props.message)
+        }
+
         add(this.props.type);
        
         this.sync({media:sr.getObjectList()})

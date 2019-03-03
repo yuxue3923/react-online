@@ -119,7 +119,7 @@ const dgraph=function(fh,fheart,fa){
 
     //  console.log(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))
    // console.log(nextProps.initContent === this.props.initContent)
-       return (isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))
+       return (isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode)
      }
  
     componentWillReceiveProps(nextProps){
@@ -207,7 +207,7 @@ const dgraph=function(fh,fheart,fa){
           </div> 
           </div>
           </Col>
-       <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} /></Col>   
+       <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode} message={this.props.message} toServe={this.props.toServe}/></Col>   
       </Row> 
         </div>
      
