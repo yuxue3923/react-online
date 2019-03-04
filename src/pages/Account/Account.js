@@ -8,6 +8,7 @@ import './Account.css'
 import $ from 'jquery';
 import PropTypes from "prop-types"
 import { connect } from 'react-redux';
+import {localhost} from '../../config'
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1006980_3sv6ir3jo3x.js',
 });
@@ -116,7 +117,7 @@ const FormItem = Form.Item;
   
     const { login_info } = this.props;
     $.ajax({
-      url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+data,
+      url: "http://"+localhost+":3000/api/getReflectProject_id?tinyCode="+data,
       async:false,
       type: "GET",
       contentType:"application/json;charset=UTF-8",
@@ -155,7 +156,7 @@ const FormItem = Form.Item;
       console.log('进入researchByCourseId接口');
       console.log(JSON.stringify(data));
       $.ajax({
-        url: "http://localhost:3000/api/researchByCourseId",
+        url: "http://"+localhost+":3000/api/researchByCourseId",
         async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",
@@ -229,7 +230,7 @@ const FormItem = Form.Item;
       };
       console.log('进入collectCourse接口');
       $.ajax({
-        url: "http://localhost:3000/api/collectCourse",
+        url: "http://"+localhost+":3000/api/collectCourse",
         async:false,
         type: "POST",
         contentType:"application/json;charset=UTF-8",
@@ -260,7 +261,7 @@ const FormItem = Form.Item;
       const { login_info}=this.props;
       console.log('进入收藏用户课件接口');
       $.ajax({
-        url: "http://localhost:3000/api/allCollectCourses",
+        url: "http://"+localhost+":3000/api/allCollectCourses",
         async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",
@@ -292,7 +293,7 @@ const FormItem = Form.Item;
       };
       console.log('进入cancelcollectCourse接口');
       $.ajax({
-        url: "http://localhost:3000/api/cancelCollect",
+        url: "http://"+localhost+":3000/api/cancelCollect",
         async:false,
         type: "DELETE",
         contentType:"application/json;charset=UTF-8",
@@ -327,7 +328,7 @@ const FormItem = Form.Item;
       console.log('进入deleteCourse接口');
       console.log(JSON.stringify(data));
       $.ajax({
-        url: "http://localhost:3000/api/deleteCourse",
+        url: "http://"+localhost+":3000/api/deleteCourse",
         async:false,
         type: "DELETE",
         contentType:"application/json;charset=UTF-8",
@@ -355,7 +356,7 @@ const FormItem = Form.Item;
       const { login_info }=this.props;
       console.log('进入researchByUserId接口');
       $.ajax({
-        url: "http://localhost:3000/api/researchByUserId",
+        url: "http://"+localhost+":3000/api/researchByUserId",
         async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",
@@ -384,7 +385,7 @@ const FormItem = Form.Item;
       const { login_info }=this.props;
       console.log('进入researchByCourseName接口');
       $.ajax({
-        url: "http://localhost:3000/api/researchByCourseName",
+        url: "http://"+localhost+":3000/api/researchByCourseName",
         async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",
@@ -413,7 +414,7 @@ const FormItem = Form.Item;
       const { login_info }=this.props;
       console.log('进入allCouse接口');
       $.ajax({
-        url: "http://localhost:3000/api/allCourses",
+        url: "http://"+localhost+":3000/api/allCourses",
         async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",

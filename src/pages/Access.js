@@ -4,6 +4,7 @@ import './Access.css'
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import PropTypes from "prop-types"
+import {localhost} from '../config'
 const FormItem = Form.Item;
   class Access_child extends Component {
     static contextTypes={
@@ -36,7 +37,7 @@ const FormItem = Form.Item;
       } else {
         console.log('进入ajax');
         $.ajax({
-            url: "http://localhost:3000/api/oauth/token",
+            url: "http://"+localhost+":3000/api/oauth/token",
             type: "POST",
             dataType: "json",
             data:"grant_type=password&"+"username="+this.state.username+"&password="+this.state.password+"&client_id=A10&client_secret=xiaomi",
