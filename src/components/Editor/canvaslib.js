@@ -176,6 +176,7 @@ export default class Editor extends React.Component {
    
       
     componentDidUpdate(){
+        console.log("this.props.isSingleMode")
         if(this.props.isSingleMode){
            
             !this.props.objectList&&sr.clear()
@@ -183,7 +184,7 @@ export default class Editor extends React.Component {
             this.props.objectList&&sr.initWithOthers(this.props.objectList)
         }
         else{
-            console.log("toServe",this.props.toServe)
+            console.log("toServe")
             var dom = document.getElementsByClassName('container')[0]
             sr=srender.init(dom,{},true)
             sr.initWithCb(this.props.toServe)
@@ -194,7 +195,7 @@ export default class Editor extends React.Component {
         add(this.props.type);
        
         this.sync({media:sr.getObjectList()})
-       
+       this.props.clearMsg()
 
         sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
             var url = URL.createObjectURL(blob);

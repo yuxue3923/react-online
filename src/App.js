@@ -195,7 +195,7 @@ class App extends Component {
   constructor(props, context) {
     super(props, context)
      // this.initPie = this.initPie.bind(this)
-     
+   this.clearMsg = this.clearMsg.bind(this)
    this.thumbnail=this.thumbnail.bind(this)
    this.sync=this.sync.bind(this);
    this.flush=this.flush.bind(this);
@@ -204,7 +204,7 @@ class App extends Component {
   }
     state = {
       toServe:null,
-      message:null,
+      msg:null,
       cooperationuserid:10,
       code:0,
       collapsed: true,
@@ -224,6 +224,11 @@ class App extends Component {
     flush(state){
       this.setState({
         canvasFlush:state
+      })
+    }
+    clearMsg(){
+      this.setState({
+        msg:null
       })
     }
     passbyJudge(){
@@ -285,7 +290,7 @@ class App extends Component {
             MyDeck = deepClone(data.msg[0].slides.slide)
             this.createSocket(invite_project_id)
             this.handleOk()
-            this.setState({ MyDeck:MyDeck,isSingle:false })
+            this.setState({ MyDeck:MyDeck})
             this.setModal2Visible(false)
 
           }
@@ -509,6 +514,7 @@ class App extends Component {
     });
       this.setState({
         modalvisible: false,
+        isSingle:false
       });
     }
     
@@ -552,6 +558,10 @@ class App extends Component {
    
     toServe = function(msg){
       console.log("socket-client")
+     // console.log("socket",socket)
+      socket.emit('editting',(data)=>{
+        console.log(data+" editing");
+    })
       socket.emit('update data', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
     }
     var self = this;
@@ -563,18 +573,21 @@ class App extends Component {
     
       socket.on('login',(data)=>{
             connected = true;
-            console.log("numOfUsers is "+JSON.stringify(data));
-            console.log("socket.id is"+socket.id);
+          //  console.log("numOfUsers is "+JSON.stringify(data));
+          //  console.log("socket.id is"+socket.id);
         });
-    
+    socket.on('editting',(data)=>{
+
+      console.log(data+" editing");
+    })
         socket.on('user joined',(data)=>{
             console.log(data.username+" come in");
         });
        
         socket.on('update data',(data)=>{
-           
+        console.log("someone update")
         var msg = JSON.parse(data);
-        self.setState({message:msg})
+        self.setState({msg:msg})
         });
       
   }
@@ -751,7 +764,7 @@ class App extends Component {
             </Dropdown>
             </span>
             </div>
-            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {this.state.isSingle} message ={!this.state.isSingle&&this.props.message} toServe={toServe}/>
+            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {this.state.isSingle} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg}/>
             </div>
             </Content>
             {/* </Layout> */}
