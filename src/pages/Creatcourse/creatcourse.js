@@ -9,7 +9,7 @@ import echarts from 'echarts/lib/echarts';
 import  'echarts/lib/chart/tree';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
-
+import {localhost} from '../../config'
 const { TextArea } = Input;
 
 const Option = Select.Option;
@@ -244,7 +244,7 @@ const formItemLayout = {
         console.log("进入ajax") 
         const {setCreatecourseState} = this.props;
         $.ajax({
-            url: "http://localhost:3000/api/createCourse",
+            url: "http://"+localhost+":3000/api/createCourse",
             async:false,
             type: "POST",
             contentType:"application/json;charset=UTF-8",

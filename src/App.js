@@ -8,7 +8,7 @@ import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
 import io from 'socket.io-client'
 import EditorWithBar from './components/Editor/EditorWithBar';
-
+import {localhost} from './config'
 var temp = 99999
 var MyDeck = [[{
   "id":temp,
@@ -219,6 +219,7 @@ class App extends Component {
       isSingle:true, //判断是否处于协同模式
       cooperuserlist:[],
       Avatartype:["icon-touxiangnvhai","icon-icon-test3","icon-icon-test1","icon-icon-test","icon-icon-test2"],
+      base64Thumbnail:[],
     };
     flush(state){
       this.setState({
@@ -237,7 +238,7 @@ class App extends Component {
       const callBack = this.getInviteData.bind(this)
       const { login_info } = this.props;
       $.ajax({
-        url: "http://localhost:3000/api/getReflectProject_id?tinyCode="+code,
+        url: "http://"+localhost+":3000/api/getReflectProject_id?tinyCode="+code,
         async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",
@@ -268,7 +269,7 @@ class App extends Component {
       console.log('进入researchByCourseId接口');
       console.log(data);
       $.ajax({
-        url: "http://localhost:3000/api/researchByCourseId",
+        url: "http://"+localhost+":3000/api/researchByCourseId",
         async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",
@@ -282,7 +283,7 @@ class App extends Component {
             console.log('返回课件项目信息');
             console.log(data);
             MyDeck = deepClone(data.msg[0].slides.slide)
-            this.createSocket()
+            this.createSocket(invite_project_id)
             this.handleOk()
             this.setState({ MyDeck:MyDeck,isSingle:false })
             this.setModal2Visible(false)
@@ -302,7 +303,7 @@ class App extends Component {
       const { login_info ,createCourse_info}=this.props;
       console.log('进入ajax');
       $.ajax({
-        url: "http://localhost:3000/api/getProjectUsersList",
+        url: "http://"+localhost+":3000/api/getProjectUsersList",
         data:{
           "project_id":createCourse_info.course_id,
         },
@@ -333,7 +334,7 @@ class App extends Component {
       const { login_info ,createCourse_info}=this.props;
       console.log('进入ajax');
       $.ajax({
-        url: "http://localhost:3000/api/joinProjectRelationShip",
+        url: "http://"+localhost+":3000/api/joinProjectRelationShip",
         data:{
           "user_id":this.state.cooperationuserid,
           "project_id":createCourse_info.course_id,
@@ -386,7 +387,7 @@ class App extends Component {
 
        console.log(JSON.stringify(formData))
       $.ajax({
-        url: "http://localhost:3000/api/updateCourse",
+        url: "http://"+localhost+":3000/api/updateCourse",
         type: "PUT",
         async:false,
         dataType: "json",
@@ -425,7 +426,7 @@ class App extends Component {
     //  MyDeck.splice(this.state.page-1,1,objectList)
     }
     
-    thumbnail = (src) =>{
+    thumbnail = (src,base64) =>{
       let thumbnail = this.state.thumbnail
       thumbnail.splice(this.state.page-1,1,src)
       this.setState({thumbnail})
@@ -443,7 +444,7 @@ class App extends Component {
         project_id_now = course_id;
         if(type === "invite"){
           $.ajax({
-            url: "http://localhost:3000/api/generateTinyCode?project_id="+course_id,
+            url: "http://"+localhost+":3000/api/generateTinyCode?project_id="+course_id,
             async:false,
             type: "GET",
             contentType:"application/json;charset=UTF-8",
@@ -475,26 +476,33 @@ class App extends Component {
       });
     }
     handleOk = (e) => {
-      const { login_info } = this.props;
-      console.log(e);
+      const { login_info,createCourse_info } = this.props;
+      const param={
+        project_id:createCourse_info.course_id
+      } 
+      console.log("projectId:", "/"+createCourse_info.course_id)
       $.ajax({
-        url: "http://localhost:3000/api/createWebSocketServer",
+        url: "http://"+localhost+":3000/api/createWebSocketServer",
         async:false,
         type: "POST",
-        contentType:"application/json;charset=UTF-8",
-        accepts:"application/json;charset=UTF-8",
-        dataType: "json",
+        contentType:"application/x-www-form-urlencoded",
+      //  accepts:"application/json;charset=UTF-8",
+      //  dataType: "json",
+        data:param,
+    // data:'5c6f6e65e00c7f1b4885c798',
         beforeSend:function(request){
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function (data) {
             if (data.errorCode === 0) {
+              console.log("this:",this);
+                this.createSocket(createCourse_info.course_id)
                 console.log('已创建协同链接');
             }
             else {
                 console.log('协同失败');
             }
-        },
+        }.bind(this),
         error: function (xhr, status, err) {
           console.log("无法协同项目")
         }
@@ -535,9 +543,13 @@ class App extends Component {
         visible: false,
       });
     };
-  createSocket=()=>{
-    var socket = io();
-    
+  createSocket=(projectId)=>{
+    console.log("socket:",socket)
+    var url = "http://"+localhost+":3001"
+    let param = `/${projectId}` 
+    console.log("param:",param)
+    var socket = io(url,{path:param});
+   
     toServe = function(msg){
       console.log("socket-client")
       socket.emit('update data', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
@@ -582,9 +594,15 @@ class App extends Component {
     return true
   }
   */
-  componentDidMount(){   //我们希望这块代码不会被频繁执行，仅当用户切换整个编辑页面时
+  shouldComponentUpdate(nextProps,nextState){
+    if(this.props.isSingleMode!==nextProps.isSingleMode&&!nextProps.isSingleMode){
+      this.createSocket(this.props.createCourse_info.course_id)
+    }
+    return true
+  }
+  componentDidMount(){   //我们希望这块代码不会被频繁执行，仅当用户切换整个编辑页面时 直接从广场点击协同项目时
     if(this.props.isSingle){
-      this.createSocket()
+      this.createSocket(this.props.createCourse_info.course_id)
   }
   }
   

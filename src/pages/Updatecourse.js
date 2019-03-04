@@ -9,6 +9,7 @@ import echarts from 'echarts/lib/echarts';
 import  'echarts/lib/chart/tree';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
+import {localhost} from '../config'
 
 const { TextArea } = Input;
 const data= {
@@ -167,7 +168,7 @@ const formItemLayout = {
         const {setCreatecourseState} = this.props;
         console.log(JSON.stringify(datamsg));
         $.ajax({
-            url: "http://localhost:3000/api/updateCourse",
+            url: "http://"+localhost+":3000/api/updateCourse",
             async:false,
             type: "PUT",
             contentType:"application/json;charset=UTF-8",
@@ -213,7 +214,7 @@ const formItemLayout = {
         console.log('进入researchByCourseId接口');
         console.log(JSON.stringify(data));
         $.ajax({
-          url: "http://localhost:3000/api/researchByCourseId",
+          url: "http://"+localhost+":3000/api/researchByCourseId",
           async:false,
           type: "GET",
           contentType:"application/json;charset=UTF-8",

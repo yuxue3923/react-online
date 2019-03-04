@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 import PropTypes from "prop-types"
 import echarts from 'echarts/lib/echarts';
+import {localhost} from '../config'
 import  'echarts/lib/chart/radar';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
@@ -93,7 +94,7 @@ const formItemLayout = {
         const { login_info }=this.props;
         console.log('进入ajax');
         $.ajax({
-          url: "http://localhost:3000/api/updatePersonalInfo",
+          url: "http://"+localhost+":3000/api/updatePersonalInfo",
           data:{
             "user_id":login_info.user_id,
             "nick_name":this.state.nick_name,
@@ -135,7 +136,7 @@ const formItemLayout = {
         const { login_info }=this.props;
         console.log('进入ajax');
         $.ajax({
-          url: "http://localhost:3000/api/updateInfo",
+          url: "http://"+localhost+":3000/api/updateInfo",
           data:{
             "user_id":login_info.user_id,
             "email":this.state.email,
@@ -177,7 +178,7 @@ const formItemLayout = {
         console.log('进入ajax');
         console.log(login_info.access_token);
         $.ajax({
-          url: "http://localhost:3000/api/queryUserinfo",
+          url: "http://"+localhost+":3000/api/queryUserinfo",
           data:"username="+login_info.username,
           beforeSend:function(request){
             request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
@@ -216,7 +217,7 @@ const formItemLayout = {
       console.log('进入getuserdata ajax');
       console.log(login_info.access_token);
       $.ajax({
-        url: "http://localhost:3000/api/getPersonalInfo",
+        url: "http://"+localhost+":3000/api/getPersonalInfo",
         data:"user_id="+login_info.user_id,
         beforeSend:function(request){
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);

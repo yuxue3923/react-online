@@ -3,6 +3,7 @@ import {Form, Icon, Input, Button, Checkbox,message,Modal,Select } from 'antd';
 import {Link} from 'react-router-dom'
 import './Access.css'
 import { connect } from 'react-redux';
+import {localhost} from '../config'
 import $ from 'jquery';
 import PropTypes from "prop-types"
 const FormItem = Form.Item;
@@ -61,7 +62,7 @@ const Option =Select.Option;
       } else {
         console.log('进入ajax');
         $.ajax({
-            url: "http://localhost:3000/api/register",
+            url: "http://"+localhost+":3000/api/register",
             type: "POST",
             dataType: "json",
             data:"username="+this.state.username+"&passwd="+this.state.passwd+"&email="+this.state.email+"&phone_num="+this.state.phone_num+"&role="+this.state.role,
