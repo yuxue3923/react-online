@@ -37,6 +37,8 @@ const FormItem = Form.Item;
     constructor(props, context) {
         super(props, context)
         this.state = {
+          allcoursedata:[],
+          usercoursedata:[],
           collectinfo:false,
           collectcourseinfo:"未收藏",
           visible: false ,
