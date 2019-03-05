@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Input, Button, Checkbox,Col,Row,Card ,Modal} from 'antd';
+import {Icon, Button,Col,Row,Card ,Modal} from 'antd';
 import {Link} from 'react-router-dom'
 import './Account.css'
 const {Meta} = Card;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Route,Switch} from 'react-router';
-import { Link, HashRouter,BrowserRouter} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 import {createStore} from 'redux';
 import {Provider}from 'react-redux';
 import Reducer from '../reducers/index.js';

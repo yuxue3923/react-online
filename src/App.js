@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card,message,Dropdown,Col} from 'antd';
+import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card,message,Dropdown} from 'antd';
 import './App.css';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -93,7 +93,7 @@ function handleChange(value) {
 
 
 const menu = function(param){
-  const {func1,func2,func3} = param
+  // const {func1,func2,func3} = param
   return <Card title="当前在线协同者">
   <div style={{margin:'2px'}} >
     <Icon type="smile"  className="iconsize" theme="twoTone" twoToneColor="#eb2f96" />
@@ -109,25 +109,6 @@ const menu = function(param){
   </div>
 </Card>
 }
-var ContentModal = function(code){
-  return (
-    <div>
-    <Row style={{margin: '8px 8px 8px 16px'}}> 
-      <a style={{float:"left"}}>加入</a>
-      <Button style={{float:"right"}} type="primary" ghost>{code}</Button>
-    </Row>
-    <Row style={{margin: '8px 8px 8px 16px'}}> 
-      <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
-      <Button style={{float:"right"}} type="primary" >分享</Button>
-    </Row>
-  <Row style={{margin: '8px 8px 8px 16px'}}>
-  <Menu.Divider />
-  </Row>
-  
-  </div>
-  )
-}
-
 function deepClone(obj){
   let _obj = JSON.stringify(obj);
   return JSON.parse(_obj)
@@ -293,7 +274,7 @@ class App extends Component {
         dataType: "json",
         async:false,
         success: function (data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('获取协作者成功');
             console.log(data);
            this.setState({
@@ -306,7 +287,7 @@ class App extends Component {
         }.bind(this),
         error: function (xhr, status, err) {
           console.log('无法获取协作者');
-        }.bind(this)
+        }
       });
     }
     createrelationship(){
@@ -325,7 +306,7 @@ class App extends Component {
         dataType: "json",
         async:false,
         success: function (data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('建立联系111');
             Modal.success({
               title: '消息提示',
@@ -338,7 +319,7 @@ class App extends Component {
           }
         }.bind(this),
         error: function (xhr, status, err) {
-        }.bind(this)
+        }
       });
     }
     save(){

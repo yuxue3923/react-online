@@ -27,7 +27,7 @@ const formItemLayout = {
   },
 };
 const TabPane = Tabs.TabPane;
-const { Header, Content } = Layout;
+const { Header} = Layout;
 const {Meta} = Card;
 const suffix=<Icon type="close-circle"/>
 const FormItem = Form.Item;
@@ -51,7 +51,7 @@ const FormItem = Form.Item;
         }
     }
     handleChangecreat=(value)=> {
-      if(value==2){
+      if(value===2){
         this.collectCourseByuser();
       }else{
         this.getdata();
@@ -135,10 +135,10 @@ const FormItem = Form.Item;
           else {
               console.log('找不到项目');
           }
-      }.bind(this),
+      },
       error: function (xhr, status, err) {
         console.log("请求项目失败")
-      }.bind(this)
+      }
   });
    
   }
@@ -166,7 +166,7 @@ const FormItem = Form.Item;
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function(data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('获取查询权限111');
             console.log(data.msg[0])
             setCreatecourseState({
@@ -184,7 +184,7 @@ const FormItem = Form.Item;
           }
         }.bind(this),
         error: function (xhr, status, err) {
-        }.bind(this)
+        }
       });
   }
   
@@ -240,7 +240,7 @@ const FormItem = Form.Item;
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function(data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('收藏课件成功111');
             Modal.success({
               title: '消息提示',
@@ -251,9 +251,9 @@ const FormItem = Form.Item;
             console.log('收藏课件成功222');
              
           }
-        }.bind(this),
+        },
         error: function (xhr, status, err) {
-        }.bind(this)
+        }
       });
     }
     //收藏课件
@@ -271,7 +271,7 @@ const FormItem = Form.Item;
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function(data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('收藏课件成功111');
             this.setState({
               usercoursedata:data.msg,
@@ -283,7 +283,7 @@ const FormItem = Form.Item;
           }
         }.bind(this),
         error: function (xhr, status, err) {
-        }.bind(this)
+        }
       });
     }
     cancelcollectCourse(id){ 
@@ -303,7 +303,7 @@ const FormItem = Form.Item;
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function(data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('取消收藏课件成功111');
             Modal.success({
               title: '消息提示',
@@ -314,10 +314,10 @@ const FormItem = Form.Item;
             console.log('取消收藏课件成功222');
              
           }
-        }.bind(this),
+        },
         error: function (xhr, status, err) {
           console.log('无法收藏课件');
-        }.bind(this)
+        }
       });
     }
     deletecourseid(id){ 
@@ -338,7 +338,7 @@ const FormItem = Form.Item;
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function(data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('删除课件id成功111');
             console.log(data);
             this.getdata();
@@ -366,7 +366,7 @@ const FormItem = Form.Item;
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function(data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('获取查询权限111');
             this.setState({
               usercoursedata:data.msg,
@@ -395,7 +395,7 @@ const FormItem = Form.Item;
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function(data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('成功查找课件111');
             this.setState({
               allcoursedata:data.msg,
@@ -406,7 +406,7 @@ const FormItem = Form.Item;
           }
         }.bind(this),
         error: function (xhr, status, err) {
-        }.bind(this)
+        }
       });
     }
      
@@ -424,7 +424,7 @@ const FormItem = Form.Item;
           request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
         },
         success: function(data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('获取查询权限111');
             this.setState({
               allcoursedata:data.msg,

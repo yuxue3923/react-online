@@ -161,7 +161,7 @@ export default class Editor extends React.Component {
         
          toServe = function(msg){
            console.log("socket-client")
-           socket.emit('update', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
+           socket.emit('update data', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
          }
         
          var username = 'bing';
@@ -179,7 +179,7 @@ export default class Editor extends React.Component {
                  console.log(data.username+" come in");
              });
             
-             socket.on('update',(data)=>{
+             socket.on('update data',(data)=>{
              console.log("someone update")
              var msg = JSON.parse(data);
         //     self.setState({msg:msg})

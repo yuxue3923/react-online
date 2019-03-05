@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import {Form, Icon, Input, Button, Radio,Avatar,Card,Row,Col,Modal} from 'antd';
+import React from 'react';
+import {Form, Input, Button, Radio,Avatar,Card,Row,Col,Modal} from 'antd';
 import {Link} from 'react-router-dom'
 import './User.css'
 import { connect } from 'react-redux';
@@ -110,7 +110,7 @@ const formItemLayout = {
           dataType: "json",
           async:false,
           success: function (data) {
-            if (data.errorCode == 0) {
+            if (data.errorCode === 0) {
               console.log('PUT个人信息1111');
               Modal.success({
                 title: '消息提示',
@@ -128,7 +128,7 @@ const formItemLayout = {
             }
           }.bind(this),
           error: function (xhr, status, err) {
-          }.bind(this)
+          }
         });
       }
       //put账户信息
@@ -150,7 +150,7 @@ const formItemLayout = {
           dataType: "json",
           async:false,
           success: function (data) {
-            if (data.errorCode == 0) {
+            if (data.errorCode === 0) {
               console.log('PUT账户信息1111');
               Modal.success({
                 title: '消息提示',
@@ -168,7 +168,7 @@ const formItemLayout = {
             }
           }.bind(this),
           error: function (xhr, status, err) {
-          }.bind(this)
+          }
         });
       }
       //Token获取数据
@@ -187,7 +187,7 @@ const formItemLayout = {
           dataType: "json",
           async:false,
           success: function (data) {
-            if (data.errorCode == '0') {
+            if (data.errorCode === '0') {
               console.log('获取查询权限1111');
               console.log(data);
               console.log("userid:"+data.msg.user_id);
@@ -208,7 +208,7 @@ const formItemLayout = {
             }
           }.bind(this),
           error: function (xhr, status, err) {
-          }.bind(this)
+          }
         });
       }
      //获取用户信息
@@ -226,7 +226,7 @@ const formItemLayout = {
         dataType: "json",
         async:false,
         success: function (data) {
-          if (data.errorCode == '1') {
+          if (data.errorCode === '1') {
             console.log('获取用户个人信息1111');
             console.log(data);
             this.setState({
@@ -243,7 +243,7 @@ const formItemLayout = {
           }
         }.bind(this),
         error: function (xhr, status, err) {
-        }.bind(this)
+        }
       });
     }
       componentWillMount(){
@@ -299,7 +299,6 @@ const formItemLayout = {
         });
     }
     render() {
-      const { login_info }=this.props;
         const pageHeaderContent = (
             <Row gutter={16}>
               <Col span={2}>
