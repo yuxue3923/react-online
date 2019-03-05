@@ -1,9 +1,9 @@
 //import srender from 'srender'
 import srender from 'srenderlib'
 import React from 'react'
-
-
-
+import {localhost} from '../../config'
+import io from 'socket.io-client'
+var toServe = null;
 const elementStyle={
     stroke: '#ccc',
     fill: 'white',
@@ -137,13 +137,11 @@ function add(type,callback){
 export default class Editor extends React.Component {
     constructor(props, context) {
         super(props, context)
-       // this.initPie = this.initPie.bind(this)
         this.state = {
             add:false
         }
         this.handleGetThumbnail=this.handleGetThumbnail.bind(this)
         this.sync = this.sync.bind(this)
-     //   this.flush = this.flush.bind(this)
     }
     handleGetThumbnail(message){
         this.props.getThumbnail(message)
@@ -154,6 +152,42 @@ export default class Editor extends React.Component {
     flush(state){
      //   this.props.flush(state);
     }
+    createSocket=(projectId)=>{
+        console.log("judgeOnaji:",projectId)
+         var url = "http://"+localhost+":3001"
+         let param = `/${projectId}` 
+         console.log("param:",param)
+         var socket = io(url,{path:param});
+        
+         toServe = function(msg){
+           console.log("socket-client")
+           socket.emit('update', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
+         }
+        
+         var username = 'bing';
+         
+        
+           socket.emit('add user', username);
+         
+           socket.on('login',(data)=>{
+                
+                 console.log("client numOfUsers is "+JSON.stringify(data));
+                 console.log("client socket.id is"+socket.id);
+             });
+         
+             socket.on('user joined',(data)=>{
+                 console.log(data.username+" come in");
+             });
+            
+             socket.on('update',(data)=>{
+             console.log("someone update")
+             var msg = JSON.parse(data);
+        //     self.setState({msg:msg})
+                resolve(msg)
+             });
+           
+           
+       }
     componentDidMount() {
       
         var dom = document.getElementsByClassName('container')[0]
@@ -161,8 +195,8 @@ export default class Editor extends React.Component {
         sr=srender.init(dom,{},!this.props.isSinleMode)
       //  sr=srender.init(dom)
         
-        sr.initWithCb(this.props.toServe)
-
+    //    sr.initWithCb(this.props.toServe)
+    sr.initWithCb(toServe)
         this.props.objectList&&sr.initWithOthers(this.props.objectList)
         sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
             var url = URL.createObjectURL(blob);
@@ -176,6 +210,10 @@ export default class Editor extends React.Component {
    
       
     componentDidUpdate(){
+        if(this.props.shouldCreateSocket){
+            this.createSocket(this.props.project_id_now)
+        }
+        console.log("this.props.isSingleMode")
         if(this.props.isSingleMode){
            
             !this.props.objectList&&sr.clear()
@@ -183,18 +221,21 @@ export default class Editor extends React.Component {
             this.props.objectList&&sr.initWithOthers(this.props.objectList)
         }
         else{
-            console.log("toServe",this.props.toServe)
+            console.log("toServe")
             var dom = document.getElementsByClassName('container')[0]
             sr=srender.init(dom,{},true)
-            sr.initWithCb(this.props.toServe)
+        //   sr.initWithCb(this.props.toServe)
+        sr.initWithCb(toServe)
             this.props.objectList&&sr.initWithOthers(this.props.objectList)
-            resolve(this.props.message)
+        //    resolve(this.props.message)
         }
 
         add(this.props.type);
        
         this.sync({media:sr.getObjectList()})
-       
+       this.props.clearMsg()
+
+        this.props.effect_createSocket(false)//
 
         sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
             var url = URL.createObjectURL(blob);

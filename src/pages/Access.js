@@ -39,6 +39,7 @@ const FormItem = Form.Item;
         $.ajax({
             url: "http://"+localhost+":3000/api/oauth/token",
             type: "POST",
+            sync:"true",
             dataType: "json",
             data:"grant_type=password&"+"username="+this.state.username+"&password="+this.state.password+"&client_id=A10&client_secret=xiaomi",
             success: function (data) {
