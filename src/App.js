@@ -134,7 +134,7 @@ class App extends Component {
       coursecatalog:[],
       toServe:null,
       msg:null,
-      cooperationuserid:10,
+      cooperationuserid:0,
       code:0,
       collapsed: true,
       visible: false,
@@ -189,6 +189,37 @@ class App extends Component {
       this.setState({
         tempochatdata: e.target.value,
       });
+    }
+    searchuser= (e) => {
+       const user_name=e.target.value;
+       const { login_info}=this.props;
+      console.log('进入ajax');
+      $.ajax({
+        url: "http://"+localhost+":3000/api/getUserid",
+        data:{
+          "user_name":user_name,
+        },
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        type: "GET",
+        dataType: "json",
+        async:false,
+        success: function (data) {
+          if (data.errorCode === 0) {
+            console.log('查找成员成功111');
+            this.setState({
+              cooperationuserid:data.msg.user_id,
+            });
+          }
+          else {   
+            console.log('查找成员失败');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }
+      });
+
     }
   
     searchCode(code){
@@ -604,13 +635,7 @@ class App extends Component {
       <Menu.Divider />
       </Row>
         <Row style={{margin: '8px 8px 8px 16px'}}>
-        <Select defaultValue="1" style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={handleChange}>
-        
-        <Option value="1">查找成员</Option>
-        <Option value="2">胡歌</Option>
-        <Option value="3">李健</Option>
-        <Option value="4">周杰伦</Option>
-        </Select>
+        <Input placeholder="输入需添加的成员用户名"  style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={this.searchuser.bind(this)}/>
         <Button onClick={this.createrelationship.bind(this)} style={{float:"right"}} type="primary">添加</Button>
         </Row>
       </div> 
