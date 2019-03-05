@@ -138,7 +138,7 @@ const FormItem = Form.Item;
       }.bind(this),
       error: function (xhr, status, err) {
         console.log("请求项目失败")
-      }.bind(this)
+      }
   });
    
   }
@@ -172,6 +172,7 @@ const FormItem = Form.Item;
             setCreatecourseState({
               type:'createcourseSuccess',
               payload:{
+                isSingle:false,
                 createCourse_info:data.msg[0],
                 course_id:projectId || this.state.searchContent
               }
@@ -443,6 +444,7 @@ const FormItem = Form.Item;
       this.getallcoursedata();
     }
     render() {
+      console.log("Account XuanRan")
       var result=[];
       for(var i=0;i<this.state.usercoursedata.length;i++){
         var obj=this.state.usercoursedata[i];

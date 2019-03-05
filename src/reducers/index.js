@@ -13,6 +13,7 @@ function  reducer_createcourse(state = {},action) {
             return { createCourse_info: action.payload};  
         default:
             return state;  
+           
     }  
 }      
 function  reducer_userupdatecourseid(state = {},action) {

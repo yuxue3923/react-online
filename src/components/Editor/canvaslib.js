@@ -196,8 +196,28 @@ export default class Editor extends React.Component {
       //  sr=srender.init(dom)
         
     //    sr.initWithCb(this.props.toServe)
-    sr.initWithCb(toServe)
+        console.log(this.props.shouldCreateSocket)
+         if(this.props.shouldCreateSocket){
+             this.createSocket(this.props.project_id_now)
+        }
+   
+        if(this.props.isSingleMode){
+       
+             !this.props.objectList&&sr.clear()
+       
+            this.props.objectList&&sr.initWithOthers(this.props.objectList)
+        }
+        else{
+         console.log("toServe")
+         sr=srender.init(dom,{},true)
+    //   sr.initWithCb(this.props.toServe)
+         sr.initWithCb(toServe)
         this.props.objectList&&sr.initWithOthers(this.props.objectList)
+    
+        }
+        this.props.effect_createSocket(false)//
+  //  sr.initWithCb(toServe)
+      //  this.props.objectList&&sr.initWithOthers(this.props.objectList)
         sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
             var url = URL.createObjectURL(blob);
             var newImg = new Image();
@@ -210,10 +230,11 @@ export default class Editor extends React.Component {
    
       
     componentDidUpdate(){
+        console.log(this.props.shouldCreateSocket)
         if(this.props.shouldCreateSocket){
             this.createSocket(this.props.project_id_now)
         }
-        console.log("this.props.isSingleMode")
+        console.log("this.props.isSingleMode:",this.props.isSingleMode)
         if(this.props.isSingleMode){
            
             !this.props.objectList&&sr.clear()
@@ -225,7 +246,7 @@ export default class Editor extends React.Component {
             var dom = document.getElementsByClassName('container')[0]
             sr=srender.init(dom,{},true)
         //   sr.initWithCb(this.props.toServe)
-        sr.initWithCb(toServe)
+            sr.initWithCb(toServe)
             this.props.objectList&&sr.initWithOthers(this.props.objectList)
         //    resolve(this.props.message)
         }
