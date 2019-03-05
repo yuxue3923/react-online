@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
-import io from 'socket.io-client'
+
 import EditorWithBar from './components/Editor/EditorWithBar';
 import {localhost} from './config'
 var temp = 99999
@@ -211,6 +211,7 @@ class App extends Component {
       visible: false,
       modalvisible:false,
       modal2Visible:false,
+      shouldCreateSocket:false,
       page:1,
       MyDeck:MyDeck,
       canvasFlush:false,
@@ -288,10 +289,13 @@ class App extends Component {
             console.log('返回课件项目信息');
             console.log(data);
             MyDeck = deepClone(data.msg[0].slides.slide)
-            this.createSocket(invite_project_id)
-            this.handleOk()
-            this.setState({ MyDeck:MyDeck})
-            this.setModal2Visible(false)
+            project_id_now = invite_project_id
+        //    this.createSocket(invite_project_id)
+        this.effect_createSocket(true)
+         //   this.handleOk()
+            this.setState({ MyDeck:MyDeck,  modalvisible: false, modal2Visible:false,  isSingle:false,
+              popoverVisible:false })
+          //  this.setModal2Visible(false)
 
           }
           else {   
@@ -485,7 +489,8 @@ class App extends Component {
       const param={
         project_id:createCourse_info.course_id
       } 
-      console.log("projectId:", "/"+createCourse_info.course_id)
+      this.save()
+    //  console.log("projectId:", "/"+createCourse_info.course_id)
       $.ajax({
         url: "http://"+localhost+":3000/api/createWebSocketServer",
         async:false,
@@ -501,7 +506,9 @@ class App extends Component {
         success: function (data) {
             if (data.errorCode === 0) {
               console.log("this:",this);
-                this.createSocket(createCourse_info.course_id)
+              project_id_now = createCourse_info.course_id
+         //       this.createSocket(createCourse_info.course_id)
+         this.effect_createSocket(true)
                 console.log('已创建协同链接');
             }
             else {
@@ -549,50 +556,15 @@ class App extends Component {
         visible: false,
       });
     };
-  createSocket=(projectId)=>{
-    console.log("socket:",socket)
-    var url = "http://"+localhost+":3001"
-    let param = `/${projectId}` 
-    console.log("param:",param)
-    var socket = io(url,{path:param});
-   
-    toServe = function(msg){
-      console.log("socket-client")
-     // console.log("socket",socket)
-      socket.emit('editting',(data)=>{
-        console.log(data+" editing");
-    })
-      socket.emit('update data', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
+    effect_createSocket=(flag,projectId)=>{
+        this.setState({
+          shouldCreateSocket:flag
+        })
     }
-    var self = this;
-    var username = 'bing';
-    var connected = false;
-    var editting = true;
-   
-      socket.emit('add user', username);
-    
-      socket.on('login',(data)=>{
-            connected = true;
-          //  console.log("numOfUsers is "+JSON.stringify(data));
-          //  console.log("socket.id is"+socket.id);
-        });
-    socket.on('editting',(data)=>{
-
-      console.log(data+" editing");
-    })
-        socket.on('user joined',(data)=>{
-            console.log(data.username+" come in");
-        });
-       
-        socket.on('update data',(data)=>{
-        console.log("someone update")
-        var msg = JSON.parse(data);
-        self.setState({msg:msg})
-        });
-      
-  }
+  
    componentWillUpdate(){
     //  this.getProjectUserList();
+
    }
   
   componentWillMount(){
@@ -609,13 +581,13 @@ class App extends Component {
   */
   shouldComponentUpdate(nextProps,nextState){
     if(this.props.isSingleMode!==nextProps.isSingleMode&&!nextProps.isSingleMode){
-      this.createSocket(this.props.createCourse_info.course_id)
+    // this.createSocket(this.props.createCourse_info.course_id)
     }
     return true
   }
   componentDidMount(){   //我们希望这块代码不会被频繁执行，仅当用户切换整个编辑页面时 直接从广场点击协同项目时
     if(this.props.isSingle){
-      this.createSocket(this.props.createCourse_info.course_id)
+    //  this.createSocket(this.props.createCourse_info.course_id)
   }
   }
   
@@ -671,11 +643,12 @@ class App extends Component {
       
       }
       const {createCourse_info} = this.props;
+      console.log(MyDeck)
       console.log(createCourse_info)
       MyDeck=this.state.isSingle?createCourse_info.createCourse_info.slides.slide:MyDeck
    //    console.log()
-    //  console.log(MyDeck)
-      console.log(this.state.thumbnail)
+     
+    //  console.log(this.state.thumbnail)
       return (
         <Layout style={{width: '100%', height: '100vh'}}>
        
@@ -764,7 +737,7 @@ class App extends Component {
             </Dropdown>
             </span>
             </div>
-            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {this.state.isSingle} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg}/>
+            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {this.state.isSingle} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg} shouldCreateSocket={this.state.shouldCreateSocket} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now}/>
             </div>
             </Content>
             {/* </Layout> */}
