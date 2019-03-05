@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card,message,Dropdown} from 'antd';
+import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card,message,Dropdown,Col} from 'antd';
 import './App.css';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -90,54 +90,8 @@ function handleChange(value) {
   console.log(`selected ${value}`);
 }
 
-const content=(
-  <div style={{ width: 500 }}>
-  <Card >
-  <div className="left">
-     <p style={{fontSize:'25px'}} >
-        <IconAvator type="icon-touxiangnvhai"/>
-        <Input value="这个协同web真棒！"  style={{ width: 200 }}/>
-     </p> 
-  </div>
-  <div className="right">
-     <p style={{fontSize:'25px'}} >
-        <Input value="我也觉得"  style={{ width: 200 }}/>
-        <IconAvator type="icon-icon-test3"/>
-     </p> 
-  </div>
-  <div className="left">
-     <p style={{fontSize:'25px'}} >
-        <IconAvator type="icon-icon-test2"/>
-        <Input value="js继承大家听懂了吗？" style={{ width: 200 }}/>
-     </p> 
-  </div>
-  <div className="left">
-     <p style={{fontSize:'25px'}} >
-        <IconAvator type="icon-icon-test1"/>
-        <Input value="只知道prototype这个属性很重要"  style={{ width: 300 }}/>
-     </p> 
-  </div>
-  <div className="right">
-     <p style={{fontSize:'25px'}} >
-        <Input value="哈哈哈！"  style={{ width: 200 }}/>
-        <IconAvator type="icon-icon-test"/>
-     </p> 
-  </div>
-  <div className="right">
-    <Input placeholder="发送消息"  style={{ width: 300 }}/>
-     <Button type="primary">发送</Button>
-  </div>  
-  </Card>
-  </div>
-);
-const text =
-  <div>
-  <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar>
-  </Link><span style={{fontSize:15}}> 当前用户</span>
-  <Popover placement="bottomRight" content={content} trigger="click">
-      <Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
-  </Popover>
-  </div>;
+
+
 const menu = function(param){
   const {func1,func2,func3} = param
   return <Card title="当前在线协同者">
@@ -155,9 +109,6 @@ const menu = function(param){
   </div>
 </Card>
 }
-  
-
-
 var ContentModal = function(code){
   return (
     <div>
@@ -176,12 +127,6 @@ var ContentModal = function(code){
   </div>
   )
 }
-  
-
-
-
-
- 
 
 function deepClone(obj){
   let _obj = JSON.stringify(obj);
@@ -203,6 +148,9 @@ class App extends Component {
    this.passbyJudge = this.passbyJudge.bind(this)
   }
     state = {
+      updatecontent:[],
+      tempochatdata: "",
+      coursecatalog:[],
       toServe:null,
       message:null,
       cooperationuserid:10,
@@ -234,6 +182,28 @@ class App extends Component {
         return null
       }
     }
+    handlePlus() {
+          const coursecatalog1 = this.state.tempochatdata; 
+          this.state.coursecatalog.push(coursecatalog1);
+          console.log('111',this.state.coursecatalog);
+          const updatecontent1=this.state.coursecatalog.map((v,i ) => {
+            return (
+              <div>
+                <IconAvator type={this.state.Avatartype[i%5]}></IconAvator>
+                <Input value={v}  style={{ width: 300 }}/>
+              </div>    
+            )
+      })
+     this.setState({
+      updatecontent:updatecontent1,
+    })
+  }
+    updatechatdata = (e) => {
+      this.setState({
+        tempochatdata: e.target.value,
+      });
+    }
+  
     searchCode(code){
       const callBack = this.getInviteData.bind(this)
       const { login_info } = this.props;
@@ -607,6 +577,29 @@ class App extends Component {
   }
   
     render() {
+      const content=(
+        <div style={{ width: 500 }}>
+        <Card >
+        <div className="left">
+           <p style={{fontSize:'25px'}}>
+              {this.state.updatecontent}
+           </p> 
+        </div>
+        <div className="right">
+          <Input placeholder="发送消息"  onChange={this.updatechatdata.bind(this)} style={{ width: 300 }}/>
+           <Button type="primary" onClick={this.handlePlus.bind(this)}>发送</Button>
+        </div>  
+        </Card>
+        </div>
+      );
+      const text =
+     <div>
+       <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar>
+       </Link><span style={{fontSize:15}}> 当前用户</span>
+       <Popover placement="bottomRight" content={content} trigger="click">
+          <Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
+       </Popover>
+     </div>;
       const userList = this.state.cooperuserlist.map((v, i) => {
         return (
           <div style={{margin:'2px'}} >

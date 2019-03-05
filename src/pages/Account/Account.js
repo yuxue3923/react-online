@@ -46,7 +46,7 @@ const FormItem = Form.Item;
           current:1,//我的课件当前页
           pagecurrent:1,//总课件当前页
           checked: true,//Tag状态
-          templatevisible:false,//控制课件模版弹出框
+          templatevisible:true,//控制课件模版弹出框
           imgurl:["https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png","https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png","https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png","https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png" ]
         }
     }
