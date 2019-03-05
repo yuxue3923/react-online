@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Input, Button, Carousel,Checkbox, } from 'antd';
+import {Icon,Carousel} from 'antd';
 import {Link} from 'react-router-dom'
 import './tempreview.css'
 

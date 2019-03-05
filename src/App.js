@@ -90,56 +90,10 @@ function handleChange(value) {
   console.log(`selected ${value}`);
 }
 
-const content=(
-  <div style={{ width: 500 }}>
-  <Card >
-  <div className="left">
-     <p style={{fontSize:'25px'}} >
-        <IconAvator type="icon-touxiangnvhai"/>
-        <Input value="这个协同web真棒！"  style={{ width: 200 }}/>
-     </p> 
-  </div>
-  <div className="right">
-     <p style={{fontSize:'25px'}} >
-        <Input value="我也觉得"  style={{ width: 200 }}/>
-        <IconAvator type="icon-icon-test3"/>
-     </p> 
-  </div>
-  <div className="left">
-     <p style={{fontSize:'25px'}} >
-        <IconAvator type="icon-icon-test2"/>
-        <Input value="js继承大家听懂了吗？" style={{ width: 200 }}/>
-     </p> 
-  </div>
-  <div className="left">
-     <p style={{fontSize:'25px'}} >
-        <IconAvator type="icon-icon-test1"/>
-        <Input value="只知道prototype这个属性很重要"  style={{ width: 300 }}/>
-     </p> 
-  </div>
-  <div className="right">
-     <p style={{fontSize:'25px'}} >
-        <Input value="哈哈哈！"  style={{ width: 200 }}/>
-        <IconAvator type="icon-icon-test"/>
-     </p> 
-  </div>
-  <div className="right">
-    <Input placeholder="发送消息"  style={{ width: 300 }}/>
-     <Button type="primary">发送</Button>
-  </div>  
-  </Card>
-  </div>
-);
-const text =
-  <div>
-  <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar>
-  </Link><span style={{fontSize:15}}> 当前用户</span>
-  <Popover placement="bottomRight" content={content} trigger="click">
-      <Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
-  </Popover>
-  </div>;
+
+
 const menu = function(param){
-  const {func1,func2,func3} = param
+  // const {func1,func2,func3} = param
   return <Card title="当前在线协同者">
   <div style={{margin:'2px'}} >
     <Icon type="smile"  className="iconsize" theme="twoTone" twoToneColor="#eb2f96" />
@@ -155,34 +109,6 @@ const menu = function(param){
   </div>
 </Card>
 }
-  
-
-
-var ContentModal = function(code){
-  return (
-    <div>
-    <Row style={{margin: '8px 8px 8px 16px'}}> 
-      <a style={{float:"left"}}>加入</a>
-      <Button style={{float:"right"}} type="primary" ghost>{code}</Button>
-    </Row>
-    <Row style={{margin: '8px 8px 8px 16px'}}> 
-      <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
-      <Button style={{float:"right"}} type="primary" >分享</Button>
-    </Row>
-  <Row style={{margin: '8px 8px 8px 16px'}}>
-  <Menu.Divider />
-  </Row>
-  
-  </div>
-  )
-}
-  
-
-
-
-
- 
-
 function deepClone(obj){
   let _obj = JSON.stringify(obj);
   return JSON.parse(_obj)
@@ -203,9 +129,12 @@ class App extends Component {
    this.passbyJudge = this.passbyJudge.bind(this)
   }
     state = {
+      updatecontent:[],
+      tempochatdata: "",
+      coursecatalog:[],
       toServe:null,
       msg:null,
-      cooperationuserid:10,
+      cooperationuserid:0,
       code:0,
       collapsed: true,
       visible: false,
@@ -240,6 +169,59 @@ class App extends Component {
         return null
       }
     }
+    handlePlus() {
+          const coursecatalog1 = this.state.tempochatdata; 
+          this.state.coursecatalog.push(coursecatalog1);
+          console.log('111',this.state.coursecatalog);
+          const updatecontent1=this.state.coursecatalog.map((v,i ) => {
+            return (
+              <div>
+                <IconAvator type={this.state.Avatartype[i%5]}></IconAvator>
+                <Input value={v}  style={{ width: 300 }}/>
+              </div>    
+            )
+      })
+     this.setState({
+      updatecontent:updatecontent1,
+    })
+  }
+    updatechatdata = (e) => {
+      this.setState({
+        tempochatdata: e.target.value,
+      });
+    }
+    searchuser= (e) => {
+       const user_name=e.target.value;
+       const { login_info}=this.props;
+      console.log('进入ajax');
+      $.ajax({
+        url: "http://"+localhost+":3000/api/getUserid",
+        data:{
+          "user_name":user_name,
+        },
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        type: "GET",
+        dataType: "json",
+        async:false,
+        success: function (data) {
+          if (data.errorCode === 0) {
+            console.log('查找成员成功111');
+            this.setState({
+              cooperationuserid:data.msg.user_id,
+            });
+          }
+          else {   
+            console.log('查找成员失败');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }
+      });
+
+    }
+  
     searchCode(code){
       const callBack = this.getInviteData.bind(this)
       const { login_info } = this.props;
@@ -329,7 +311,7 @@ class App extends Component {
         dataType: "json",
         async:false,
         success: function (data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('获取协作者成功');
             console.log(data);
            this.setState({
@@ -342,7 +324,7 @@ class App extends Component {
         }.bind(this),
         error: function (xhr, status, err) {
           console.log('无法获取协作者');
-        }.bind(this)
+        }
       });
     }
     createrelationship(){
@@ -361,7 +343,7 @@ class App extends Component {
         dataType: "json",
         async:false,
         success: function (data) {
-          if (data.errorCode == 0) {
+          if (data.errorCode === 0) {
             console.log('建立联系111');
             Modal.success({
               title: '消息提示',
@@ -374,7 +356,7 @@ class App extends Component {
           }
         }.bind(this),
         error: function (xhr, status, err) {
-        }.bind(this)
+        }
       });
     }
     save(){
@@ -628,6 +610,29 @@ class App extends Component {
   }
   
     render() {
+      const content=(
+        <div style={{ width: 500 }}>
+        <Card >
+        <div className="left">
+           <p style={{fontSize:'25px'}}>
+              {this.state.updatecontent}
+           </p> 
+        </div>
+        <div className="right">
+          <Input placeholder="发送消息"  onChange={this.updatechatdata.bind(this)} style={{ width: 300 }}/>
+           <Button type="primary" onClick={this.handlePlus.bind(this)}>发送</Button>
+        </div>  
+        </Card>
+        </div>
+      );
+      const text =
+     <div>
+       <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar>
+       </Link><span style={{fontSize:15}}> 当前用户</span>
+       <Popover placement="bottomRight" content={content} trigger="click">
+          <Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
+       </Popover>
+     </div>;
       const userList = this.state.cooperuserlist.map((v, i) => {
         return (
           <div style={{margin:'2px'}} >
@@ -666,13 +671,7 @@ class App extends Component {
       <Menu.Divider />
       </Row>
         <Row style={{margin: '8px 8px 8px 16px'}}>
-        <Select defaultValue="1" style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={handleChange}>
-        
-        <Option value="1">查找成员</Option>
-        <Option value="2">胡歌</Option>
-        <Option value="3">李健</Option>
-        <Option value="4">周杰伦</Option>
-        </Select>
+        <Input placeholder="输入需添加的成员用户名"  style={{ margin:'0px,0px,0px,-10px',width: '80% ',float:'left'}} onChange={this.searchuser.bind(this)}/>
         <Button onClick={this.createrelationship.bind(this)} style={{float:"right"}} type="primary">添加</Button>
         </Row>
       </div> 

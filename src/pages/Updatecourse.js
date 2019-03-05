@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Avatar,Input, Button,Pagination, Checkbox,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
+import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
 import {Link} from 'react-router-dom'
 import './Creatcourse/creatcourse.css'
 import $ from 'jquery';
@@ -22,7 +22,7 @@ const data= {
     "name": "课件总目录"
   }
 const Option = Select.Option;
-const {  Content, Sider,Header, } = Layout;
+const { Sider} = Layout;
 const TreeNode = Tree.TreeNode;
 
 const formItemLayout = {
@@ -77,7 +77,7 @@ const formItemLayout = {
       //传入是否公开
       Inputisopen(value){
         console.log(value);
-        if(value==true){
+        if(value===true){
         this.setState({
           isOpen:"1",
         });}
@@ -179,7 +179,7 @@ const formItemLayout = {
               request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
             },
             success: function (data) {
-                if (data.errorCode == 0) {
+                if (data.errorCode === 0) {
                     console.log('成功更新课件'+data.msg[0]);
                     Modal.success({
                       title: '消息提示',
@@ -224,7 +224,7 @@ const formItemLayout = {
             request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
           },
           success: function(data) {
-            if (data.errorCode == 0) {
+            if (data.errorCode === 0) {
               console.log('获取查询权限111');
               console.log(data);
              data.msg&&data.msg[0]&&data.msg[0].catalog&&data.msg[0].catalog.children&&this.setState({
@@ -254,7 +254,7 @@ const formItemLayout = {
             }
           }.bind(this),
           error: function (xhr, status, err) {
-          }.bind(this)
+          }
         });
       }
       componentWillMount(){

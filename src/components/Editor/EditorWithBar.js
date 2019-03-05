@@ -122,7 +122,7 @@ const dgraph=function(fh,fheart,fa){
        //console.log("1:",!(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode))
    //     console.log("2:",nextProps.message)
         //||(this.props.shouldCreateSocket&&nextProps.shouldCreateSocket!==this.props.shouldCreateSocket)
-       return (isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode)||nextProps.message
+       return (isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)===JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode)||nextProps.message
        
      }
  

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Input, Button, Checkbox,message } from 'antd';
+import {Form, Icon, Input, Button,message } from 'antd';
 import './Access.css'
 import { connect } from 'react-redux';
 import $ from 'jquery';
@@ -43,7 +43,7 @@ const FormItem = Form.Item;
             dataType: "json",
             data:"grant_type=password&"+"username="+this.state.username+"&password="+this.state.password+"&client_id=A10&client_secret=xiaomi",
             success: function (data) {
-                if (data.error == "server_error") {
+                if (data.error === "server_error") {
                     console.log("没有登录权限");
                 }
                 else {
@@ -63,7 +63,7 @@ const FormItem = Form.Item;
             }.bind(this),
             error: function (xhr, status, err) {
               message.error("用户名或密码错误");
-            }.bind(this)
+            }
         });
         
       }

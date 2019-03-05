@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import {Form, Icon, Input, Button, Checkbox,message,Modal,Select } from 'antd';
-import {Link} from 'react-router-dom'
+import {Form, Icon, Input, Button, message,Modal,Select } from 'antd';
 import './Access.css'
-import { connect } from 'react-redux';
 import {localhost} from '../config'
 import $ from 'jquery';
 import PropTypes from "prop-types"
@@ -67,7 +65,7 @@ const Option =Select.Option;
             dataType: "json",
             data:"username="+this.state.username+"&passwd="+this.state.passwd+"&email="+this.state.email+"&phone_num="+this.state.phone_num+"&role="+this.state.role,
             success: function (data) {
-                if (data.errorCode == 0) {
+                if (data.errorCode === 0) {
                    console.log(data);
                     console.log('注册成功');
                     Modal.success({
@@ -82,13 +80,12 @@ const Option =Select.Option;
                 }
             }.bind(this),
             error: function (xhr, status, err) {
-            }.bind(this)
+            }
         });
         
       }
     }
     render() {
-      const { getFieldDecorator } = this.props.form;
       return (
         <div className="divparent">
         <Form className="login-form">

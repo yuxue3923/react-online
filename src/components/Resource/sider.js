@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {   Layout, Pagination,Menu,Card, Icon,Row, Col,Carousel,Divider,Avatar,Drawer,Input,Upload, message,Button,Tabs } from 'antd';
-import {Link} from 'react-router-dom'
+import { Pagination,Card, Icon,Row, Col,Input,Upload, message,Button,Tabs } from 'antd';
 import './sider.css';
 const TabPane = Tabs.TabPane;
 const { Meta } = Card;

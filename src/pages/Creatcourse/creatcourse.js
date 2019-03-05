@@ -36,40 +36,6 @@ const data= {
   ],
   "name": "课件总目录"
 }
-
-function handleChange(value) {
-    console.log(`selected ${value}`);
-}
-const IconFont = Icon.createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_1009429_5fzr0d23izi.js',
-  });
-
-// const CourseLine = Form.create()(props => {
-//     const { visible, onCancel, onCreate, form } = props;
-//     const { getFieldDecorator } = form;
-//     return (
-      
-//         <Form>
-//         <Form.Item >
-//         <p style={{fontSize:'16px'}} ><IconFont type="icon-mubiao" /> 学习目标</p>
-//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-//         </Form.Item >
-//         <Form.Item >
-//         <p style={{fontSize:'16px' }} ><IconFont type="icon-demand" /> 学习要求</p>
-//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-//         </Form.Item >
-//         <Form.Item >
-//         <p style={{fontSize:'16px' }} ><IconFont type="icon-xintubiao-" /> 考核标准</p>
-//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-//         </Form.Item >
-//         <Form.Item >
-//         <p style={{fontSize:'16px' }} ><IconFont type="icon-jiaocaixuanze" /> 教材教参</p>
-//         <TextArea style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
-//         </Form.Item >
-//         </Form>
-     
-//     );
-//   });
 const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -90,7 +56,6 @@ const formItemLayout = {
           arrSize: 0,
           collapsed: false,//控制sider折叠
           isOpen:"0",
-          visible: true, //控制弹出框的呈现与隐藏
           coursecatalog:[],//课件目录
           knowledges:[],
         }
@@ -121,7 +86,7 @@ const formItemLayout = {
       //传入是否公开
       Inputisopen(value){
         console.log(value);
-        if(value==true){
+        if(value===true){
         this.setState({
           isOpen:"1",
         });}
@@ -131,19 +96,6 @@ const formItemLayout = {
           });
         }
       }
-      //课件大纲弹出框事件
-      showModal = () => {
-        this.setState({ visible: true });
-      };
-      handleCancel = () => {
-        this.setState({ visible: false });
-      };
-      handleCreate() {
-        this.setState({ visible: false });
-      }
-      saveFormRef = form => {
-        this.form = form;
-      };
       //侧栏知识点弹出框事件
       toggle = () => {
         this.setState({
@@ -255,7 +207,7 @@ const formItemLayout = {
               request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
             },
             success: function (data) {
-                if (data.errorCode == 0) {
+                if (data.errorCode === 0) {
                     console.log('成功保存课件');
                     console.log(data.msg);
                     console.log(data.msg._id);
@@ -282,7 +234,7 @@ const formItemLayout = {
             }.bind(this),
             error: function (xhr, status, err) {
               console.log("取回课件数据错误")
-            }.bind(this)
+            }
         });
     }
       CourseAppear() {
@@ -495,11 +447,6 @@ const formItemLayout = {
                 </Col>
             </Row>
             </Form.Item>
-               {/* <Form.Item label="课件大纲安排" {...formItemLayout}>
-                  <Button onClick={this.showModal} type="primary" >
-                    课件大纲
-                  </Button>
-               </Form.Item> */}
         </Form>
            <Row>
              <Button type="primary" onClick={this.creatcourse} style={{margin:'0px 0px 0px 100px'}}>确认创建</Button>
@@ -507,12 +454,6 @@ const formItemLayout = {
             </Col>
             <Col span={15}>
               <Card style={{margin:'80px 0px 30px 80px',width:550 }} title="课件目录大纲">
-              {/* <CourseLine
-                  ref={this.saveFormRef}
-                  visible={this.state.visible}
-                  onCancel={this.handleCancel}
-                  onCreate={this.handleCreate.bind(this)}
-               /> */}
                <div id="main" style={{ width: 500, height: 500 }}></div>
               </Card>
             </Col>
