@@ -35,6 +35,10 @@ const formItemLayout = {
       sm: { span: 16 },
     },
   };
+  function deepClone(obj){
+    let _obj = JSON.stringify(obj);
+    return JSON.parse(_obj)
+  }
   class Updatecourse extends Component {
     static contextTypes={
       router:PropTypes.object
@@ -140,33 +144,44 @@ const formItemLayout = {
         }
       }
       updatecourse = () =>{
-        const { login_info ,updatecourseid}=this.props;
-        var datamsg={
-         "_id":updatecourseid,
-          "courseName":this.state.courseName,
-          "grade": this.state.grade,
-          "subject": this.state.subject,
-          "descript":  this.state.descript,
-          "knowledges":this.state.knowledges,
-          "isOpen": this.state.isOpen,
-          "isEdit": 1,
-          "name": "课件目录",
-          "children":this.state.coursecatalog,
-          "templateId":this.state.templateId,
-          "slide": this.state.slide,     
-          "fileSize": this.state.fileSize,
-          "scope":this.state.scope,
-          "addTime":this.state.addTime,
-          "views":this.state.views,
-          "url": this.state.url,
-          "width": this.state.width,
-          "height":this.state.height
-      };
+        const { login_info }=this.props;
+          var temp = deepClone(this.state.coursedata)
+        var passbydata = this.state.coursedata.createCourse_info
+     
+     var formData = deepClone(passbydata)
+
+      delete formData.slides
+
+      delete formData.thumbnail
+
+      formData.courseName=this.state.courseName
+      formData.grade=this.state.grade
+      formData.subject=this.state.subject
+      formData.descript=this.state.descript
+      formData.knowledges=this.state.knowledges
+      formData.children=this.state.coursecatalog
+      formData.isOpen=this.state.isOpen
+
+      formData.name = temp.createCourse_info.catalog.name
+      formData.width = temp.createCourse_info.thumbnail.style.width
+
+      formData.height = temp.createCourse_info.thumbnail.style.height
+
+      formData.url = temp.createCourse_info.thumbnail.url
+    
+      formData.slide =  [...temp.createCourse_info.slides.slide]
+
+      formData.templateId = deepClone(temp.createCourse_info.slides.templateId) 
+    
+           console.log(JSON.stringify(formData))
+         
+          
+    
        
         //更新课件
         console.log("进入更新课件ajax");
         const {setCreatecourseState} = this.props;
-        console.log(JSON.stringify(datamsg));
+
         $.ajax({
             url: "http://"+localhost+":3000/api/updateCourse",
             async:false,
@@ -174,13 +189,13 @@ const formItemLayout = {
             contentType:"application/json;charset=UTF-8",
             accepts:"application/json;charset=UTF-8",
             dataType: "json",
-            data:JSON.stringify(datamsg),
+            data:JSON.stringify(formData),
             beforeSend:function(request){
               request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
             },
             success: function (data) {
                 if (data.errorCode === 0) {
-                    console.log('成功更新课件'+data.msg[0]);
+                    console.log('成功更新课件:',data);
                     Modal.success({
                       title: '消息提示',
                       content: '成功更新课件！',
@@ -228,7 +243,9 @@ const formItemLayout = {
               console.log('获取查询权限111');
               console.log(data);
              data.msg&&data.msg[0]&&data.msg[0].catalog&&data.msg[0].catalog.children&&this.setState({
-                coursedata:data.msg[0],
+                coursedata:{
+                  createCourse_info:data.msg[0],
+                  course_id:data.msg[0]._id},
                 arrSize: data.msg[0].catalog.children.length,
                 isOpen:data.msg[0].isOpen,
                 coursecatalog:data.msg[0].catalog.children,
@@ -261,6 +278,7 @@ const formItemLayout = {
         this.getdata();
       }
       componentDidMount(){
+          this.getdata();
           this.CourseAppear();
       }
       CourseAppear() {
@@ -386,19 +404,19 @@ const formItemLayout = {
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
-            <Input placeholder={this.state.coursedata.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
+            <Input placeholder={this.state.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
           </Form.Item>
           <Form.Item label="年级科目" {...formItemLayout}>
           <Row gutter={16}>
           <Col span={12}>
-          <Select onChange={this.Inputgrade.bind(this)} style={{width:'100%'}} placeholder={this.state.coursedata.grade}>
+          <Select onChange={this.Inputgrade.bind(this)} style={{width:'100%'}} placeholder={this.state.grade}>
                     <Option value="小学">小学</Option>
                     <Option value="初中"> 初中</Option>
                     <Option value="高中">高中</Option>
           </Select> 
           </Col> 
           <Col span={12}>
-           <Select onChange={this.Inputsubject.bind(this)} style={{width:'100%'}} placeholder={this.state.coursedata.subject}>
+           <Select onChange={this.Inputsubject.bind(this)} style={{width:'100%'}} placeholder={this.state.subject}>
                     <Option value="语文">语文</Option>
                     <Option value="数学">数学</Option>
                     <Option value="英语">英语</Option>
@@ -413,13 +431,13 @@ const formItemLayout = {
             </Row>                 
           </Form.Item>
           <Form.Item label="课件简介" {...formItemLayout}>
-           <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} placeholder={this.state.coursedata.descript} rows={4} />
+           <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} placeholder={this.state.descript} rows={4} />
           </Form.Item>
 
           <Form.Item label="知识点" {...formItemLayout}>
           <Row gutter={16}>
           <Col span={20}>
-             <TextArea placeholder={this.state.coursedata.knowledges} value={this.state.knowledges} style={{ width:'100%'}} rows={4}/>
+             <TextArea placeholder={this.state.knowledges} value={this.state.knowledges} style={{ width:'100%'}} rows={4}/>
           </Col> 
            <Col span={4}>
               <Button onClick={this.toggle}>选择知识点</Button>
@@ -429,7 +447,7 @@ const formItemLayout = {
           <Form.Item label="公开/私密" {...formItemLayout}>
           <Row gutter={8}>
           <Col span={10}>
-             <Switch onChange={this.Inputisopen.bind(this)} checkedChildren="公开" unCheckedChildren="私密" defaultChecked={this.state.coursedata.isOpen}/>
+             <Switch onChange={this.Inputisopen.bind(this)} checkedChildren="公开" unCheckedChildren="私密" defaultChecked={this.state.isOpen}/>
           </Col> 
           </Row>
           </Form.Item>

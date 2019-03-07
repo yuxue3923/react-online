@@ -226,7 +226,7 @@ const formItemLayout = {
         dataType: "json",
         async:false,
         success: function (data) {
-          if (data.errorCode === '1') {
+          if (data.errorCode === 1) {
             console.log('获取用户个人信息1111');
             console.log(data);
             this.setState({
@@ -239,7 +239,13 @@ const formItemLayout = {
           }
           else {   
             console.log('获取查询权限2222');
-             
+            this.setState({
+              nick_name:data.msg.nick_name,
+              position:data.msg.position,
+              city:data.msg.city,
+              sexy:data.msg.sexy,
+              description:data.msg.description,
+            });
           }
         }.bind(this),
         error: function (xhr, status, err) {

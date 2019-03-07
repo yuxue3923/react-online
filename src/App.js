@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
-
+import PropTypes from "prop-types"
 import EditorWithBar from './components/Editor/EditorWithBar';
 import {localhost} from './config'
 var temp = 99999
@@ -89,26 +89,6 @@ const Option = Select.Option;
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
-
-
-
-const menu = function(param){
-  // const {func1,func2,func3} = param
-  return <Card title="当前在线协同者">
-  <div style={{margin:'2px'}} >
-    <Icon type="smile"  className="iconsize" theme="twoTone" twoToneColor="#eb2f96" />
-    <span style={{fontSize:15}}> 梁静茹</span>
-  </div>
-  <div style={{margin:'2px'}}>
-    <Icon type="meh"  className="iconsize" theme="twoTone" twoToneColor="#52c41a"/>
-    <span style={{fontSize:15}}> 王菲</span>
-  </div>
-  <div style={{margin:'2px'}} onClick={param}>
-    <Icon type="frown" className="iconsize" theme="twoTone"/>
-     <span style={{fontSize:15}}> Join</span>   
-  </div>
-</Card>
-}
 function deepClone(obj){
   let _obj = JSON.stringify(obj);
   return JSON.parse(_obj)
@@ -118,6 +98,9 @@ var toServe = null;
 var project_id_now = 0;
 var share_code_now = 0;
 class App extends Component {
+  static contextTypes={
+    router:PropTypes.object
+  }
   constructor(props, context) {
     super(props, context)
      // this.initPie = this.initPie.bind(this)
@@ -125,10 +108,12 @@ class App extends Component {
    this.thumbnail=this.thumbnail.bind(this)
    this.sync=this.sync.bind(this);
    this.flush=this.flush.bind(this);
-   this.save = this.save.bind(this)
+   this.save = this.save.bind(this);
+   this.showModal_preview=this.showModal_preview.bind(this);
    this.passbyJudge = this.passbyJudge.bind(this)
   }
     state = {
+      previewvisible: false ,//预览课件弹出框
       updatecontent:[],
       tempochatdata: "",
       coursecatalog:[],
@@ -151,6 +136,32 @@ class App extends Component {
       Avatartype:["icon-touxiangnvhai","icon-icon-test3","icon-icon-test1","icon-icon-test","icon-icon-test2"],
       base64Thumbnail:[],
     };
+     //课件预览弹出框
+     showModal_preview () {
+      this.setState({
+        previewvisible: true,
+      });
+    }
+  
+    handleOk_preview = () => {
+      this.setState({
+        previewvisible: false,
+      });
+      const { sendpreviewcourseid,createCourse_info} = this.props;
+      sendpreviewcourseid({
+        type: 'GetpreviewcourseidSuccess',
+        payload:{ 
+          project_id:createCourse_info.course_id,
+          thumbnail:this.state.thumbnail,
+        },
+      });
+      this.context.router.history.push("/Previewcourse");
+    }
+    handleCancel_preview = () => {
+      this.setState({
+        previewvisible: false,
+      });
+    }
     flush(state){
       this.setState({
         canvasFlush:state
@@ -365,7 +376,8 @@ class App extends Component {
       delete formData.slides
 
       delete formData.thumbnail
-
+      formData.children = temp.createCourse_info.catalog.children
+      formData.name = temp.createCourse_info.catalog.name
       formData.width = temp.createCourse_info.thumbnail.style.width
 
       formData.height = temp.createCourse_info.thumbnail.style.height
@@ -394,7 +406,7 @@ class App extends Component {
             }
             else {
               message.success('保存成功');
-                console.log(data);
+                console.log("返回的保存数据",data);
                 
                
             }
@@ -545,7 +557,7 @@ class App extends Component {
     }
   
    componentWillUpdate(){
-    //  this.getProjectUserList();
+     this.getProjectUserList();
 
    }
   
@@ -574,6 +586,16 @@ class App extends Component {
   }
   
     render() {
+      const menu = function(param){
+        // const {func1,func2,func3} = param
+        return <Card title="当前在线协同者">
+          {userList}
+        <div style={{margin:'2px'}} onClick={param}>
+          <Icon type="frown" className="iconsize" theme="twoTone"/>
+           <span style={{fontSize:15}}> Join</span>   
+        </div>
+      </Card>
+      }
       const content=(
         <div style={{ width: 500 }}>
         <Card >
@@ -593,23 +615,21 @@ class App extends Component {
      <div>
        <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar>
        </Link><span style={{fontSize:15}}> 当前用户</span>
-       <Popover placement="bottomRight" content={content} trigger="click">
-          <Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
-       </Popover>
+       
      </div>;
       const userList = this.state.cooperuserlist.map((v, i) => {
         return (
           <div style={{margin:'2px'}} >
-               <IconAvator type={this.state.Avatartype[i%5]}/>
+               <IconAvator type={this.state.Avatartype[i%5]} className="iconsize"/>
               <span style={{fontSize:15}}>{v.user_name}</span>
           </div>
         );}
       )
-      const menu1 = (
-        <Card title="当前在线协同者">
-                {userList}
-        </Card>
-      );
+      // const menu1 = (
+      //   <Card title="当前在线协同者">
+      //           {userList}
+      //   </Card>
+      // );
       const ContentModal =(code)=>{
         return <div>
         <Row style={{margin: '8px 8px 8px 16px'}}> 
@@ -663,10 +683,6 @@ class App extends Component {
           >
              <Bodysider/>
           </Sider>
-         
-        
-         
-          
             <div className="flowbar" style={{right:80,top: 20}}>
                <Button style={{fontSize:15}} type="primary" onClick={this.showDrawer}>
                  视图
@@ -729,15 +745,32 @@ class App extends Component {
               </Modal>
               </span>
             </div>
-            <div className="flowbar" style={{right:10,top:80}}>
+            {/* <div className="flowbar" style={{right:10,top:80}}>
             <span style={{ marginRight: 24, }}>
             <Dropdown overlay={menu1} placement="bottomLeft" trigger={['click']}>
             <Button type="primary" shape="circle"><Icon type="sync" /></Button>
             </Dropdown>
             </span>
+            </div> */}
+            <div className="flowbar" style={{right:40,top:80}}>
+            <Popover placement="bottomRight" content={content} trigger="click">
+            <Badge count={this.state.updatecontent.length}><Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button></Badge>
+            </Popover>
             </div>
-            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {this.state.isSingle} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg} shouldCreateSocket={this.state.shouldCreateSocket} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now}/>
+            <EditorWithBar initContent={this.passbyJudge()} showModal_preview={this.showModal_preview} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {this.state.isSingle} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg} shouldCreateSocket={this.state.shouldCreateSocket} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now}/>
             </div>
+            <Modal
+             title="是否预览课件"
+             visible={this.state.previewvisible}
+             onOk={this.handleOk_preview}
+             onCancel={this.handleCancel_preview}
+             footer={null}
+            >
+            <p className="right">
+              <Button key="return" onClick={this.handleCancel_preview}>取消</Button>
+              <Button key="next" type="primary" onClick={this.handleOk_preview}> 确定 </Button>
+            </p>
+        </Modal>
             </Content>
             {/* </Layout> */}
           </Layout>
@@ -756,6 +789,7 @@ class App extends Component {
   function mapDispatchToProps(dispatch){
     return{
       setCreatecourseState: (state) => dispatch(state),
+      sendpreviewcourseid: (state) => dispatch(state),
     };
   }
   export default connect(

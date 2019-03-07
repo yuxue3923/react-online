@@ -23,9 +23,17 @@ function  reducer_userupdatecourseid(state = {},action) {
             return state;
     }
 }
-
+function  reducer_previewcourseid(state = {},action) {
+    switch (action.type) {
+        case 'GetpreviewcourseidSuccess':
+            return { previewcourseid: action.payload};          
+        default:
+            return state;
+    }
+}
 export default combineReducers({
     reducer_login,
     reducer_createcourse,
     reducer_userupdatecourseid,
+    reducer_previewcourseid,
 })

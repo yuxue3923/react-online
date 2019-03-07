@@ -1,1 +1,1 @@
-export var localhost = "192.168.1.109"
+export var localhost = "localhost"
