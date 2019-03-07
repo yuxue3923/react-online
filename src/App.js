@@ -794,7 +794,7 @@ class App extends Component {
             <Badge count={this.state.updatecontent.length}><Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button></Badge>
             </Popover>
             </div>
-            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg} shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id}/>
+            <EditorWithBar showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg} shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id}/>
             </div>
             <Modal
              title="是否预览课件"
