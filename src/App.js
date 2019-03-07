@@ -262,6 +262,7 @@ class App extends Component {
     }
     getInviteData(invite_project_id){
       const { login_info}=this.props;
+      const {setCreatecourseState} = this.props;
       const data = {
         "_id" :invite_project_id.toString(),
       }
@@ -281,15 +282,20 @@ class App extends Component {
           if (data.errorCode === 0) {
             console.log('返回课件项目信息');
             console.log(data);
+            setCreatecourseState({
+              type:'createcourseSuccess',
+              payload:{
+                course_id:invite_project_id,
+                createCourse_info:data.msg[0],
+              }
+            }); 
             MyDeck = deepClone(data.msg[0].slides.slide)
             project_id_now = invite_project_id
-        //    this.createSocket(invite_project_id)
-        this.effect_createSocket(true)
-         //   this.handleOk()
+       
+           this.effect_createSocket(true)
             this.setState({ MyDeck:MyDeck,  modalvisible: false, modal2Visible:false,  isSingle:false,
               popoverVisible:false })
           //  this.setModal2Visible(false)
-
           }
           else {   
             message.error("找不到对应项目");
@@ -402,7 +408,7 @@ class App extends Component {
         },
         success: function (data) {
             if (data.errorCode !== 0) {
-              message.error("保存失败1");
+              message.error("保存失败1");  
             }
             else {
               message.success('保存成功');
@@ -441,6 +447,7 @@ class App extends Component {
       console.log(Xst)
     }
     showModal = (type) => {
+      console.log("???")
       const { createCourse_info,login_info } = this.props;
       const course_id = createCourse_info.createCourse_info._id;
       if(project_id_now !== course_id){
@@ -484,7 +491,6 @@ class App extends Component {
         project_id:createCourse_info.course_id
       } 
       this.save()
-    //  console.log("projectId:", "/"+createCourse_info.course_id)
       $.ajax({
         url: "http://"+localhost+":3000/api/createWebSocketServer",
         async:false,
@@ -499,11 +505,11 @@ class App extends Component {
         },
         success: function (data) {
             if (data.errorCode === 0) {
-              console.log("this:",this);
+              console.log("this:",this);//这个地方似乎不用赋值给MyDeck，只需要警惕从别处跳过来的情况（project的slides数据不一致）
               project_id_now = createCourse_info.course_id
-         //       this.createSocket(createCourse_info.course_id)
-         this.effect_createSocket(true)
-                console.log('已创建协同链接');
+       
+              this.effect_createSocket(true)
+              console.log('已创建协同链接');
             }
             else {
                 console.log('协同失败');
@@ -556,14 +562,31 @@ class App extends Component {
         })
     }
   
-   componentWillUpdate(){
-     this.getProjectUserList();
-
-   }
+  
   
   componentWillMount(){
-    this.getProjectUserList();
+   this.getProjectUserList();
+    const {createCourse_info} = this.props;
+    console.log("初次加载:",createCourse_info)  //isSingle也需要改变
+    MyDeck = createCourse_info.createCourse_info.slides.slide  //适用于创建者与从课件广场进入的用户
+   // project_id_now = createCourse_info.course_id
+  
   }
+  /*
+  componentDidMount(){
+    const {createCourse_info,setCreatecourseState} = this.props;
+   // this.setState({shouldCreateSocket:typeof createCourse_info.isSingle === undefined?false:createCourse_info.isSingle})
+  // this.setState({isSingle:createCourse_info.isSingle})
+    
+    setCreatecourseState({
+      type:'createcourseSuccess',
+      payload:{
+        isSingle:true,
+      }
+    });
+    
+  }
+  */
   /*
   shouldComponentUpdate(nextProps,nextState){
     if(nextProps.isSingle!==this.props.isSingle&&this.props.isSingle===false){
@@ -574,15 +597,28 @@ class App extends Component {
   }
   */
   shouldComponentUpdate(nextProps,nextState){
+    
+
     if(this.props.isSingleMode!==nextProps.isSingleMode&&!nextProps.isSingleMode){
     // this.createSocket(this.props.createCourse_info.course_id)
     }
+  //  if()
     return true
   }
-  componentDidMount(){   //我们希望这块代码不会被频繁执行，仅当用户切换整个编辑页面时 直接从广场点击协同项目时
-    if(this.props.isSingle){
-    //  this.createSocket(this.props.createCourse_info.course_id)
-  }
+  componentDidUpdate(){
+    const {createCourse_info,setCreatecourseState} = this.props;
+    // this.setState({shouldCreateSocket:typeof createCourse_info.isSingle === undefined?false:createCourse_info.isSingle})
+   // this.setState({isSingle:createCourse_info.isSingle})
+     
+   !createCourse_info.isSingle&&setCreatecourseState({
+       type:'createcourseSuccess',
+       payload:{
+       
+        createCourse_info:createCourse_info.createCourse_info,
+        course_id:createCourse_info.course_id,
+         isSingle:true,
+       }
+     });
   }
   
     render() {
@@ -662,10 +698,11 @@ class App extends Component {
       
       }
       const {createCourse_info} = this.props;
-      console.log(MyDeck)
-      console.log(createCourse_info)
-      MyDeck=this.state.isSingle?createCourse_info.createCourse_info.slides.slide:MyDeck
-   //    console.log()
+   //   console.log(MyDeck)
+    //  console.log(createCourse_info.isSingle)
+    //  MyDeck=this.state.isSingle?MyDeck:createCourse_info.createCourse_info.slides.slide
+    //  MyDeck=(this.state.isSingle&&createCourse_info.isSingle)?MyDeck:createCourse_info.createCourse_info.slides.slide
+      //createCourse_info.isSingle为null会产生错误吗
      
     //  console.log(this.state.thumbnail)
       return (
@@ -757,7 +794,7 @@ class App extends Component {
             <Badge count={this.state.updatecontent.length}><Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button></Badge>
             </Popover>
             </div>
-            <EditorWithBar initContent={this.passbyJudge()} showModal_preview={this.showModal_preview} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {this.state.isSingle} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg} shouldCreateSocket={this.state.shouldCreateSocket} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now}/>
+            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg} shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id}/>
             </div>
             <Modal
              title="是否预览课件"
