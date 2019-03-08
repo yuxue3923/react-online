@@ -9,6 +9,7 @@ import DrawView from './components/ZoomPic/drawerview';
 import PropTypes from "prop-types"
 import EditorWithBar from './components/Editor/EditorWithBar';
 import {localhost} from './config'
+import io from 'socket.io-client'
 var temp = 99999
 var MyDeck = [[{
   "id":temp,
@@ -181,20 +182,22 @@ class App extends Component {
       }
     }
     handlePlus() {
-          const coursecatalog1 = this.state.tempochatdata; 
-          this.state.coursecatalog.push(coursecatalog1);
-          console.log('111',this.state.coursecatalog);
-          const updatecontent1=this.state.coursecatalog.map((v,i ) => {
-            return (
-              <div>
-                <IconAvator type={this.state.Avatartype[i%5]}></IconAvator>
-                <Input value={v}  style={{ width: 300 }}/>
-              </div>    
-            )
-      })
-     this.setState({
-      updatecontent:updatecontent1,
-    })
+        const { createCourse_info } = this.props;
+    //       const coursecatalog1 = this.state.tempochatdata; 
+    //       this.state.coursecatalog.push(coursecatalog1);
+    //       console.log('111',this.state.coursecatalog);
+    //       const updatecontent1=this.state.coursecatalog.map((v,i ) => {
+    //         return (
+    //           <div>
+    //             <IconAvator type={this.state.Avatartype[i%5]}></IconAvator>
+    //             <Input value={v}  style={{ width: 300 }}/>
+    //           </div>    
+    //         )
+    //   })
+    //  this.setState({
+    //   updatecontent:updatecontent1,
+    // })
+    this.createchat(createCourse_info.course_id)
   }
     updatechatdata = (e) => {
       this.setState({
@@ -361,6 +364,7 @@ class App extends Component {
               content: '成功建立联系',
             });
             this.getProjectUserList();
+            this.createChatChannel();
           }
           else {   
             console.log('建立连接失败');
@@ -524,7 +528,41 @@ class App extends Component {
         isSingle:false
       });
     }
-    
+    createChatChannel = () => {
+      const { login_info,createCourse_info } = this.props;
+      const param={
+        project_id:createCourse_info.course_id
+      } 
+      $.ajax({
+        url: "http://"+localhost+":3000/api/createChatChannel",
+        async:false,
+        type: "POST",
+        contentType:"application/x-www-form-urlencoded",
+      //  accepts:"application/json;charset=UTF-8",
+      //  dataType: "json",
+        data:param,
+    // data:'5c6f6e65e00c7f1b4885c798',
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function (data) {
+            if (data.errorCode === 0) {
+          
+              console.log('已创建协同聊天');
+            }
+            else {
+                console.log('协同聊天失败');
+            }
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.log("无法协同项目")
+        }
+    });
+      this.setState({
+        modalvisible: false,
+        isSingle:false
+      });
+    }
     popoverVisibleChange = (popoverVisible) => {
       this.setState({ popoverVisible });
     }
@@ -561,7 +599,48 @@ class App extends Component {
           shouldCreateSocket:flag
         })
     }
-  
+    createchat=(projectId)=>{
+      const { login_info}=this.props;
+      console.log("聊天室:",projectId)
+       var url = "http://"+localhost+":3001"
+       let param = `/${projectId}` 
+       console.log("param:",param)
+      //  var socket = io(url,{path:param});
+      var socket = io(url);
+      //  toServe = function(chatdata){
+      //    console.log("socket-client")
+      //    socket.emit('send mesg', JSON.stringify(chatdata)); 
+      //  }
+      var joindata={
+        username : login_info.username,
+       }
+        socket.emit('join chat', joindata);
+       var chatdata={
+         text:this.state.tempochatdata,
+         username : login_info.username,
+        }
+         socket.emit('send mesg', chatdata);
+       
+    //        socket.on('send mesg',(data)=>{
+    //        console.log("someone send mesg")
+    //        var msg = JSON.parse(data);
+    //       const coursecatalog1 = msg.text; 
+    //       this.state.coursecatalog.push(coursecatalog1);
+    //       console.log('111',this.state.coursecatalog);
+    //       const updatecontent1=this.state.coursecatalog.map((v,i ) => {
+    //         return (
+    //           <div>
+    //             <IconAvator type={this.state.Avatartype[i%5]}></IconAvator>
+    //             <Input value={v}  style={{ width: 300 }}/>
+    //           </div>    
+    //         )
+    //   })
+    //  this.setState({
+    //   updatecontent:updatecontent1,
+    // })
+    //        });
+         
+     }
   
   
   componentWillMount(){
@@ -571,6 +650,11 @@ class App extends Component {
     MyDeck = createCourse_info.createCourse_info.slides.slide  //适用于创建者与从课件广场进入的用户
    // project_id_now = createCourse_info.course_id
   
+  }
+  componentDidMount(){
+    const { login_info,createCourse_info } = this.props;
+    // this.createchat(createCourse_info.course_id);
+    this.getProjectUserList();
   }
   /*
   componentDidMount(){

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Avatar,Button,Row,Col ,Layout,Card,} from 'antd';
+import {Form, Icon, Avatar,Button,Row,Col ,Layout,Card,message} from 'antd';
 import {Link} from 'react-router-dom'
 import './creatcourse.css'
 import '../User.css'
@@ -72,6 +72,38 @@ const formItemLayout = {
           }
         });
       }
+      downloadcoursedata() {
+        const { login_info ,previewcourseid}=this.props;
+        var a=previewcourseid.project_id;
+        var data = {
+            "_id" :a.toString(),
+        };
+        console.log('进入downloadCourse接口');
+        $.ajax({
+          url: "http://"+localhost+":3000/api/downloadCourse",
+          async:false,
+          type: "GET",
+          contentType:"application/json;charset=UTF-8",
+          dataType: "json",
+          data:data,
+          beforeSend:function(request){
+            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+          },
+          success: function(data) {
+            if (data.errorCode === 0) {
+              console.log('下载成功111');
+              console.log(data);
+              message.success('下载成功，请到桌面区查看课件压缩包~');
+            }
+            else {   
+              console.log('下载成功2222');
+               
+            }
+          }.bind(this),
+          error: function (xhr, status, err) {
+          }
+        });
+      }
       getuserdata() {
         const { login_info }=this.props;
         console.log('进入getuserdata ajax');
@@ -131,7 +163,7 @@ const formItemLayout = {
          </Button></Link>
         </div>
         <div className="flowbar" style={{right:80,top:20}}>      
-         <Button type="primary"  className="iconsize" >
+         <Button onClick={this.downloadcoursedata.bind(this)} type="primary"  className="iconsize" >
            下载
          </Button>
         </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
+import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,message} from 'antd';
 import {Link} from 'react-router-dom'
 import './Creatcourse/creatcourse.css'
 import $ from 'jquery';
@@ -196,10 +196,7 @@ const formItemLayout = {
             success: function (data) {
                 if (data.errorCode === 0) {
                     console.log('成功更新课件:',data);
-                    Modal.success({
-                      title: '消息提示',
-                      content: '成功更新课件！',
-                    });
+                    message.success('成功更新课件~');
                     console.log(this.state.coursecatalog);
                     setCreatecourseState({
                         type:'createcourseSuccess',

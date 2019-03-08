@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
-import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,} from 'antd';
+import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,message} from 'antd';
 import MyTag from './Tag';
 import ChoseTemplate from './ChoseTemplate'
 import '../../App.css'
@@ -339,6 +339,7 @@ const FormItem = Form.Item;
         },
         success: function(data) {
           if (data.errorCode === 0) {
+            message.success('成功删除课件~');
             console.log('删除课件id成功111');
             console.log(data);
             this.getdata();
