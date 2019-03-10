@@ -3,16 +3,8 @@ import { List, Avatar, Icon,Button} from 'antd';
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_988038_ej9e5sv8svd.js',
 });
-const listData = [];
-for (let i = 0; i < 4; i++) {
-  listData.push({
-    href: 'http://ant.design',
-    title: `幻灯片 ${i+1}`,
-    // avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    // description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    Xst:i+1
-  });
-}
+var imgSrc = null;
+
 
 // const IconText = ({ type, text }) => (
 //   <span>
@@ -29,11 +21,29 @@ class Drawerview extends Component {
   pageChoose(Xst){
     this.props.pageChoose(Xst)
   }
+  newSlide(i,page,e){  //i true for add false for delete
+      this.props.newSlide(i,page)
+  }
   componentWillMount(){
    // listData[0].title=this.props.thumbnail
+    
   }
 
     render() {
+     
+      const length = this.props.thumbnail.length
+      console.log("thumbnail:",this.props.thumbnail)
+    //  console.log("pages:",length)
+      const listData = [];
+      for (let i = 0; i < length; i++) {
+        listData.push({
+          href: 'http://ant.design',
+          title: `幻灯片 ${i+1}`,
+          // avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+          // description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
+          Xst:i+1
+        });
+      }
       return (
         <List
         itemLayout="vertical"
@@ -46,10 +56,10 @@ class Drawerview extends Component {
         }}*/
         dataSource={listData}
         footer={<div>
-          <Button type="dashed"  shape="circle" >
+          <Button type="dashed"  shape="circle" onClick = {(e)=>this.newSlide(true,this.props.page)}>
                  <IconFont type="anticon-plus-bold" />
           </Button>
-          <Button type="dashed" shape="circle" >
+          <Button type="dashed" shape="circle" onClick = {(e)=>this.newSlide(false,this.props.page)}>
                  <IconFont type="anticon-jianshao"/>
           </Button>
           </div>}
@@ -65,7 +75,7 @@ class Drawerview extends Component {
               title={<a href={item.href}>{item.title}</a>}
             //   description={item.description}
             />
-            <img width={150} alt="logo" src={this.props.thumbnail[item.Xst-1]} onClick={this.pageChoose.bind(this,item.Xst)}/>
+            <img width={150} alt="logo" src={typeof this.props.thumbnail[item.Xst-1].pageThumbnail !== "undefined"?this.props.thumbnail[item.Xst-1].pageThumbnail:this.props.thumbnail[item.Xst-1]} onClick={this.pageChoose.bind(this,item.Xst)}/>
           </List.Item>
         )}
       />

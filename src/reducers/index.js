@@ -12,7 +12,7 @@ function  reducer_createcourse(state = {},action) {
         case 'createcourseSuccess':
             return { createCourse_info: action.payload};  
         default:
-            return state;  
+            return state;
            
     }  
 }      

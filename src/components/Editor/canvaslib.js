@@ -142,12 +142,16 @@ export default class Editor extends React.Component {
         }
         this.handleGetThumbnail=this.handleGetThumbnail.bind(this)
         this.sync = this.sync.bind(this)
+        this.dispatchState = this.dispatchState.bind(this)
     }
     handleGetThumbnail(message){
         this.props.getThumbnail(message)
     }
     sync(objectList){
         this.props.sync(objectList);
+    }
+    dispatchState(){
+        this.props.dispatchState();
     }
     flush(state){
      //   this.props.flush(state);
@@ -215,26 +219,38 @@ export default class Editor extends React.Component {
         this.props.objectList&&sr.initWithOthers(this.props.objectList)
     
         }
+
+        add(this.props.type);
+
+      //  this.sync({media:sr.getObjectList()})
         this.props.effect_createSocket(false)//
   //  sr.initWithCb(toServe)
       //  this.props.objectList&&sr.initWithOthers(this.props.objectList)
+        var base64 = sr.painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
+        var newImg = new Image();
         sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
             var url = URL.createObjectURL(blob);
-            var newImg = new Image();
-            newImg.src=url;
-            this.props.type!=='none'&&this.handleGetThumbnail(newImg.src)
+            newImg.src=url; 
+            this.handleGetThumbnail(newImg.src,base64);
         },'image/png')
+       
+      //this.props.type!=='none'&&
+       
+        
+
+        this.sync({media:sr.getObjectList(),pageThumbnail:base64});
+     //   this.dispatchState({thumbnail:url},{sync:{media:sr.getObjectList(),pageThumbnail:base64}})
     }
     
     
    
       
     componentDidUpdate(){
-        console.log(this.props.shouldCreateSocket)
+        
         if(this.props.shouldCreateSocket){
-            this.createSocket(this.props.project_id_now)
+            this.createSocket(this.props.project_id_now);
         }
-        console.log("this.props.isSingleMode:",this.props.isSingleMode)
+       
         if(this.props.isSingleMode){
            
             !this.props.objectList&&sr.clear()
@@ -253,22 +269,24 @@ export default class Editor extends React.Component {
 
         add(this.props.type);
        
-        this.sync({media:sr.getObjectList()})
-       this.props.clearMsg()
+       
+     //   this.props.clearMsg()
 
-        this.props.effect_createSocket(false)//
+        this.props.shouldCreateSocket&&this.props.effect_createSocket(false)//
 
+        var newImg = new Image();
+        var base64 = sr.painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
         sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
-            var url = URL.createObjectURL(blob);
-            var newImg = new Image();
-        //    newImg.onload = function() {URL.revokeObjectURL(url)};
-            newImg.src=url;
-            this.props.type!=='none'&&this.handleGetThumbnail(newImg.src)
+             var url = URL.createObjectURL(blob);
+             newImg.src=url;
+             this.props.type!=='none'&&this.handleGetThumbnail(newImg.src,base64);//应该是缩略图有变化就该传递
         },'image/png')
-      //  console.log(Image)
-     //   console.log(URL)
+       
+        //this.props.type&&
        
        
+       this.sync({media:sr.getObjectList(),pageThumbnail:base64});
+     //   this.dispatchState({thumbnail:url},{sync:{media:sr.getObjectList(),pageThumbnail:base64}})
     }
     render() {
         return (

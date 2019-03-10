@@ -10,6 +10,10 @@ import DrawView from './components/ZoomPic/drawerview';
 import EditorWithBar from './components/Editor/EditorWithBar';
 import {localhost} from './config'
 var temp = 99999
+var MyDeck = []
+var thumbnail = []
+
+/*
 var MyDeck = [[{
   "id":temp,
   "type":"isogon",
@@ -76,7 +80,7 @@ var MyDeck = [[{
       "stroke":"green"
   }
 }]];
-
+*/
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_981127_oee7kc1cksg.js',
 });
@@ -114,26 +118,27 @@ function deepClone(obj){
   return JSON.parse(_obj)
 }
 
-var toServe = null;
+
 var project_id_now = 0;
 var share_code_now = 0;
 class App extends Component {
   constructor(props, context) {
     super(props, context)
      // this.initPie = this.initPie.bind(this)
-   this.clearMsg = this.clearMsg.bind(this)
+  
    this.thumbnail=this.thumbnail.bind(this)
    this.sync=this.sync.bind(this);
    this.flush=this.flush.bind(this);
    this.save = this.save.bind(this)
    this.passbyJudge = this.passbyJudge.bind(this)
+   this.newSlide = this.newSlide.bind(this)
   }
     state = {
       updatecontent:[],
       tempochatdata: "",
       coursecatalog:[],
       toServe:null,
-      msg:null,
+    //  msg:null,
       cooperationuserid:0,
       code:0,
       collapsed: true,
@@ -145,28 +150,68 @@ class App extends Component {
       MyDeck:MyDeck,
       canvasFlush:false,
       thumbnail:[],
+      thumbnailBase64:[],//this.props.createCourse_info.createCourse_info.slides.slide,
       PopoverVisible:false,
       isSingle:true, //判断是否处于协同模式
       cooperuserlist:[],
       Avatartype:["icon-touxiangnvhai","icon-icon-test3","icon-icon-test1","icon-icon-test","icon-icon-test2"],
-      base64Thumbnail:[],
+
     };
     flush(state){
       this.setState({
         canvasFlush:state
       })
     }
+    /*
     clearMsg(){
       this.setState({
         msg:null
       })
     }
-    passbyJudge(){
-      if(typeof MyDeck[this.state.page-1] !== "undefined"){
-        return MyDeck[this.state.page-1].media
+    */
+    dispatchState(forThumbnail,forSync){
+      let url = forThumbnail.url,
+          slide = forSync
+      MyDeck.splice(this.state.page-1,1, slide) //先浅复制
+      let _thumbnail = this.state.thumbnail
+      let thumbnailBase64 = this.state.thumbnailBase64
+      _thumbnail.splice(this.state.page-1,1,url)
+      thumbnail.splice(this.state.page-1,1,url)//这个变量用于缩略图显示blob
+      thumbnailBase64.splice(this.state.page-1,1,slide.pageThumbnail)//这个变量用于数据库存储
+      this.setState({thumbnail,thumbnailBase64})//这种格式可以？
+    }
+    newSlide(flag,page){
+      let is = true; //处理删除只剩一页的特例
+      if(flag){
+        console.log("newSlide")
+        thumbnail.splice(page,0,{meida:[],pageThumbnail:"whiteBoard"})//增加页面时，页面跳转到新增空白页面
+        console.log(thumbnail.length)
+        MyDeck.splice(page,0,[])
       }
       else{
-        return null
+        if(page === 1&&thumbnail.length === 1){
+          is = false;
+          
+          thumbnail = [];
+          MyDeck = [];
+        }
+        else{
+          thumbnail.splice(page-1,1)
+          MyDeck.splice(page-1,1) //删除页面时，页面跳转到上（下）一个页面
+        } 
+      }
+      let oldPage = this.state.page//这个指的当前页面
+     // let length = thumbnail.length 如果新增始终增加在最后，采取该值无问题
+      this.setState({
+        page:flag?oldPage+1:(is?oldPage-1:oldPage)
+      })
+    }
+    passbyJudge(){
+      if(typeof MyDeck[this.state.page-1] !== "undefined"){
+        return typeof MyDeck[this.state.page-1].media === "undefined"?[]:MyDeck[this.state.page-1].media
+      }
+      else{
+        return (typeof MyDeck[this.state.page] !== "undefined")?MyDeck[this.state.page].media:[] //当删去的一页为首页时 //有问题
       }
     }
     handlePlus() {
@@ -371,6 +416,7 @@ class App extends Component {
       delete formData.slides
 
       delete formData.thumbnail
+      
 
       formData.width = temp.createCourse_info.thumbnail.style.width
 
@@ -424,9 +470,13 @@ class App extends Component {
     }
     
     thumbnail = (src,base64) =>{
-      let thumbnail = this.state.thumbnail
-      thumbnail.splice(this.state.page-1,1,src)
-      this.setState({thumbnail})
+      console.log("duoyu:",src)
+      let _thumbnail = this.state.thumbnail
+      let thumbnailBase64 = this.state.thumbnailBase64
+      _thumbnail.splice(this.state.page-1,1,src)
+      thumbnail.splice(this.state.page-1,1,src)//这个变量用于缩略图显示blob
+      thumbnailBase64.splice(this.state.page-1,1,base64)//这个变量用于数据库存储
+      this.setState({thumbnailBase64})//这种格式可以？thumbnail:thumbnail,:thumbnailBase64
     }
     pageChoose = (Xst) => {
       this.setState({
@@ -554,27 +604,21 @@ class App extends Component {
   
   componentWillMount(){
    // this.getProjectUserList();
+   console.log("ss",this.state.thumbnailBase64)
     const {createCourse_info} = this.props;
     console.log("初次加载:",createCourse_info)  //isSingle也需要改变
     MyDeck = createCourse_info.createCourse_info.slides.slide  //适用于创建者与从课件广场进入的用户
    // project_id_now = createCourse_info.course_id
   
   }
-  /*
+  
   componentDidMount(){
-    const {createCourse_info,setCreatecourseState} = this.props;
-   // this.setState({shouldCreateSocket:typeof createCourse_info.isSingle === undefined?false:createCourse_info.isSingle})
-  // this.setState({isSingle:createCourse_info.isSingle})
-    
-    setCreatecourseState({
-      type:'createcourseSuccess',
-      payload:{
-        isSingle:true,
-      }
-    });
+    const {createCourse_info} = this.props;
+    thumbnail = deepClone(createCourse_info.createCourse_info.slides.slide) //如果是引用可能造成重复引用
+  
     
   }
-  */
+  
   /*
   shouldComponentUpdate(nextProps,nextState){
     if(nextProps.isSingle!==this.props.isSingle&&this.props.isSingle===false){
@@ -678,8 +722,9 @@ class App extends Component {
       
       }
       const {createCourse_info} = this.props;
+      const serveThumbnail = null;
    //   console.log(MyDeck)
-    //  console.log(createCourse_info.isSingle)
+      console.log(createCourse_info.createCourse_info)
     //  MyDeck=this.state.isSingle?MyDeck:createCourse_info.createCourse_info.slides.slide
     //  MyDeck=(this.state.isSingle&&createCourse_info.isSingle)?MyDeck:createCourse_info.createCourse_info.slides.slide
       //createCourse_info.isSingle为null会产生错误吗
@@ -716,7 +761,7 @@ class App extends Component {
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                <DrawView pageChoose={this.pageChoose} thumbnail={this.state.thumbnail}/>{/**/}
+                <DrawView mask={false} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>{/**/}
               </Drawer>
             </div>
             <div className="flowbar" style={{right:10,top:20}}>
@@ -773,7 +818,7 @@ class App extends Component {
             </Dropdown>
             </span>
             </div>
-            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg} shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id}/>
+            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
             </div>
             </Content>
             {/* </Layout> */}
