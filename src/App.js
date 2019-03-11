@@ -136,6 +136,7 @@ class App extends Component {
       cooperuserlist:[],
       Avatartype:["icon-touxiangnvhai","icon-icon-test3","icon-icon-test1","icon-icon-test","icon-icon-test2"],
       base64Thumbnail:[],
+      chatsocketid:"",
     };
      //课件预览弹出框
      showModal_preview () {
@@ -182,22 +183,8 @@ class App extends Component {
       }
     }
     handlePlus() {
-        const { createCourse_info } = this.props;
-    //       const coursecatalog1 = this.state.tempochatdata; 
-    //       this.state.coursecatalog.push(coursecatalog1);
-    //       console.log('111',this.state.coursecatalog);
-    //       const updatecontent1=this.state.coursecatalog.map((v,i ) => {
-    //         return (
-    //           <div>
-    //             <IconAvator type={this.state.Avatartype[i%5]}></IconAvator>
-    //             <Input value={v}  style={{ width: 300 }}/>
-    //           </div>    
-    //         )
-    //   })
-    //  this.setState({
-    //   updatecontent:updatecontent1,
-    // })
-    this.createchat(createCourse_info.course_id)
+     const { createCourse_info } = this.props;
+     this.createchat(createCourse_info.course_id)
   }
     updatechatdata = (e) => {
       this.setState({
@@ -238,7 +225,8 @@ class App extends Component {
   
     searchCode(code){
       const callBack = this.getInviteData.bind(this)
-      const { login_info } = this.props;
+      const callBack_chat= this.createchatcopy.bind(this)
+      const { login_info ,createCourse_info} = this.props;
       $.ajax({
         url: "http://"+localhost+":3000/api/getReflectProject_id?tinyCode="+code,
         async:false,
@@ -252,12 +240,13 @@ class App extends Component {
         success: function (data) {
             if (data) {
                 console.log('返回对应项目id'+data);
-                callBack(data)
+                callBack(data);
+                callBack_chat(data);
             }
             else {
               message.error("无法找到对应项目");
             }
-        },
+        }.bind(this),
         error: function (xhr, status, err) {
           message.error("进入项目失败");
         }
@@ -359,15 +348,11 @@ class App extends Component {
         success: function (data) {
           if (data.errorCode === 0) {
             console.log('建立联系111');
-            Modal.success({
-              title: '消息提示',
-              content: '成功建立联系',
-            });
+            message.success('添加成功~');
             this.getProjectUserList();
-            this.createChatChannel();
           }
           else {   
-            console.log('建立连接失败');
+            message.error("添加成员失败~");  
           }
         }.bind(this),
         error: function (xhr, status, err) {
@@ -494,7 +479,8 @@ class App extends Component {
       const param={
         project_id:createCourse_info.course_id
       } 
-      this.save()
+      this.createChatChannel(createCourse_info.course_id);
+      this.save();
       $.ajax({
         url: "http://"+localhost+":3000/api/createWebSocketServer",
         async:false,
@@ -528,10 +514,11 @@ class App extends Component {
         isSingle:false
       });
     }
-    createChatChannel = () => {
+    createChatChannel = (project_id) => {
+      const callBack_chat= this.createchatcopy.bind(this)
       const { login_info,createCourse_info } = this.props;
       const param={
-        project_id:createCourse_info.course_id
+        project_id:project_id
       } 
       $.ajax({
         url: "http://"+localhost+":3000/api/createChatChannel",
@@ -549,6 +536,7 @@ class App extends Component {
             if (data.errorCode === 0) {
           
               console.log('已创建协同聊天');
+              callBack_chat(project_id);
             }
             else {
                 console.log('协同聊天失败');
@@ -558,10 +546,6 @@ class App extends Component {
           console.log("无法协同项目")
         }
     });
-      this.setState({
-        modalvisible: false,
-        isSingle:false
-      });
     }
     popoverVisibleChange = (popoverVisible) => {
       this.setState({ popoverVisible });
@@ -602,15 +586,20 @@ class App extends Component {
     createchat=(projectId)=>{
       const { login_info}=this.props;
       console.log("聊天室:",projectId)
-       var url = "http://"+localhost+":3001"
-       let param = `/${projectId}` 
-       console.log("param:",param)
+       var url = "http://"+localhost+":3001?roomid="+projectId;
+      //  let param = `/${projectId}` 
+      //  console.log("param:",param)
       //  var socket = io(url,{path:param});
       var socket = io(url);
       //  toServe = function(chatdata){
       //    console.log("socket-client")
       //    socket.emit('send mesg', JSON.stringify(chatdata)); 
       //  }
+      var username = 'bing';
+      var connected = false;
+      var editting = false;
+      socket.emit('add user', username);
+  
       var joindata={
         username : login_info.username,
        }
@@ -620,28 +609,61 @@ class App extends Component {
          username : login_info.username,
         }
          socket.emit('send mesg', chatdata);
-       
-    //        socket.on('send mesg',(data)=>{
-    //        console.log("someone send mesg")
+         socket.on('login',(data)=>{
+          connected = true;
+          console.log("numOfUsers is "+data.numOfUers);
+          console.log("socket.id is"+socket.id);
+      });
+
+     }
+     createchatcopy=(projectId)=>{
+      const { login_info}=this.props;
+      console.log("聊天室:",projectId)
+       var url = "http://"+localhost+":3001?roomid="+projectId;
+      //  let param = `/${projectId}` 
+      //  console.log("param:",param)
+      //  var socket = io(url,{path:param});
+      var socket = io(url);
+      //  toServe = function(chatdata){
+      //    console.log("socket-client")
+      //    socket.emit('send mesg', JSON.stringify(chatdata)); 
+      //  }
+      var username = 'bing';
+      var connected = false;
+      var editting = false;
+      socket.emit('add user', username);
+  
+      var joindata={
+        username : login_info.username,
+       }
+        socket.emit('join chat', joindata);
+       var chatdata={
+         text:this.state.tempochatdata,
+         username : login_info.username,
+        }
+         socket.emit('send mesg', chatdata);
+         socket.on('login',(data)=>{
+          connected = true;
+          console.log("numOfUsers is "+data.numOfUers);
+          console.log("socket.id is"+socket.id);
+      });
+
+           socket.on('message',(data)=>{
+           console.log("someone send mesg")
+           console.log(data)
     //        var msg = JSON.parse(data);
-    //       const coursecatalog1 = msg.text; 
-    //       this.state.coursecatalog.push(coursecatalog1);
-    //       console.log('111',this.state.coursecatalog);
-    //       const updatecontent1=this.state.coursecatalog.map((v,i ) => {
-    //         return (
-    //           <div>
-    //             <IconAvator type={this.state.Avatartype[i%5]}></IconAvator>
-    //             <Input value={v}  style={{ width: 300 }}/>
-    //           </div>    
-    //         )
-    //   })
-    //  this.setState({
-    //   updatecontent:updatecontent1,
-    // })
-    //        });
+    if(data.event=="broadcast emit"&&data.data.text){
+          const coursecatalog1 =data.data; 
+          this.state.coursecatalog.push(coursecatalog1);
+          const coursedata=this.state.coursecatalog;
+          console.log('111',coursedata);
+          this.setState({
+            coursecatalog:coursedata,
+          });
+         }
+           });
          
      }
-  
   
   componentWillMount(){
    this.getProjectUserList();
@@ -716,12 +738,22 @@ class App extends Component {
         </div>
       </Card>
       }
+      const updatecontent=this.state.coursecatalog.map((v,i ) => {
+        return (
+          <div>
+            <IconAvator type={this.state.Avatartype[i%5]}></IconAvator>
+            <a style={{fontSize:10}}>{v.username}</a>
+            <Input value={v.text}  style={{ width: 300 }}/>
+          </div>    
+        )
+  })
+
       const content=(
         <div style={{ width: 500 }}>
         <Card >
         <div className="left">
            <p style={{fontSize:'25px'}}>
-              {this.state.updatecontent}
+              {updatecontent}
            </p> 
         </div>
         <div className="right">
@@ -875,7 +907,7 @@ class App extends Component {
             </div> */}
             <div className="flowbar" style={{right:40,top:80}}>
             <Popover placement="bottomRight" content={content} trigger="click">
-            <Badge count={this.state.updatecontent.length}><Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button></Badge>
+            <Badge count={this.state.coursecatalog.length}><Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button></Badge>
             </Popover>
             </div>
             <EditorWithBar showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)} message ={!this.state.isSingle&&this.state.msg} toServe={toServe} clearMsg = {this.clearMsg} shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id}/>
