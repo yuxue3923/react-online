@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
+import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,message} from 'antd';
 import {Link} from 'react-router-dom'
 import './creatcourse.css'
 import $ from 'jquery';
@@ -211,11 +211,8 @@ const formItemLayout = {
                     console.log('成功保存课件');
                     console.log(data.msg);
                     console.log(data.msg._id);
-                    Modal.success({
-                      title: '消息提示',
-                      content: '成功创建课件！',
-                    });
-                    console.log(this.state.coursecatalog);
+                    message.success('成功创建课件！');
+                   
                     setCreatecourseState({
                       type:'createcourseSuccess',
                       payload:{
@@ -223,6 +220,7 @@ const formItemLayout = {
                         course_id:data.msg._id
                       }
                     });
+                    console.log(data.msg.knowledges);
                     this.context.router.history.push("/APP");
 
                 }
@@ -308,9 +306,9 @@ const formItemLayout = {
                 <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
                       <Tree showLine defaultExpandedKeys={['一次方程概念', '一次方程应用']} onSelect={this.onSelect}>
                         <TreeNode title="一次方程" key="一次方程">
-                          <TreeNode title="一次方程概念" key="一次方程概念" />
-                          <TreeNode title="一次方程特点" key="一次方程特点" />
-                          <TreeNode title="一次方程应用" key="一次方程应用">
+                          <TreeNode title="数一数" key="数一数" />
+                          <TreeNode title="1--5的认识" key="1--5的认识" />
+                          <TreeNode title="认识11--20" key="认识11--20">
                             <TreeNode title="应用实例" key="应用实例" />
                           </TreeNode>
                         </TreeNode>

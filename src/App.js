@@ -111,6 +111,7 @@ class App extends Component {
    this.flush=this.flush.bind(this);
    this.save = this.save.bind(this);
    this.showModal_preview=this.showModal_preview.bind(this);
+   this.sendsource=this.sendsource.bind(this);
    this.passbyJudge = this.passbyJudge.bind(this)
   }
     state = {
@@ -137,6 +138,7 @@ class App extends Component {
       Avatartype:["icon-touxiangnvhai","icon-icon-test3","icon-icon-test1","icon-icon-test","icon-icon-test2"],
       base64Thumbnail:[],
       chatsocketid:"",
+      source:{},
     };
      //课件预览弹出框
      showModal_preview () {
@@ -144,7 +146,14 @@ class App extends Component {
         previewvisible: true,
       });
     }
-  
+    sendsource=(source)=>{
+      this.setState({
+        source:{
+          "r_id":source.r_id,
+          "file_url":source.file_url,
+        },
+      });
+    }
     handleOk_preview = () => {
       this.setState({
         previewvisible: false,
@@ -327,6 +336,37 @@ class App extends Component {
         }.bind(this),
         error: function (xhr, status, err) {
           console.log('无法获取协作者');
+        }
+      });
+    }
+    getresource(knowledges){
+      const { login_info }=this.props;
+      console.log('进入ajax');
+      $.ajax({
+        url: "http://"+localhost+":3000/api/resourceRel",
+        data:{
+          "knowledges":JSON.stringify(knowledges),
+        },
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        type: "GET",
+        dataType: "json",
+        async:false,
+        success: function (data) {
+          if (data.errorCode === 0) {
+            console.log('获取知识资源成功');
+            console.log(data);
+           this.setState({
+             resourcelist:data.msg,
+           });
+          }
+          else {   
+            console.log('获取知识资源失败');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.log('无法获取知识资源');
         }
       });
     }
@@ -669,6 +709,8 @@ class App extends Component {
    this.getProjectUserList();
     const {createCourse_info} = this.props;
     console.log("初次加载:",createCourse_info)  //isSingle也需要改变
+    console.log("知识点:",[].concat.apply([],createCourse_info.createCourse_info.knowledges)); 
+    this.getresource([].concat.apply([],createCourse_info.createCourse_info.knowledges));
     MyDeck = createCourse_info.createCourse_info.slides.slide  //适用于创建者与从课件广场进入的用户
    // project_id_now = createCourse_info.course_id
   
@@ -728,6 +770,7 @@ class App extends Component {
   }
   
     render() {
+      console.log(this.state.source)
       const menu = function(param){
         // const {func1,func2,func3} = param
         return <Card title="当前在线协同者">
@@ -834,7 +877,7 @@ class App extends Component {
           className="Sider"
           style={{width: '100%', height: '100vh'}}
           >
-             <Bodysider/>
+             <Bodysider resourcelist={this.state.resourcelist} Getsource={this.sendsource}/>
           </Sider>
             <div className="flowbar" style={{right:80,top: 20}}>
                <Button style={{fontSize:15}} type="primary" onClick={this.showDrawer}>

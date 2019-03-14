@@ -20,153 +20,170 @@ const props = {
       }
     },
   };
-  function callback(key) {
-    console.log(key);
-  }
+  
   class sider extends Component {
+    constructor(props, context) {
+      super(props, context)
+      this.state = {
+        resourcelist:this.props.resourcelist,
+        current:1,//图片资源当前页
+        currentpage:1,//视频资源当前页
+      }
+  }
+ 
+  onChange=(page)=>{
+    this.setState(
+      {
+        current:page,
+      }
+    )
+  }
+  onChangepage=(page)=>{
+    this.setState(
+      {
+        currentpage:page,
+      }
+    )
+  }
+ 
+  callback(key) {
+    console.log(key);
+    console.log(this.state.resourcelist);
+  }
+  componentDidMount() {
+    console.log(this.state.source)
+  }
     render() {
-        const cardBasic_viedo = (
-            <div>
-              <Row gutter={16}>
-                <Col span={8}>
-                    <Card
-                      style={{ width:220 ,height:230}}
-                      cover={
-                        <img
-                          alt="example"
-                          src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                        />
-                      }
-                    >
-                      <Row>
-                        <Col span={18}>
-                          <Meta  title="解方程应用.mp4" />
-                        </Col>
-                        <Col span={6}>
-                          <Icon type="star-o" /><span style={{fontSize:'1px'}}> 收藏</span>
-                      </Col>
-                      </Row>
-                      <br />
-                      <Row >
-                        <Col span={7}>
-                          <Icon type="like-o" /><span style={{fontSize:'1px'}}>1718</span>
-                      </Col>
-                        <Col span={8}><span style={{fontSize:'1px'}}>积分：49</span></Col>
-                        <Col span={9}><span style={{fontSize:'1px'}}>引用数：89</span></Col>
-                      </Row>
-                    </Card>
-                </Col>
-              </Row>
-            </div>
-          );
-          const cardBasic_pdf = (
-            <div>
-              <Row gutter={16}>
-                <Col span={8}>
-                    <Card
-                      style={{ width:220 ,height:230}}
-                      cover={
-                        <img
-                          alt="example"
-                          src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                        />
-                      }
-                    >
-                      <Row>
-                        <Col span={18}>
-                          <Meta  title="解方程应用.pdf" />
-                        </Col>
-                        <Col span={6}>
-                          <Icon type="star-o" /><span style={{fontSize:'1px'}}> 收藏</span>
-                      </Col>
-                      </Row>
-                      <br />
-                      <Row >
-                        <Col span={7}>
-                          <Icon type="like-o" /><span style={{fontSize:'1px'}}>1718</span>
-                      </Col>
-                        <Col span={8}><span style={{fontSize:'1px'}}>积分：49</span></Col>
-                        <Col span={9}><span style={{fontSize:'1px'}}>引用数：89</span></Col>
-                      </Row>
-                    </Card>
-                </Col>
-              </Row>
-            </div>
-          );
-          const cardBasic_word = (
-            <div>
-              <Row gutter={16}>
-                <Col span={8}>
-                    <Card
-                      style={{ width:220 ,height:230}}
-                      cover={
-                        <img
-                          alt="example"
-                          src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                        />
-                      }
-                    >
-                      <Row>
-                        <Col span={18}>
-                          <Meta  title="解方程应用.docx" />
-                        </Col>
-                        <Col span={6}>
-                          <Icon type="star-o" /><span style={{fontSize:'1px'}}> 收藏</span>
-                      </Col>
-                      </Row>
-                      <br />
-                      <Row >
-                        <Col span={7}>
-                          <Icon type="like-o" /><span style={{fontSize:'1px'}}>1718</span>
-                      </Col>
-                        <Col span={8}><span style={{fontSize:'1px'}}>积分：49</span></Col>
-                        <Col span={9}><span style={{fontSize:'1px'}}>引用数：89</span></Col>
-                      </Row>
-                    </Card>
-                </Col>
-              </Row>
-            </div>
-          );
-         const cardList_viedo = (
-            <div className='cardstyle'>
-              <Row>
-                <Col span={8}>{cardBasic_viedo}</Col>
-                <Col span={8}>{cardBasic_viedo}</Col>
-                {/* {/* <Col span={6}>{cardBasic_viedo}</Col> */}
-                <Col span={8}>{cardBasic_viedo}</Col> 
-              </Row>
-              <Row>
-                <Col span={8}>{cardBasic_viedo}</Col>
-                <Col span={8}>{cardBasic_viedo}</Col>
-                {/* {/* <Col span={6}>{cardBasic_viedo}</Col> */}
-                <Col span={8}>{cardBasic_viedo}</Col> 
-              </Row>
-              <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-                <Pagination  defaultCurrent={1} total={500} />
-                {/* <Pagination showQuickJumper defaultCurrent={1} total={500} /> */}
-              </Row>
-            </div>
-          );
-          const cardList_document = (
-            <div className='cardstyle'>
-              <Row>
-                <Col span={8}>{cardBasic_pdf}</Col>
-                <Col span={8}>{cardBasic_pdf}</Col>
-                {/* {/* <Col span={6}>{cardBasic_pdf}</Col> */}
-                <Col span={8}>{cardBasic_pdf}</Col>
-              </Row>
-              <Row>
-                <Col span={8}>{cardBasic_word}</Col>
-                <Col span={8}>{cardBasic_word}</Col>
-                {/* {/* <Col span={6}>{cardBasic_word}</Col> */}
-                <Col span={8}>{cardBasic_word}</Col>
-              </Row>
-              <Row style={{  margin: '8px 8px 8px 0',textAlign: 'center'  }}>
-                <Pagination  defaultCurrent={1} total={500} />
-              </Row>
-              </div>
-          );
+      const resource=this.state.resourcelist;
+      // console.log(this.state.source)
+      var imgresource=[];
+      for(var i=0;i<resource.length;i++){
+        var obj=resource[i];
+        if(obj.rtype ==="图片"){
+          imgresource.push(obj);
+        }
+      };
+      var videoresource=[];
+      for(var j=0;j<resource.length;j++){
+        var objec=resource[j];
+        if(objec.rtype ==="视频"){
+          videoresource.push(objec);
+        }
+      };
+      const imgresourceList = imgresource.map((v, i) => {
+        return (
+          <div>
+          <Row gutter={16}>
+            <Col span={8}>
+                <Card
+                  style={{ width:220 ,height:230}}
+                  cover={
+                    <img onClick={()=>this.props.Getsource(v)}
+                      alt="example"
+                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                    />
+                  }
+                >
+                  <Row>
+                    <Col span={18}>
+                      <Meta  title={v.r_name} />
+                    </Col>
+                    <Col span={6}>
+                      <Icon type="star-o" onClick={()=>this.props.Getsource(v)} /><span style={{fontSize:'1px'}}> 应用</span>
+                  </Col>
+                  </Row>
+                  <br />
+                  <Row >
+                    <Col span={7}>
+                      <Icon type="like-o" /><span style={{fontSize:'1px'}}>1718</span>
+                  </Col>
+                    <Col span={8}><span style={{fontSize:'1px'}}>积分：49</span></Col>
+                    <Col span={9}><span style={{fontSize:'1px'}}>引用数：89</span></Col>
+                  </Row>
+                </Card>
+            </Col>
+          </Row>
+        </div>
+        );}
+      );
+      const videosourceList =videoresource.map((v, i) => {
+        return (
+          <div>
+          <Row gutter={16}>
+            <Col span={8}>
+                <Card
+                  style={{ width:220 ,height:230}}
+                  cover={
+                    <img onClick={()=>this.props.Getsource(v)} 
+                      alt="example"
+                      src="https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png"
+                    />
+                  }
+                >
+                  <Row>
+                    <Col span={18}>
+                      <Meta  title={v.r_name} />
+                    </Col>
+                    <Col span={6}>
+                      <Icon type="star-o" onClick={()=>this.props.Getsource(v)}/><span style={{fontSize:'1px'}}> 应用</span>
+                  </Col>
+                  </Row>
+                  <br />
+                  <Row >
+                    <Col span={7}>
+                      <Icon type="like-o" /><span style={{fontSize:'1px'}}>1718</span>
+                  </Col>
+                    <Col span={8}><span style={{fontSize:'1px'}}>积分：49</span></Col>
+                    <Col span={9}><span style={{fontSize:'1px'}}>引用数：89</span></Col>
+                  </Row>
+                </Card>
+            </Col>
+          </Row>
+        </div>
+        );}
+      );
+      var ownMap=(list,current)=>{
+        for(let i=(current-1)*6;i<list.length;){
+          return <div className='cardstyle'>
+          <Row>
+            <Col span={8}>{list[i]}</Col>
+            <Col span={8}>{list[i+1]}</Col>
+            <Col span={8}>{list[i+2]}</Col> 
+          </Row>
+          <Row>
+            <Col span={8}>{list[i+3]}</Col>
+            <Col span={8}>{list[i+4]}</Col>
+            <Col span={8}>{list[i+5]}</Col> 
+          </Row>
+          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
+          <Pagination current={this.state.current} onChange={this.onChange} total={list.length} />
+          </Row>
+        </div>
+        }
+       }
+       var videoownMap=(list,current)=>{
+        for(let i=(current-1)*6;i<list.length;){
+          return <div className='cardstyle'>
+          <Row>
+            <Col span={8}>{list[i]}</Col>
+            <Col span={8}>{list[i+1]}</Col>
+            <Col span={8}>{list[i+2]}</Col> 
+          </Row>
+          <Row>
+            <Col span={8}>{list[i+3]}</Col>
+            <Col span={8}>{list[i+4]}</Col>
+            <Col span={8}>{list[i+5]}</Col> 
+          </Row>
+          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
+          <Pagination current={this.state.currentpage} onChange={this.onChangepage} total={list.length} />
+          </Row>
+        </div>
+        }
+       }
+         const cardList_img = ownMap(imgresourceList,this.state.current)
+          const cardList_video = videoownMap(videosourceList,this.state.currentpage)
       return (
+        
           <div className='divContent'>
              
              <Input className='inputstyle' placeholder="输入搜索资源关键字" />
@@ -178,10 +195,10 @@ const props = {
                   </Button>
               </Upload>
               
-              <Tabs defaultActiveKey="2" onChange={callback} >
-                  <TabPane tab="视频" key="1">{cardList_viedo}</TabPane>
-                  <TabPane tab="图片" key="2">{cardList_viedo}</TabPane>
-                  <TabPane tab="文本" key="3">{cardList_document}</TabPane>
+              <Tabs defaultActiveKey="2" onChange={this.callback.bind(this)} >
+                  <TabPane tab="视频" key="1">{cardList_video}</TabPane>
+                  <TabPane tab="图片" key="2">{cardList_img}</TabPane>
+                  <TabPane tab="文本" key="3">{cardList_img}</TabPane>
               </Tabs>
               </div>
       );
