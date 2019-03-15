@@ -304,7 +304,7 @@ const formItemLayout = {
         const sidecontent=(
             <div>
                 <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
-                      <Tree showLine defaultExpandedKeys={['一次方程概念', '一次方程应用']} onSelect={this.onSelect}>
+                      <Tree showLine defaultExpandedKeys={['一次方程', '二次方程']} onSelect={this.onSelect}>
                         <TreeNode title="一次方程" key="一次方程">
                           <TreeNode title="数一数" key="数一数" />
                           <TreeNode title="1--5的认识" key="1--5的认识" />

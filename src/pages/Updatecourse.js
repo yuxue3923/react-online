@@ -78,6 +78,11 @@ const formItemLayout = {
           descript: e.target.value,
         });
       }
+      InputKnowledges(e){
+        this.setState({
+          knowledges:[],
+        });
+      }
       //传入是否公开
       Inputisopen(value){
         console.log(value);
@@ -99,7 +104,6 @@ const formItemLayout = {
       }
       //树状知识点点击事件
       onSelect = (value) => {
-        console.log(value);
         const knowledges1=this.state.knowledges; 
         knowledges1.push(value) ;
         console.log(knowledges1);
@@ -347,11 +351,11 @@ const formItemLayout = {
         const sidecontent=(
             <div>
                 <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
-                      <Tree showLine defaultExpandedKeys={['一次方程概念', '一次方程应用']} onSelect={this.onSelect}>
+                     <Tree showLine defaultExpandedKeys={['一次方程', '二次方程']} onSelect={this.onSelect}>
                         <TreeNode title="一次方程" key="一次方程">
-                          <TreeNode title="一次方程概念" key="一次方程概念" />
-                          <TreeNode title="一次方程特点" key="一次方程特点" />
-                          <TreeNode title="一次方程应用" key="一次方程应用">
+                          <TreeNode title="数一数" key="数一数" />
+                          <TreeNode title="1--5的认识" key="1--5的认识" />
+                          <TreeNode title="认识11--20" key="认识11--20">
                             <TreeNode title="应用实例" key="应用实例" />
                           </TreeNode>
                         </TreeNode>
@@ -434,7 +438,7 @@ const formItemLayout = {
           <Form.Item label="知识点" {...formItemLayout}>
           <Row gutter={16}>
           <Col span={20}>
-             <TextArea placeholder={this.state.knowledges} value={this.state.knowledges} style={{ width:'100%'}} rows={4}/>
+             <TextArea onChange={this.InputKnowledges.bind(this)} placeholder={this.state.knowledges} value={this.state.knowledges} style={{ width:'100%'}} rows={4}/>
           </Col> 
            <Col span={4}>
               <Button onClick={this.toggle}>选择知识点</Button>
