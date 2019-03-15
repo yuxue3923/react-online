@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Pagination,Card, Icon,Row, Col,Input,Upload, message,Button,Tabs } from 'antd';
 import './sider.css';
+import { DefaultPlayer as Video } from 'react-html5video';
+import 'react-html5video/dist/styles.css';
 const TabPane = Tabs.TabPane;
 const { Meta } = Card;
 const props = {
@@ -78,9 +80,9 @@ const props = {
                 <Card
                   style={{ width:220 ,height:230}}
                   cover={
-                    <img onClick={()=>this.props.Getsource(v)}
+                    <img style={{ width:220 ,height:130}} onClick={()=>this.props.Getsource(v)}
                       alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                      src={v.file_url}
                     />
                   }
                 >
@@ -114,12 +116,17 @@ const props = {
                 <Card
                   style={{ width:220 ,height:230}}
                   cover={
-                    <img onClick={()=>this.props.Getsource(v)} 
-                      alt="example"
-                      src="https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png"
-                    />
-                  }
-                >
+                    <Video style={{ width:220 ,height:130}} autoPlay loop muted
+                         controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
+                         poster=""
+                         onCanPlayThrough={() => {
+                         // Do stuff
+                         }}>
+                        <source src={v.file_url} type="video/mp4" />
+                        <track label="English" kind="subtitles" srcLang="en" src="" default />
+                    </Video>
+                    }
+                   >
                   <Row>
                     <Col span={18}>
                       <Meta  title={v.r_name} />
