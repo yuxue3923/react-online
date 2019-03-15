@@ -3,6 +3,7 @@ import { Pagination,Card, Icon,Row, Col,Input,Upload, message,Button,Tabs } from
 import './sider.css';
 import { DefaultPlayer as Video } from 'react-html5video';
 import 'react-html5video/dist/styles.css';
+const { TextArea } = Input;
 const TabPane = Tabs.TabPane;
 const { Meta } = Card;
 const props = {
@@ -30,6 +31,7 @@ const props = {
         resourcelist:this.props.resourcelist,
         current:1,//图片资源当前页
         currentpage:1,//视频资源当前页
+        textcurrentpage:1,//文本资源当前页
       }
   }
  
@@ -47,7 +49,13 @@ const props = {
       }
     )
   }
- 
+  onChangetext=(page)=>{
+    this.setState(
+      {
+        textcurrentpage:page,
+      }
+    )
+  }
   callback(key) {
     console.log(key);
     console.log(this.state.resourcelist);
@@ -70,6 +78,13 @@ const props = {
         var objec=resource[j];
         if(objec.rtype ==="视频"){
           videoresource.push(objec);
+        }
+      };
+      var textresource=[];
+      for(var k=0;k<resource.length;k++){
+        var obje=resource[k];
+        if(obje.rtype ==="文本"){
+          textresource.push(obje);
         }
       };
       const imgresourceList = imgresource.map((v, i) => {
@@ -149,6 +164,42 @@ const props = {
         </div>
         );}
       );
+      const textsourceList = textresource.map((v, i) => {
+        return (
+          <div>
+          <Row gutter={16}>
+            <Col span={8}>
+                <Card
+                  style={{ width:220 ,height:230}}
+                  cover={
+                    <TextArea onClick={()=>this.props.Getsource(v)} style={{ minHeight: 130 ,minWidth: 220}} value={v.r_descript} rows={4} />
+                    // <div style={{ width:220 ,height:130}} onClick={()=>this.props.Getsource(v)}>
+                    //   {v.r_descript}
+                    // </div>
+                  }
+                >
+                  <Row>
+                    <Col span={18}>
+                      <Meta  title={v.r_name} />
+                    </Col>
+                    <Col span={6}>
+                      <Icon type="star-o" onClick={()=>this.props.Getsource(v)} /><span style={{fontSize:'1px'}}> 应用</span>
+                  </Col>
+                  </Row>
+                  <br />
+                  <Row >
+                    <Col span={7}>
+                      <Icon type="like-o" /><span style={{fontSize:'1px'}}>1718</span>
+                  </Col>
+                    <Col span={8}><span style={{fontSize:'1px'}}>积分：49</span></Col>
+                    <Col span={9}><span style={{fontSize:'1px'}}>引用数：89</span></Col>
+                  </Row>
+                </Card>
+            </Col>
+          </Row>
+        </div>
+        );}
+      );
       var ownMap=(list,current)=>{
         for(let i=(current-1)*6;i<list.length;){
           return <div className='cardstyle'>
@@ -187,8 +238,28 @@ const props = {
         </div>
         }
        }
+       var textownMap=(list,current)=>{
+        for(let i=(current-1)*6;i<list.length;){
+          return <div className='cardstyle'>
+          <Row>
+            <Col span={8}>{list[i]}</Col>
+            <Col span={8}>{list[i+1]}</Col>
+            <Col span={8}>{list[i+2]}</Col> 
+          </Row>
+          <Row>
+            <Col span={8}>{list[i+3]}</Col>
+            <Col span={8}>{list[i+4]}</Col>
+            <Col span={8}>{list[i+5]}</Col> 
+          </Row>
+          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
+          <Pagination current={this.state.textcurrentpage} onChange={this.onChangetext} total={list.length} />
+          </Row>
+        </div>
+        }
+       }
          const cardList_img = ownMap(imgresourceList,this.state.current)
-          const cardList_video = videoownMap(videosourceList,this.state.currentpage)
+         const cardList_video = videoownMap(videosourceList,this.state.currentpage)
+         const cardList_text = textownMap(textsourceList,this.state.textcurrentpage)
       return (
         
           <div className='divContent'>
@@ -205,7 +276,7 @@ const props = {
               <Tabs defaultActiveKey="2" onChange={this.callback.bind(this)} >
                   <TabPane tab="视频" key="1">{cardList_video}</TabPane>
                   <TabPane tab="图片" key="2">{cardList_img}</TabPane>
-                  <TabPane tab="文本" key="3">{cardList_img}</TabPane>
+                  <TabPane tab="文本" key="3">{cardList_text}</TabPane>
               </Tabs>
               </div>
       );

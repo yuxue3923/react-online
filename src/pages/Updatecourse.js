@@ -53,6 +53,7 @@ const formItemLayout = {
           coursecatalog:[],//课件目录
           knowledges:[],
           coursedata:{},//课件信息
+          knowledgelist:[],
         }
       }
       // 传入课件名称
@@ -60,6 +61,7 @@ const formItemLayout = {
         this.setState({
           courseName: e.target.value,
         });
+        this.getknowledgeRel(e.target.value);
       }
       //年级科目
       Inputgrade(value){
@@ -275,6 +277,35 @@ const formItemLayout = {
           }
         });
       }
+      getknowledgeRel(value) {
+        const { login_info }=this.props;
+        console.log('进入knowledgeRel ajax');
+        console.log(login_info.access_token);
+        $.ajax({
+          url: "http://"+localhost+":3000/api/knowledgeRel",
+          data:"courseName="+value,
+          beforeSend:function(request){
+            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+          },
+          type: "GET",
+          dataType: "json",
+          async:false,
+          success: function (data) {
+            if (data.errorCode === 0) {
+              console.log('获取关联知识点');
+              console.log(data);
+              this.setState({
+                knowledgelist:data.msg,
+              });
+            }
+            else {   
+              console.log('获取关联知识点2222');
+            }
+          }.bind(this),
+          error: function (xhr, status, err) {
+          }
+        });
+      }
       componentWillMount(){
         this.getdata();
       }
@@ -348,32 +379,20 @@ const formItemLayout = {
 // });
     }
     render() {
+      const treeList = this.state.knowledgelist.map((v, i) => {
+        return (
+          <TreeNode title={v.title} key={v.title}/>
+        );}
+      )
         const sidecontent=(
-            <div>
+           <Card style={{margin:'60px 10px 30px 10px'}} title="与课件关联的知识点">
                 <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
-                     <Tree showLine defaultExpandedKeys={['一次方程', '二次方程']} onSelect={this.onSelect}>
-                        <TreeNode title="一次方程" key="一次方程">
-                          <TreeNode title="数一数" key="数一数" />
-                          <TreeNode title="1--5的认识" key="1--5的认识" />
-                          <TreeNode title="认识11--20" key="认识11--20">
-                            <TreeNode title="应用实例" key="应用实例" />
-                          </TreeNode>
-                        </TreeNode>
-                        <TreeNode title="二次方程" key="二次方程">
-                          <TreeNode title="二次方程概念" key="二次方程概念" />
-                          <TreeNode title="二次方程特点" key="二次方程特点" />
-                          <TreeNode title="二次方程应用" key="二次方程应用">
-                            <TreeNode title="应用实例" key="应用实例" />
-                          </TreeNode>
-                        </TreeNode>
-                        <TreeNode title="二次函数" key="二次函数" />
-                        <TreeNode title="分数" key="分数" />
-                        <TreeNode title="比值" key="比值" />
+                      <Tree showLine  onSelect={this.onSelect}>
+                       {treeList}
                       </Tree>
                     </div>
-            </div>
+            </Card>
         );
-     
       return (
         <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
         <Sider 
