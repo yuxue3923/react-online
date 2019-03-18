@@ -54,7 +54,7 @@ const formItemLayout = {
         super(props, context)
         this.state = {
           arrSize: 0,
-          collapsed: false,//控制sider折叠
+          // collapsed: false,//控制sider折叠
           isOpen:"0",
           coursecatalog:[],//课件目录
           knowledges:[],
@@ -74,11 +74,11 @@ const formItemLayout = {
           grade:value,
         });
       }
-      InputKnowledges(e){
-        this.setState({
-          knowledges:[],
-        });
-      }
+      // InputKnowledges(e){
+      //   this.setState({
+      //     knowledges:[],
+      //   });
+      // }
       Inputsubject(value){
         this.setState({
           subject:value,
@@ -104,21 +104,22 @@ const formItemLayout = {
         }
       }
       //侧栏知识点弹出框事件
-      toggle = () => {
-        this.setState({
-          collapsed: !this.state.collapsed,
-        });
-      }
+      // toggle = () => {
+      //   this.setState({
+      //     collapsed: !this.state.collapsed,
+      //   });
+      // }
       //树状知识点点击事件
-      onSelect = (value) => {
-        console.log(value);
-        const knowledges1=this.state.knowledges; 
-        knowledges1.push(value) ;
-        console.log(knowledges1);
+      onSelect = (e) => {
+        console.log(e.target.value);
+        const a=this.state.knowledgelist;
+        const knowledges1={}; 
+        knowledges1['title'] =e.target.value; 
+        a.push(knowledges1);
+        console.log(a[0].title);
         this.setState({
-          knowledges:knowledges1
+          knowledgelist:a
         });
-    
       }
       // onSelectcopy = () => {
       //   const knowledges1=this.state.knowledges; 
@@ -128,10 +129,10 @@ const formItemLayout = {
       //     knowledges:knowledges1
       //   });
       // }
-      onCollapse = (collapsed) => {
-        console.log(collapsed);
-        this.setState({ collapsed });
-      }
+      // onCollapse = (collapsed) => {
+      //   console.log(collapsed);
+      //   this.setState({ collapsed });
+      // }
       handlePlus() {
         if (this.state.arrSize < 7) {
             const coursecatalog1 = {}; 
@@ -165,6 +166,13 @@ const formItemLayout = {
         }
       }
       creatcourse = () =>{
+        const know=this.state.knowledgelist;
+        var knowsource=[];
+        for(var i=0;i<know.length;i++){
+           var obj=know[i];
+           knowsource.push(obj.title);
+        };
+        console.log(knowsource)
         const { login_info }=this.props;
         var data={
          "user_id":login_info.user_id,
@@ -172,7 +180,7 @@ const formItemLayout = {
           "grade": this.state.grade,
           "subject": this.state.subject,
           "descript":  this.state.descript,
-          "knowledges":this.state.knowledges,
+          "knowledges":knowsource,
           "isOpen": this.state.isOpen,
           "isEdit": 1,
           "name": "课件目录",
@@ -250,6 +258,20 @@ const formItemLayout = {
               console.log("取回课件数据错误")
             }
         });
+    }
+    deleteknowid(value){
+      var array=this.state.knowledgelist;
+        for (var i=0;i<array.length;i++){
+          if(array[i].title==value){
+             var index=i;
+             console.log("index",index)
+          }
+        }
+      array.splice(index,1);
+      console.log(array);
+      this.setState({
+        knowledgelist:array,
+      })
     }
     getknowledgeRel(value) {
       const { login_info }=this.props;
@@ -349,22 +371,31 @@ const formItemLayout = {
     render() {
       const treeList = this.state.knowledgelist.map((v, i) => {
         return (
-          <TreeNode title={v.title} key={v.title}/>
+          <div>
+          <Row gutter={16}>
+            <Col span={20}>
+              <div key={i}>{v.title}</div>
+            </Col>
+            <Col span={4}>
+              <Icon type="minus-square" onClick={this.deleteknowid.bind(this,v.title)}/>
+            </Col>
+          </Row>
+          </div>
         );}
       )
-        const sidecontent=(
-           <Card style={{margin:'60px 10px 30px 10px'}} title="与课件关联的知识点">
-                <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
-                      <Tree showLine  onSelect={this.onSelect}>
-                       {treeList}
-                      </Tree>
-                    </div>
-            </Card>
-        );
+        // const sidecontent=(
+        //    <Card style={{margin:'60px 10px 30px 10px'}} title="与课件关联的知识点">
+        //         <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
+        //               <Tree showLine  onSelect={this.onSelect}>
+        //                {treeList}
+        //               </Tree>
+        //             </div>
+        //     </Card>
+        // );
      
       return (
         <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
-        <Sider 
+        {/* <Sider 
         width={250}
         trigger={null}
         collapsible
@@ -375,7 +406,7 @@ const formItemLayout = {
         style={{width: '100%', height: '700px'}}
         >
          {sidecontent}
-        </Sider>
+        </Sider> */}
         {/* <Header className='top-navigation' style={{height:'8.2%'}}> */}
         {/* <div className="logo" /> */}
         
@@ -391,8 +422,8 @@ const formItemLayout = {
          
         <div>
          <Row gutter={16}>
-         <Col span={9}>
-        <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >创建课件</div>
+         <Col span={12}>
+        <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 200px' }} >创建课件</div>
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
@@ -425,15 +456,20 @@ const formItemLayout = {
           <Form.Item label="课件简介" {...formItemLayout}>
            <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
           </Form.Item>
-
-          <Form.Item label="知识点" {...formItemLayout}>
+          <Form.Item label="手动输入关联知识点" {...formItemLayout}>
+            <Input placeholder="20字以内" onPressEnter={this.onSelect.bind(this)} style={{ width: 300 }}/>
+          </Form.Item>
+          <Form.Item label="关联知识点" {...formItemLayout}>
           <Row gutter={16}>
-          <Col span={20}>
-             <TextArea  onChange={this.InputKnowledges.bind(this)} placeholder="在这里写下你的知识点" value={this.state.knowledges} style={{ width:'100%'}} rows={4}/>
+          <Col span={24}>
+             <Card> 
+             {/* <TextArea   placeholder="关联知识点" value={treeList} style={{ width:'100%'}} rows={4}/> */}
+                {treeList}
+             </Card>
           </Col> 
-           <Col span={4}>
+           {/* <Col span={4}>
               <Button onClick={this.toggle}>选择知识点</Button>
-            </Col> 
+            </Col>  */}
             </Row>                 
           </Form.Item>
           <Form.Item label="公开/私密" {...formItemLayout}>
@@ -482,10 +518,12 @@ const formItemLayout = {
             </Form.Item>
         </Form>
            <Row>
-             <Button type="primary" onClick={this.creatcourse} style={{margin:'0px 0px 0px 100px'}}>确认创建</Button>
+            <div style={{ margin:'20px 0px 30px 200px' }} > 
+             <Button type="primary" onClick={this.creatcourse} >确认创建</Button>
+            </div>
            </Row>
             </Col>
-            <Col span={15}>
+            <Col span={12}>
               <Card style={{margin:'80px 0px 30px 80px',width:550 }} title="课件目录大纲">
                <div id="main" style={{ width: 500, height: 500 }}></div>
               </Card>

@@ -201,6 +201,12 @@ const props = {
         );}
       );
       var ownMap=(list,current)=>{
+        if(list.length===0){
+          return <div className='cardstyle'>
+             <div>当前没有图片资源哟~</div>
+        </div>
+         }
+         else{
         for(let i=(current-1)*6;i<list.length;){
           return <div className='cardstyle'>
           <Row>
@@ -219,7 +225,14 @@ const props = {
         </div>
         }
        }
+      }
        var videoownMap=(list,current)=>{
+        if(list.length===0){
+          return <div className='cardstyle'>
+             <div>当前没有视频资源哟~</div>
+        </div>
+         }
+         else{
         for(let i=(current-1)*6;i<list.length;){
           return <div className='cardstyle'>
           <Row>
@@ -238,7 +251,14 @@ const props = {
         </div>
         }
        }
+      }
        var textownMap=(list,current)=>{
+         if(list.length===0){
+          return <div className='cardstyle'>
+             <div>当前没有文本资源哟~</div>
+        </div>
+         }
+         else{
         for(let i=(current-1)*6;i<list.length;){
           return <div className='cardstyle'>
           <Row>
@@ -256,6 +276,7 @@ const props = {
           </Row>
         </div>
         }
+      }
        }
          const cardList_img = ownMap(imgresourceList,this.state.current)
          const cardList_video = videoownMap(videosourceList,this.state.currentpage)
