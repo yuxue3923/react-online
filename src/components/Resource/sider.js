@@ -214,7 +214,7 @@ const props = {
             <Col span={8}>{list[i+5]}</Col> 
           </Row>
           <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-          <Pagination current={this.state.current} onChange={this.onChange} total={list.length} />
+          <Pagination current={this.state.current} onChange={this.onChange} total={list.length} pageSize={6}/>
           </Row>
         </div>
         }
@@ -233,7 +233,7 @@ const props = {
             <Col span={8}>{list[i+5]}</Col> 
           </Row>
           <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-          <Pagination current={this.state.currentpage} onChange={this.onChangepage} total={list.length} />
+          <Pagination current={this.state.currentpage} onChange={this.onChangepage} total={list.length} pageSize={6}/>
           </Row>
         </div>
         }
@@ -252,7 +252,7 @@ const props = {
             <Col span={8}>{list[i+5]}</Col> 
           </Row>
           <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-          <Pagination current={this.state.textcurrentpage} onChange={this.onChangetext} total={list.length} />
+          <Pagination current={this.state.textcurrentpage} onChange={this.onChangetext} total={list.length} pageSize={6}/>
           </Row>
         </div>
         }
@@ -273,7 +273,7 @@ const props = {
                   </Button>
               </Upload>
               
-              <Tabs defaultActiveKey="2" onChange={this.callback.bind(this)} >
+              <Tabs defaultActiveKey="1" onChange={this.callback.bind(this)} >
                   <TabPane tab="视频" key="1">{cardList_video}</TabPane>
                   <TabPane tab="图片" key="2">{cardList_img}</TabPane>
                   <TabPane tab="文本" key="3">{cardList_text}</TabPane>

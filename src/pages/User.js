@@ -204,7 +204,16 @@ const formItemLayout = {
             }
             else {   
               console.log('获取查询权限2222');
-               
+              this.setState({
+                username:login_info.username,
+                email:data.msg.email,
+                phone_num:data.msg.phone_num,
+                works:data.msg.works,
+                mark:data.msg.mark,
+                download:data.msg.download,
+                visit:data.msg.visit,
+                contribution:[data.msg.works,data.msg.download,data.msg.mark,data.msg.visit]
+              });
             }
           }.bind(this),
           error: function (xhr, status, err) {

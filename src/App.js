@@ -123,7 +123,7 @@ class App extends Component {
       msg:null,
       cooperationuserid:0,
       code:0,
-      collapsed: true,
+      collapsed: false,
       visible: false,
       modalvisible:false,
       modal2Visible:false,

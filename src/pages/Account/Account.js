@@ -468,7 +468,7 @@ const FormItem = Form.Item;
                   }
                 >
                   <Row>
-                    <Col span={18}>
+                    <Col span={24}>
                     <Meta
                         title={v.courseName}
                         description={v.descript}
@@ -507,7 +507,7 @@ const FormItem = Form.Item;
                   }
                 >
                   <Row>
-                    <Col span={18}>
+                    <Col span={24}>
                     <Meta
                         title={v.courseName}
                         description={v.descript}
@@ -562,7 +562,7 @@ const FormItem = Form.Item;
             <Col span={4}>{list[i+11]}</Col> 
           </Row>
           <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-          <Pagination current={this.state.pagecurrent} onChange={this.onChangepage} total={list.length} />
+          <Pagination current={this.state.pagecurrent} onChange={this.onChangepage} total={list.length} pageSize={12} />
           </Row>
         </div>
         }
@@ -587,7 +587,7 @@ const FormItem = Form.Item;
            <Col span={4}>{list[i+10]}</Col>
          </Row>
          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-         <Pagination current={this.state.current} onChange={this.onChange} total={list.length} />
+         <Pagination current={this.state.current} onChange={this.onChange} total={list.length} pageSize={11}/>
          </Row>
        </div>
        }
