@@ -215,7 +215,8 @@ const formItemLayout = {
                         type:'createcourseSuccess',
                         payload:{
                             createCourse_info:data.msg[0],
-                            course_id:data.msg[0]._id
+                            course_id:data.msg[0]._id,
+                            // numchat:false,
                         }
                       });
                       this.context.router.history.push("/APP");

@@ -180,7 +180,8 @@ const FormItem = Form.Item;
               payload:{
                 isSingle:false,
                 createCourse_info:data.msg[0],
-                course_id:projectId || this.state.searchContent
+                course_id:projectId || this.state.searchContent,
+                numchat:true,
               }
             });
             this.context.router.history.push("/APP");
