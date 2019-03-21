@@ -12,7 +12,7 @@ import {localhost} from './config'
 var temp = 99999
 var MyDeck = []
 var thumbnail = []
-
+var toServePage = null;
 /*
 var MyDeck = [[{
   "id":temp,
@@ -129,6 +129,7 @@ class App extends Component {
    this.thumbnail=this.thumbnail.bind(this)
    this.sync=this.sync.bind(this);
    this.flush=this.flush.bind(this);
+   this.getToServePage=this.getToServePage.bind(this);
    this.save = this.save.bind(this)
    this.passbyJudge = this.passbyJudge.bind(this)
    this.newSlide = this.newSlide.bind(this)
@@ -155,11 +156,18 @@ class App extends Component {
       isSingle:true, //判断是否处于协同模式
       cooperuserlist:[],
       Avatartype:["icon-touxiangnvhai","icon-icon-test3","icon-icon-test1","icon-icon-test","icon-icon-test2"],
-
+      pageChange:false,
+      trick:false, //只让缩略图组件使用，用于传递socket而不引发视图（EditorWithBar canvaslib）的渲染
     };
     flush(state){
       this.setState({
         canvasFlush:state
+      })
+    }
+    getToServePage(func){
+      toServePage = func;
+      this.setState({
+        trick:true
       })
     }
     /*
@@ -193,7 +201,7 @@ class App extends Component {
           is = false;
           
           thumbnail = [];
-          MyDeck = [];
+          MyDeck[0].media = []; //为了同步componentWillUpdate的浅复制
         }
         else{
           thumbnail.splice(page-1,1)
@@ -761,7 +769,7 @@ class App extends Component {
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                <DrawView mask={false} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>{/**/}
+                <DrawView mask={false} trick={this.state.trick} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>{/**/}
               </Drawer>
             </div>
             <div className="flowbar" style={{right:10,top:20}}>
@@ -818,7 +826,7 @@ class App extends Component {
             </Dropdown>
             </span>
             </div>
-            <EditorWithBar initContent={this.passbyJudge()} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
+            <EditorWithBar initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
             </div>
             </Content>
             {/* </Layout> */}

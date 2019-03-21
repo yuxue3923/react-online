@@ -180,12 +180,12 @@ const dgraph=function(fh,fheart,fa){
                </Button>
           </div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" onClick={this.add.bind(this,'pen')}>
+               <Button type="primary" onClick={(e) => {this.add.bind(this,'pen')}}>
                  <Icon className="iconsize" type="scissor"/>
                </Button>
           </div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" onClick={this.add.bind(this,'pen')}>
+               <Button type="primary" >
                  <Icon className="iconsize" type="file-search"/>
                </Button>
           </div> 
@@ -200,18 +200,18 @@ const dgraph=function(fh,fheart,fa){
                </Button>
           </div> 
           <div style={{margin:'1px'}}>
-               <Button type="primary" >
-                 <Icon className="iconsize" type="redo"/>
+               <Button type="primary" onClick = {this.add.bind(this,'redo')}>
+                 <Icon className="iconsize" type="redo" />
                </Button>
           </div> 
           <div style={{margin:'1px'}}>
-               <Button type="primary" >
+               <Button type="primary" onClick = {this.add.bind(this,'undo')}>
                  <Icon className="iconsize" type="undo"/>
                </Button>
           </div> 
           </div>
           </Col>
-       <Col span={23}> <Editor type={isButton&&this.state.addType} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode}   shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now} dispatchState = {this.props.dispatchState}/></Col>   
+       <Col span={23}> <Editor type={isButton&&this.state.addType} getToServePage={this.props.getToServePage} pageChange={this.props.pageChange} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode}   shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now} dispatchState = {this.props.dispatchState}/></Col>   
       </Row> 
         </div>
      

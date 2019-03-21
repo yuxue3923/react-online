@@ -4,6 +4,7 @@ import React from 'react'
 import {localhost} from '../../config'
 import io from 'socket.io-client'
 var toServe = null;
+var toServePage = null;
 const elementStyle={
     stroke: '#ccc',
     fill: 'white',
@@ -32,6 +33,19 @@ function resolve(msg){
             break;
         case 'delete':
             sr.remove(el)
+            break;
+        case 'stack':
+          //  sr.remove(el)
+            switch(tag){
+                case 'redo':
+                  sr.redo();
+                  break;
+                case 'undo':
+                  sr.undo();
+                  break;
+                default:
+                  break;
+            }
             break;
         default:
             break;
@@ -126,6 +140,14 @@ function add(type,callback){
             var heart=new srender.Heart({shape:{cx:200,cy:20,width:50,height:50},style:{fill: 'red',stroke: 'none'}})
             sr.add(heart);
             break;
+        case 'undo':
+          //  Pen('undo')
+            sr.undo();
+            break
+        case 'redo':
+         //   Pen('redo')
+            sr.redo();
+            break
         default:
             Pen('none')
             console.log("Sorry,no shape to draw")
@@ -161,13 +183,15 @@ export default class Editor extends React.Component {
          var url = "http://"+localhost+":3001"
          let param = `/${projectId}` 
          console.log("param:",param)
-         var socket = io(url,{path:param});
+         var socket = io(url,{path:param});//无论页面怎样切换，用户应当只获取该socket
         
          toServe = function(msg){
            console.log("socket-client")
            socket.emit('update data', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
          }
-        
+         toServePage = function(msg){
+            socket.emit('page change',msg)
+         }
          var username = 'bing';
          
         
@@ -182,14 +206,16 @@ export default class Editor extends React.Component {
              socket.on('user joined',(data)=>{
                  console.log(data.username+" come in");
              });
-            
+            socket.on('page change',(page)=>{
+
+            })
              socket.on('update data',(data)=>{
              console.log("someone update")
              var msg = JSON.parse(data);
         //     self.setState({msg:msg})
                 resolve(msg)
              });
-           
+           this.props.getToServePage(toServePage)
            
        }
     componentDidMount() {
@@ -213,8 +239,8 @@ export default class Editor extends React.Component {
         }
         else{
          console.log("toServe")
-         sr=srender.init(dom,{},true)
-    //   sr.initWithCb(this.props.toServe)
+     //    sr=srender.init(dom,{},true)
+   
          sr.initWithCb(toServe)
         this.props.objectList&&sr.initWithOthers(this.props.objectList)
     
@@ -253,9 +279,9 @@ export default class Editor extends React.Component {
        
         if(this.props.isSingleMode){
            
-            !this.props.objectList&&sr.clear()
+        //    !this.props.objectList&&sr.clear()
            
-            this.props.objectList&&sr.initWithOthers(this.props.objectList)
+        //    this.props.objectList&&sr.initWithOthers(this.props.objectList)
         }
         else{
             console.log("toServe")
