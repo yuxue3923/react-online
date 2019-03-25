@@ -97,7 +97,8 @@ const dgraph=function(fh,fheart,fa){
         }
         
         this.handleThumbnail=this.handleThumbnail.bind(this);
-        this.save = this.save.bind(this)
+        this.save = this.save.bind(this);
+        this.showModal_preview=this.showModal_preview.bind(this);
     }
  
     add(type){
@@ -110,6 +111,9 @@ const dgraph=function(fh,fheart,fa){
         this.props.thumbnail(src)
 
 
+    }
+    showModal_preview(){
+      this.props.showModal_preview()
     }
     save(){
       this.props.save()
@@ -195,7 +199,7 @@ const dgraph=function(fh,fheart,fa){
                </Button>
           </div> 
           <div style={{margin:'1px'}}>
-               <Button type="primary" >
+               <Button type="primary" onClick={this.showModal_preview}>
                  <Icon className="iconsize" type="eye"/>
                </Button>
           </div> 

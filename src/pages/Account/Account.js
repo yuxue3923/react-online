@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
-import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,} from 'antd';
+import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,message} from 'antd';
 import MyTag from './Tag';
 import ChoseTemplate from './ChoseTemplate'
 import '../../App.css'
@@ -46,12 +46,12 @@ const FormItem = Form.Item;
           current:1,//我的课件当前页
           pagecurrent:1,//总课件当前页
           checked: true,//Tag状态
-          templatevisible:true,//控制课件模版弹出框
+          templatevisible:false,//控制课件模版弹出框
           imgurl:["https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png","https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png","https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png","https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png" ]
         }
     }
     handleChangecreat=(value)=> {
-      if(value===2){
+      if(value==="2"){
         this.collectCourseByuser();
       }else{
         this.getdata();
@@ -97,6 +97,12 @@ const FormItem = Form.Item;
       Modal.success({
         title: '消息提示',
         content: '成功选择该课件模版！',
+      });
+    }
+    handleCancel_template = (e) => {
+      console.log(e);
+      this.setState({
+        templatevisible: false,
       });
     }
   onChange=(page)=>{
@@ -174,7 +180,8 @@ const FormItem = Form.Item;
               payload:{
                 isSingle:false,
                 createCourse_info:data.msg[0],
-                course_id:projectId || this.state.searchContent
+                course_id:projectId || this.state.searchContent,
+                numchat:true,
               }
             });
             this.context.router.history.push("/APP");
@@ -209,13 +216,6 @@ const FormItem = Form.Item;
       this.cancelcollectCourse(id);
     }
   }
-
-    handleCancel_template = (e) => {
-      console.log(e);
-      this.setState({
-        templatevisible: false,
-      });
-    }
     sendupdatecourseid(id){ 
       const { setSsendupdatecourseid } = this.props;
       setSsendupdatecourseid({
@@ -340,9 +340,11 @@ const FormItem = Form.Item;
         },
         success: function(data) {
           if (data.errorCode === 0) {
+            message.success('成功删除课件~');
             console.log('删除课件id成功111');
             console.log(data);
             this.getdata();
+            this.getallcoursedata();
           }
           else {   
             console.log('删除课件id成功2222');
@@ -460,14 +462,14 @@ const FormItem = Form.Item;
                 <Card
                   style={{ width:250 ,height:300}}
                   cover={
-                    <img onClick={this.showModal.bind(this,v._id)}
+                    <img 
                       alt="example"
                       src={this.state.imgurl[i%4]} height="154"
                     />
                   }
                 >
                   <Row>
-                    <Col span={18}>
+                    <Col span={24}>
                     <Meta
                         title={v.courseName}
                         description={v.descript}
@@ -499,14 +501,14 @@ const FormItem = Form.Item;
                 <Card
                   style={{ width:250 ,height:300}}
                   cover={
-                    <img onClick={this.showModal.bind(this,v._id)}
+                    <img
                       alt="example"
                       src={this.state.imgurl[i%4]} height="154"
                     />
                   }
                 >
                   <Row>
-                    <Col span={18}>
+                    <Col span={24}>
                     <Meta
                         title={v.courseName}
                         description={v.descript}
@@ -542,43 +544,51 @@ const FormItem = Form.Item;
 
      
       var ownMapallcourse=(list,current)=>{
-        for(let i=(current-1)*8;i<list.length;){
+        for(let i=(current-1)*12;i<list.length;){
           return  <div>
-          <Row style={{ margin: '8px 8px 8px 0'}}>
-             <Col span={6}>{list[i]}</Col>
-            <Col span={6}>{list[i+1]}</Col>
-            <Col span={6}>{list[i+2]}</Col> 
-            <Col span={6}>{list[i+3]}</Col>
+          <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
+             <Col span={4}>{list[i]}</Col>
+            <Col span={4}>{list[i+1]}</Col>
+            <Col span={4}>{list[i+2]}</Col> 
+            <Col span={4}>{list[i+3]}</Col>
+            <Col span={4}>{list[i+4]}</Col>
+            <Col span={4}>{list[i+5]}</Col>
           </Row>
-          <Row style={{ margin: '8px 8px 8px 0'}}>
-            <Col span={6}>{list[i+4]}</Col>
-            <Col span={6}>{list[i+5]}</Col>
-            <Col span={6}>{list[i+6]}</Col> 
-            <Col span={6}>{list[i+7]}</Col> 
+          <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
+            <Col span={4}>{list[i+6]}</Col>
+            <Col span={4}>{list[i+7]}</Col>
+            <Col span={4}>{list[i+8]}</Col> 
+            <Col span={4}>{list[i+9]}</Col> 
+            <Col span={4}>{list[i+10]}</Col>
+            <Col span={4}>{list[i+11]}</Col> 
           </Row>
           <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-          <Pagination current={this.state.pagecurrent} onChange={this.onChangepage} total={list.length} />
+          <Pagination current={this.state.pagecurrent} onChange={this.onChangepage} total={list.length} pageSize={12} />
           </Row>
         </div>
         }
        }
       var ownMap=(list,current)=>{
-       for(let i=(current-1)*7;i<list.length;){
+       for(let i=(current-1)*11;i<list.length;){
          return  <div>
-         <Row style={{ margin: '8px 8px 8px 0'}}>
-           <Col span={6}>{cardBasic_creat}</Col>
-            <Col span={6}>{list[i]}</Col>
-           <Col span={6}>{list[i+1]}</Col>
-           <Col span={6}>{list[i+2]}</Col> 
+         <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
+           <Col span={4}>{cardBasic_creat}</Col>
+           <Col span={4}>{list[i]}</Col>
+           <Col span={4}>{list[i+1]}</Col>
+           <Col span={4}>{list[i+2]}</Col> 
+           <Col span={4}>{list[i+3]}</Col> 
+           <Col span={4}>{list[i+4]}</Col>
          </Row>
-         <Row style={{ margin: '8px 8px 8px 0'}}>
-           <Col span={6}>{list[i+3]}</Col>
-           <Col span={6}>{list[i+4]}</Col>
-           <Col span={6}>{list[i+5]}</Col>
-           <Col span={6}>{list[i+6]}</Col> 
+         <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
+           <Col span={4}>{list[i+5]}</Col>
+           <Col span={4}>{list[i+6]}</Col>
+           <Col span={4}>{list[i+7]}</Col>
+           <Col span={4}>{list[i+8]}</Col> 
+           <Col span={4}>{list[i+9]}</Col> 
+           <Col span={4}>{list[i+10]}</Col>
          </Row>
          <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
-         <Pagination current={this.state.current} onChange={this.onChange} total={list.length} />
+         <Pagination current={this.state.current} onChange={this.onChange} total={list.length} pageSize={11}/>
          </Row>
        </div>
        }
@@ -698,12 +708,9 @@ const FormItem = Form.Item;
         <Link to='/User'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar></Link>
         <span style={{padding:10,fontSize:15}}>当前用户</span>
         </div>
-         
-       
-     
         </Header>
         <Modal
-          title="是否查看课件"
+          title="是否编辑课件"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}

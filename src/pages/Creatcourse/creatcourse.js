@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
+import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,message} from 'antd';
 import {Link} from 'react-router-dom'
 import './creatcourse.css'
 import $ from 'jquery';
@@ -54,10 +54,11 @@ const formItemLayout = {
         super(props, context)
         this.state = {
           arrSize: 0,
-          collapsed: false,//控制sider折叠
+          // collapsed: false,//控制sider折叠
           isOpen:"0",
           coursecatalog:[],//课件目录
           knowledges:[],
+          knowledgelist:[],
         }
       }
       // 传入课件名称
@@ -65,6 +66,7 @@ const formItemLayout = {
         this.setState({
           courseName: e.target.value,
         });
+        this.getknowledgeRel(e.target.value);
       }
       //年级科目
       Inputgrade(value){
@@ -72,6 +74,11 @@ const formItemLayout = {
           grade:value,
         });
       }
+      // InputKnowledges(e){
+      //   this.setState({
+      //     knowledges:[],
+      //   });
+      // }
       Inputsubject(value){
         this.setState({
           subject:value,
@@ -97,25 +104,35 @@ const formItemLayout = {
         }
       }
       //侧栏知识点弹出框事件
-      toggle = () => {
-        this.setState({
-          collapsed: !this.state.collapsed,
-        });
-      }
+      // toggle = () => {
+      //   this.setState({
+      //     collapsed: !this.state.collapsed,
+      //   });
+      // }
       //树状知识点点击事件
-      onSelect = (value) => {
-        console.log(value);
-        const knowledges1=this.state.knowledges; 
-        knowledges1.push(value) ;
-        console.log(knowledges1);
+      onSelect = (e) => {
+        console.log(e.target.value);
+        const a=this.state.knowledgelist;
+        const knowledges1={}; 
+        knowledges1['title'] =e.target.value; 
+        a.push(knowledges1);
+        console.log(a[0].title);
         this.setState({
-          knowledges:knowledges1
+          knowledgelist:a
         });
       }
-      onCollapse = (collapsed) => {
-        console.log(collapsed);
-        this.setState({ collapsed });
-      }
+      // onSelectcopy = () => {
+      //   const knowledges1=this.state.knowledges; 
+      //   knowledges1.push(this.state.knowledgesa) ;
+      //   console.log(knowledges1);
+      //   this.setState({
+      //     knowledges:knowledges1
+      //   });
+      // }
+      // onCollapse = (collapsed) => {
+      //   console.log(collapsed);
+      //   this.setState({ collapsed });
+      // }
       handlePlus() {
         if (this.state.arrSize < 7) {
             const coursecatalog1 = {}; 
@@ -125,7 +142,7 @@ const formItemLayout = {
           this.setState({ 
               arrSize: this.state.arrSize + 1 ,
         })
-        this.CourseAppear(); 
+        this.CourseAppear();
         } else {
           Modal.warning({
             title: '注意：',
@@ -149,6 +166,13 @@ const formItemLayout = {
         }
       }
       creatcourse = () =>{
+        const know=this.state.knowledgelist;
+        var knowsource=[];
+        for(var i=0;i<know.length;i++){
+           var obj=know[i];
+           knowsource.push(obj.title);
+        };
+        console.log(knowsource)
         const { login_info }=this.props;
         var data={
          "user_id":login_info.user_id,
@@ -156,7 +180,7 @@ const formItemLayout = {
           "grade": this.state.grade,
           "subject": this.state.subject,
           "descript":  this.state.descript,
-          "knowledges":this.state.knowledges,
+          "knowledges":knowsource,
           "isOpen": this.state.isOpen,
           "isEdit": 1,
           "name": "课件目录",
@@ -211,18 +235,17 @@ const formItemLayout = {
                     console.log('成功保存课件');
                     console.log(data.msg);
                     console.log(data.msg._id);
-                    Modal.success({
-                      title: '消息提示',
-                      content: '成功创建课件！',
-                    });
-                    console.log(this.state.coursecatalog);
+                    message.success('成功创建课件！');
+                   
                     setCreatecourseState({
                       type:'createcourseSuccess',
                       payload:{
                         createCourse_info:data.msg,
-                        course_id:data.msg._id
+                        course_id:data.msg._id,
+                        // numchat:false,
                       }
                     });
+                    console.log(data.msg.knowledges);
                     this.context.router.history.push("/APP");
 
                 }
@@ -237,6 +260,50 @@ const formItemLayout = {
             }
         });
     }
+    deleteknowid(value){
+      var array=this.state.knowledgelist;
+        for (var i=0;i<array.length;i++){
+          if(array[i].title==value){
+             var index=i;
+             console.log("index",index)
+          }
+        }
+      array.splice(index,1);
+      console.log(array);
+      this.setState({
+        knowledgelist:array,
+      })
+    }
+    getknowledgeRel(value) {
+      const { login_info }=this.props;
+      console.log('进入knowledgeRel ajax');
+      console.log(login_info.access_token);
+      $.ajax({
+        url: "http://"+localhost+":3000/api/knowledgeRel",
+        data:"courseName="+value,
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        type: "GET",
+        dataType: "json",
+        async:false,
+        success: function (data) {
+          if (data.errorCode === 0) {
+            console.log('获取关联知识点');
+            console.log(data);
+            this.setState({
+              knowledgelist:data.msg,
+            });
+          }
+          else {   
+            console.log('获取关联知识点2222');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }
+      });
+    }
+
       CourseAppear() {
         console.log("课件展示区")
         console.log(JSON.stringify(this.state.coursecatalog))
@@ -303,35 +370,33 @@ const formItemLayout = {
 // });
     }
     render() {
-        const sidecontent=(
-            <div>
-                <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
-                      <Tree showLine defaultExpandedKeys={['一次方程概念', '一次方程应用']} onSelect={this.onSelect}>
-                        <TreeNode title="一次方程" key="一次方程">
-                          <TreeNode title="一次方程概念" key="一次方程概念" />
-                          <TreeNode title="一次方程特点" key="一次方程特点" />
-                          <TreeNode title="一次方程应用" key="一次方程应用">
-                            <TreeNode title="应用实例" key="应用实例" />
-                          </TreeNode>
-                        </TreeNode>
-                        <TreeNode title="二次方程" key="二次方程">
-                          <TreeNode title="二次方程概念" key="二次方程概念" />
-                          <TreeNode title="二次方程特点" key="二次方程特点" />
-                          <TreeNode title="二次方程应用" key="二次方程应用">
-                            <TreeNode title="应用实例" key="应用实例" />
-                          </TreeNode>
-                        </TreeNode>
-                        <TreeNode title="二次函数" key="二次函数" />
-                        <TreeNode title="分数" key="分数" />
-                        <TreeNode title="比值" key="比值" />
-                      </Tree>
-                    </div>
-            </div>
-        );
+      const treeList = this.state.knowledgelist.map((v, i) => {
+        return (
+          <div>
+          <Row gutter={16}>
+            <Col span={20}>
+              <div key={i}>{v.title}</div>
+            </Col>
+            <Col span={4}>
+              <Icon type="minus-square" onClick={this.deleteknowid.bind(this,v.title)}/>
+            </Col>
+          </Row>
+          </div>
+        );}
+      )
+        // const sidecontent=(
+        //    <Card style={{margin:'60px 10px 30px 10px'}} title="与课件关联的知识点">
+        //         <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
+        //               <Tree showLine  onSelect={this.onSelect}>
+        //                {treeList}
+        //               </Tree>
+        //             </div>
+        //     </Card>
+        // );
      
       return (
         <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
-        <Sider 
+        {/* <Sider 
         width={250}
         trigger={null}
         collapsible
@@ -342,7 +407,7 @@ const formItemLayout = {
         style={{width: '100%', height: '700px'}}
         >
          {sidecontent}
-        </Sider>
+        </Sider> */}
         {/* <Header className='top-navigation' style={{height:'8.2%'}}> */}
         {/* <div className="logo" /> */}
         
@@ -358,8 +423,8 @@ const formItemLayout = {
          
         <div>
          <Row gutter={16}>
-         <Col span={9}>
-        <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >创建课件</div>
+         <Col span={12}>
+        <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 200px' }} >创建课件</div>
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
@@ -392,15 +457,20 @@ const formItemLayout = {
           <Form.Item label="课件简介" {...formItemLayout}>
            <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} placeholder="200个字以内" rows={4} />
           </Form.Item>
-
-          <Form.Item label="知识点" {...formItemLayout}>
+          <Form.Item label="手动输入关联知识点" {...formItemLayout}>
+            <Input placeholder="20字以内" onPressEnter={this.onSelect.bind(this)} style={{ width: 300 }}/>
+          </Form.Item>
+          <Form.Item label="关联知识点" {...formItemLayout}>
           <Row gutter={16}>
-          <Col span={20}>
-             <TextArea placeholder="在这里写下你的知识点" value={this.state.knowledges} style={{ width:'100%'}} rows={4}/>
+          <Col span={24}>
+             <Card> 
+             {/* <TextArea   placeholder="关联知识点" value={treeList} style={{ width:'100%'}} rows={4}/> */}
+                {treeList}
+             </Card>
           </Col> 
-           <Col span={4}>
+           {/* <Col span={4}>
               <Button onClick={this.toggle}>选择知识点</Button>
-            </Col> 
+            </Col>  */}
             </Row>                 
           </Form.Item>
           <Form.Item label="公开/私密" {...formItemLayout}>
@@ -449,10 +519,12 @@ const formItemLayout = {
             </Form.Item>
         </Form>
            <Row>
-             <Button type="primary" onClick={this.creatcourse} style={{margin:'0px 0px 0px 100px'}}>确认创建</Button>
+            <div style={{ margin:'20px 0px 30px 200px' }} > 
+             <Button type="primary" onClick={this.creatcourse} >确认创建</Button>
+            </div>
            </Row>
             </Col>
-            <Col span={15}>
+            <Col span={12}>
               <Card style={{margin:'80px 0px 30px 80px',width:550 }} title="课件目录大纲">
                <div id="main" style={{ width: 500, height: 500 }}></div>
               </Card>

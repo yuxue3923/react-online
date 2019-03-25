@@ -6,9 +6,10 @@ import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
 import Bodysider from './components/Resource/sider';
 import DrawView from './components/ZoomPic/drawerview';
-
+import PropTypes from "prop-types"
 import EditorWithBar from './components/Editor/EditorWithBar';
 import {localhost} from './config'
+import io from 'socket.io-client'
 var temp = 99999
 var MyDeck = []
 var thumbnail = []
@@ -93,26 +94,6 @@ const Option = Select.Option;
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
-
-
-
-const menu = function(param){
-  // const {func1,func2,func3} = param
-  return <Card title="当前在线协同者">
-  <div style={{margin:'2px'}} >
-    <Icon type="smile"  className="iconsize" theme="twoTone" twoToneColor="#eb2f96" />
-    <span style={{fontSize:15}}> 梁静茹</span>
-  </div>
-  <div style={{margin:'2px'}}>
-    <Icon type="meh"  className="iconsize" theme="twoTone" twoToneColor="#52c41a"/>
-    <span style={{fontSize:15}}> 王菲</span>
-  </div>
-  <div style={{margin:'2px'}} onClick={param}>
-    <Icon type="frown" className="iconsize" theme="twoTone"/>
-     <span style={{fontSize:15}}> Join</span>   
-  </div>
-</Card>
-}
 function deepClone(obj){
   let _obj = JSON.stringify(obj);
   return JSON.parse(_obj)
@@ -122,6 +103,9 @@ function deepClone(obj){
 var project_id_now = 0;
 var share_code_now = 0;
 class App extends Component {
+  static contextTypes={
+    router:PropTypes.object
+  }
   constructor(props, context) {
     super(props, context)
      // this.initPie = this.initPie.bind(this)
@@ -130,11 +114,14 @@ class App extends Component {
    this.sync=this.sync.bind(this);
    this.flush=this.flush.bind(this);
    this.getToServePage=this.getToServePage.bind(this);
-   this.save = this.save.bind(this)
+   this.save = this.save.bind(this);
+   this.showModal_preview=this.showModal_preview.bind(this);
+   this.sendsource=this.sendsource.bind(this);
    this.passbyJudge = this.passbyJudge.bind(this)
    this.newSlide = this.newSlide.bind(this)
   }
     state = {
+      previewvisible: false ,//预览课件弹出框
       updatecontent:[],
       tempochatdata: "",
       coursecatalog:[],
@@ -142,7 +129,7 @@ class App extends Component {
     //  msg:null,
       cooperationuserid:0,
       code:0,
-      collapsed: true,
+      collapsed: false,
       visible: false,
       modalvisible:false,
       modal2Visible:false,
@@ -154,11 +141,50 @@ class App extends Component {
       thumbnailBase64:[],//this.props.createCourse_info.createCourse_info.slides.slide,
       PopoverVisible:false,
       isSingle:true, //判断是否处于协同模式
+      resourcelist:0,
       cooperuserlist:[],
       Avatartype:["icon-touxiangnvhai","icon-icon-test3","icon-icon-test1","icon-icon-test","icon-icon-test2"],
       pageChange:false,
       trick:false, //只让缩略图组件使用，用于传递socket而不引发视图（EditorWithBar canvaslib）的渲染
+      base64Thumbnail:[],
+      chatsocketid:"",
+      source:{},
+      // templatecourseid:"",
     };
+     //课件预览弹出框
+     showModal_preview () {
+      this.setState({
+        previewvisible: true,
+      });
+    }
+    sendsource=(source)=>{
+      this.setState({
+        source:{
+          "r_id":source.r_id,
+          "file_url":source.file_url,
+          "r_descript":source.r_descript,
+        },
+      });
+    }
+    handleOk_preview = () => {
+      this.setState({
+        previewvisible: false,
+      });
+      const { sendpreviewcourseid,createCourse_info} = this.props;
+      sendpreviewcourseid({
+        type: 'GetpreviewcourseidSuccess',
+        payload:{ 
+          project_id:createCourse_info.course_id,
+          thumbnail:this.state.thumbnail,
+        },
+      });
+      this.context.router.history.push("/Previewcourse");
+    }
+    handleCancel_preview = () => {
+      this.setState({
+        previewvisible: false,
+      });
+    }
     flush(state){
       this.setState({
         canvasFlush:state
@@ -223,20 +249,8 @@ class App extends Component {
       }
     }
     handlePlus() {
-          const coursecatalog1 = this.state.tempochatdata; 
-          this.state.coursecatalog.push(coursecatalog1);
-          console.log('111',this.state.coursecatalog);
-          const updatecontent1=this.state.coursecatalog.map((v,i ) => {
-            return (
-              <div>
-                <IconAvator type={this.state.Avatartype[i%5]}></IconAvator>
-                <Input value={v}  style={{ width: 300 }}/>
-              </div>    
-            )
-      })
-     this.setState({
-      updatecontent:updatecontent1,
-    })
+     const { createCourse_info } = this.props;
+     this.createchat(createCourse_info.course_id)
   }
     updatechatdata = (e) => {
       this.setState({
@@ -277,7 +291,10 @@ class App extends Component {
   
     searchCode(code){
       const callBack = this.getInviteData.bind(this)
-      const { login_info } = this.props;
+      const callBack_chat= this.createchatcopy.bind(this)
+ 
+      const {login_info ,createCourse_info,setCreatecourseState} = this.props;
+ 
       $.ajax({
         url: "http://"+localhost+":3000/api/getReflectProject_id?tinyCode="+code,
         async:false,
@@ -291,12 +308,21 @@ class App extends Component {
         success: function (data) {
             if (data) {
                 console.log('返回对应项目id'+data);
-                callBack(data)
+                callBack(data);
+                callBack_chat(data);
+                setCreatecourseState({
+                  type:'createcourseSuccess',
+                  payload:{
+                    course_id:data,
+                    // numchat:true,
+                  }
+                });
+               
             }
             else {
               message.error("无法找到对应项目");
             }
-        },
+        }.bind(this),
         error: function (xhr, status, err) {
           message.error("进入项目失败");
         }
@@ -329,6 +355,7 @@ class App extends Component {
               payload:{
                 course_id:invite_project_id,
                 createCourse_info:data.msg[0],
+                // numchat:true,
               }
             }); 
             MyDeck = deepClone(data.msg[0].slides.slide)
@@ -380,6 +407,37 @@ class App extends Component {
         }
       });
     }
+    getresource(knowledges){
+      const { login_info }=this.props;
+      console.log('进入ajax');
+      $.ajax({
+        url: "http://"+localhost+":3000/api/resourceRel",
+        data:{
+          "knowledges":JSON.stringify(knowledges),
+        },
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        type: "GET",
+        dataType: "json",
+        async:false,
+        success: function (data) {
+          if (data.errorCode === 0) {
+            console.log('获取知识资源成功');
+            console.log(data);
+           this.setState({
+             resourcelist:data.msg,
+           });
+          }
+          else {   
+            console.log('获取知识资源失败');
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.log('无法获取知识资源');
+        }
+      });
+    }
     createrelationship(){
       const { login_info ,createCourse_info}=this.props;
       console.log('进入ajax');
@@ -398,14 +456,11 @@ class App extends Component {
         success: function (data) {
           if (data.errorCode === 0) {
             console.log('建立联系111');
-            Modal.success({
-              title: '消息提示',
-              content: '成功建立联系',
-            });
+            message.success('添加成功~');
             this.getProjectUserList();
           }
           else {   
-            console.log('建立连接失败');
+            message.error("添加成员失败~");  
           }
         }.bind(this),
         error: function (xhr, status, err) {
@@ -426,6 +481,8 @@ class App extends Component {
       delete formData.thumbnail
       
 
+      formData.children = temp.createCourse_info.catalog.children
+      formData.name = temp.createCourse_info.catalog.name
       formData.width = temp.createCourse_info.thumbnail.style.width
 
       formData.height = temp.createCourse_info.thumbnail.style.height
@@ -454,7 +511,7 @@ class App extends Component {
             }
             else {
               message.success('保存成功');
-                console.log(data);//保存成功后应该更新MyDeck？
+                console.log("返回的保存数据",data);
                 
                
             }
@@ -536,7 +593,8 @@ class App extends Component {
       const param={
         project_id:createCourse_info.course_id
       } 
-      this.save()
+      this.createChatChannel(createCourse_info.course_id);
+      this.save();
       $.ajax({
         url: "http://"+localhost+":3000/api/createWebSocketServer",
         async:false,
@@ -570,11 +628,47 @@ class App extends Component {
         isSingle:false
       });
     }
-    
+    createChatChannel = (project_id) => {
+      const callBack_chat= this.createchatcopy.bind(this)
+      const { login_info,createCourse_info } = this.props;
+      const param={
+        project_id:project_id
+      } 
+      $.ajax({
+        url: "http://"+localhost+":3000/api/createChatChannel",
+        async:false,
+        type: "POST",
+        contentType:"application/x-www-form-urlencoded",
+      //  accepts:"application/json;charset=UTF-8",
+      //  dataType: "json",
+        data:param,
+    // data:'5c6f6e65e00c7f1b4885c798',
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function (data) {
+            if (data.errorCode === 0) {
+          
+              console.log('已创建协同聊天');
+              callBack_chat(project_id);
+            }
+            else {
+                console.log('协同聊天失败');
+            }
+        }.bind(this),
+        error: function (xhr, status, err) {
+          console.log("无法协同项目")
+        }
+    });
+    }
     popoverVisibleChange = (popoverVisible) => {
+     
+      
       this.setState({ popoverVisible });
     }
     setModal2Visible = (modal2Visible)=> {
+      const{createCourse_info}=this.props;
+      this.quitchat(createCourse_info.course_id);
       this.setState({ 
         modal2Visible:modal2Visible,
         popoverVisible:false //选择后让气泡框消失
@@ -607,19 +701,183 @@ class App extends Component {
           shouldCreateSocket:flag
         })
     }
+    createchat=(projectId)=>{
+      const { login_info}=this.props;
+      console.log("聊天室:",projectId)
+       var url = "http://"+localhost+":3001?roomid="+projectId;
+      //  let param = `/${projectId}` 
+      //  console.log("param:",param)
+      //  var socket = io(url,{path:param});
+      var socket = io(url);
+      //  toServe = function(chatdata){
+      //    console.log("socket-client")
+      //    socket.emit('send mesg', JSON.stringify(chatdata)); 
+      //  }
+      var username = 'bing';
+      var connected = false;
+      var editting = false;
+      socket.emit('add user', username);
   
+      var joindata={
+        username : login_info.username,
+       }
+        socket.emit('join chat', joindata);
+       var chatdata={
+         text:this.state.tempochatdata,
+         username : login_info.username,
+        }
+         socket.emit('send mesg', chatdata);
+         socket.on('login',(data)=>{
+          connected = true;
+          console.log("numOfUsers is "+data.numOfUers);
+          console.log("socket.id is"+socket.id);
+      });
+
+     }
+     createchatcopy=(projectId)=>{
+      //  this.quitchat(this.state.templatecourseid);
+      
+      const { login_info}=this.props;
+      console.log("聊天室entrepress:",projectId)
+      // this.setState({
+      //   coursecatalog:[],
+      // });
+       var url = "http://"+localhost+":3001?roomid="+projectId;
+      //  let param = `/${projectId}` 
+      //  console.log("param:",param)
+      //  var socket = io(url,{path:param});
+      var socket = io(url);
+      //  toServe = function(chatdata){
+      //    console.log("socket-client")
+      //    socket.emit('send mesg', JSON.stringify(chatdata)); 
+      //  }
+      var username = 'bing';
+      var connected = false;
+      var editting = false;
+      socket.emit('add user', username);
   
+      var joindata={
+        username : login_info.username,
+       }
+        socket.emit('join chat', joindata);
+      //  var chatdata={
+      //    text:this.state.tempochatdata,
+      //    username : login_info.username,
+      //   }
+      //    socket.emit('send mesg', chatdata);
+         socket.on('login',(data)=>{
+          connected = true;
+          console.log("numOfUsers is "+data.numOfUers);
+          console.log("socket.id is"+socket.id);
+      });
+
+           socket.on('message',(data)=>{
+           console.log("someone send mesg")
+           console.log(data)
+    //        var msg = JSON.parse(data);
+    if(data.event=="broadcast emit"&&data.data.text){
+          const coursecatalog1 =data.data; 
+          this.state.coursecatalog.push(coursecatalog1);
+          const coursedata=this.state.coursecatalog;
+          console.log('createchatcopy111',coursedata);
+          this.setState({
+            coursecatalog:coursedata,
+            numchat:true,
+            // templatecourseid:projectId,
+          });
+         }
+           });
+         
+     }
+     numchat=(projectId)=>{
+      const { login_info,createCourse_info } = this.props;
+       if(createCourse_info.numchat){
+     
+      console.log("聊天室初始:",projectId)
+       var url = "http://"+localhost+":3001?roomid="+projectId;
+      var socket = io(url);
+      var username = 'bing';
+      var connected = false;
+      var editting = false;
+      socket.emit('add user', username);
   
+      var joindata={
+        username : login_info.username,
+       }
+        socket.emit('join chat', joindata);
+      //  var chatdata={
+      //    text:this.state.tempochatdata,
+      //    username : login_info.username,
+      //   }
+      //    socket.emit('send mesg', chatdata);
+         socket.on('login',(data)=>{
+          connected = true;
+          console.log("numOfUsers is "+data.numOfUers);
+          console.log("socket.id is"+socket.id);
+      });
+
+           socket.on('message',(data)=>{
+           console.log("someone send mesg")
+           console.log(data)
+    //        var msg = JSON.parse(data);
+    if(data.event=="broadcast emit"&&data.data.text){
+          const coursecatalog1 =data.data; 
+          this.state.coursecatalog.push(coursecatalog1);
+          const coursedata=this.state.coursecatalog;
+          console.log('numchat111',coursedata);
+          this.setState({
+            coursecatalog:coursedata,
+            numchat:true,
+            // templatecourseid:projectId,
+          });
+         }
+           });
+         
+     }
+    }
+    quitchat=(projectId)=>{
+      this.setState({
+        coursecatalog:[],
+      });
+      console.log("退出聊天室numchat:",this.state.numchat)
+      // console.log("退出聊天室:",this.state.templatecourseid)
+      const { login_info,createCourse_info } = this.props;
+       if(this.state.numchat){
+     
+      console.log("退出聊天室:",projectId)
+       var url = "http://"+localhost+":3001?roomid="+projectId;
+      var socket = io(url);
+     
+        
+      socket.emit('disconnection',{data:'emit disconnection'});
+    //   socket.on('disconnection',(data)=>{
+    //     console.log(data);
+    // });         
+     }
+    }
   componentWillMount(){
    // this.getProjectUserList();
    console.log("ss",this.state.thumbnailBase64)
+   this.getProjectUserList();
     const {createCourse_info} = this.props;
     console.log("初次加载:",createCourse_info)  //isSingle也需要改变
+    console.log("知识点:",[].concat.apply([],createCourse_info.createCourse_info.knowledges)); 
+    this.getresource([].concat.apply([],createCourse_info.createCourse_info.knowledges));
     MyDeck = createCourse_info.createCourse_info.slides.slide  //适用于创建者与从课件广场进入的用户
    // project_id_now = createCourse_info.course_id
+   console.log("测试多人聊天");
+   this.numchat(createCourse_info.course_id);
   
   }
   
+  componentDidMount(){
+    const { login_info,createCourse_info } = this.props;
+    // this.createchat(createCourse_info.course_id);
+    this.getProjectUserList();
+   
+   
+  }
+  /*
   componentDidMount(){
     const {createCourse_info} = this.props;
     thumbnail = deepClone(createCourse_info.createCourse_info.slides.slide) //如果是引用可能造成重复引用
@@ -662,12 +920,34 @@ class App extends Component {
   }
   
     render() {
+      const {createCourse_info} = this.props;
+      console.log(this.state.source)
+      const menu = function(param){
+        // const {func1,func2,func3} = param
+        return <Card title="当前在线协同者">
+          {userList}
+        <div style={{margin:'2px'}} onClick={param}>
+          <Icon type="frown" className="iconsize" theme="twoTone"/>
+           <span style={{fontSize:15}}> Join</span>   
+        </div>
+      </Card>
+      }
+      const updatecontent=this.state.coursecatalog.map((v,i ) => {
+        return (
+          <div>
+            <IconAvator type={this.state.Avatartype[i%5]}></IconAvator>
+            <a style={{fontSize:10}}>{v.username}</a>
+            <Input value={v.text}  style={{ width: 300 }}/>
+          </div>    
+        )
+  })
+
       const content=(
         <div style={{ width: 500 }}>
         <Card >
         <div className="left">
            <p style={{fontSize:'25px'}}>
-              {this.state.updatecontent}
+              {updatecontent}
            </p> 
         </div>
         <div className="right">
@@ -679,25 +959,23 @@ class App extends Component {
       );
       const text =
      <div>
-       <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar>
+       <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} onClick={this.quitchat.bind(this,createCourse_info.course_id)} size="large" >U</Avatar>
        </Link><span style={{fontSize:15}}> 当前用户</span>
-       <Popover placement="bottomRight" content={content} trigger="click">
-          <Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
-       </Popover>
+       
      </div>;
       const userList = this.state.cooperuserlist.map((v, i) => {
         return (
           <div style={{margin:'2px'}} >
-               <IconAvator type={this.state.Avatartype[i%5]}/>
+               <IconAvator type={this.state.Avatartype[i%5]} className="iconsize"/>
               <span style={{fontSize:15}}>{v.user_name}</span>
           </div>
         );}
       )
-      const menu1 = (
-        <Card title="当前在线协同者">
-                {userList}
-        </Card>
-      );
+      // const menu1 = (
+      //   <Card title="当前在线协同者">
+      //           {userList}
+      //   </Card>
+      // );
       const ContentModal =(code)=>{
         return <div>
         <Row style={{margin: '8px 8px 8px 16px'}}> 
@@ -729,8 +1007,9 @@ class App extends Component {
       </div> 
       
       }
-      const {createCourse_info} = this.props;
+   //   const {createCourse_info} = this.props;
       const serveThumbnail = null;
+      // const {createCourse_info} = this.props;
    //   console.log(MyDeck)
       console.log(createCourse_info.createCourse_info)
     //  MyDeck=this.state.isSingle?MyDeck:createCourse_info.createCourse_info.slides.slide
@@ -751,12 +1030,8 @@ class App extends Component {
           className="Sider"
           style={{width: '100%', height: '100vh'}}
           >
-             <Bodysider/>
+             <Bodysider resourcelist={this.state.resourcelist} Getsource={this.sendsource}/>
           </Sider>
-         
-        
-         
-          
             <div className="flowbar" style={{right:80,top: 20}}>
                <Button style={{fontSize:15}} type="primary" onClick={this.showDrawer}>
                  视图
@@ -819,15 +1094,33 @@ class App extends Component {
               </Modal>
               </span>
             </div>
-            <div className="flowbar" style={{right:10,top:80}}>
+            {/* <div className="flowbar" style={{right:10,top:80}}>
             <span style={{ marginRight: 24, }}>
             <Dropdown overlay={menu1} placement="bottomLeft" trigger={['click']}>
             <Button type="primary" shape="circle"><Icon type="sync" /></Button>
             </Dropdown>
             </span>
+            </div> */}
+            <div className="flowbar" style={{right:40,top:80}}>
+            <Popover placement="bottomRight" content={content} trigger="click">
+            <Badge count={this.state.coursecatalog.length}><Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button></Badge>
+            </Popover>
             </div>
-            <EditorWithBar initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
+            <EditorWithBar showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
+            
             </div>
+            <Modal
+             title="是否预览课件"
+             visible={this.state.previewvisible}
+             onOk={this.handleOk_preview}
+             onCancel={this.handleCancel_preview}
+             footer={null}
+            >
+            <p className="right">
+              <Button key="return" onClick={this.handleCancel_preview}>取消</Button>
+              <Button key="next" type="primary" onClick={this.handleOk_preview}> 确定 </Button>
+            </p>
+        </Modal>
             </Content>
             {/* </Layout> */}
           </Layout>
@@ -846,6 +1139,7 @@ class App extends Component {
   function mapDispatchToProps(dispatch){
     return{
       setCreatecourseState: (state) => dispatch(state),
+      sendpreviewcourseid: (state) => dispatch(state),
     };
   }
   export default connect(

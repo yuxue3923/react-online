@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,} from 'antd';
+import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,message} from 'antd';
 import {Link} from 'react-router-dom'
 import './Creatcourse/creatcourse.css'
 import $ from 'jquery';
@@ -35,6 +35,10 @@ const formItemLayout = {
       sm: { span: 16 },
     },
   };
+  function deepClone(obj){
+    let _obj = JSON.stringify(obj);
+    return JSON.parse(_obj)
+  }
   class Updatecourse extends Component {
     static contextTypes={
       router:PropTypes.object
@@ -43,12 +47,11 @@ const formItemLayout = {
         super(props, context)
         this.state = {
           arrSize: 0,
-          collapsed: false,//控制sider折叠
           isOpen:"0",
           visible: true, //控制弹出框的呈现与隐藏
           coursecatalog:[],//课件目录
-          knowledges:[],
           coursedata:{},//课件信息
+          knowledgelist:[],
         }
       }
       // 传入课件名称
@@ -56,6 +59,7 @@ const formItemLayout = {
         this.setState({
           courseName: e.target.value,
         });
+        this.getknowledgeRel(e.target.value);
       }
       //年级科目
       Inputgrade(value){
@@ -87,25 +91,32 @@ const formItemLayout = {
           });
         }
       }
-      //侧栏知识点弹出框事件
-      toggle = () => {
-        this.setState({
-          collapsed: !this.state.collapsed,
-        });
-      }
+     
       //树状知识点点击事件
-      onSelect = (value) => {
-        console.log(value);
-        const knowledges1=this.state.knowledges; 
-        knowledges1.push(value) ;
-        console.log(knowledges1);
+      onSelect = (e) => {
+        console.log(e.target.value);
+        const a=this.state.knowledgelist;
+        const knowledges1={}; 
+        knowledges1['title'] =e.target.value; 
+        a.push(knowledges1);
+        console.log(a[0].title);
         this.setState({
-          knowledges:knowledges1
+          knowledgelist:a
         });
       }
-      onCollapse = (collapsed) => {
-        console.log(collapsed);
-        this.setState({ collapsed });
+      deleteknowid(value){
+        var array=this.state.knowledgelist;
+          for (var i=0;i<array.length;i++){
+            if(array[i].title==value){
+               var index=i;
+               console.log("index",index)
+            }
+          }
+        array.splice(index,1);
+        console.log(array);
+        this.setState({
+          knowledgelist:array,
+        })
       }
       handlePlus() {
         if (this.state.arrSize < 7) {
@@ -140,33 +151,50 @@ const formItemLayout = {
         }
       }
       updatecourse = () =>{
-        const { login_info ,updatecourseid}=this.props;
-        var datamsg={
-         "_id":updatecourseid,
-          "courseName":this.state.courseName,
-          "grade": this.state.grade,
-          "subject": this.state.subject,
-          "descript":  this.state.descript,
-          "knowledges":this.state.knowledges,
-          "isOpen": this.state.isOpen,
-          "isEdit": 1,
-          "name": "课件目录",
-          "children":this.state.coursecatalog,
-          "templateId":this.state.templateId,
-          "slide": this.state.slide,     
-          "fileSize": this.state.fileSize,
-          "scope":this.state.scope,
-          "addTime":this.state.addTime,
-          "views":this.state.views,
-          "url": this.state.url,
-          "width": this.state.width,
-          "height":this.state.height
-      };
+        const know=this.state.knowledgelist;
+        var knowsource=[];
+        for(var i=0;i<know.length;i++){
+           var obj=know[i];
+           knowsource.push(obj.title);
+        };
+        const { login_info }=this.props;
+          var temp = deepClone(this.state.coursedata)
+        var passbydata = this.state.coursedata.createCourse_info
+     
+     var formData = deepClone(passbydata)
+
+      delete formData.slides
+
+      delete formData.thumbnail
+
+      formData.courseName=this.state.courseName
+      formData.grade=this.state.grade
+      formData.subject=this.state.subject
+      formData.descript=this.state.descript
+      formData.knowledges=knowsource
+      formData.children=this.state.coursecatalog
+      formData.isOpen=this.state.isOpen
+
+      formData.name = temp.createCourse_info.catalog.name
+      formData.width = temp.createCourse_info.thumbnail.style.width
+
+      formData.height = temp.createCourse_info.thumbnail.style.height
+
+      formData.url = temp.createCourse_info.thumbnail.url
+    
+      formData.slide =  [...temp.createCourse_info.slides.slide]
+
+      formData.templateId = deepClone(temp.createCourse_info.slides.templateId) 
+    
+           console.log(JSON.stringify(formData))
+         
+          
+    
        
         //更新课件
         console.log("进入更新课件ajax");
         const {setCreatecourseState} = this.props;
-        console.log(JSON.stringify(datamsg));
+
         $.ajax({
             url: "http://"+localhost+":3000/api/updateCourse",
             async:false,
@@ -174,23 +202,21 @@ const formItemLayout = {
             contentType:"application/json;charset=UTF-8",
             accepts:"application/json;charset=UTF-8",
             dataType: "json",
-            data:JSON.stringify(datamsg),
+            data:JSON.stringify(formData),
             beforeSend:function(request){
               request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
             },
             success: function (data) {
                 if (data.errorCode === 0) {
-                    console.log('成功更新课件'+data.msg[0]);
-                    Modal.success({
-                      title: '消息提示',
-                      content: '成功更新课件！',
-                    });
+                    console.log('成功更新课件:',data);
+                    message.success('成功更新课件~');
                     console.log(this.state.coursecatalog);
                     setCreatecourseState({
                         type:'createcourseSuccess',
                         payload:{
                             createCourse_info:data.msg[0],
-                            course_id:data.msg[0]._id
+                            course_id:data.msg[0]._id,
+                            // numchat:false,
                         }
                       });
                       this.context.router.history.push("/APP");
@@ -227,8 +253,18 @@ const formItemLayout = {
             if (data.errorCode === 0) {
               console.log('获取查询权限111');
               console.log(data);
+              const a=data.msg[0].knowledges;
+              const knowcontain=[];
+              for(var i=0;i<a.length;i++){
+              const coursecatalog1 = {};   
+              coursecatalog1['title'] = a[i];
+              knowcontain.push(coursecatalog1);
+              }
+            
              data.msg&&data.msg[0]&&data.msg[0].catalog&&data.msg[0].catalog.children&&this.setState({
-                coursedata:data.msg[0],
+                coursedata:{
+                  createCourse_info:data.msg[0],
+                  course_id:data.msg[0]._id},
                 arrSize: data.msg[0].catalog.children.length,
                 isOpen:data.msg[0].isOpen,
                 coursecatalog:data.msg[0].catalog.children,
@@ -236,7 +272,8 @@ const formItemLayout = {
                 grade: data.msg[0].grade,
                 subject: data.msg[0].subject,
                 descript: data.msg[0].descript,
-                knowledges:data.msg[0].knowledges,
+                // knowledges:data.msg[0].knowledges,
+                knowledgelist:knowcontain,
                 templateId:data.msg[0].slides.templateId,
                 slide: data.msg[0].slides.slide,     
                 fileSize:data.msg[0].fileSize,
@@ -257,10 +294,40 @@ const formItemLayout = {
           }
         });
       }
+      getknowledgeRel(value) {
+        const { login_info }=this.props;
+        console.log('进入knowledgeRel ajax');
+        console.log(login_info.access_token);
+        $.ajax({
+          url: "http://"+localhost+":3000/api/knowledgeRel",
+          data:"courseName="+value,
+          beforeSend:function(request){
+            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+          },
+          type: "GET",
+          dataType: "json",
+          async:false,
+          success: function (data) {
+            if (data.errorCode === 0) {
+              console.log('获取关联知识点');
+              console.log(data);
+              this.setState({
+                knowledgelist:data.msg,
+              });
+            }
+            else {   
+              console.log('获取关联知识点2222');
+            }
+          }.bind(this),
+          error: function (xhr, status, err) {
+          }
+        });
+      }
       componentWillMount(){
         this.getdata();
       }
       componentDidMount(){
+          this.getdata();
           this.CourseAppear();
       }
       CourseAppear() {
@@ -329,46 +396,22 @@ const formItemLayout = {
 // });
     }
     render() {
-        const sidecontent=(
-            <div>
-                <div borderd={false} title="选择知识点" style={{ margin: '16px 16px 16px 16px'}}>
-                      <Tree showLine defaultExpandedKeys={['一次方程概念', '一次方程应用']} onSelect={this.onSelect}>
-                        <TreeNode title="一次方程" key="一次方程">
-                          <TreeNode title="一次方程概念" key="一次方程概念" />
-                          <TreeNode title="一次方程特点" key="一次方程特点" />
-                          <TreeNode title="一次方程应用" key="一次方程应用">
-                            <TreeNode title="应用实例" key="应用实例" />
-                          </TreeNode>
-                        </TreeNode>
-                        <TreeNode title="二次方程" key="二次方程">
-                          <TreeNode title="二次方程概念" key="二次方程概念" />
-                          <TreeNode title="二次方程特点" key="二次方程特点" />
-                          <TreeNode title="二次方程应用" key="二次方程应用">
-                            <TreeNode title="应用实例" key="应用实例" />
-                          </TreeNode>
-                        </TreeNode>
-                        <TreeNode title="二次函数" key="二次函数" />
-                        <TreeNode title="分数" key="分数" />
-                        <TreeNode title="比值" key="比值" />
-                      </Tree>
-                    </div>
-            </div>
-        );
-     
+      const treeList = this.state.knowledgelist.map((v, i) => {
+        return (
+          <div>
+          <Row gutter={16}>
+            <Col span={20}>
+              <div key={i}>{v.title}</div>
+            </Col>
+            <Col span={4}>
+              <Icon type="minus-square" onClick={this.deleteknowid.bind(this,v.title)}/>
+            </Col>
+          </Row>
+          </div>
+        );}
+      )
       return (
         <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
-        <Sider 
-        width={250}
-        trigger={null}
-        collapsible
-        collapsed={this.state.collapsed}
-        collapsedWidth={0}
-       
-        className="Sider"
-        style={{width: '100%', height: '700px'}}
-        >
-         {sidecontent}
-        </Sider>
          <div className='flowbar' style={{right:30,top:20}}>
         <Link to='/User'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar></Link>
         <span style={{padding:10,fontSize:15}}>当前用户</span>
@@ -386,19 +429,19 @@ const formItemLayout = {
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
-            <Input placeholder={this.state.coursedata.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
+            <Input placeholder={this.state.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
           </Form.Item>
           <Form.Item label="年级科目" {...formItemLayout}>
           <Row gutter={16}>
           <Col span={12}>
-          <Select onChange={this.Inputgrade.bind(this)} style={{width:'100%'}} placeholder={this.state.coursedata.grade}>
+          <Select onChange={this.Inputgrade.bind(this)} style={{width:'100%'}} placeholder={this.state.grade}>
                     <Option value="小学">小学</Option>
                     <Option value="初中"> 初中</Option>
                     <Option value="高中">高中</Option>
           </Select> 
           </Col> 
           <Col span={12}>
-           <Select onChange={this.Inputsubject.bind(this)} style={{width:'100%'}} placeholder={this.state.coursedata.subject}>
+           <Select onChange={this.Inputsubject.bind(this)} style={{width:'100%'}} placeholder={this.state.subject}>
                     <Option value="语文">语文</Option>
                     <Option value="数学">数学</Option>
                     <Option value="英语">英语</Option>
@@ -413,23 +456,24 @@ const formItemLayout = {
             </Row>                 
           </Form.Item>
           <Form.Item label="课件简介" {...formItemLayout}>
-           <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} placeholder={this.state.coursedata.descript} rows={4} />
+           <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} placeholder={this.state.descript} rows={4} />
           </Form.Item>
-
-          <Form.Item label="知识点" {...formItemLayout}>
+          <Form.Item label="手动输入关联知识点" {...formItemLayout}>
+            <Input placeholder="20字以内" onPressEnter={this.onSelect.bind(this)} style={{ width: 300 }}/>
+          </Form.Item>
+          <Form.Item label="关联知识点" {...formItemLayout}>
           <Row gutter={16}>
-          <Col span={20}>
-             <TextArea placeholder={this.state.coursedata.knowledges} value={this.state.knowledges} style={{ width:'100%'}} rows={4}/>
+          <Col span={24}>
+             <Card> 
+                {treeList}
+             </Card>
           </Col> 
-           <Col span={4}>
-              <Button onClick={this.toggle}>选择知识点</Button>
-            </Col> 
-            </Row>                 
+          </Row>                 
           </Form.Item>
           <Form.Item label="公开/私密" {...formItemLayout}>
           <Row gutter={8}>
           <Col span={10}>
-             <Switch onChange={this.Inputisopen.bind(this)} checkedChildren="公开" unCheckedChildren="私密" defaultChecked={this.state.coursedata.isOpen}/>
+             <Switch onChange={this.Inputisopen.bind(this)} checkedChildren="公开" unCheckedChildren="私密" defaultChecked={this.state.isOpen}/>
           </Col> 
           </Row>
           </Form.Item>
