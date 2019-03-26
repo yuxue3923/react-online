@@ -10,7 +10,25 @@ const elementStyle={
     fill: 'white',
    // lineDash: [5, 5, 10, 10],
 }
-
+const sourceXY = {
+    x:100,
+    y:100
+}
+function allowDrop(ev)
+{
+ev.preventDefault();
+}
+function drop(ev)
+{
+ev.preventDefault();
+console.log(ev)
+var src=ev.dataTransfer.getData("dragSource");
+//src= src +"?v=" + new Date().getTime();
+if(sr){
+    var img = new srender.Image({style:{image:src,height:230,width:200,x:sourceXY.x,y:sourceXY.y}})
+    sr.add(img)
+}
+}
 function resolve(msg){
     if(!msg) return
     let el = msg.el;
@@ -109,6 +127,7 @@ function add(type,callback){
         case 'image':
             Pen('image')
             console.log("Sorry,image module to be done")
+         // var image=new srender.Circle({shape:{cx:70,cy: 90,r: 90},style: elementStyle,})
             break;
         case 'star':
             Pen('star')
@@ -179,14 +198,13 @@ export default class Editor extends React.Component {
      //   this.props.flush(state);
     }
     createSocket=(projectId)=>{
-        console.log("judgeOnaji:",projectId)
+       
          var url = "http://"+localhost+":3001"
          let param = `/${projectId}` 
          console.log("param:",param)
          var socket = io(url,{path:param});//无论页面怎样切换，用户应当只获取该socket
         
          toServe = function(msg){
-           console.log("socket-client")
            socket.emit('update data', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
          }
          toServePage = function(msg){
@@ -212,7 +230,6 @@ export default class Editor extends React.Component {
              socket.on('update data',(data)=>{
              console.log("someone update")
              var msg = JSON.parse(data);
-        //     self.setState({msg:msg})
                 resolve(msg)
              });
            this.props.getToServePage(toServePage)
@@ -223,6 +240,10 @@ export default class Editor extends React.Component {
         var dom = document.getElementsByClassName('container')[0]
       
         sr=srender.init(dom,{},!this.props.isSinleMode)
+        sr.on("mouseup",function(e){
+            sourceXY.x = e.zrX
+            sourceXY.y = e.zrY
+        })
       //  sr=srender.init(dom)
         
     //    sr.initWithCb(this.props.toServe)
@@ -254,6 +275,7 @@ export default class Editor extends React.Component {
       //  this.props.objectList&&sr.initWithOthers(this.props.objectList)
         var base64 = sr.painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
         var newImg = new Image();
+        newImg.setAttribute('crossOrigin', 'anonymous');
         sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
             var url = URL.createObjectURL(blob);
             newImg.src=url; 
@@ -272,7 +294,7 @@ export default class Editor extends React.Component {
    
       
     componentDidUpdate(){
-        
+        console.log("canvaslib:",this.props.shouldCreateSocket)
         if(this.props.shouldCreateSocket){
             this.createSocket(this.props.project_id_now);
         }
@@ -285,14 +307,15 @@ export default class Editor extends React.Component {
         }
         else{
             console.log("toServe")
-            var dom = document.getElementsByClassName('container')[0]
-            sr=srender.init(dom,{},true)
+            var dom = document.getElementsByClassName('container')[0];
+            sr=srender.init(dom,{},true);
+            sr.on("mouseup",function(e){sourceXY.x = e.zrX;sourceXY.y = e.zrY})
         //   sr.initWithCb(this.props.toServe)
-            sr.initWithCb(toServe)
-            this.props.objectList&&sr.initWithOthers(this.props.objectList)
+            sr.initWithCb(toServe);
+            this.props.objectList&&sr.initWithOthers(this.props.objectList);
         //    resolve(this.props.message)
         }
-
+        
         add(this.props.type);
        
        
@@ -301,7 +324,9 @@ export default class Editor extends React.Component {
         this.props.shouldCreateSocket&&this.props.effect_createSocket(false)//
 
         var newImg = new Image();
+        newImg.setAttribute('crossOrigin', 'anonymous');
         var base64 = sr.painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
+     
         sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
              var url = URL.createObjectURL(blob);
              newImg.src=url;
@@ -318,8 +343,7 @@ export default class Editor extends React.Component {
         return (
 
             <div>
-            <div className="container" style={{height:'100vh',width:'100%',padding:"0px 0px 0px 20px"}}></div>
-          
+            <div className="container" style={{height:'100vh',width:'100%',padding:"0px 0px 0px 20px"}} onDrop={drop} onDragOver={allowDrop}></div>
             </div>
 
         )

@@ -613,7 +613,7 @@ class App extends Component {
               project_id_now = createCourse_info.course_id
        
               this.effect_createSocket(true)
-              console.log('已创建协同链接');
+              console.log('准备创建协同链接');
             }
             else {
                 console.log('协同失败');

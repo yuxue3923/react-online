@@ -23,7 +23,10 @@ const props = {
       }
     },
   };
-  
+function drag(ev)
+{
+  ev.dataTransfer.setData("dragSource",ev.target.src);
+}
   class sider extends Component {
     constructor(props, context) {
       super(props, context)
@@ -98,6 +101,8 @@ const props = {
                     <img style={{ width:220 ,height:130}} onClick={()=>this.props.Getsource(v)}
                       alt="example"
                       src={v.file_url}
+                      draggable="true" 
+                      onDragStart={drag}
                     />
                   }
                 >
@@ -131,7 +136,7 @@ const props = {
                 <Card
                   style={{ width:220 ,height:230}}
                   cover={
-                    <Video style={{ width:220 ,height:130}} autoPlay loop muted
+                    <Video style={{ width:220 ,height:130}}  loop muted //autoPlay
                          controls={['PlayPause', 'Seek', 'Time', 'Volume', 'Fullscreen']}
                          poster=""
                          onCanPlayThrough={() => {
