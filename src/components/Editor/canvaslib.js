@@ -40,7 +40,12 @@ function resolve(msg){
                     sr.attr(el,tag)
                     break;
                 case 'shape':
-                    sr.attr(el,tag,true)
+                sr.attr(el,tag,true)
+                    break;
+                case 'style':
+                console.log("style change:",el)
+                  //  sr.attr(el,tag)
+                  sr.attr(el,"style",false,el.style,true);
                     break;
                 default:
                     break;
