@@ -109,7 +109,6 @@ class App extends Component {
   constructor(props, context) {
     super(props, context)
      // this.initPie = this.initPie.bind(this)
-  
    this.thumbnail=this.thumbnail.bind(this)
    this.sync=this.sync.bind(this);
    this.flush=this.flush.bind(this);
@@ -121,6 +120,7 @@ class App extends Component {
    this.newSlide = this.newSlide.bind(this)
   }
     state = {
+      userName:"yukipedia",
       previewvisible: false ,//预览课件弹出框
       updatecontent:[],
       tempochatdata: "",
@@ -920,8 +920,8 @@ class App extends Component {
   }
   
     render() {
-      const {createCourse_info} = this.props;
-      console.log(this.state.source)
+      const {createCourse_info,login_info} = this.props;
+    //  console.log("login:",login_info)
       const menu = function(param){
         // const {func1,func2,func3} = param
         return <Card title="当前在线协同者">
@@ -1106,7 +1106,7 @@ class App extends Component {
             <Badge count={this.state.coursecatalog.length}><Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button></Badge>
             </Popover>
             </div>
-            <EditorWithBar showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
+            <EditorWithBar userName = {login_info.username} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
             
             </div>
             <Modal

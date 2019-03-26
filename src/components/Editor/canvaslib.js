@@ -25,7 +25,7 @@ console.log(ev)
 var src=ev.dataTransfer.getData("dragSource");
 //src= src +"?v=" + new Date().getTime();
 if(sr){
-    var img = new srender.Image({style:{image:src,height:230,width:200,x:sourceXY.x,y:sourceXY.y}})
+    var img = new srender.Image({style:{image:src,height:230,width:200,x:sourceXY.x,y:sourceXY.y},draggable:true})
     sr.add(img)
 }
 }
@@ -112,12 +112,12 @@ function add(type,callback){
     switch(type){
         case 'circle':
             Pen('circle')
-            var circle=new srender.Circle({shape:{cx:70,cy: 90,r: 90},style: elementStyle,})
+            var circle=new srender.Circle({shape:{cx:70,cy: 90,r: 90},style: elementStyle,draggable:true})
             sr.add(circle)
             break;
         case 'rect':
             Pen('rect')
-            var rect = new srender.Rect({shape: {r: 1,x: 100,y: 100,width: 100,height: 100},style: elementStyle,})
+            var rect = new srender.Rect({shape: {r: 1,x: 100,y: 100,width: 100,height: 100},style: elementStyle,draggable:true})
             sr.add(rect);
             break;
         case 'pen':
@@ -131,22 +131,22 @@ function add(type,callback){
             break;
         case 'star':
             Pen('star')
-            var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,})
+            var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,draggable:true})
             sr.add(star);
             return true;
         case 'house':
             Pen('house')
-            var house=new srender.House({shape:{cx:500,cy:300},style:{fill: 'none',stroke: 'green'}})
+            var house=new srender.House({shape:{cx:500,cy:300},style:{fill: 'none',stroke: 'green'},draggable:true})
             sr.add(house);
             return true;
         case 'apple':
             Pen('apple')
-            var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill: 'red',stroke: 'none'}})
+            var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill: 'red',stroke: 'none'},draggable:true})
             sr.add(apple);
             break;
         case 'tisogon':
             Pen('tisogon')
-            var tisogon=new srender.Isogon({shape:{x:300,y:300,r:50,n:3},style:{fill: 'none',stroke: 'green'}})
+            var tisogon=new srender.Isogon({shape:{x:300,y:300,r:50,n:3},style:{fill: 'none',stroke: 'green'},draggable:true})
             sr.add(tisogon);
             break;
         case 'fisogon':
@@ -238,8 +238,8 @@ export default class Editor extends React.Component {
     componentDidMount() {
       
         var dom = document.getElementsByClassName('container')[0]
-      
-        sr=srender.init(dom,{},!this.props.isSinleMode)
+        console.log(this.props.userName)
+        sr=srender.init(dom,{},!this.props.isSinleMode,this.props.userName)
         sr.on("mouseup",function(e){
             sourceXY.x = e.zrX
             sourceXY.y = e.zrY
@@ -306,9 +306,9 @@ export default class Editor extends React.Component {
         //    this.props.objectList&&sr.initWithOthers(this.props.objectList)
         }
         else{
-            console.log("toServe")
+            console.log(this.props.userName)
             var dom = document.getElementsByClassName('container')[0];
-            sr=srender.init(dom,{},true);
+            sr=srender.init(dom,{},true,this.props.userName);
             sr.on("mouseup",function(e){sourceXY.x = e.zrX;sourceXY.y = e.zrY})
         //   sr.initWithCb(this.props.toServe)
             sr.initWithCb(toServe);
