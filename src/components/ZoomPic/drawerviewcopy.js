@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { List, Avatar, Icon,Button} from 'antd';
-const IconFont = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_988038_ej9e5sv8svd.js',
-});
+import { List, Avatar, Icon} from 'antd';
+// const IconFont = Icon.createFromIconfontCN({
+//   scriptUrl: '//at.alicdn.com/t/font_988038_ej9e5sv8svd.js',
+// });
 // var imgSrc = null;
 
 
@@ -55,14 +55,14 @@ class Drawerview extends Component {
           pageSize: 3,
         }}*/
         dataSource={listData}
-        footer={<div>
-          <Button type="dashed"  shape="circle" onClick = {(e)=>this.newSlide(true,this.props.page)}>
-                 <IconFont type="anticon-plus-bold" />
-          </Button>
-          <Button type="dashed" shape="circle" onClick = {(e)=>this.newSlide(false,this.props.page)}>
-                 <IconFont type="anticon-jianshao"/>
-          </Button>
-          </div>}
+        // footer={<div>
+        //   <Button type="dashed"  shape="circle" onClick = {(e)=>this.newSlide(true,this.props.page)}>
+        //          <IconFont type="anticon-plus-bold" />
+        //   </Button>
+        //   <Button type="dashed" shape="circle" onClick = {(e)=>this.newSlide(false,this.props.page)}>
+        //          <IconFont type="anticon-jianshao"/>
+        //   </Button>
+        //   </div>}
         renderItem={item => (
           <List.Item
             key={item.title}
@@ -75,7 +75,7 @@ class Drawerview extends Component {
               title={<a href={item.href}>{item.title}</a>}
             //   description={item.description}
             />
-            <img width={150} alt="logo" src={typeof this.props.thumbnail[item.Xst-1].pageThumbnail !== "undefined"?this.props.thumbnail[item.Xst-1].pageThumbnail:this.props.thumbnail[item.Xst-1]} onClick={this.pageChoose.bind(this,item.Xst)}/>
+            <img width="100%" alt="logo" src={typeof this.props.thumbnail[item.Xst-1].pageThumbnail !== "undefined"?this.props.thumbnail[item.Xst-1].pageThumbnail:this.props.thumbnail[item.Xst-1]} onClick={this.pageChoose.bind(this,item.Xst)}/>
           </List.Item>
         )}
       />

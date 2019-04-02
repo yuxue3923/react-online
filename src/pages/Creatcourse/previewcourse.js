@@ -6,9 +6,9 @@ import '../User.css'
 import $ from 'jquery';
 import PropTypes from "prop-types"
 import { connect } from 'react-redux';
-import DrawView from '../../components/ZoomPic/drawerview';
+import DrawViewcopy from '../../components/ZoomPic/drawerviewcopy';
 import {localhost} from '../../config'
-import Editor from '../../components/Editor/canvaslib'
+// import Editor from '../../components/Editor/canvaslib'
 const FormItem = Form.Item;
 const formItemLayout = {
     labelCol: {
@@ -20,7 +20,7 @@ const formItemLayout = {
       sm: { span: 12 },
     },
   };
-  var isflush = true;
+  // var isflush = true;
   class Previewcourse extends Component {
     static contextTypes={
       router:PropTypes.object
@@ -99,7 +99,7 @@ const formItemLayout = {
               console.log('下载成功2222');
                
             }
-          }.bind(this),
+          },
           error: function (xhr, status, err) {
           }
         });
@@ -170,19 +170,19 @@ const formItemLayout = {
       <Card  style={{height:'100%',width:'100%'}}>
         <div>
          <Row gutter={16}>
-         <Col span={3}>
+         {/* <Col span={3}>
            <Card style={{margin:'80px 0px 30px 80px',width:"100%",height: 700}} title="缩略图">
               <DrawView pageChoose={this.pageChoose} thumbnail={this.state.thumbnail}/>
            </Card>
-         </Col>
-         <Col span={14}>
-           <Card style={{margin:'80px 0px 30px 80px',width:"100%",height:700}} title="显示区">
+         </Col> */}
+         <Col span={17}>
+           <Card style={{margin:'80px 0px 30px 80px',width:"100%",height:"100%"}} title="显示区">
            {/* <Editor getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode} message={this.props.message} toServe={this.props.toServe} clearMsg = {this.props.clearMsg} shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now}/>/> */}
-            {/* <DrawView pageChoose={this.pageChoose} thumbnail={this.state.thumbnail}/> */}
+            <DrawViewcopy pageChoose={this.pageChoose} thumbnail={this.state.thumbnail}/>
             </Card>
          </Col>
          <Col span={4}>
-           <Card style={{margin:'80px 0px 30px 80px',width:"100%",height: 700}} title="课件详情">
+           <Card style={{margin:'80px 0px 30px 80px',width:"100%",height:"100%"}} title="课件详情">
            <Row gutter={16}>
               <Col span={8}>
                 <Avatar style={{width:70,height:70}}

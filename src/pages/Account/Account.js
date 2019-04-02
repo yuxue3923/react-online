@@ -275,6 +275,7 @@ const FormItem = Form.Item;
           if (data.errorCode === 0) {
             console.log('收藏课件成功111');
             this.setState({
+              current:1,
               usercoursedata:data.msg,
             });
           }
@@ -570,6 +571,7 @@ const FormItem = Form.Item;
        }
       var ownMap=(list,current)=>{
        for(let i=(current-1)*11;i<list.length;){
+        
          return  <div>
          <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
            <Col span={4}>{cardBasic_creat}</Col>
@@ -591,7 +593,16 @@ const FormItem = Form.Item;
          <Pagination current={this.state.current} onChange={this.onChange} total={list.length} pageSize={11}/>
          </Row>
        </div>
-       }
+      
+      }
+      return  <div>
+      <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
+        <Col span={4}>{cardBasic_creat}</Col>
+      </Row>
+      <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
+      <Pagination current={this.state.current} onChange={this.onChange} total={list.length} pageSize={11}/>
+      </Row>
+    </div>
       }
       const cardList_course = ownMap(courseList,this.state.current)
       const cardList_viedo = ownMapallcourse(allcourseList,this.state.pagecurrent)

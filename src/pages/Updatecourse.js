@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,Tree,message} from 'antd';
+import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,message} from 'antd';
 import {Link} from 'react-router-dom'
 import './Creatcourse/creatcourse.css'
 import $ from 'jquery';
@@ -22,8 +22,8 @@ const data= {
     "name": "课件总目录"
   }
 const Option = Select.Option;
-const { Sider} = Layout;
-const TreeNode = Tree.TreeNode;
+// const { Sider} = Layout;
+// const TreeNode = Tree.TreeNode;
 
 const formItemLayout = {
     labelCol: {
@@ -107,7 +107,7 @@ const formItemLayout = {
       deleteknowid(value){
         var array=this.state.knowledgelist;
           for (var i=0;i<array.length;i++){
-            if(array[i].title==value){
+            if(array[i].title===value){
                var index=i;
                console.log("index",index)
             }
@@ -311,9 +311,11 @@ const formItemLayout = {
             if (data.errorCode === 0) {
               console.log('获取关联知识点');
               console.log(data);
+              if(data.msg){
               this.setState({
                 knowledgelist:data.msg,
               });
+            }
             }
             else {   
               console.log('获取关联知识点2222');

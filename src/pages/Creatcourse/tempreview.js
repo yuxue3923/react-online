@@ -17,23 +17,23 @@ import './tempreview.css'
         <Carousel autoplay>
            <div>
              <h3>
-             <img className="imgdiv"
+             <img className="imgdiv" alt="1"
                src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="600"/>
             </h3>
            </div>
            <div>
              <h3>
-               <img className="imgdiv"
+               <img className="imgdiv" alt="2"
                src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="600"/>
              </h3>
            </div>
            <div>
-             <h3><img className="imgdiv"
+             <h3><img className="imgdiv" alt="3"
                src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="600"/>
             </h3>
           </div>
            <div>
-             <h3><img className="imgdiv"
+             <h3><img className="imgdiv" alt="4"
                src="https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png" height="600"/>
             </h3>
           </div>

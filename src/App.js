@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card,message,Dropdown} from 'antd';
+import {Form, Layout, Menu,Select, Row,Input,Button,Drawer,Avatar, Badge,Icon,Popover,Modal, Card,message} from 'antd';
 import './App.css';
 import {Link} from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -10,7 +10,7 @@ import PropTypes from "prop-types"
 import EditorWithBar from './components/Editor/EditorWithBar';
 import {localhost} from './config'
 import io from 'socket.io-client'
-var temp = 99999
+// var temp = 99999
 var MyDeck = []
 var thumbnail = []
 var toServePage = null;
@@ -293,7 +293,7 @@ class App extends Component {
       const callBack = this.getInviteData.bind(this)
       const callBack_chat= this.createchatcopy.bind(this)
  
-      const {login_info ,createCourse_info,setCreatecourseState} = this.props;
+      const {login_info ,setCreatecourseState} = this.props;
  
       $.ajax({
         url: "http://"+localhost+":3000/api/getReflectProject_id?tinyCode="+code,
@@ -322,7 +322,7 @@ class App extends Component {
             else {
               message.error("无法找到对应项目");
             }
-        }.bind(this),
+        },
         error: function (xhr, status, err) {
           message.error("进入项目失败");
         }
@@ -630,7 +630,7 @@ class App extends Component {
     }
     createChatChannel = (project_id) => {
       const callBack_chat= this.createchatcopy.bind(this)
-      const { login_info,createCourse_info } = this.props;
+      const { login_info} = this.props;
       const param={
         project_id:project_id
       } 
@@ -655,7 +655,7 @@ class App extends Component {
             else {
                 console.log('协同聊天失败');
             }
-        }.bind(this),
+        },
         error: function (xhr, status, err) {
           console.log("无法协同项目")
         }
@@ -714,8 +714,7 @@ class App extends Component {
       //    socket.emit('send mesg', JSON.stringify(chatdata)); 
       //  }
       var username = 'bing';
-      var connected = false;
-      var editting = false;
+      
       socket.emit('add user', username);
   
       var joindata={
@@ -728,7 +727,7 @@ class App extends Component {
         }
          socket.emit('send mesg', chatdata);
          socket.on('login',(data)=>{
-          connected = true;
+          // connected = true;
           console.log("numOfUsers is "+data.numOfUers);
           console.log("socket.id is"+socket.id);
       });
@@ -752,8 +751,7 @@ class App extends Component {
       //    socket.emit('send mesg', JSON.stringify(chatdata)); 
       //  }
       var username = 'bing';
-      var connected = false;
-      var editting = false;
+      
       socket.emit('add user', username);
   
       var joindata={
@@ -766,7 +764,7 @@ class App extends Component {
       //   }
       //    socket.emit('send mesg', chatdata);
          socket.on('login',(data)=>{
-          connected = true;
+          // connected = true;
           console.log("numOfUsers is "+data.numOfUers);
           console.log("socket.id is"+socket.id);
       });
@@ -775,7 +773,7 @@ class App extends Component {
            console.log("someone send mesg")
            console.log(data)
     //        var msg = JSON.parse(data);
-    if(data.event=="broadcast emit"&&data.data.text){
+    if(data.event==="broadcast emit"&&data.data.text){
           const coursecatalog1 =data.data; 
           this.state.coursecatalog.push(coursecatalog1);
           const coursedata=this.state.coursecatalog;
@@ -797,8 +795,7 @@ class App extends Component {
        var url = "http://"+localhost+":3001?roomid="+projectId;
       var socket = io(url);
       var username = 'bing';
-      var connected = false;
-      var editting = false;
+      
       socket.emit('add user', username);
   
       var joindata={
@@ -811,7 +808,7 @@ class App extends Component {
       //   }
       //    socket.emit('send mesg', chatdata);
          socket.on('login',(data)=>{
-          connected = true;
+          // connected = true;
           console.log("numOfUsers is "+data.numOfUers);
           console.log("socket.id is"+socket.id);
       });
@@ -820,7 +817,7 @@ class App extends Component {
            console.log("someone send mesg")
            console.log(data)
     //        var msg = JSON.parse(data);
-    if(data.event=="broadcast emit"&&data.data.text){
+    if(data.event==="broadcast emit"&&data.data.text){
           const coursecatalog1 =data.data; 
           this.state.coursecatalog.push(coursecatalog1);
           const coursedata=this.state.coursecatalog;
@@ -841,7 +838,7 @@ class App extends Component {
       });
       console.log("退出聊天室numchat:",this.state.numchat)
       // console.log("退出聊天室:",this.state.templatecourseid)
-      const { login_info,createCourse_info } = this.props;
+      // const { login_info,createCourse_info } = this.props;
        if(this.state.numchat){
      
       console.log("退出聊天室:",projectId)
@@ -871,7 +868,7 @@ class App extends Component {
   }
   
   componentDidMount(){
-    const { login_info,createCourse_info } = this.props;
+    // const { login_info,createCourse_info } = this.props;
     // this.createchat(createCourse_info.course_id);
     this.getProjectUserList();
    
@@ -1008,7 +1005,7 @@ class App extends Component {
       
       }
    //   const {createCourse_info} = this.props;
-      const serveThumbnail = null;
+      // const serveThumbnail = null;
       // const {createCourse_info} = this.props;
    //   console.log(MyDeck)
       console.log(createCourse_info.createCourse_info)
