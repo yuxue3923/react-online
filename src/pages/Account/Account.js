@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
-import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,message} from 'antd';
+import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,message,Skeleton} from 'antd';
 import MyTag from './Tag';
 import ChoseTemplate from './ChoseTemplate'
 import '../../App.css'
@@ -38,6 +38,7 @@ const FormItem = Form.Item;
     constructor(props, context) {
         super(props, context)
         this.state = {
+          loading:true,
           allcoursedata:[],
           usercoursedata:[],
           collectinfo:false,
@@ -361,7 +362,7 @@ const FormItem = Form.Item;
       console.log('进入researchByUserId接口');
       $.ajax({
         url: "http://"+localhost+":3000/api/researchByUserId",
-        async:false,
+        // async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",
         dataType: "json",
@@ -373,6 +374,7 @@ const FormItem = Form.Item;
           if (data.errorCode === 0) {
             console.log('获取查询权限111');
             this.setState({
+              loading:false,
               usercoursedata:data.msg,
             });
           }
@@ -390,7 +392,7 @@ const FormItem = Form.Item;
       console.log('进入researchByCourseName接口');
       $.ajax({
         url: "http://"+localhost+":3000/api/researchByCourseName",
-        async:false,
+        // async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",
         dataType: "json",
@@ -402,6 +404,7 @@ const FormItem = Form.Item;
           if (data.errorCode === 0) {
             console.log('成功查找课件111');
             this.setState({
+              loading:false,
               allcoursedata:data.msg,
             });
           }
@@ -419,7 +422,7 @@ const FormItem = Form.Item;
       console.log('进入allCouse接口');
       $.ajax({
         url: "http://"+localhost+":3000/api/allCourses",
-        async:false,
+        // async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",
         dataType: "json",
@@ -442,12 +445,38 @@ const FormItem = Form.Item;
         }
       });
     }
-    componentWillMount(){
+    componentDidMount(){
       this.getdata();
       this.getallcoursedata();
     }
     render() {
       console.log("Account XuanRan")
+      const { loading } = this.state;
+      var ownloadcourse=(loading)=>{
+      if(loading){
+        return  <div>
+       <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
+         <Col span={4}><Skeleton loading={loading} active /></Col>
+         <Col span={4}><Skeleton loading={loading} active /></Col>
+         <Col span={4}><Skeleton loading={loading} active /></Col>
+         <Col span={4}><Skeleton loading={loading} active /></Col> 
+         <Col span={4}><Skeleton loading={loading} active /></Col> 
+         <Col span={4}><Skeleton loading={loading} active /></Col>
+       </Row>
+       <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
+         <Col span={4}><Skeleton loading={loading} active /></Col>
+         <Col span={4}><Skeleton loading={loading} active /></Col>
+         <Col span={4}><Skeleton loading={loading} active /></Col>
+         <Col span={4}><Skeleton loading={loading} active /></Col> 
+         <Col span={4}><Skeleton loading={loading} active /></Col> 
+         <Col span={4}><Skeleton loading={loading} active /></Col>
+       </Row>
+     </div>
+      }
+    }
+     
+     
+     
       var result=[];
       for(var i=0;i<this.state.usercoursedata.length;i++){
         var obj=this.state.usercoursedata[i];
@@ -604,8 +633,10 @@ const FormItem = Form.Item;
       </Row>
     </div>
       }
-      const cardList_course = ownMap(courseList,this.state.current)
-      const cardList_viedo = ownMapallcourse(allcourseList,this.state.pagecurrent)
+      const cardList_course = ownloadcourse(loading)||ownMap(courseList,this.state.current)
+      const cardList_viedo = ownloadcourse(loading)||ownMapallcourse(allcourseList,this.state.pagecurrent)
+      // const cardList_course = ownloadcourse(loading)
+      // const cardList_viedo = ownloadcourse(loading)
       const mycourse_ground=(
         <div style={{ margin: '8px 8px 8px 0'}}>
         <Card bordered={false}>
