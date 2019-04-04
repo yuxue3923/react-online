@@ -299,8 +299,13 @@ const formItemLayout = {
         <div>
          <Row gutter={16}>
          <Col span={9}>
-        <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >查看课件</div>
-         
+         <Row gutter={16}>
+         <Col span={8}>
+         </Col>
+          <Col span={8}>
+            <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >查看课件</div>
+         </Col>
+        </Row>
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
             <Input value={this.state.courseName}  style={{ width: 300 }}/>
@@ -367,8 +372,12 @@ const formItemLayout = {
             </Row>
             </Form.Item>
         </Form>
-           <Row>
-             <Button type="primary" onClick={this.updatecourse} style={{margin:'0px 0px 0px 100px'}}>进入课件详情</Button>
+          <Row gutter={16}>
+             <Col span={8}>
+             </Col>
+            <Col span={16}>
+               <Button type="primary" onClick={this.updatecourse} style={{margin:'0px 0px 0px 100px'}}>进入课件详情</Button>
+             </Col>
            </Row>
             </Col>
             <Col span={15}>

@@ -161,7 +161,7 @@ function add(type,callback){
             break;
         case 'heart':
             Pen('heart')
-            var heart=new srender.Heart({shape:{cx:200,cy:20,width:50,height:50},style:{fill: 'red',stroke: 'none'}})
+            var heart=new srender.Heart({shape:{cx:200,cy:600,width:50,height:50},style:{fill: 'red',stroke: 'none'}})
             sr.add(heart);
             break;
         case 'undo':
@@ -348,7 +348,7 @@ export default class Editor extends React.Component {
         return (
 
             <div>
-            <div className="container" style={{height:'100vh',width:'100%',padding:"0px 0px 0px 20px"}} onDrop={drop} onDragOver={allowDrop}></div>
+            <div className="container" style={{height:'100vh',width:'100%',padding:"0px 0px 0px 0px"}} onDrop={drop} onDragOver={allowDrop}></div>
             </div>
 
         )

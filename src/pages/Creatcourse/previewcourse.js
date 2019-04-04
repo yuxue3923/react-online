@@ -61,6 +61,7 @@ const formItemLayout = {
                 addTime:data.msg[0].addTime,
                 views: data.msg[0].views,
                 thumbnail:previewcourseid.thumbnail,
+                cataloglist:previewcourseid.cataloglist,
               });
             }
             else {   
@@ -178,7 +179,7 @@ const formItemLayout = {
          <Col span={17}>
            <Card style={{margin:'80px 0px 30px 80px',width:"100%",height:"100%"}} title="显示区">
            {/* <Editor getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode} message={this.props.message} toServe={this.props.toServe} clearMsg = {this.props.clearMsg} shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now}/>/> */}
-            <DrawViewcopy pageChoose={this.pageChoose} thumbnail={this.state.thumbnail}/>
+            <DrawViewcopy cataloglist={this.state.cataloglist} pageChoose={this.pageChoose} thumbnail={this.state.thumbnail}/>
             </Card>
          </Col>
          <Col span={4}>

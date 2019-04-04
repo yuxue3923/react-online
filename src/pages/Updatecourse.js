@@ -441,8 +441,13 @@ const formItemLayout = {
         <div>
          <Row gutter={16}>
          <Col span={9}>
+         <Row gutter={16}>
+         <Col span={8}>
+         </Col>
+          <Col span={8}>
         <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >修改课件</div>
-         
+         </Col>
+         </Row>
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
             <Input value={this.state.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
@@ -526,8 +531,12 @@ const formItemLayout = {
             </Row>
             </Form.Item>
         </Form>
-           <Row>
+           <Row gutter={16}>
+             <Col span={8}>
+             </Col>
+            <Col span={16}>
              <Button type="primary" onClick={this.updatecourse} style={{margin:'0px 0px 0px 100px'}}>确认修改</Button>
+             </Col>
            </Row>
             </Col>
             <Col span={15}>

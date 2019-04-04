@@ -30,15 +30,15 @@ class Drawerview extends Component {
   }
 
     render() {
-     
-      const length = this.props.thumbnail.length
-      console.log("thumbnail:",this.props.thumbnail)
+     const title=this.props.cataloglist;
+      const length = this.props.thumbnail.length;
+      console.log("thumbnail:",this.props.thumbnail);
     //  console.log("pages:",length)
       const listData = [];
       for (let i = 0; i < length; i++) {
         listData.push({
-          href: 'http://ant.design',
-          title: `幻灯片 ${i+1}`,
+          // href: 'http://ant.design',
+          title: title[i],
           // avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
           // description: 'Ant Design, a design language for background applications, is refined by Ant UED Team.',
           Xst:i+1
@@ -72,7 +72,7 @@ class Drawerview extends Component {
           >
             <List.Item.Meta
               avatar={<Avatar style={{ backgroundColor: '#fde3cf' }}> <Icon type='tags'/></Avatar>}
-              title={<a href={item.href}>{item.title}</a>}
+              title={item.title}
             //   description={item.description}
             />
             <img width="100%" alt="logo" src={typeof this.props.thumbnail[item.Xst-1].pageThumbnail !== "undefined"?this.props.thumbnail[item.Xst-1].pageThumbnail:this.props.thumbnail[item.Xst-1]} onClick={this.pageChoose.bind(this,item.Xst)}/>
