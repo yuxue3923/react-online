@@ -13,6 +13,7 @@ import Previewcourse from '../pages/Creatcourse/previewcourse'
 import Tempreview from '../pages/Creatcourse/tempreview'
 import User from '../pages/User'
 import Updatecourse from '../pages/Updatecourse'
+import Reviewcourse from '../pages/reviewcourse'
 const store=createStore(Reducer)
 export default class RouterIndex extends Component {
     render() {
@@ -29,6 +30,7 @@ export default class RouterIndex extends Component {
                 <Route path="/Tempreview" component={Tempreview}></Route>
                 <Route path="/Register" component={Register}></Route>
                 <Route path="/User" component={User}></Route>
+                <Route path="/Reviewcourse" component={Reviewcourse}></Route>
             </Switch>
             </BrowserRouter>
             </Provider>

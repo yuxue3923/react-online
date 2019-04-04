@@ -38,16 +38,20 @@ const FormItem = Form.Item;
     constructor(props, context) {
         super(props, context)
         this.state = {
+          controlrecycle:false,
           loading:true,
           allcoursedata:[],
+          recyclcourse:[],
           usercoursedata:[],
           collectinfo:false,
           collectcourseinfo:"未收藏",
           visible: false ,
           current:1,//我的课件当前页
           pagecurrent:1,//总课件当前页
+          pagecurrentrecycle:1,
           checked: true,//Tag状态
           templatevisible:false,//控制课件模版弹出框
+          deletevisible:false,//课件删除弹出框
           imgurl:["https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png","https://gw.alipayobjects.com/zos/rmsportal/uMfMFlvUuceEyPpotzlq.png","https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png","https://gw.alipayobjects.com/zos/rmsportal/gLaIAoVWTtLbBWZNYEMg.png" ]
         }
     }
@@ -104,6 +108,50 @@ const FormItem = Form.Item;
       console.log(e);
       this.setState({
         templatevisible: false,
+      });
+    }
+    //课件删除确认弹出框
+    showModal_delete = (_id) => {
+      this.setState({
+        deletevisible: true,
+        _id:_id
+      });
+    }
+  
+    handleOk_delete = (e) => {
+      console.log(e);
+      message.success('还可以去右上角的回收站找哟~');
+      var recyclcourse1=this.state.recyclcourse;
+       var arraydata=this.state.usercoursedata;
+        for (let i=0;i<arraydata.length;i++){
+          if(arraydata[i]._id===this.state._id){
+                var index=i;
+                recyclcourse1.push(arraydata[i]);
+            }
+         }
+          arraydata.splice(index,1);
+          this.setState({
+            usercoursedata:arraydata,
+            recyclcourse:recyclcourse1,
+            deletevisible: false,
+          });
+    }
+    recyclcourse=()=>{
+      this.setState({
+        controlrecycle:true,
+      });
+    }
+    handleCancel_delete = (e) => {
+      console.log(e);
+      this.deletecourseid(this.state._id);
+      this.setState({
+        deletevisible: false,
+      });
+    }
+    handleCanceldelete = (e) => {
+      console.log(e);
+      this.setState({
+        deletevisible: false,
       });
     }
   onChange=(page)=>{
@@ -204,6 +252,13 @@ const FormItem = Form.Item;
       }
     )
   }
+  onChangepagerecycle=(page)=>{
+    this.setState(
+      {
+        pagecurrentrecycle:page,
+      }
+    )
+  }
   //控制收藏按钮
   collect=(id)=>{
     this.setState({
@@ -244,10 +299,7 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode === 0) {
             console.log('收藏课件成功111');
-            Modal.success({
-              title: '消息提示',
-              content: '成功收藏该课件',
-            });
+            message.success('成功收藏该课件');
           }
           else {   
             console.log('收藏课件成功222');
@@ -264,7 +316,7 @@ const FormItem = Form.Item;
       console.log('进入收藏用户课件接口');
       $.ajax({
         url: "http://"+localhost+":3000/api/allCollectCourses",
-        async:false,
+        // async:false,
         type: "GET",
         contentType:"application/json;charset=UTF-8",
         dataType: "json",
@@ -275,9 +327,17 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode === 0) {
             console.log('收藏课件成功111');
+            var result=[];
+            for(var i=0;i<data.msg.length;i++){
+              var obj=data.msg[i];
+              if(obj!==null){
+                result.push(obj);
+              }
+            }
             this.setState({
               current:1,
-              usercoursedata:data.msg,
+              usercoursedata:result,
+              controlrecycle:false,
             });
           }
           else {   
@@ -308,14 +368,10 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode === 0) {
             console.log('取消收藏课件成功111');
-            Modal.success({
-              title: '消息提示',
-              content: '取消收藏该课件',
-            });
+            message.success( '取消收藏该课件');
           }
           else {   
             console.log('取消收藏课件成功222');
-             
           }
         },
         error: function (xhr, status, err) {
@@ -323,7 +379,27 @@ const FormItem = Form.Item;
         }
       });
     }
-    deletecourseid(id){ 
+    cancelrecycledeletecourseid(id){ 
+      message.info('该课件已还原到原位置哟~');
+      console.log('进入取消deleteCourse接口');
+      var array=this.state.recyclcourse;
+      for (var i=0;i<array.length;i++){
+        console.log("index",array)
+        if(array[i]._id===id){
+           var index=i;
+           console.log("index",index)
+        }
+      }
+    array.splice(index,1);
+    console.log(array);
+    this.setState({
+      recyclcourse:array,
+      controlrecycle:true,
+
+    })
+    this.getdata();
+    }
+    recycledeletecourseid(id){ 
       const { login_info}=this.props;
       var data = {
           "_id" :id.toString(),
@@ -345,8 +421,74 @@ const FormItem = Form.Item;
             message.success('成功删除课件~');
             console.log('删除课件id成功111');
             console.log(data);
-            this.getdata();
-            this.getallcoursedata();
+            
+            // this.getdata();
+            // this.getallcoursedata();
+
+            var array=this.state.recyclcourse;
+            for (var i=0;i<array.length;i++){
+              console.log("index",array)
+              if(array[i]._id===id){
+                 var index=i;
+                 console.log("index",index)
+              }
+            }
+          array.splice(index,1);
+          console.log(array);
+          this.setState({
+            recyclcourse:array,
+            controlrecycle:true,
+          })
+          }
+          else {   
+            console.log('删除课件id成功2222');
+             
+          }
+        }.bind(this),
+        error: function (xhr, status, err) {
+        }
+      });
+    }
+    deletecourseid(id){ 
+      const { login_info}=this.props;
+      var data = {
+          "_id" :id.toString(),
+      };
+      console.log('进入deleteCourse接口');
+      console.log(JSON.stringify(data));
+      $.ajax({
+        url: "http://"+localhost+":3000/api/deleteCourse",
+        // async:false,
+        type: "DELETE",
+        contentType:"application/json;charset=UTF-8",
+        dataType: "json",
+        data:JSON.stringify(data),
+        beforeSend:function(request){
+          request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+        },
+        success: function(data) {
+          if (data.errorCode === 0) {
+            message.success('成功删除课件~');
+            console.log('删除课件id成功111');
+            console.log(data);
+            
+            // this.getdata();
+            // this.getallcoursedata();
+
+            var array=this.state.usercoursedata;
+            for (var i=0;i<array.length;i++){
+              console.log("index",array)
+              if(array[i]._id===id){
+                 var index=i;
+                 console.log("index",index)
+              }
+            }
+          array.splice(index,1);
+          console.log(array);
+          this.setState({
+            usercoursedata:array,
+            controlrecycle:false,
+          })
           }
           else {   
             console.log('删除课件id成功2222');
@@ -360,6 +502,10 @@ const FormItem = Form.Item;
     getdata() {
       const { login_info }=this.props;
       console.log('进入researchByUserId接口');
+      message.info('加载过程有点缓慢，请耐心等待哟~');
+      this.setState({
+        loading:true,
+      });
       $.ajax({
         url: "http://"+localhost+":3000/api/researchByUserId",
         // async:false,
@@ -373,9 +519,16 @@ const FormItem = Form.Item;
         success: function(data) {
           if (data.errorCode === 0) {
             console.log('获取查询权限111');
+            var result=[];
+            for(var i=0;i<data.msg.length;i++){
+              var obj=data.msg[i];
+              if(obj!==null){
+                result.push(obj);
+              }
+            }
             this.setState({
               loading:false,
-              usercoursedata:data.msg,
+              usercoursedata:result,
             });
           }
           else {   
@@ -451,7 +604,7 @@ const FormItem = Form.Item;
     }
     render() {
       console.log("Account XuanRan")
-      const { loading } = this.state;
+      const { loading ,controlrecycle} = this.state;
       var ownloadcourse=(loading)=>{
       if(loading){
         return  <div>
@@ -475,16 +628,47 @@ const FormItem = Form.Item;
       }
     }
      
-     
-     
-      var result=[];
-      for(var i=0;i<this.state.usercoursedata.length;i++){
-        var obj=this.state.usercoursedata[i];
-        if(obj!==null){
-          result.push(obj);
-        }
-      }
-      const courseList = result.map((v, i) => {
+    const recyclecourseList = this.state.recyclcourse.map((v, i) => {
+      return (
+        <div>
+             <Row gutter={16}>
+           <Col span={8}>
+            <Card
+              style={{ width:250 ,height:300}}
+              cover={
+                <img 
+                  alt="example"
+                  src={this.state.imgurl[i%4]} height="154"
+                />
+              }
+            >
+              <Row>
+                <Col span={24}>
+                <Meta
+                    title={v.courseName}
+                    description={v.descript}
+                 />
+                </Col>
+              </Row>
+              <br />
+              <Row >
+                <Col span={3}>
+                {/* <IconFont className="iconsize" type="icon-xiugai" onClick={this.showModal.bind(this,v._id)}/> */}
+              </Col>
+                {/* <Col span={4}><IconFont className="iconsize" type="icon-xin" onClick={this.collect.bind(this,v._id)}/>{v.isEdit?"已收藏":"未收藏"}</Col> */}
+                {/* <Col span={3}><IconFont className="iconsize" type="icon-xin" onClick={this.collectCourse.bind(this,v._id)}/></Col>
+                <Col span={3}><IconFont className="iconsize" type="icon-shoucang" onClick={this.cancelcollectCourse.bind(this,v._id)}/></Col> */}
+                <Col span={3}><Icon className="iconsize" type="delete" onClick={this.recycledeletecourseid.bind(this,v._id)}/></Col>
+                <Col span={3}><Icon className="iconsize" type="rollback" onClick={this.cancelrecycledeletecourseid.bind(this,v._id)}/></Col>
+                <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
+              </Row>
+            </Card>
+        </Col>
+        </Row>
+        </div>
+      );}
+    );
+      const courseList = this.state.usercoursedata.map((v, i) => {
           return (
             <div>
                  <Row gutter={16}>
@@ -514,7 +698,7 @@ const FormItem = Form.Item;
                     {/* <Col span={4}><IconFont className="iconsize" type="icon-xin" onClick={this.collect.bind(this,v._id)}/>{v.isEdit?"已收藏":"未收藏"}</Col> */}
                     <Col span={3}><IconFont className="iconsize" type="icon-xin" onClick={this.collectCourse.bind(this,v._id)}/></Col>
                     <Col span={3}><IconFont className="iconsize" type="icon-shoucang" onClick={this.cancelcollectCourse.bind(this,v._id)}/></Col>
-                    <Col span={3}><Icon className="iconsize" type="delete" onClick={this.deletecourseid.bind(this,v._id)}/></Col>
+                    <Col span={3}><Icon className="iconsize" type="delete" onClick={this.showModal_delete.bind(this,v._id)}/></Col>
                     <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
                   </Row>
                 </Card>
@@ -633,14 +817,41 @@ const FormItem = Form.Item;
       </Row>
     </div>
       }
-      const cardList_course = ownloadcourse(loading)||ownMap(courseList,this.state.current)
+      var ownrecyclecourse=(controlrecycle,list,current)=>{
+        if(controlrecycle){
+          for(let i=(current-1)*12;i<list.length;){
+            return  <div>
+            <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
+               <Col span={4}>{list[i]}</Col>
+              <Col span={4}>{list[i+1]}</Col>
+              <Col span={4}>{list[i+2]}</Col> 
+              <Col span={4}>{list[i+3]}</Col>
+              <Col span={4}>{list[i+4]}</Col>
+              <Col span={4}>{list[i+5]}</Col>
+            </Row>
+            <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
+              <Col span={4}>{list[i+6]}</Col>
+              <Col span={4}>{list[i+7]}</Col>
+              <Col span={4}>{list[i+8]}</Col> 
+              <Col span={4}>{list[i+9]}</Col> 
+              <Col span={4}>{list[i+10]}</Col>
+              <Col span={4}>{list[i+11]}</Col> 
+            </Row>
+            <Row style={{ margin: '8px 8px 8px 0',textAlign: 'center' }}>
+            <Pagination current={this.state.pagecurrentrecycle} onChange={this.onChangepagerecycle} total={list.length} pageSize={12} />
+            </Row>
+          </div>
+          }
+        }
+      }
+      const cardList_course = ownloadcourse(loading)||ownrecyclecourse(controlrecycle,recyclecourseList,this.state.pagecurrentrecycle)||ownMap(courseList,this.state.current)
       const cardList_viedo = ownloadcourse(loading)||ownMapallcourse(allcourseList,this.state.pagecurrent)
       // const cardList_course = ownloadcourse(loading)
       // const cardList_viedo = ownloadcourse(loading)
       const mycourse_ground=(
         <div style={{ margin: '8px 8px 8px 0'}}>
         <Card bordered={false}>
-          <Form layout="inline" style={{ paddingBottom: 11 }}>
+          <Form layout="inline" style={{ paddingBottom: 5 }}>
               <Row gutter={16}>
               <Col span={5}>                  
                   <Select defaultValue="1" onChange={this.handleChangecreat} style={{width:'100%'}}>
@@ -666,6 +877,10 @@ const FormItem = Form.Item;
                     <Option value="6">生物</Option>
                  </Select>                  
                 </Col>
+                <Col span={7}/> 
+                <Col span={2}>
+                  <p style={{fontSize:'35px'}}><Icon onClick={this.recyclcourse} type="rest" /></p>
+                </Col> 
               </Row>
           </Form>
         </Card>
@@ -752,15 +967,29 @@ const FormItem = Form.Item;
         </div>
         </Header>
         <Modal
-          title="是否编辑课件"
+          title="是否查看课件"
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={null}
         >
+         <p>你可以选择查看课件，也可以编辑修改课件哟~</p>
         <p className="right">
-           <Button key="return" onClick={this.handleCancel}>取消</Button>
-           <Link to='/Updatecourse'><Button key="next" type="primary"> 确定 </Button></Link>
+            <Link to='/Reviewcourse'><Button key="return" >查看课件</Button></Link>
+           <Link to='/Updatecourse'><Button key="next" type="primary"> 编辑课件 </Button></Link>
+        </p>
+        </Modal>
+        <Modal
+          title="是否删除课件"
+          visible={this.state.deletevisible}
+          // onOk={this.handleOk_delete}
+          onCancel={this.handleCanceldelete}
+          footer={null}
+        >
+        <p>你可以选择彻底删除课件，也可以将其放到回收站哟~</p>
+        <p className="right">
+           <Button key="return" onClick={this.handleCancel_delete}>彻底删除</Button>
+          <Button key="next" type="primary" onClick={this.handleOk_delete}>回收站</Button>
         </p>
         </Modal>
         <Card bordered={false}>
