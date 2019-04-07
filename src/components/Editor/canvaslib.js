@@ -172,6 +172,25 @@ function add(type,callback){
          //   Pen('redo')
             sr.redo();
             break
+        case 'text':
+               Pen('text')
+               var text=new srender.Text({
+                draggable:true,
+                 style:{
+                     x:500,
+                     y:500,
+                     text: '默认文字',
+                     textAlign: 'center',
+                     textVerticalAlign: 'middle',
+                     fontSize: 200,
+                     fontFamily: 'Lato',
+                     fontWeight: 'bolder',
+                     textFill: '#0ff',
+                     blend: 'lighten'
+                 }})
+               sr.add(text);
+               sr.redo();
+               break
         default:
             Pen('none')
             console.log("Sorry,no shape to draw")
@@ -213,7 +232,8 @@ export default class Editor extends React.Component {
            socket.emit('update data', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
          }
          toServePage = function(msg){
-            socket.emit('page change',msg)
+             console.log(msg)
+            socket.emit('update page',JSON.stringify(msg))
          }
          var username = 'bing';
          
@@ -229,8 +249,9 @@ export default class Editor extends React.Component {
              socket.on('user joined',(data)=>{
                  console.log(data.username+" come in");
              });
-            socket.on('page change',(page)=>{
-
+            socket.on('update page',(data)=>{
+                var msg = JSON.parse(data)
+                this.props.newSlide(msg.add,msg.page)
             })
              socket.on('update data',(data)=>{
              console.log("someone update")
@@ -306,9 +327,9 @@ export default class Editor extends React.Component {
        
         if(this.props.isSingleMode){
            
-        //    !this.props.objectList&&sr.clear()
+            !this.props.objectList&&sr.clear()//jian cha dian
            
-        //    this.props.objectList&&sr.initWithOthers(this.props.objectList)
+            this.props.objectList&&sr.initWithOthers(this.props.objectList)
         }
         else{
             console.log(this.props.userName)

@@ -23,6 +23,7 @@ class Drawerview extends Component {
   }
   newSlide(i,page,e){  //i true for add false for delete
       this.props.newSlide(i,page)
+      !this.props.isSingle&&this.props.socketFn({add:i,page:page})
   }
   componentWillMount(){
    // listData[0].title=this.props.thumbnail

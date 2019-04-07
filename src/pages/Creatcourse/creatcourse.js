@@ -63,9 +63,10 @@ const formItemLayout = {
       }
       // 传入课件名称
       Inputcoursename(e){
-        this.setState({
+       /*  this.setState({
           courseName: e.target.value,
-        });
+        }); */
+        console.log("keydown");
         this.getknowledgeRel(e.target.value);
       }
       //年级科目
@@ -430,7 +431,7 @@ const formItemLayout = {
          
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
-            <Input placeholder="20字以内" onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
+            <Input defaultValue="20字以内" onInput={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
           </Form.Item>
           <Form.Item label="年级科目" {...formItemLayout}>
           <Row gutter={16}>

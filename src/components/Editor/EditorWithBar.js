@@ -215,7 +215,7 @@ const dgraph=function(fh,fheart,fa){
           </div> 
           </div>
           </Col>
-       <Col span={23}> <Editor userName={this.props.userName} type={isButton&&this.state.addType} getToServePage={this.props.getToServePage} pageChange={this.props.pageChange} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode}   shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now} dispatchState = {this.props.dispatchState}/></Col>   
+       <Col span={23}> <Editor userName={this.props.userName} newSlide={this.props.newSlide} type={isButton&&this.state.addType} getToServePage={this.props.getToServePage} pageChange={this.props.pageChange} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode}   shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now} dispatchState = {this.props.dispatchState}/></Col>   
       </Row> 
         </div>
      
