@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Icon, Avatar,Input, Button,Select,Row,Col ,Switch,Modal,Layout,Card,message} from 'antd';
+import {Form, Icon, Avatar,Input, Button,Row,Col ,Switch,Layout,Card,message} from 'antd';
 import {Link} from 'react-router-dom'
 import './Creatcourse/creatcourse.css'
 import $ from 'jquery';
@@ -21,9 +21,6 @@ const data= {
     ],
     "name": "课件总目录"
   }
-const Option = Select.Option;
-// const { Sider} = Layout;
-// const TreeNode = Tree.TreeNode;
 
 const formItemLayout = {
     labelCol: {
@@ -39,7 +36,7 @@ const formItemLayout = {
     let _obj = JSON.stringify(obj);
     return JSON.parse(_obj)
   }
-  class Updatecourse extends Component {
+  class Reviewcourse extends Component {
     static contextTypes={
       router:PropTypes.object
     }
@@ -55,110 +52,8 @@ const formItemLayout = {
           courseName:"",
         }
       }
-      // 传入课件名称
-      Inputcoursename(e){
-        let coursename=e.target.value;
-        if(coursename){
-        this.setState({
-          courseName:coursename,
-        });
-        this.getknowledgeRel(coursename);
-      }else{
-        this.setState({
-          courseName:coursename,
-        });
-        this.getknowledgeRel("ttt");
-      } 
-      }
-      //年级科目
-      Inputgrade(value){
-        this.setState({
-          grade:value,
-        });
-      }
-      Inputsubject(value){
-        this.setState({
-          subject:value,
-        });
-      }
-      //传入课件描述
-      Inputdescript(e){
-        this.setState({
-          descript: e.target.value,
-        });
-      }
-      //传入是否公开
-      Inputisopen(value){
-        console.log(value);
-        if(value===true){
-        this.setState({
-          isOpen:"1",
-        });}
-        else{
-          this.setState({
-            isOpen:"0",
-          });
-        }
-      }
-     
-      //树状知识点点击事件
-      onSelect = (e) => {
-        console.log(e.target.value);
-        const a=this.state.knowledgelist;
-        const knowledges1={}; 
-        knowledges1['title'] =e.target.value; 
-        a.push(knowledges1);
-        console.log(a[0].title);
-        this.setState({
-          knowledgelist:a
-        });
-      }
-      deleteknowid(value){
-        var array=this.state.knowledgelist;
-          for (var i=0;i<array.length;i++){
-            if(array[i].title===value){
-               var index=i;
-               console.log("index",index)
-            }
-          }
-        array.splice(index,1);
-        console.log(array);
-        this.setState({
-          knowledgelist:array,
-        })
-      }
-      handlePlus() {
-        if (this.state.arrSize < 7) {
-            const coursecatalog1 = {}; 
-            coursecatalog1['children'] =[];   
-            coursecatalog1['name'] = "";
-            this.state.coursecatalog.push(coursecatalog1);
-          this.setState({ 
-              arrSize: this.state.arrSize + 1 ,
-        })
-        this.CourseAppear(); 
-        } else {
-          Modal.warning({
-            title: '注意：',
-            content: '最多8个目录！',
-          });
-        }
-      }
     
-      handleMinus() {
-        if (this.state.arrSize > 0) {
-            this.state.coursecatalog.pop()
-          this.setState({ 
-              arrSize: this.state.arrSize - 1 ,
-        })
-        this.CourseAppear(); 
-        } else {
-          Modal.warning({
-            title: '注意：',
-            content: '最少1个目录！',
-          });
-        }
-      }
+    
       updatecourse = () =>{
         const know=this.state.knowledgelist;
         var knowsource=[];
@@ -196,10 +91,7 @@ const formItemLayout = {
       formData.templateId = deepClone(temp.createCourse_info.slides.templateId) 
     
            console.log(JSON.stringify(formData))
-         
-          
-    
-       
+        
         //更新课件
         console.log("进入更新课件ajax");
         const {setCreatecourseState} = this.props;
@@ -218,7 +110,7 @@ const formItemLayout = {
             success: function (data) {
                 if (data.errorCode === 0) {
                     console.log('成功更新课件:',data);
-                    message.success('成功更新课件~');
+                    message.success('进入课件详情~');
                     console.log(this.state.coursecatalog);
                     setCreatecourseState({
                         type:'createcourseSuccess',
@@ -303,38 +195,7 @@ const formItemLayout = {
           }
         });
       }
-      getknowledgeRel(value) {
-        const { login_info }=this.props;
-        console.log('进入knowledgeRel ajax');
-        console.log(login_info.access_token);
-        $.ajax({
-          url: "http://"+localhost+":3000/api/knowledgeRel",
-          data:"courseName="+value,
-          beforeSend:function(request){
-            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
-          },
-          type: "GET",
-          dataType: "json",
-          async:false,
-          success: function (data) {
-            if (data.errorCode === 0) {
-              console.log('获取关联知识点');
-              console.log(data);
-              if(data.msg){
-              this.setState({
-                // courseName:value,
-                knowledgelist:data.msg,
-              });
-            }
-            }
-            else {   
-              console.log('获取关联知识点2222');
-            }
-          }.bind(this),
-          error: function (xhr, status, err) {
-          }
-        });
-      }
+     
       componentWillMount(){
         this.getdata();
       }
@@ -419,9 +280,6 @@ const formItemLayout = {
             <Col span={20}>
               <div key={i}>{v.title}</div>
             </Col>
-            <Col span={4}>
-              <Icon type="minus-square" onClick={this.deleteknowid.bind(this,v.title)}/>
-            </Col>
           </Row>
           </div>
         );}
@@ -445,43 +303,29 @@ const formItemLayout = {
          <Col span={8}>
          </Col>
           <Col span={8}>
-        <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >修改课件</div>
+            <div style={{ color: 'green', fontSize:'20px',margin:'20px 0px 30px 0px' }} >查看课件</div>
          </Col>
-         </Row>
+        </Row>
         <Form style={{margin:'20px 0px 0px 0px'}}>
           <Form.Item label="课件名称" {...formItemLayout}>
-            <Input value={this.state.courseName} onChange={this.Inputcoursename.bind(this)} style={{ width: 300 }}/>
+            <Input value={this.state.courseName}  style={{ width: 300 }}/>
           </Form.Item>
           <Form.Item label="年级科目" {...formItemLayout}>
           <Row gutter={16}>
           <Col span={12}>
-          <Select onChange={this.Inputgrade.bind(this)} style={{width:'100%'}} value={this.state.grade}>
-                    <Option value="小学">小学</Option>
-                    <Option value="初中"> 初中</Option>
-                    <Option value="高中">高中</Option>
-          </Select> 
+          <Input style={{width:'100%'}} value={this.state.grade}>
+          </Input> 
           </Col> 
           <Col span={12}>
-           <Select onChange={this.Inputsubject.bind(this)} style={{width:'100%'}} value={this.state.subject}>
-                    <Option value="语文">语文</Option>
-                    <Option value="数学">数学</Option>
-                    <Option value="英语">英语</Option>
-                    <Option value="物理">物理</Option>
-                    <Option value="化学">化学</Option>
-                    <Option value="生物">生物</Option>
-                    <Option value="政治">政治</Option>
-                    <Option value="历史">历史</Option>
-                    <Option value="地理">地理</Option>
-            </Select> 
+           <Input style={{width:'100%'}} value={this.state.subject}>
+            </Input> 
             </Col> 
             </Row>                 
           </Form.Item>
           <Form.Item label="课件简介" {...formItemLayout}>
-           <TextArea onChange={this.Inputdescript.bind(this)} style={{ minHeight: 32 ,minWidth: 300}} value={this.state.descript} rows={4} />
+           <TextArea style={{ minHeight: 32 ,minWidth: 300}} value={this.state.descript} rows={4} />
           </Form.Item>
-          <Form.Item label="手动输入关联知识点" {...formItemLayout}>
-            <Input placeholder="20字以内" onPressEnter={this.onSelect.bind(this)} style={{ width: 300 }}/>
-          </Form.Item>
+         
           <Form.Item label="关联知识点" {...formItemLayout}>
           <Row gutter={16}>
           <Col span={24}>
@@ -494,17 +338,17 @@ const formItemLayout = {
           <Form.Item label="公开/私密" {...formItemLayout}>
           <Row gutter={8}>
           <Col span={10}>
-             <Switch onChange={this.Inputisopen.bind(this)} checkedChildren="公开" unCheckedChildren="私密" defaultChecked={this.state.isOpen}/>
+             <Switch disabled="true" checkedChildren="公开" unCheckedChildren="私密" defaultChecked={this.state.isOpen}/>
           </Col> 
           </Row>
           </Form.Item>
           <Form.Item label="课件目录" {...formItemLayout}>
           <Row gutter={16}>
            <Col span={12}>
-            <Button type="dashed" style={{ width: '100%' }} onClick={this.handlePlus.bind(this)}><Icon type="plus" />添加</Button>
+            <Button type="dashed" style={{ width: '100%' }} ><Icon type="plus" />添加</Button>
             </Col>
             <Col span={12}>
-            <Button type="dashed" style={{ width:'100%' }} onClick={this.handleMinus.bind(this)}><Icon type="minus" />删除</Button>
+            <Button type="dashed" style={{ width:'100%' }} ><Icon type="minus" />删除</Button>
             </Col>
             </Row>
           </Form.Item>
@@ -517,10 +361,7 @@ const formItemLayout = {
                         <Row gutter={8} key={i}>
                            <Col span={10}>
                           <Input style={{ width: 300 }}
-                          onChange={(e)=>{
-                            v.name = e.target.value; 
-                            this.CourseAppear();  
-                          }} value={v.name}
+                          value={v.name}
                           />
                            </Col>
                         </Row>
@@ -531,11 +372,11 @@ const formItemLayout = {
             </Row>
             </Form.Item>
         </Form>
-           <Row gutter={16}>
+          <Row gutter={16}>
              <Col span={8}>
              </Col>
             <Col span={16}>
-             <Button type="primary" onClick={this.updatecourse} style={{margin:'0px 0px 0px 100px'}}>确认修改</Button>
+               <Button type="primary" onClick={this.updatecourse} style={{margin:'0px 0px 0px 100px'}}>进入课件详情</Button>
              </Col>
            </Row>
             </Col>
@@ -551,7 +392,7 @@ const formItemLayout = {
       );
     }
   }
-  const Updatecourse_Index=Form.create()(Updatecourse);
+  const Reviewcourse_Index=Form.create()(Reviewcourse);
   function  mapStateToProps(state) {
     return{
        login_info:state.reducer_login.login_info,
@@ -566,4 +407,4 @@ const formItemLayout = {
   export default connect(
     mapStateToProps,
     mapDispatchToProps,
-  )(Updatecourse_Index);
+  )(Reviewcourse_Index);

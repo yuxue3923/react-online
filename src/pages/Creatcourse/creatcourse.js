@@ -63,11 +63,18 @@ const formItemLayout = {
       }
       // 传入课件名称
       Inputcoursename(e){
-       /*  this.setState({
-          courseName: e.target.value,
-        }); */
-        console.log("keydown");
-        this.getknowledgeRel(e.target.value);
+        let coursename=e.target.value;
+        if(coursename){
+        this.setState({
+          courseName:coursename,
+        });
+        this.getknowledgeRel(coursename);
+      }else{
+        this.setState({
+          courseName:coursename,
+        });
+        this.getknowledgeRel("ttt");
+      } 
       }
       //年级科目
       Inputgrade(value){
@@ -310,6 +317,10 @@ const formItemLayout = {
       CourseAppear() {
         console.log("课件展示区")
         console.log(JSON.stringify(this.state.coursecatalog))
+        let a=this.state.coursecatalog;
+        this.setState({ 
+          coursecatalog: a,
+       })
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));
         // 绘制图表
@@ -507,11 +518,11 @@ const formItemLayout = {
                     return (
                       <Row gutter={8} key={i}>
                          <Col span={10}>
-                        <Input onPressEnter={(e)=>{
+                        <Input onChange={(e)=>{
                               v.name = e.target.value; 
                               this.CourseAppear();  
                           }} 
-                          placeholder={v.name}  style={{ width: 300 }}/>
+                          value={v.name}  style={{ width: 300 }}/>
                          </Col>
                       </Row>
                     )

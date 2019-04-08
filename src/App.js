@@ -115,6 +115,7 @@ class App extends Component {
    this.getToServePage=this.getToServePage.bind(this);
    this.save = this.save.bind(this);
    this.showModal_preview=this.showModal_preview.bind(this);
+   this.onCollapse=this.onCollapse.bind(this);
    this.sendsource=this.sendsource.bind(this);
    this.passbyJudge = this.passbyJudge.bind(this)
    this.newSlide = this.newSlide.bind(this)
@@ -130,6 +131,7 @@ class App extends Component {
       cooperationuserid:0,
       code:0,
       collapsed: false,
+      collapsedleftsider:false,
       visible: false,
       modalvisible:false,
       modal2Visible:false,
@@ -176,6 +178,7 @@ class App extends Component {
         payload:{ 
           project_id:createCourse_info.course_id,
           thumbnail:this.state.thumbnail,
+          cataloglist:this.state.cataloglist,
         },
       });
       this.context.router.history.push("/Previewcourse");
@@ -376,6 +379,18 @@ class App extends Component {
           message.error("无法获取项目数据");
         }
       })
+    }
+    setcatalog(){
+      const {createCourse_info}=this.props;
+      const cataloglist=createCourse_info.createCourse_info.catalog.children;
+      var knowsource=[];
+      for(var i=0;i<cataloglist.length;i++){
+         var obj=cataloglist[i];
+         knowsource.push(obj.name);
+      }; 
+      this.setState({
+        cataloglist:knowsource,
+      });
     }
     getProjectUserList(){
       const { login_info ,createCourse_info}=this.props;
@@ -682,9 +697,8 @@ class App extends Component {
         modalvisible: false,
       });
     }
-    onCollapse = (collapsed) => {
-      console.log(collapsed);
-      this.setState({ collapsed });
+    onCollapse = () => {
+      this.setState({ collapsed: !this.state.collapsed, });
     }
     showDrawer = () => {
       this.setState({
@@ -865,14 +879,15 @@ class App extends Component {
    // project_id_now = createCourse_info.course_id
    console.log("测试多人聊天");
    this.numchat(createCourse_info.course_id);
-  
+   console.log("初次加载课件目录:",createCourse_info.createCourse_info.catalog.children) 
+   this.setcatalog();
   }
   
   componentDidMount(){
     // const { login_info,createCourse_info } = this.props;
     // this.createchat(createCourse_info.course_id);
     this.getProjectUserList();
-   
+   this.setcatalog();
    
   }
   /*
@@ -941,8 +956,8 @@ class App extends Component {
   })
 
       const content=(
-        <div style={{ width: 500 }}>
-        <Card >
+        <div style={{ width: 450 }}>
+        {/* <Card > */}
         <div className="left">
            <p style={{fontSize:'25px'}}>
               {updatecontent}
@@ -952,7 +967,7 @@ class App extends Component {
           <Input placeholder="发送消息"  onChange={this.updatechatdata.bind(this)} style={{ width: 300 }}/>
            <Button type="primary" onClick={this.handlePlus.bind(this)}>发送</Button>
         </div>  
-        </Card>
+        {/* </Card> */}
         </div>
       );
       const text =
@@ -1017,44 +1032,45 @@ class App extends Component {
     //  console.log(this.state.thumbnail)
       return (
         <Layout style={{width: '100%', height: '100vh'}}>
-       
-        <Sider 
-          width={700}
-          collapsible
-          collapsed={this.state.collapsed}
-          onCollapse={this.onCollapse}
-          collapsedWidth={0}
-         
-          className="Sider"
-          style={{width: '100%', height: '100vh'}}
+         <Sider 
+             trigger={null}
+             width={250}
+             collapsible
+             collapsed={this.state.collapsedleftsider}
+             collapsedWidth={0}
+             // onCollapse={this.onCollapse}
+             className="Sider"
+             style={{width: '100%', height: '100vh'}}
           >
-             <Bodysider resourcelist={this.state.resourcelist} Getsource={this.sendsource}/>
+          <DrawView  cataloglist={this.state.cataloglist} mask={false} socketFn={toServePage} isSingle={this.state.isSingle&&createCourse_info.isSingle} trick={this.state.trick} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>
+            
           </Sider>
-            <div className="flowbar" style={{right:80,top: 20}}>
-               <Button style={{fontSize:15}} type="primary" onClick={this.showDrawer}>
-                 视图
-              </Button>
+          {/* <div className="flowbar" style={{left:440,top:80}}>
+            <Popover placement="bottomRight" content={content} trigger="click">
+            <Badge count={this.state.coursecatalog.length}><Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button></Badge>
+            </Popover>
+            </div> */}
+          <div className="flowbar" style={{left:480,top: 20}}>
+           <Badge count={this.state.coursecatalog.length}>
+           <Button onClick={this.showDrawer} style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button>
+           </Badge>
               <Drawer
-                width={300}
-                title="幻灯片结构"
+                width={500}
+                title="交流区间"
                 placement="right"
                 closable={false}
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                <DrawView mask={false} socketFn={toServePage} isSingle={this.state.isSingle&&createCourse_info.isSingle} trick={this.state.trick} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>{/**/}
+                {content}
               </Drawer>
             </div>
-            <div className="flowbar" style={{right:10,top:20}}>
-            <span style={{ marginRight: 24, }}>
-                <Badge count={3}><Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Link></Badge>
-              </span>
-            </div>
+           
             
             {/* <Layout className='Layoutstyle'> */}
             <Content className="Content" style={{height: '100vh',margin: '0 16px'}}>
             <div>
-            <div className="flowbar" style={{right:170,top:20}}>
+            <div className="flowbar" style={{left:570,top:20}}>
             {/* <div className="flowbar" style={{right:200,top:20}}> */}
            <Popover placement="bottomLeft" title={text} content={menu(this.setModal2Visible.bind(this,true))} trigger="click"  visible={this.state.popoverVisible} onVisibleChange={this.popoverVisibleChange}>
            <Button type="dashed" shape="circle" className="iconsize" >
@@ -1078,7 +1094,7 @@ class App extends Component {
               <Button shape="circle" type="primary" ghost icon="share-alt" onClick={this.showModal}></Button> */}
               
            {/* </div> */}
-          <div className="flowbar" style={{right:10,top:20}}>
+          <div className="flowbar" style={{left:410,top:20}}>
             <span style={{ marginRight: 24, }}>
                 <Badge count={1}><Avatar className="iconsize" onClick={this.showModal.bind(this,"invite")} style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}  icon="user" /></Badge>
                 <Modal
@@ -1099,11 +1115,7 @@ class App extends Component {
             </Dropdown>
             </span>
             </div> */}
-            <div className="flowbar" style={{right:40,top:80}}>
-            <Popover placement="bottomRight" content={content} trigger="click">
-            <Badge count={this.state.coursecatalog.length}><Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button></Badge>
-            </Popover>
-            </div>
+            
             <EditorWithBar  newSlide={this.newSlide} pageChoose={this.pageChoose} userName = {login_info.username} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
             
             </div>
@@ -1121,6 +1133,18 @@ class App extends Component {
         </Modal>
             </Content>
             {/* </Layout> */}
+            <Sider 
+            trigger={null}
+          width={700}
+          collapsible
+          collapsed={this.state.collapsed}
+          collapsedWidth={0}
+          // onCollapse={this.onCollapse}
+          className="Sider"
+          style={{width: '100%', height: '100vh'}}
+          >
+             <Bodysider resourcelist={this.state.resourcelist} Getsource={this.sendsource}/>
+          </Sider>
           </Layout>
       );
     }
