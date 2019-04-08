@@ -651,7 +651,7 @@ class App extends Component {
             if (data.errorCode === 0) {
           
               console.log('已创建协同聊天');
-              callBack_chat(project_id);
+         //     callBack_chat(project_id);
             }
             else {
                 console.log('协同聊天失败');
@@ -902,19 +902,19 @@ class App extends Component {
     return true
   }
   componentDidUpdate(){
-    const {createCourse_info,setCreatecourseState} = this.props;
+  //  const {createCourse_info,setCreatecourseState} = this.props;
     // this.setState({shouldCreateSocket:typeof createCourse_info.isSingle === undefined?false:createCourse_info.isSingle})
    // this.setState({isSingle:createCourse_info.isSingle})
      
-   !createCourse_info.isSingle&&setCreatecourseState({
+   /* !createCourse_info.isSingle&&setCreatecourseState({
        type:'createcourseSuccess',
        payload:{
        
         createCourse_info:createCourse_info.createCourse_info,
         course_id:createCourse_info.course_id,
-         isSingle:true,
+         isSingle:false,
        }
-     });
+     }); */
   }
   
     render() {
@@ -1009,7 +1009,7 @@ class App extends Component {
       // const serveThumbnail = null;
       // const {createCourse_info} = this.props;
    //   console.log(MyDeck)
-      console.log(createCourse_info.createCourse_info)
+      console.log(createCourse_info.isSingle)
     //  MyDeck=this.state.isSingle?MyDeck:createCourse_info.createCourse_info.slides.slide
     //  MyDeck=(this.state.isSingle&&createCourse_info.isSingle)?MyDeck:createCourse_info.createCourse_info.slides.slide
       //createCourse_info.isSingle为null会产生错误吗
@@ -1042,7 +1042,7 @@ class App extends Component {
                 onClose={this.onClose}
                 visible={this.state.visible}
               >
-                <DrawView mask={false} socketFn={toServePage} isSingle={this.state.isSingle} trick={this.state.trick} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>{/**/}
+                <DrawView mask={false} socketFn={toServePage} isSingle={this.state.isSingle&&createCourse_info.isSingle} trick={this.state.trick} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>{/**/}
               </Drawer>
             </div>
             <div className="flowbar" style={{right:10,top:20}}>
@@ -1104,7 +1104,7 @@ class App extends Component {
             <Badge count={this.state.coursecatalog.length}><Button style={{margin:"0px 0px 0px 4px"}}type="primary" size="small" ghost>交流</Button></Badge>
             </Popover>
             </div>
-            <EditorWithBar  newSlide={this.newSlide} userName = {login_info.username} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
+            <EditorWithBar  newSlide={this.newSlide} pageChoose={this.pageChoose} userName = {login_info.username} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
             
             </div>
             <Modal

@@ -251,7 +251,8 @@ export default class Editor extends React.Component {
              });
             socket.on('update page',(data)=>{
                 var msg = JSON.parse(data)
-                this.props.newSlide(msg.add,msg.page)
+                if(msg.choose){this.props.pageChoose(msg.choose)}
+                else this.props.newSlide(msg.add,msg.page)
             })
              socket.on('update data',(data)=>{
              console.log("someone update")
