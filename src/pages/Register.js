@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import {Form, Icon, Input, Button, message,Modal,Select } from 'antd';
+import {Link} from 'react-router-dom'
 import './Access.css'
 import {localhost} from '../config'
 import $ from 'jquery';
+import { connect } from 'react-redux';
 import PropTypes from "prop-types"
 const FormItem = Form.Item;
 const Option =Select.Option;
@@ -115,7 +117,7 @@ const Option =Select.Option;
           <Button onClick={this.handleClick.bind(this)} type="primary" htmlType="submit" className="login-form-button">
             注册
           </Button>
-          <a href="/">使用已有账户登录</a>
+          <Link to='/Access'><a>使用已有账户登录</a></Link>
         </FormItem>
       </Form>
       </div>
@@ -123,4 +125,18 @@ const Option =Select.Option;
     }
   }
   const Register = Form.create()(Register_child);
-  export default Register;
+  function  mapStateToProps(state) {
+    return{
+        
+    };
+  }
+  function mapDispatchToProps(dispatch){
+    return{
+       
+    };
+  }
+  export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(Register);
+  

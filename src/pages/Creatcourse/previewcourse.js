@@ -31,25 +31,51 @@ const formItemLayout = {
           coursecatalog:[],//课件目录
           knowledges:[],
           page:1,
+          login_info:{
+            username:"",
+            access_token:"",
+            user_id:"",
+          },
+          previewcourseid:{ 
+            project_id:"",
+            thumbnail:"",
+            cataloglist:"",
+          },
         }
       }
-      
-      getdata() {
+      getprops(){
         const { login_info ,previewcourseid}=this.props;
-        var a=previewcourseid.project_id;
+        this.setState({
+          login_info:{
+            username:login_info.username,
+            access_token:login_info.access_token,
+            user_id:login_info.user_id,
+          },
+          previewcourseid:{ 
+            project_id:previewcourseid.project_id,
+            thumbnail:previewcourseid.thumbnail,
+            cataloglist:previewcourseid.cataloglist,
+          },
+        });
+      }
+      getdata() {
+        // const { login_info ,previewcourseid}=this.props;
+        var a=this.state.previewcourseid.project_id;
+        var access_token=this.state.login_info.access_token;
         var data = {
             "_id" :a.toString(),
         };
         console.log('进入researchByCourseId接口');
+        console.log("this.state.login_info.access_token",access_token)
         $.ajax({
           url: "http://"+localhost+":3000/api/researchByCourseId",
-          async:false,
+          // async:false,
           type: "GET",
           contentType:"application/json;charset=UTF-8",
           dataType: "json",
           data:data,
           beforeSend:function(request){
-            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+            request.setRequestHeader("Authorization",'Bearer '+access_token);
           },
           success: function(data) {
             if (data.errorCode === 0) {
@@ -60,8 +86,8 @@ const formItemLayout = {
                 scope:data.msg[0].scope,
                 addTime:data.msg[0].addTime,
                 views: data.msg[0].views,
-                thumbnail:previewcourseid.thumbnail,
-                cataloglist:previewcourseid.cataloglist,
+                thumbnail:this.state.previewcourseid.thumbnail,
+                cataloglist:this.state.previewcourseid.cataloglist,
               });
             }
             else {   
@@ -74,21 +100,22 @@ const formItemLayout = {
         });
       }
       downloadcoursedata() {
-        const { login_info ,previewcourseid}=this.props;
-        var a=previewcourseid.project_id;
+        // const { login_info ,previewcourseid}=this.props;
+        var a=this.state.previewcourseid.project_id;
+        var access_token=this.state.login_info.access_token;
         var data = {
             "_id" :a.toString(),
         };
         console.log('进入downloadCourse接口');
         $.ajax({
           url: "http://"+localhost+":3000/api/downloadCourse",
-          async:false,
+          // async:false,
           type: "GET",
           contentType:"application/json;charset=UTF-8",
           dataType: "json",
           data:data,
           beforeSend:function(request){
-            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+            request.setRequestHeader("Authorization",'Bearer '+ access_token);
           },
           success: function(data) {
             if (data.errorCode === 0) {
@@ -106,18 +133,19 @@ const formItemLayout = {
         });
       }
       getuserdata() {
-        const { login_info }=this.props;
+        // const { login_info }=this.props;
         console.log('进入getuserdata ajax');
-        console.log(login_info.access_token);
+        // console.log(login_info.access_token);
+        var access_token=this.state.login_info.access_token;
         $.ajax({
           url: "http://"+localhost+":3000/api/getPersonalInfo",
-          data:"user_id="+login_info.user_id,
+          data:"user_id="+this.state.login_info.user_id,
           beforeSend:function(request){
-            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+            request.setRequestHeader("Authorization",'Bearer '+access_token);
           },
           type: "GET",
           dataType: "json",
-          async:false,
+          // async:false,
           success: function (data) {
             if (data.errorCode === 1) {
               console.log('获取用户个人信息1111');
@@ -152,10 +180,15 @@ const formItemLayout = {
         console.log(Xst)
       }
       componentWillMount(){
-        this.getdata();
-        this.getuserdata();
+        this.getprops();
+        setTimeout(() => {
+          this.getdata();
+          this.getuserdata();
+        }, 1000); 
       }
     render() { 
+      console.log("login...",this.state.login_info)
+      console.log("login...",this.state.thumbnail)
       return (
       <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
         <div className="flowbar" style={{right:10,top:20}}>      
@@ -179,7 +212,7 @@ const formItemLayout = {
          <Col span={17}>
            <Card style={{margin:'80px 0px 30px 80px',width:"100%",height:"100%"}} title="显示区">
            {/* <Editor getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode} message={this.props.message} toServe={this.props.toServe} clearMsg = {this.props.clearMsg} shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now}/>/> */}
-            <DrawViewcopy cataloglist={this.state.cataloglist} pageChoose={this.pageChoose} thumbnail={this.state.thumbnail}/>
+            <DrawViewcopy cataloglist={this.state.previewcourseid.cataloglist} pageChoose={this.pageChoose} thumbnail={this.state.previewcourseid.thumbnail}/>
             </Card>
          </Col>
          <Col span={4}>
