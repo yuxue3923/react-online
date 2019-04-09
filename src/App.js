@@ -196,7 +196,7 @@ class App extends Component {
     getToServePage(func){
       toServePage = func;
       this.setState({
-        trick:true
+        trick:true//刷新的目的是使drawview获得向socket发送页面改变的函数
       })
     }
     /*
@@ -220,10 +220,11 @@ class App extends Component {
     newSlide(flag,page){
       let is = true; //处理删除只剩一页的特例
       if(flag){
-        console.log("newSlide")
+        console.log("newSlide:",page)
         thumbnail.splice(page,0,{meida:[],pageThumbnail:"whiteBoard"})//增加页面时，页面跳转到新增空白页面
         console.log(thumbnail.length)
-        MyDeck.splice(page,0,[])
+        MyDeck.splice(page,0,{})
+        console.log(MyDeck)
       }
       else{
         if(page === 1&&thumbnail.length === 1){
@@ -665,7 +666,7 @@ class App extends Component {
             if (data.errorCode === 0) {
           
               console.log('已创建协同聊天');
-              callBack_chat(project_id);
+         //     callBack_chat(project_id);
             }
             else {
                 console.log('协同聊天失败');
@@ -784,7 +785,6 @@ class App extends Component {
       });
 
            socket.on('message',(data)=>{
-           console.log("someone send mesg")
            console.log(data)
     //        var msg = JSON.parse(data);
     if(data.event==="broadcast emit"&&data.data.text){
@@ -874,7 +874,8 @@ class App extends Component {
     console.log("初次加载:",createCourse_info)  //isSingle也需要改变
     console.log("知识点:",[].concat.apply([],createCourse_info.createCourse_info.knowledges)); 
     this.getresource([].concat.apply([],createCourse_info.createCourse_info.knowledges));
-    MyDeck = createCourse_info.createCourse_info.slides.slide  //适用于创建者与从课件广场进入的用户
+    MyDeck = createCourse_info.createCourse_info.slides.slide //适用于创建者与从课件广场进入的用户
+    console.log("初始Deck:",MyDeck)
    // project_id_now = createCourse_info.course_id
    console.log("测试多人聊天");
    this.numchat(createCourse_info.course_id);
@@ -916,19 +917,19 @@ class App extends Component {
     return true
   }
   componentDidUpdate(){
-    const {createCourse_info,setCreatecourseState} = this.props;
+  //  const {createCourse_info,setCreatecourseState} = this.props;
     // this.setState({shouldCreateSocket:typeof createCourse_info.isSingle === undefined?false:createCourse_info.isSingle})
    // this.setState({isSingle:createCourse_info.isSingle})
      
-   !createCourse_info.isSingle&&setCreatecourseState({
+   /* !createCourse_info.isSingle&&setCreatecourseState({
        type:'createcourseSuccess',
        payload:{
        
         createCourse_info:createCourse_info.createCourse_info,
         course_id:createCourse_info.course_id,
-         isSingle:true,
+         isSingle:false,
        }
-     });
+     }); */
   }
   
     render() {
@@ -1023,7 +1024,7 @@ class App extends Component {
       // const serveThumbnail = null;
       // const {createCourse_info} = this.props;
    //   console.log(MyDeck)
-      console.log(createCourse_info.createCourse_info)
+      console.log(createCourse_info.isSingle)
     //  MyDeck=this.state.isSingle?MyDeck:createCourse_info.createCourse_info.slides.slide
     //  MyDeck=(this.state.isSingle&&createCourse_info.isSingle)?MyDeck:createCourse_info.createCourse_info.slides.slide
       //createCourse_info.isSingle为null会产生错误吗
@@ -1041,7 +1042,8 @@ class App extends Component {
              className="Sider"
              style={{width: '100%', height: '100vh'}}
           >
-             <DrawView cataloglist={this.state.cataloglist} mask={false} trick={this.state.trick} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>
+          <DrawView  cataloglist={this.state.cataloglist} mask={false} socketFn={toServePage} isSingle={this.state.isSingle&&createCourse_info.isSingle} trick={this.state.trick} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>
+            
           </Sider>
           {/* <div className="flowbar" style={{left:440,top:80}}>
             <Popover placement="bottomRight" content={content} trigger="click">
@@ -1114,7 +1116,7 @@ class App extends Component {
             </span>
             </div> */}
             
-            <EditorWithBar userName = {login_info.username} onCollapse={this.onCollapse} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
+            <EditorWithBar  newSlide={this.newSlide} pageChoose={this.pageChoose} userName = {login_info.username} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
             
             </div>
             <Modal
