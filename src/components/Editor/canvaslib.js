@@ -3,8 +3,14 @@ import srender from 'srenderlib'
 import React from 'react'
 import {localhost} from '../../config'
 import io from 'socket.io-client'
+function dClone(obj){
+    let _obj = JSON.stringify(obj);
+    return JSON.parse(_obj)
+  }
 var toServe = null;
 var toServePage = null;
+var prePage = 0;
+var nowShape = null;
 const elementStyle={
     stroke: '#ccc',
     fill: 'white',
@@ -21,16 +27,16 @@ ev.preventDefault();
 function drop(ev)
 {
 ev.preventDefault();
-console.log(ev)
 var src=ev.dataTransfer.getData("dragSource");
 //src= src +"?v=" + new Date().getTime();
-if(sr){
+if(srs[prePage]){
     var img = new srender.Image({style:{image:src,height:230,width:200,x:sourceXY.x,y:sourceXY.y},draggable:true})
-    sr.add(img)
+    srs[prePage].add(img)
 }
 }
-function resolve(msg){
-    if(!msg) return
+function resolve(msg,page){
+    if(!msg||!srs[page]) return
+    let sr = srs[page]
     let el = msg.el;
     let tag = msg.tag;
     switch(msg.type){
@@ -61,10 +67,11 @@ function resolve(msg){
           //  sr.remove(el)
             switch(tag){
                 case 'redo':
-                  sr.redo();
+                console.log("redo")
+                  sr.redo(true);
                   break;
                 case 'undo':
-                  sr.undo();
+                  sr.undo(true);
                   break;
                 default:
                   break;
@@ -75,7 +82,7 @@ function resolve(msg){
     }
 }
 
-var sr=null;
+var srs=[];
 /**这段较长的代码为画笔，由于作用域暂时无法封装为文件 */
 var s; //定义路径对象
 var sL = []; //路径数组
@@ -83,7 +90,7 @@ var isDraw = false;
 function pen1(e) {
     isDraw = true; //表示正在画线了
     s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke: 'rgba(220, 20, 60, 0.8)',lineWidth: 2},draggable:true,});//初始化线条
-    sr.add(s); //将线条添加到图层上
+    srs[prePage].add(s); //将线条添加到图层上
     }
 function pen2(e) {
     if (isDraw) { //判断是否是画线状态
@@ -99,68 +106,81 @@ function pen3(e) {
              // s=null;    //清空线条对象
     }
          
-function Pen(flag){
+function Pen(flag,page){
+    if(!srs[page]) return
     if(flag!=='pen'){
-        sr.off('mousedown',pen1);
-        sr.off('mousemove',pen2);
-        sr.off('mouseup',pen3);
+        srs[page].disableDrag(true);
+        srs[page].off('mousedown',pen1);
+        srs[page].off('mousemove',pen2);
+        srs[page].off('mouseup',pen3);
         return;
     }
-    sr.on('mousedown',pen1);
-    sr.on('mousemove',pen2);
-    sr.on('mouseup',pen3);
+    srs[page].disableDrag(false);
+    srs[page].on('mousedown',pen1);
+    srs[page].on('mousemove',pen2);
+    srs[page].on('mouseup',pen3);
     
 }
 /**画笔 */
 
-function add(type,callback){
+function add(type,colorType,page,callback){
+    var sr;
+
+    /* if(typeof colorType === "number"){
+        page = colorType;
+        callback = page;
+    } */
+    console.log("instance:",srs[page])
+    if(!srs[page]) return
+    else sr = srs[page]
+
     switch(type){
         case 'circle':
-            Pen('circle')
+            Pen('circle',page)
             var circle=new srender.Circle({shape:{cx:70,cy: 90,r: 90},style: elementStyle,draggable:true})
             sr.add(circle)
             break;
         case 'rect':
-            Pen('rect')
+            Pen('rect',page)
             var rect = new srender.Rect({shape: {r: 1,x: 100,y: 100,width: 100,height: 100},style: elementStyle,draggable:true})
             sr.add(rect);
             break;
         case 'pen':
-            Pen('pen')
+            Pen('pen',page)
         //    callback()
             break;
         case 'image':
-            Pen('image')
+            Pen('image',page)
             console.log("Sorry,image module to be done")
          // var image=new srender.Circle({shape:{cx:70,cy: 90,r: 90},style: elementStyle,})
             break;
         case 'star':
-            Pen('star')
+            Pen('star',page)
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,draggable:true})
             sr.add(star);
             return true;
         case 'house':
-            Pen('house')
+            Pen('house',page)
             var house=new srender.House({shape:{cx:500,cy:300},style:{fill: 'none',stroke: 'green'},draggable:true})
             sr.add(house);
             return true;
         case 'apple':
-            Pen('apple')
+            Pen('apple',page)
             var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill: 'red',stroke: 'none'},draggable:true})
             sr.add(apple);
             break;
         case 'tisogon':
-            Pen('tisogon')
+            Pen('tisogon',page)
             var tisogon=new srender.Isogon({shape:{x:300,y:300,r:50,n:3},style:{fill: 'none',stroke: 'green'},draggable:true})
             sr.add(tisogon);
             break;
         case 'fisogon':
-            Pen('fisogon')
+            Pen('fisogon',page)
             var fisogon=new srender.Isogon({shape:{x:400,y:300,r:50,n:5},style:{fill: 'none',stroke: 'blue'}})
             sr.add(fisogon);
             break;
         case 'heart':
-            Pen('heart')
+            Pen('heart',page)
             var heart=new srender.Heart({shape:{cx:200,cy:600,width:50,height:50},style:{fill: 'red',stroke: 'none'}})
             sr.add(heart);
             break;
@@ -172,8 +192,13 @@ function add(type,callback){
          //   Pen('redo')
             sr.redo();
             break
+        case 'color':
+               Pen('color')
+               console.log(callback)
+               sr.changeFillColor(callback(),colorType);
+               break
         case 'text':
-               Pen('text')
+               Pen('text',page)
                var text=new srender.Text({
                 draggable:true,
                  style:{
@@ -225,14 +250,13 @@ export default class Editor extends React.Component {
        
          var url = "http://"+localhost+":3001"
          let param = `/${projectId}` 
-         console.log("param:",param)
+       
          var socket = io(url,{path:param});//无论页面怎样切换，用户应当只获取该socket
         
-         toServe = function(msg){
-           socket.emit('update data', JSON.stringify(msg));   //sr用以初始化向外界传递消息的回调函数
-         }
+         toServe = function(page,msg){
+           socket.emit('update data', {id:page,body:JSON.stringify(msg)});   //sr用以初始化向外界传递消息的回调函数
+         }//在唯一一次创建socket时被赋值，但是可以被多个画布使用，前提在于画布有自己的id来区分
          toServePage = function(msg){
-             console.log(msg)
             socket.emit('update page',JSON.stringify(msg))
          }
          var username = 'bing';
@@ -241,7 +265,6 @@ export default class Editor extends React.Component {
            socket.emit('add user', username);
          
            socket.on('login',(data)=>{
-                
                  console.log("client numOfUsers is "+JSON.stringify(data));
                  console.log("client socket.id is"+socket.id);
              });
@@ -256,18 +279,17 @@ export default class Editor extends React.Component {
             })
              socket.on('update data',(data)=>{
              console.log("someone update")
-             var msg = JSON.parse(data);
-                resolve(msg)
+             const msg = JSON.parse(data).body;
+             const page = JSON.parse(data).id
+                resolve(msg,page)
              });
            this.props.getToServePage(toServePage)
            
        }
     componentDidMount() {
-      
         var dom = document.getElementsByClassName('container')[0]
-        console.log(this.props.userName)
-        sr=srender.init(dom,{},!this.props.isSinleMode,this.props.userName)
-        sr.on("mouseup",function(e){
+        srs[this.props.page]=srender.init(dom,{},!this.props.isSingleMode,this.props.userName,this.props.page)
+        srs[this.props.page].on("mouseup",function(e){
             sourceXY.x = e.zrX
             sourceXY.y = e.zrY
         })
@@ -281,29 +303,28 @@ export default class Editor extends React.Component {
    
         if(this.props.isSingleMode){
        
-             !this.props.objectList&&sr.clear()
+             !this.props.objectList&&srs[this.props.page].clear()
        
-            this.props.objectList&&sr.initWithOthers(this.props.objectList)
+            this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList)
         }
         else{
          console.log("toServe")
-     //    sr=srender.init(dom,{},true)
-   
-         sr.initWithCb(toServe)
-        this.props.objectList&&sr.initWithOthers(this.props.objectList)
+        srs[this.props.page].initWithCb(toServe)
+        this.props.objectList&& srs[this.props.page].initWithOthers(this.props.objectList)
     
         }
-
-        add(this.props.type);
+       
+        prePage = this.props.page;
+        add(this.props.type,prePage,this.props.tag,srs[prePage].getNowShape.bind(srs[prePage]));
 
       //  this.sync({media:sr.getObjectList()})
         this.props.effect_createSocket(false)//
   //  sr.initWithCb(toServe)
       //  this.props.objectList&&sr.initWithOthers(this.props.objectList)
-        var base64 = sr.painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
+        var base64 =  srs[this.props.page].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
         var newImg = new Image();
         newImg.setAttribute('crossOrigin', 'anonymous');
-        sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
+        srs[this.props.page].painter.getRenderedCanvas('black').toBlob((blob)=>{
             var url = URL.createObjectURL(blob);
             newImg.src=url; 
             this.handleGetThumbnail(newImg.src,base64);
@@ -313,7 +334,7 @@ export default class Editor extends React.Component {
        
         
 
-        this.sync({media:sr.getObjectList(),pageThumbnail:base64});
+        this.sync({media: srs[this.props.page].getObjectList(),pageThumbnail:base64});
      //   this.dispatchState({thumbnail:url},{sync:{media:sr.getObjectList(),pageThumbnail:base64}})
     }
     
@@ -321,30 +342,41 @@ export default class Editor extends React.Component {
    
       
     componentDidUpdate(){
-        console.log("canvaslib:",this.props.shouldCreateSocket)
+        var dom=document.getElementsByClassName('container')[0];;
         if(this.props.shouldCreateSocket){
             this.createSocket(this.props.project_id_now);
         }
        
         if(this.props.isSingleMode){
            
-            !this.props.objectList&&sr.clear()//jian cha dian
+         //   !this.props.objectList&&sr.clear()//jian cha dian
            
-            this.props.objectList&&sr.initWithOthers(this.props.objectList)
+         //   this.props.objectList&&sr.initWithOthers(this.props.objectList)
+
+         //   sr.objectList.stack._redoList = this.props.stack._redoList;
+         //   sr.objectList.stack._undoList = this.props.stack._undoList
+         if(this.props.page-prePage===0||srs.length === this.props.pageLength);
+         else{
+         //   dom = document.getElementsByClassName('container')[0];
+            srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
+            srs[this.props.page].on("mouseup",function(e){sourceXY.x = e.zrX;sourceXY.y = e.zrY})  
+        }
+         dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
         }
         else{
-            console.log(this.props.userName)
-            var dom = document.getElementsByClassName('container')[0];
-            sr=srender.init(dom,{},true,this.props.userName);
-            sr.on("mouseup",function(e){sourceXY.x = e.zrX;sourceXY.y = e.zrY})
-        //   sr.initWithCb(this.props.toServe)
-            sr.initWithCb(toServe);
-            this.props.objectList&&sr.initWithOthers(this.props.objectList);
-        //    resolve(this.props.message)
-        }
-        
-        add(this.props.type);
+            if(this.props.page-prePage===0||srs.length === this.props.pageLength);
+            else{
+                srs[this.props.page]=srender.init(dom,{},true,this.props.userName,this.props.page);
+                srs[this.props.page].on("mouseup",function(e){sourceXY.x = e.zrX;sourceXY.y = e.zrY})
+                srs[this.props.page].initWithCb(toServe);
+            }
+            this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
+            dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
        
+        }
+        prePage = this.props.page;
+        add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]));
+      
        
      //   this.props.clearMsg()
 
@@ -352,9 +384,9 @@ export default class Editor extends React.Component {
 
         var newImg = new Image();
         newImg.setAttribute('crossOrigin', 'anonymous');
-        var base64 = sr.painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
+        var base64 =  srs[this.props.page].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
      
-        sr.painter.getRenderedCanvas('black').toBlob((blob)=>{
+        srs[this.props.page].painter.getRenderedCanvas('black').toBlob((blob)=>{
              var url = URL.createObjectURL(blob);
              newImg.src=url;
              this.props.type!=='none'&&this.handleGetThumbnail(newImg.src,base64);//应该是缩略图有变化就该传递
@@ -363,7 +395,7 @@ export default class Editor extends React.Component {
         //this.props.type&&
        
        
-       this.sync({media:sr.getObjectList(),pageThumbnail:base64});
+       this.sync({media: srs[this.props.page].getObjectList(),pageThumbnail:base64});
      //   this.dispatchState({thumbnail:url},{sync:{media:sr.getObjectList(),pageThumbnail:base64}})
     }
     render() {
