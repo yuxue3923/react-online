@@ -297,17 +297,21 @@ export default class Editor extends React.Component {
             sourceXY.y = e.zrY
         })
 
-         if(this.props.shouldCreateSocket){
+         /* if(this.props.shouldCreateSocket&&!this.props.isSingleMode){
+             console.log("建立socket")
              this.createSocket(this.props.project_id_now);
-        }
+        } */
    
         if(this.props.isSingleMode){
        
+            
+
              !this.props.objectList&&srs[this.props.page].clear()
        
             this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList)
         }
         else{
+        this.createSocket(this.props.project_id_now);
         srs[this.props.page].initWithCb(toServe)
         this.props.objectList&& srs[this.props.page].initWithOthers(this.props.objectList)
     
@@ -340,7 +344,8 @@ export default class Editor extends React.Component {
       
     componentDidUpdate(){
         var dom=document.getElementsByClassName('container')[0];;
-        if(this.props.shouldCreateSocket){
+        if(this.props.shouldCreateSocket&&!this.props.isSingleMode){
+            console.log("建立socket")
             this.createSocket(this.props.project_id_now);
         }
        

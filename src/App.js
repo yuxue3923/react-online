@@ -548,7 +548,7 @@ class App extends Component {
     
     }
     sync(objectList){
-      console.log(objectList)
+    //  console.log(objectList)
    // console.log(MyDeck) ; //浅复制不太对
   //  let temp = deepClone(objectList)
   //  let state=MyDeck[this.state.page-1]==objectList?false:true
@@ -860,12 +860,12 @@ class App extends Component {
       this.setState({
         coursecatalog:[],
       });
-      console.log("退出聊天室numchat:",this.state.numchat)
+   //   console.log("退出聊天室numchat:",this.state.numchat)
       // console.log("退出聊天室:",this.state.templatecourseid)
       // const { login_info,createCourse_info } = this.props;
        if(this.state.numchat){
      
-      console.log("退出聊天室:",projectId)
+   //   console.log("退出聊天室:",projectId)
        var url = "http://"+localhost+":3001?roomid="+projectId;
       var socket = io(url);
      
@@ -1034,7 +1034,7 @@ class App extends Component {
       // const serveThumbnail = null;
       // const {createCourse_info} = this.props;
    //   console.log(MyDeck)
-      console.log(createCourse_info.isSingle)
+   //   console.log(createCourse_info.isSingle)
     //  MyDeck=this.state.isSingle?MyDeck:createCourse_info.createCourse_info.slides.slide
     //  MyDeck=(this.state.isSingle&&createCourse_info.isSingle)?MyDeck:createCourse_info.createCourse_info.slides.slide
       //createCourse_info.isSingle为null会产生错误吗
@@ -1126,7 +1126,7 @@ class App extends Component {
             </span>
             </div> */}
             
-            <EditorWithBar onCollapse={this.onCollapse} pageLength={MyDeck.length} newSlide={this.newSlide} pageChoose={this.pageChoose} userName = {login_info.username} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()}  initStack={this.passbyStack()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
+            <EditorWithBar onCollapse={this.onCollapse} pageLength={MyDeck.length} newSlide={this.newSlide} pageChoose={this.pageChoose} userName = {login_info.username} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()}  initStack={this.passbyStack()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={this.state.shouldCreateSocket} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
             
             </div>
             <Modal

@@ -36,7 +36,7 @@ class Drawerview extends Component {
     render() {
       const title=this.props.cataloglist;
       const length = this.props.thumbnail.length
-      console.log("thumbnail:",this.props.thumbnail)
+  //    console.log("thumbnail:",this.props.thumbnail)
     //  console.log("pages:",length)
       const listData = [];
       for (let i = 0; i < length; i++) {
