@@ -74,7 +74,7 @@ const Option =Select.Option;
                       title: '消息提示',
                       content: '成功注册账号！',
                     });
-                    this.context.router.history.push("/");
+                    this.context.router.history.push("/Access");
                 }
                 else {
                    console.log(data);
