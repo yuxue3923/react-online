@@ -79,7 +79,7 @@ class Drawerview extends Component {
               title={item.title}
             //   description={item.description}
             />
-            <img width={150} alt="logo" src={typeof this.props.thumbnail[item.Xst-1].pageThumbnail !== "undefined"?this.props.thumbnail[item.Xst-1].pageThumbnail:this.props.thumbnail[item.Xst-1]} onClick={this.pageChoose.bind(this,item.Xst)}/>
+            <img width={150} height={150} alt="logo" src={typeof this.props.thumbnail[item.Xst-1].pageThumbnail !== "undefined"?this.props.thumbnail[item.Xst-1].pageThumbnail:this.props.thumbnail[item.Xst-1]} onClick={this.pageChoose.bind(this,item.Xst)}/>
           </List.Item>
         )}
       />

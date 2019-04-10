@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Form, Icon, Input, Button,message } from 'antd';
+import {Link} from 'react-router-dom'
 import './Access.css'
 import { connect } from 'react-redux';
 import $ from 'jquery';
@@ -82,7 +83,7 @@ const FormItem = Form.Item;
             <Button onClick={this.handleClick.bind(this)} type="primary" htmlType="submit" className="login-form-button">
               登录
             </Button>
-           <a href="/Register">注册账户!</a>
+            <Link to='/Register'><a >注册账户!</a></Link>
           </FormItem>
       </Form>
       </div>
