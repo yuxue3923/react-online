@@ -11,6 +11,7 @@ var toServe = null;
 var toServePage = null;
 var prePage = 0;
 var nowShape = null;
+var hasInitCb = false;
 const elementStyle={
     stroke: '#ccc',
     fill: 'white',
@@ -130,10 +131,10 @@ function add(type,colorType,page,callback){
         page = colorType;
         callback = page;
     } */
-    console.log("instance:",srs[page])
+   
     if(!srs[page]) return
     else sr = srs[page]
-
+    console.log("instance:",srs[page])
     switch(type){
         case 'circle':
             Pen('circle',page)
@@ -254,7 +255,8 @@ export default class Editor extends React.Component {
          var socket = io(url,{path:param});//无论页面怎样切换，用户应当只获取该socket
         
          toServe = function(page,msg){
-           socket.emit('update data', {id:page,body:JSON.stringify(msg)});   //sr用以初始化向外界传递消息的回调函数
+             console.log("page:",page)
+           socket.emit('update data', JSON.stringify({id:page,body:msg}));   //sr用以初始化向外界传递消息的回调函数
          }//在唯一一次创建socket时被赋值，但是可以被多个画布使用，前提在于画布有自己的id来区分
          toServePage = function(msg){
             socket.emit('update page',JSON.stringify(msg))
@@ -278,27 +280,25 @@ export default class Editor extends React.Component {
                 else this.props.newSlide(msg.add,msg.page)
             })
              socket.on('update data',(data)=>{
-             console.log("someone update")
              const msg = JSON.parse(data).body;
-             const page = JSON.parse(data).id
+             const page = JSON.parse(data).id;
                 resolve(msg,page)
              });
            this.props.getToServePage(toServePage)
            
        }
     componentDidMount() {
+       
         var dom = document.getElementsByClassName('container')[0]
         srs[this.props.page]=srender.init(dom,{},!this.props.isSingleMode,this.props.userName,this.props.page)
         srs[this.props.page].on("mouseup",function(e){
+            console.log("I'm here")
             sourceXY.x = e.zrX
             sourceXY.y = e.zrY
         })
-      //  sr=srender.init(dom)
-        
-    //    sr.initWithCb(this.props.toServe)
-        console.log(this.props.shouldCreateSocket)
+
          if(this.props.shouldCreateSocket){
-             this.createSocket(this.props.project_id_now)
+             this.createSocket(this.props.project_id_now);
         }
    
         if(this.props.isSingleMode){
@@ -308,7 +308,6 @@ export default class Editor extends React.Component {
             this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList)
         }
         else{
-         console.log("toServe")
         srs[this.props.page].initWithCb(toServe)
         this.props.objectList&& srs[this.props.page].initWithOthers(this.props.objectList)
     
@@ -317,10 +316,8 @@ export default class Editor extends React.Component {
         prePage = this.props.page;
         add(this.props.type,prePage,this.props.tag,srs[prePage].getNowShape.bind(srs[prePage]));
 
-      //  this.sync({media:sr.getObjectList()})
-        this.props.effect_createSocket(false)//
-  //  sr.initWithCb(toServe)
-      //  this.props.objectList&&sr.initWithOthers(this.props.objectList)
+        this.props.shouldCreateSocket&&this.props.effect_createSocket(false)//
+
         var base64 =  srs[this.props.page].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
         var newImg = new Image();
         newImg.setAttribute('crossOrigin', 'anonymous');
@@ -330,7 +327,7 @@ export default class Editor extends React.Component {
             this.handleGetThumbnail(newImg.src,base64);
         },'image/png')
        
-      //this.props.type!=='none'&&
+    
        
         
 
@@ -352,23 +349,20 @@ export default class Editor extends React.Component {
          //   !this.props.objectList&&sr.clear()//jian cha dian
            
          //   this.props.objectList&&sr.initWithOthers(this.props.objectList)
-
-         //   sr.objectList.stack._redoList = this.props.stack._redoList;
-         //   sr.objectList.stack._undoList = this.props.stack._undoList
          if(this.props.page-prePage===0||srs.length === this.props.pageLength);
          else{
-         //   dom = document.getElementsByClassName('container')[0];
             srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
-            srs[this.props.page].on("mouseup",function(e){sourceXY.x = e.zrX;sourceXY.y = e.zrY})  
+            srs[this.props.page].on("mouseup",function(e){ console.log("I'm here");sourceXY.x = e.zrX;sourceXY.y = e.zrY})  
         }
          dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
         }
         else{
-            if(this.props.page-prePage===0||srs.length === this.props.pageLength);
+            if((this.props.page-prePage===0||srs.length === this.props.pageLength)&&hasInitCb);
             else{
                 srs[this.props.page]=srender.init(dom,{},true,this.props.userName,this.props.page);
                 srs[this.props.page].on("mouseup",function(e){sourceXY.x = e.zrX;sourceXY.y = e.zrY})
                 srs[this.props.page].initWithCb(toServe);
+                hasInitCb = true;
             }
             this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
             dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
@@ -378,9 +372,8 @@ export default class Editor extends React.Component {
         add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]));
       
        
-     //   this.props.clearMsg()
 
-        this.props.shouldCreateSocket&&this.props.effect_createSocket(false)//
+        this.props.shouldCreateSocket&&this.props.effect_createSocket(false)
 
         var newImg = new Image();
         newImg.setAttribute('crossOrigin', 'anonymous');

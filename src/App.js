@@ -637,7 +637,7 @@ class App extends Component {
               console.log("this:",this);//这个地方似乎不用赋值给MyDeck，只需要警惕从别处跳过来的情况（project的slides数据不一致）
               project_id_now = createCourse_info.course_id
        
-              this.effect_createSocket(true)
+          //    this.effect_createSocket(true)
               console.log('准备创建协同链接');
             }
             else {
@@ -650,7 +650,8 @@ class App extends Component {
     });
       this.setState({
         modalvisible: false,
-        isSingle:false
+        isSingle:false,
+        shouldCreateSocket:true
       });
     }
     createChatChannel = (project_id) => {

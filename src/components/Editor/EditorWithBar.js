@@ -184,7 +184,7 @@ const dgraph=function(fh,fheart,fa){
           </Popover>
           </div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" onClick={(e) => {this.add.bind(this,'text')}}>
+               <Button type="primary" onClick={ this.add.bind(this,'text')}>
                  <Icon className="iconsize" type="font-size"/>
                </Button>
           </div>
