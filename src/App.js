@@ -118,6 +118,7 @@ class App extends Component {
    this.onCollapse=this.onCollapse.bind(this);
    this.sendsource=this.sendsource.bind(this);
    this.passbyJudge = this.passbyJudge.bind(this)
+   this.passbyStack = this.passbyStack.bind(this)
    this.newSlide = this.newSlide.bind(this)
   }
     state = {
@@ -130,7 +131,7 @@ class App extends Component {
     //  msg:null,
       cooperationuserid:0,
       code:0,
-      collapsed: false,
+      collapsed: true,
       collapsedleftsider:false,
       visible: false,
       modalvisible:false,
@@ -247,6 +248,14 @@ class App extends Component {
     passbyJudge(){
       if(typeof MyDeck[this.state.page-1] !== "undefined"){
         return typeof MyDeck[this.state.page-1].media === "undefined"?[]:MyDeck[this.state.page-1].media
+      }
+      else{
+        return (typeof MyDeck[this.state.page] !== "undefined")?MyDeck[this.state.page].media:[] //当删去的一页为首页时 //有问题
+      }
+    }
+    passbyStack(){
+      if(typeof MyDeck[this.state.page-1] !== "undefined"){
+        return typeof MyDeck[this.state.page-1].stack === "undefined"?[]:MyDeck[this.state.page-1].stack
       }
       else{
         return (typeof MyDeck[this.state.page] !== "undefined")?MyDeck[this.state.page].media:[] //当删去的一页为首页时 //有问题
@@ -666,7 +675,7 @@ class App extends Component {
             if (data.errorCode === 0) {
           
               console.log('已创建协同聊天');
-         //     callBack_chat(project_id);
+              callBack_chat(project_id);
             }
             else {
                 console.log('协同聊天失败');
@@ -1042,7 +1051,7 @@ class App extends Component {
              className="Sider"
              style={{width: '100%', height: '100vh'}}
           >
-          <DrawView  cataloglist={this.state.cataloglist} mask={false} socketFn={toServePage} isSingle={this.state.isSingle&&createCourse_info.isSingle} trick={this.state.trick} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>
+          <DrawView  cataloglist={this.state.cataloglist} mask={false} socketFn={toServePage} isSingle={typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle} trick={this.state.trick} pageChoose={this.pageChoose} page={this.state.page} thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide} newSlide={this.newSlide}/>
             
           </Sider>
           {/* <div className="flowbar" style={{left:440,top:80}}>
@@ -1116,7 +1125,7 @@ class App extends Component {
             </span>
             </div> */}
             
-            <EditorWithBar  onCollapse={this.onCollapse} newSlide={this.newSlide} pageChoose={this.pageChoose} userName = {login_info.username} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
+            <EditorWithBar onCollapse={this.onCollapse} pageLength={MyDeck.length} newSlide={this.newSlide} pageChoose={this.pageChoose} userName = {login_info.username} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()}  initStack={this.passbyStack()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={typeof createCourse_info.isSingle === "undefined"?this.state.shouldCreateSocket:(!createCourse_info.isSingle||this.state.shouldCreateSocket)} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
             
             </div>
             <Modal

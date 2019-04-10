@@ -20,10 +20,12 @@ class Drawerview extends Component {
   }
   pageChoose(Xst){
     this.props.pageChoose(Xst)
+   
     !this.props.isSingle&&this.props.socketFn({choose:Xst})
   }
   newSlide(i,page,e){  //i true for add false for delete
       this.props.newSlide(i,page)
+      console.log("isSingel:",this.props.isSingle)
       !this.props.isSingle&&this.props.socketFn({add:i,page:page})
   }
   componentWillMount(){

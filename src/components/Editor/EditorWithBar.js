@@ -15,7 +15,7 @@ var content1 = function(fn){
    return (
     <div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" icon="align-center" onClick={fn}></Button>
+               <Button type="primary" icon="align-center" onClick={fn.bind(this,"red")}></Button>
           </div>
           <div style={{margin:'1px'}}>
                <Button type="primary" icon="align-left"></Button>
@@ -93,6 +93,7 @@ const dgraph=function(fh,fheart,fa){
         super()
         this.state = {
             addType:'none',
+            tag:'',//补充参数，如颜色
             //fromSr:{},
         }
         
@@ -102,10 +103,10 @@ const dgraph=function(fh,fheart,fa){
         this.onCollapse=this.onCollapse.bind(this);
     }
  
-    add(type){
+    add(type,colorType){
         console.log("按钮")
         isButton=true;
-        this.setState({addType:type})
+        this.setState({addType:type,tag:colorType||""})
      //  this.flush(true)
     }
     handleThumbnail(src){
@@ -172,24 +173,19 @@ const dgraph=function(fh,fheart,fa){
           </div> 
           <div style={{margin:'1px'}}>
               <Button type="primary" onClick={this.add.bind(this,'pen')}>
-                 <Icon className="iconsize" type="highlight"/>
+                 <Icon className="iconsize" type="edit"/>
                </Button>
           </div>
           <div style={{margin:'1px'}} >
-          <Popover placement="rightTop" content={ content1(this.add.bind(this,'circle'))} trigger="click">
-               <Button type="primary" onClick={this.add.bind(this,'pen')}>
-                 <Icon className="iconsize" type="edit"/>
+          <Popover placement="rightTop" content={ content1(this.add.bind(this,'color'))} trigger="click">
+               <Button type="primary" >
+                 <Icon className="iconsize" type="bg-colors"/>
                </Button>
           </Popover>
           </div>
           <div style={{margin:'1px'}}>
-               <Button type="primary" onClick={this.add.bind(this,'pen')}>
-                 <Icon className="iconsize" type="drag"/>
-               </Button>
-          </div>
-          <div style={{margin:'1px'}}>
-               <Button type="primary" onClick={(e) => {this.add.bind(this,'pen')}}>
-                 <Icon className="iconsize" type="scissor"/>
+               <Button type="primary" onClick={(e) => {this.add.bind(this,'text')}}>
+                 <Icon className="iconsize" type="font-size"/>
                </Button>
           </div>
           <div style={{margin:'1px'}}>
@@ -219,7 +215,7 @@ const dgraph=function(fh,fheart,fa){
           </div> 
           </div>
           </Col>
-       <Col span={23}> <Editor userName={this.props.userName} newSlide={this.props.newSlide} pageChoose={this.props.pageChoose} type={isButton&&this.state.addType} getToServePage={this.props.getToServePage} pageChange={this.props.pageChange} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode}   shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now} dispatchState = {this.props.dispatchState}/></Col>   
+       <Col span={23}> <Editor pageLength={this.props.pageLength} page={this.props.page} userName={this.props.userName} newSlide={this.props.newSlide} pageChoose={this.props.pageChoose} type={isButton&&this.state.addType} tag={this.state.tag}  getToServePage={this.props.getToServePage} pageChange={this.props.pageChange} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent}  stack={isflush&&this.props.initStack} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode}   shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now} dispatchState = {this.props.dispatchState}/></Col>   
       </Row> 
         </div>
      
