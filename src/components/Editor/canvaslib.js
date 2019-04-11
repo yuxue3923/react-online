@@ -72,8 +72,13 @@ function resolve(msg,page){
                   sr.redo(true);
                   break;
                 case 'undo':
+                console.log("undo")
                   sr.undo(true);
                   break;
+                /* case 'interrup':
+                  console.log("interrup")
+                    sr.undo(true);
+                    break; */
                 default:
                   break;
             }
@@ -187,11 +192,12 @@ function add(type,colorType,page,callback){
             break;
         case 'undo':
           //  Pen('undo')
-            sr.undo();
+            console.log("发起撤销")
+            sr.undo(true);
             break
         case 'redo':
          //   Pen('redo')
-            sr.redo();
+            sr.redo(true);
             break
         case 'color':
                Pen('color')
@@ -215,7 +221,7 @@ function add(type,colorType,page,callback){
                      blend: 'lighten'
                  }})
                sr.add(text);
-               sr.redo();
+             //  sr.redo(true);
                break
         default:
             Pen('none')
@@ -254,8 +260,7 @@ export default class Editor extends React.Component {
        
          var socket = io(url,{path:param});//无论页面怎样切换，用户应当只获取该socket
         
-         toServe = function(page,msg){
-             console.log("page:",page)
+         toServe = function(page=0,msg){
            socket.emit('update data', JSON.stringify({id:page,body:msg}));   //sr用以初始化向外界传递消息的回调函数
          }//在唯一一次创建socket时被赋值，但是可以被多个画布使用，前提在于画布有自己的id来区分
          toServePage = function(msg){
@@ -297,14 +302,8 @@ export default class Editor extends React.Component {
             sourceXY.y = e.zrY
         })
 
-         /* if(this.props.shouldCreateSocket&&!this.props.isSingleMode){
-             console.log("建立socket")
-             this.createSocket(this.props.project_id_now);
-        } */
    
         if(this.props.isSingleMode){
-       
-            
 
              !this.props.objectList&&srs[this.props.page].clear()
        
@@ -314,11 +313,11 @@ export default class Editor extends React.Component {
         this.createSocket(this.props.project_id_now);
         srs[this.props.page].initWithCb(toServe)
         this.props.objectList&& srs[this.props.page].initWithOthers(this.props.objectList)
-    
+        hasInitCb = true;//
         }
-       
+     //   srs[this.props.page].initWithCb(toServe)
         prePage = this.props.page;
-        add(this.props.type,prePage,this.props.tag,srs[prePage].getNowShape.bind(srs[prePage]));
+    //    add(this.props.type,prePage,this.props.tag,srs[prePage].getNowShape.bind(srs[prePage]));
 
         this.props.shouldCreateSocket&&this.props.effect_createSocket(false)//
 
@@ -343,7 +342,8 @@ export default class Editor extends React.Component {
    
       
     componentDidUpdate(){
-        var dom=document.getElementsByClassName('container')[0];;
+        var dom=document.getElementsByClassName('container')[0];
+      //  console.log(srs[this.props.page].stack._undoList)
         if(this.props.shouldCreateSocket&&!this.props.isSingleMode){
             console.log("建立socket")
             this.createSocket(this.props.project_id_now);
@@ -351,30 +351,30 @@ export default class Editor extends React.Component {
        
         if(this.props.isSingleMode){
            
-         //   !this.props.objectList&&sr.clear()//jian cha dian
-           
-         //   this.props.objectList&&sr.initWithOthers(this.props.objectList)
          if(this.props.page-prePage===0||srs.length === this.props.pageLength);
          else{
             srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
-            srs[this.props.page].on("mouseup",function(e){ console.log("I'm here");sourceXY.x = e.zrX;sourceXY.y = e.zrY})  
+        //    srs[this.props.page].on("mouseup",function(e){ console.log("I'm here");sourceXY.x = e.zrX;sourceXY.y = e.zrY})  
         }
-         dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
         }
         else{
             if((this.props.page-prePage===0||srs.length === this.props.pageLength)&&hasInitCb);
             else{
                 srs[this.props.page]=srender.init(dom,{},true,this.props.userName,this.props.page);
-                srs[this.props.page].on("mouseup",function(e){sourceXY.x = e.zrX;sourceXY.y = e.zrY})
                 srs[this.props.page].initWithCb(toServe);
                 hasInitCb = true;
+                this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
+                
             }
-            this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
-            dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
+           // srs[this.props.page].initWithCb(toServe);
+          //  this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
        
         }
         prePage = this.props.page;
         add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]));
+        dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
+       
+      
       
        
 

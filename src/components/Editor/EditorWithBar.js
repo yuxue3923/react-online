@@ -104,7 +104,7 @@ const dgraph=function(fh,fheart,fa){
     }
  
     add(type,colorType){
-        console.log("按钮")
+      
         isButton=true;
         this.setState({addType:type,tag:colorType||""})
      //  this.flush(true)
