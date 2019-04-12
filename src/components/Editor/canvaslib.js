@@ -50,8 +50,12 @@ function resolve(msg,page){
                     sr.attr(el,tag,true)
                     break;
                 case 'style':
-                    console.log("style change:",el)
+                    
                   //  sr.attr(el,tag)
+                    sr.attr(el,"style",false,el.style);
+                    break;
+                case 'style-text':
+                    console.log("text change:",el)
                     sr.attr(el,"style",false,el.style,true);
                     break;
                 default:
@@ -204,7 +208,6 @@ function add(type,colorType,page,callback){
             break
         case 'color':
                Pen('color')
-               console.log(callback)
                sr.changeFillColor(callback(),colorType);
                break
         case 'text':
