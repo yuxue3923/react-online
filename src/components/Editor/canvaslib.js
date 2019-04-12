@@ -37,7 +37,7 @@ if(srs[prePage]){
 }
 function resolve(msg,page){
     if(!msg||!srs[page]) return
-    let sr = srs[page]
+    let sr = srs[page];
     let el = msg.el;
     let tag = msg.tag;
     switch(msg.type){
@@ -47,12 +47,12 @@ function resolve(msg,page){
                     sr.attr(el,tag)
                     break;
                 case 'shape':
-                sr.attr(el,tag,true)
+                    sr.attr(el,tag,true)
                     break;
                 case 'style':
-                console.log("style change:",el)
+                    console.log("style change:",el)
                   //  sr.attr(el,tag)
-                  sr.attr(el,"style",false,el.style,true);
+                    sr.attr(el,"style",false,el.style,true);
                     break;
                 default:
                     break;
@@ -64,15 +64,18 @@ function resolve(msg,page){
         case 'delete':
             sr.remove(el)
             break;
+        case 'stack-transform':
+            sr.stacking("transform",msg.el,tag);
+            break;
         case 'stack':
           //  sr.remove(el)
             switch(tag){
                 case 'redo':
-                console.log("redo")
+                  console.log("redo")
                   sr.redo(true);
                   break;
                 case 'undo':
-                console.log("undo")
+                  console.log("undo")
                   sr.undo(true);
                   break;
                 /* case 'interrup':
@@ -193,11 +196,11 @@ function add(type,colorType,page,callback){
         case 'undo':
           //  Pen('undo')
             console.log("发起撤销")
-            sr.undo(true);
+            sr.undo();
             break
         case 'redo':
          //   Pen('redo')
-            sr.redo(true);
+            sr.redo();
             break
         case 'color':
                Pen('color')
