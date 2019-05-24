@@ -6,7 +6,9 @@
   animation: App-logo-spin infinite 20s linear;
   height: 40vmin;
 }
-
+.Layoutstyle {
+  height: 100vh;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -19,9 +21,84 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: #4bd0f1;
+}
+.Sider{
+  transition: all 0.2s;
+  position: relative;
+  background-color: #fff;
+  
+ 
+  /* fix firefox can't set width smaller than content on flex item */
+  min-width:0;
+}
+.Content{
+  height: "100vh";
+  flex: auto;
+  padding: '0 50px';
+  /* fix firefox can't set height smaller than content on flex item */
+  min-height: 0;
+}
+.flowbar{
+  overflow: hidden;
+  z-index: 99;
+	position: fixed;
+	padding:10px;
+  text-align:center;
+  border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+	border-top-left-radius: 4px;	
+  border-top-right-radius: 4px;
+  
 }
 
+.search{
+  text-align:center;
+  margin: 0 auto;
+  width: 38%;
+  height: 100;
+  
+
+}
+.logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(0, 0, 0, 0.25);
+  margin: 16px 24px 16px 0;
+  float: left;
+}
+.ant-popover-placement-bottom, .ant-popover-placement-bottomLeft, .ant-popover-placement-bottomRight {
+  padding-top: 0px;
+}
+.ant-popover-arrow {
+  background: #00000000;
+  width: 0;
+  height: 0;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  position: absolute;
+  display: block;
+  border-color: transparent;
+  border-style: solid;
+  background-clip: padding-box;
+  border-radius: 0px;
+ 
+}
+.ant-popover-placement-bottomLeft > .ant-popover-content > .ant-popover-arrow, .ant-popover-placement-bottomRight > .ant-popover-content > .ant-popover-arrow {
+  top: 0px;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+.right{
+    text-align: right;
+    /* margin: 8px 8px 8px 8px; */
+}
+.left{
+  text-align: left;
+  /* margin: 8px 8px 8px 8px; */
+}
+.iconsize{
+  font-size: 25px;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
