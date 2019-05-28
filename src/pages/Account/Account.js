@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
-import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,message,Skeleton} from 'antd';
+import { Layout,Modal, Button, Tabs, Card, Row,Input,Col,Avatar, Icon,Form,Pagination,Select,message,Skeleton,Divider} from 'antd';
 import MyTag from './Tag';
 import ChoseTemplate from './ChoseTemplate'
 import '../../App.css'
@@ -56,11 +56,28 @@ const FormItem = Form.Item;
         }
     }
     handleChangecreat=(value)=> {
-      if(value==="2"){
-        this.collectCourseByuser();
-      }else{
+      console.log("value",value)
+      if(value==="1"){
         this.getdata();
       }
+      if(value==="2"){
+        this.collectCourseByuser();
+      }
+      
+    }
+    //预览课件传参
+    handleOk_preview = (id) => {
+      const { sendpreviewcourseid} = this.props;
+      sendpreviewcourseid({
+        type: 'GetpreviewcourseidSuccess',
+        payload:{ 
+          project_id:id,
+          allcoursedata:this.state.allcoursedata,
+          // thumbnail:this.state.thumbnail,
+          // cataloglist:this.state.cataloglist,
+        },
+      });
+      this.context.router.history.push("/Previewcourse");
     }
     //Modal事件
     showModal = (id) => {
@@ -529,6 +546,7 @@ const FormItem = Form.Item;
             this.setState({
               loading:false,
               usercoursedata:result,
+              controlrecycle:false,
             });
           }
           else {   
@@ -599,6 +617,7 @@ const FormItem = Form.Item;
       });
     }
     componentDidMount(){
+      this.setState({trigger:1})
       this.getdata();
       this.getallcoursedata();
     }
@@ -674,9 +693,9 @@ const FormItem = Form.Item;
                  <Row gutter={16}>
                <Col span={8}>
                 <Card
-                  style={{ width:250 ,height:300}}
+                  style={{ width:250 ,height:370}}
                   cover={
-                    <img 
+                    <img onClick={this.handleOk_preview.bind(this,v._id)}
                       alt="example"
                       src={this.state.imgurl[i%4]} height="154"
                     />
@@ -691,15 +710,23 @@ const FormItem = Form.Item;
                     </Col>
                   </Row>
                   <br />
-                  <Row >
-                    <Col span={3}>
+                  <Row style={{ marginBottom: '0px' }}>
+               <Col span={1}></Col>
+               <Col span={8}><Icon type="message" />2534</Col>
+               <Col span={7}><Icon type="heart" />12万</Col>
+               <Col span={7}><Icon type="share-alt" />367</Col>
+               <Col span={1}></Col>
+              </Row>
+              <Divider>课件操作</Divider>
+                  <Row style={{ marginBottom: '0px' }}>
+                    {/* <Col span={3}>
                     <IconFont className="iconsize" type="icon-xiugai" onClick={this.showModal.bind(this,v._id)}/>
-                  </Col>
+                  </Col> */}
                     {/* <Col span={4}><IconFont className="iconsize" type="icon-xin" onClick={this.collect.bind(this,v._id)}/>{v.isEdit?"已收藏":"未收藏"}</Col> */}
-                    <Col span={3}><IconFont className="iconsize" type="icon-xin" onClick={this.collectCourse.bind(this,v._id)}/></Col>
-                    <Col span={3}><IconFont className="iconsize" type="icon-shoucang" onClick={this.cancelcollectCourse.bind(this,v._id)}/></Col>
-                    <Col span={3}><Icon className="iconsize" type="delete" onClick={this.showModal_delete.bind(this,v._id)}/></Col>
-                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
+                    <Col span={7}><IconFont className="iconsize" type="icon-xin" onClick={this.collectCourse.bind(this,v._id)}/>收藏</Col>
+                    <Col span={10}><IconFont className="iconsize" type="icon-shoucang" onClick={this.cancelcollectCourse.bind(this,v._id)}/>取消收藏</Col>
+                    <Col span={7}><Icon className="iconsize" type="delete" onClick={this.showModal_delete.bind(this,v._id)}/>删除</Col>
+                    {/* <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col> */}
                   </Row>
                 </Card>
             </Col>
@@ -713,9 +740,9 @@ const FormItem = Form.Item;
                  <Row gutter={16}>
                <Col span={8}>
                 <Card
-                  style={{ width:250 ,height:300}}
+                  style={{ width:250 ,height:370}}
                   cover={
-                    <img
+                    <img onClick={this.handleOk_preview.bind(this,v._id)}
                       alt="example"
                       src={this.state.imgurl[i%4]} height="154"
                     />
@@ -730,12 +757,23 @@ const FormItem = Form.Item;
                     </Col>
                   </Row>
                   <br />
+                  <Row style={{ marginBottom: '0px' }}>
+               <Col span={1}></Col>
+               <Col span={8}><Icon type="message" />2534</Col>
+               <Col span={7}><Icon type="heart" />12万</Col>
+               <Col span={7}><Icon type="share-alt" />367</Col>
+               <Col span={1}></Col>
+              </Row>
+              <Divider>课件操作</Divider>
                   <Row >
-                    <Col span={4}>
+                    {/* <Col span={4}>
                     <IconFont className="iconsize" type="icon-xiugai" onClick={this.showModal.bind(this,v._id)}/>
-                  </Col>
-                    <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col>
-                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
+                  </Col> */}
+                   <Col span={12}><IconFont className="iconsize" type="icon-xin" onClick={this.collectCourse.bind(this,v._id)}/>收藏</Col>
+                    <Col span={12}><IconFont className="iconsize" type="icon-shoucang" onClick={this.cancelcollectCourse.bind(this,v._id)}/>取消收藏</Col>
+                    {/* <Col span={7}><Icon className="iconsize" type="delete" onClick={this.showModal_delete.bind(this,v._id)}/>删除</Col> */}
+                    {/* <Col span={8}><IconFont className="iconsize" type="icon-xin"/></Col> */}
+                    {/* <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col> */}
                   </Row>
                 </Card>
             </Col>
@@ -849,14 +887,16 @@ const FormItem = Form.Item;
       // const cardList_course = ownloadcourse(loading)
       // const cardList_viedo = ownloadcourse(loading)
       const mycourse_ground=(
-        <div style={{ margin: '8px 8px 8px 0'}}>
-        <Card bordered={false}>
-          <Form layout="inline" style={{ paddingBottom: 5 }}>
+        <div style={{ margin: '0'}}>
+        {/* <Card bordered={false}> */}
+          <Form layout="inline"  style={{ marginTop: '20px'}}>
               <Row gutter={16}>
               <Col span={5}>                  
                   <Select defaultValue="1" onChange={this.handleChangecreat} style={{width:'100%'}}>
                      <Option value="1">我创建的课件</Option>
                     <Option value="2"> 我收藏的课件</Option>
+                    <Option value="3">我删除的课件</Option>
+                    <Option value="4"> 我协同的课件</Option>
                  </Select>                  
                 </Col>
                 <Col span={5}>                  
@@ -883,7 +923,7 @@ const FormItem = Form.Item;
                 </Col> 
               </Row>
           </Form>
-        </Card>
+        {/* </Card> */}
         {cardList_course}
         </div>
       );
@@ -1019,6 +1059,7 @@ const FormItem = Form.Item;
     return{
       setSsendupdatecourseid: (state) => dispatch(state),
       setCreatecourseState: (state) => dispatch(state),
+      sendpreviewcourseid: (state) => dispatch(state),
     };
   }
   export default connect(

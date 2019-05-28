@@ -217,7 +217,7 @@ const formItemLayout = {
           }],     
           "fileSize": "100M",
           "scope": "k12教育",
-          "addTime": 20190124,
+          "addTime": new Date(),
           "views": 300,
           "url": "D:/Graduate/11.jpg",
           "width": "30px",
@@ -253,7 +253,6 @@ const formItemLayout = {
                         // numchat:false,
                       }
                     });
-                    console.log(data.msg.knowledges);
                     this.context.router.history.push("/APP");
 
                 }
