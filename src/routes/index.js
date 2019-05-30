@@ -8,6 +8,7 @@ import App from '../App'
 import Account from '../pages/Account/Account'
 import Access from '../pages/Access'
 import Register from '../pages/Register'
+import Teach from '../pages/Teach'
 import Createcourse from '../pages/Creatcourse/creatcourse'
 import Previewcourse from '../pages/Creatcourse/previewcourse'
 import Tempreview from '../pages/Creatcourse/tempreview'
@@ -34,6 +35,7 @@ export default class RouterIndex extends Component {
                 <Route path="/User" component={User}></Route>
                 <Route path="/Reviewcourse" component={Reviewcourse}></Route>
                 <Route path="/Register" component={Register}></Route>
+                <Route path="/Teach" component={Teach}></Route>
             </Switch>
             </Page>
             </BrowserRouter>
