@@ -9,6 +9,8 @@ import $ from 'jquery';
 import PropTypes from "prop-types"
 import { connect } from 'react-redux';
 import {localhost} from '../../config'
+//import pagefirst from '../CreatecourseNew/pagefirst'
+
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1006980_3sv6ir3jo3x.js',
 });
@@ -105,11 +107,11 @@ const FormItem = Form.Item;
       });
     }
      //课件模版选择确认弹出框
-     showModal_template = () => {
-      this.setState({
-        templatevisible: true,
-      });
-    }
+     //showModal_template = () => {
+      //this.setState({
+      //  templatevisible: true,
+     // });
+    //}
   
     handleOk_template = (e) => {
       console.log(e);
@@ -787,7 +789,7 @@ const FormItem = Form.Item;
                   className="cardparent"
                 >
                   <Row className="cardself" >
-                    <p style={{fontSize:'35px'}}><IconFont  onClick={this.showModal_template} type="icon-jia" /></p>
+                    <p style={{fontSize:'35px'}}><Link to='pagefirst'><IconFont  type="icon-jia" /></Link></p>
                     <p>创建新课件</p>
                   </Row>
                 </Card>
