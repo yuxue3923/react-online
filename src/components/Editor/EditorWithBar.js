@@ -199,7 +199,8 @@ const dgraph=function(fh,fheart,fa){
                </Button>
           </div> 
           <div style={{margin:'1px'}}>
-               <Button type="primary" onClick={this.showModal_preview}>
+               {/* <Button type="primary" onClick={this.showModal_preview}> */}
+              <Button type="primary">
                  <Icon className="iconsize" type="eye"/>
                </Button>
           </div> 
