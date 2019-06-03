@@ -184,6 +184,18 @@ class App extends Component {
       });
       this.context.router.history.push("/Previewcourse");
     }
+    goTeach=()=>{
+      const { sendpreviewcourseid,createCourse_info} = this.props;
+      sendpreviewcourseid({
+        type: 'GetpreviewcourseidSuccess',
+        payload:{ 
+          project_id:createCourse_info.course_id,
+          thumbnail:this.state.statethumbnail,
+          cataloglist:this.cataloglist,
+        },
+      });
+      this.context.router.history.push("/Teach");
+    }
     handleCancel_preview = () => {
       this.setState({
         previewvisible: false,
@@ -1126,7 +1138,7 @@ class App extends Component {
             </span>
             </div> */}
             
-            <EditorWithBar onCollapse={this.onCollapse} pageLength={MyDeck.length} newSlide={this.newSlide} pageChoose={this.pageChoose} userName = {login_info.username} showModal_preview={this.showModal_preview} initContent={this.passbyJudge()}  initStack={this.passbyStack()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={this.state.shouldCreateSocket} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
+            <EditorWithBar onCollapse={this.onCollapse} pageLength={MyDeck.length} newSlide={this.newSlide} pageChoose={this.pageChoose} userName = {login_info.username} showModal_preview={this.showModal_preview} goTeach={this.goTeach} initContent={this.passbyJudge()}  initStack={this.passbyStack()} getToServePage={this.getToServePage} pageChange={this.state.pageChange} sync={this.sync} page={this.state.page-1} thumbnail={this.thumbnail} save={this.save} isSingleMode = {(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}  shouldCreateSocket={this.state.shouldCreateSocket} effect_createSocket = {this.effect_createSocket} project_id_now = {project_id_now||createCourse_info.course_id} dispatchState = {this.dispatchState} />
             
             </div>
             <Modal

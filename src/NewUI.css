@@ -1,0 +1,196 @@
+.App{
+    text-align: center;
+  }
+  .trigger {
+    font-size: 18px;
+    line-height: 64px;
+    padding: 0 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .trigger:hover {
+    color: #1890ff;
+  }
+  
+  .single-viewer {
+    height: 32px;
+    margin: 16px;
+  }
+  .logo {
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px;
+  }
+  .main-nav{
+    display:flex;
+    flex-direction:row;
+    padding:0;
+    height:100%;
+  }
+  .nav{
+    display:flex;
+    flex-direction:row;
+    padding:0;
+    height:100%;
+  }
+  .nav.col{
+    display:flex;
+    flex-direction:column;
+    padding:0;
+    height:100%;
+  }
+  .nav.col.tool{
+    margin-right:0;
+  }
+  .nav .ant-btn{
+    height:100%;
+    display:flex;
+    flex-direction:row;
+    justify-content:center; 
+    align-items: center;
+    margin-right:1%;
+    
+  }
+  .nav.tool .ant-btn{
+    display:flex;
+    flex-direction:column;
+    justify-content:center; 
+    align-items: center;
+    margin-right:1%
+  }
+  .second .ant-btn{
+    margin:0;
+    height:100%;
+  }
+  .second-button{
+    padding:5px;
+  }
+  .second-button .ant-btn-primary{
+    background-color:#fff;
+    border-color: #fff #1DA569 #fff #fff;
+    color: #1DA569;
+    border-radius:0;
+    font-family: Georgia,Times New Roman,Times,Songti SC,serif;
+    font-weight: 700;
+  }
+  .second-button .ant-btn-primary.at-right-border{
+    background-color:#fff;
+    border-color: #fff;
+    color: #1DA569;
+    border-radius:0;
+  }
+  .second-button .ant-btn-primary .anticon{
+    color: #1DA569;
+  }
+  .second-button .ant-btn-primary>div{
+    margin-top: 0px;
+  }
+  .nav.tool .ant-btn{
+    background-color:rgb(227,227,227);
+    border-color: #fff #1DA569 #fff #fff;
+    width:68px;
+    border-radius:0;
+    margin-right:0;
+    color: #1DA569;
+  }
+  .nav.tool .ant-btn.at-right-border{ 
+    border-color: #fff;
+  }
+  .nav.tool .ant-btn .anticon{
+    color: #1DA569;
+  }
+  .nav .ant-btn>div{
+     margin-bottom: 7%;
+    font-size: 18px;
+    font-family: Georgia,Times New Roman,Times,Songti SC,serif;
+    align-self:center;
+    
+  }
+  .nav.tool .ant-btn>div{
+    margin-bottom:0;
+    font-size: 10px;
+  }
+  .nav .ant-btn .anticon{
+    font-size: 28px;
+    align-self:center;
+  }
+  .nav .ant-btn .anticon.shrink{
+    font-size: 8px;
+    align-self:center;
+  }
+  /* .nav .anticon{
+    align-self:center;
+  } */
+  .head_one{
+    font-size: 20px;
+    margin: 8px 8px 8px 8px;
+  }
+  .head_two{
+    font-size: 16px;
+    margin: 8px 8px 8px 8px;
+  }
+  .wid-content{
+    width: 100%;
+  }
+  .wid-shrink{ 
+    width: 76%
+    /*
+    用于出现新的
+    */
+  }
+  .wid-footer{
+    width: 100%;
+  }
+  .reverse{
+    display:flex;
+    flex-direction:row-reverse;
+  }
+  .ant-popover-content {
+    opacity: 0.7;
+  }
+  .self-popover .ant-popover-inner-content {
+    padding: 0px;
+  }
+  .ant-popover-inner {
+    background-color: #00000000;
+    background-clip: padding-box;
+    border-radius: 0px;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    margin: 0;
+  }
+  .ant-popover-placement-right, .ant-popover-placement-rightTop, .ant-popover-placement-rightBottom {
+    padding-left:0px;
+  }
+  .ant-popover-placement-rightTop > .ant-popover-content > .ant-popover-arrow, .ant-popover-placement-rightBottom > .ant-popover-content > .ant-popover-arrow {
+    background-color: #00000000;
+    left: 0px;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    width:0;
+    height: 0;
+  }
+  .ant-carousel{
+    /* display: flex; */
+  }
+  
+    
+  .ant-carousel .slick-list .slick-track .slick-slide {
+    display: flex;
+    /* text-align: center;  */
+    justify-content:center; 
+    align-items: center; 
+    height: 100%;
+    /* line-height: 160px; */
+    background: #364d79;
+    /* overflow: hidden; */
+  }
+  
+  .ant-carousel .slick-slide img{
+    align-self: center;
+  }
+  .ant-carousel .slick-slide h3 {
+    color: #fff;
+  }
+  
+  
+  

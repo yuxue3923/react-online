@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import './App.css';
+import '../NewUI.css';
 import PropTypes from "prop-types";
-import { Button,Input, Icon ,Carousel} from 'antd';
-
+import { Button,Input, Icon ,Carousel,Form} from 'antd';
+import $ from 'jquery';
+import {localhost} from '../config';
+import { connect } from 'react-redux';
+import srender from 'srenderlib'
 
 var isVisible = true;
-
-export default class Teach extends Component {
+var srs= [];
+class Teach extends Component {
     static contextTypes = {
         router: PropTypes.object
     }
@@ -14,6 +17,7 @@ export default class Teach extends Component {
         super(props, context);
         this.state = {
            currentpage:1,
+           page:1,
         };
     }
    
@@ -48,11 +52,10 @@ export default class Teach extends Component {
 //         console.log(a, b, c);
 //       }
     next(){
-        this.refs.Carousel.next();
+        
     }
     prev(){
-        console.log("a")
-        this.refs.Carousel.prev();
+       
     }
     shrink(){
         if(isVisible) {
@@ -65,9 +68,31 @@ export default class Teach extends Component {
         }
       
     }
+    componentDidMount(){
+        this.getcoursenamedata();
+        this.initialCanvas();
+
+    }
+    componentDidUpdate(){
+        this.initialCanvas();
+        
+    }
+    initialCanvas(){
+        const { login_info,createCourse_info }=this.props;
+        var content = createCourse_info.createCourse_info.slides.slide;
+        var dom = document.getElementsByClassName('container')[0]
+        srs[this.state.page-1]=srender.init(dom,{},login_info.userName,this.state.page-1)
+        srs[this.state.page-1].initWithOthers(content[this.state.page-1].media)
+    }
+    getcoursenamedata(e) {
+        const { login_info,createCourse_info }=this.props;
+        console.log('授课页面信息');
+        console.log(createCourse_info)
+      
+      }
   render(){
       return (
-      <div onMouseMove={(e)=>this.displayNav(e)} ref="page">
+      <div onMouseMove={(e)=>this.displayNav(e)} ref="page" style={{overflow:"hidden"}}>
        <div style={{position:"absolute" ,height:"auto",bottom:"0%",left:"0%",zIndex:"99"}} className="nav tool"> 
         <Button type="primary" size="small" block><Icon type="appstore"/><div>菜 单</div></Button>
         <Button type="primary" size="small" block><Icon type="appstore"/><div>最小化</div></Button>
@@ -88,31 +113,28 @@ export default class Teach extends Component {
         <Button type="primary" size="small" block ><Icon type="appstore"/><div>交流</div></Button>
         <Button type="primary" size="small" block onClick={()=>this.shrink()}><Icon className="shrink" style={{height:"12px"}} type="appstore"/></Button>
       </div> 
-      
-      <Carousel afterChange={this.onChange} style={{height:"100%"}} dots={false} ref="Carousel">
-        <div>   
-            <img src="http://bpic.588ku.com//back_origin_min_pic/19/04/16/aba3ab2789b1aea6c7412512c41e887d.jpg" alt="" height="971" width="1680"/>
-        </div>
-        {/* 
-        wid 1680
-        height 971
-        */}
-       
-        
-        <div>
-            <img src="http://i2.hdslb.com/bfs/archive/582b62c6e6fea16ed2dc1973073d4cd64f72e7d0.jpg" alt="" height="971" width="1680"/>
-        </div>
-        <div>
-            <img src="https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png" alt="" height="971" width="1680"/>
-        </div>
-        <div>
-            <img src="https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png" alt="" height="971" width="1680"/>
-        </div>
-        <div>
-            <img src="https://gw.alipayobjects.com/zos/rmsportal/iZBVOIhGJiAnhplqjvZW.png" alt="" height="971" width="1680"/>
-        </div>
-      </Carousel>
+      <div>
+            <div className="container" style={{height:'100vh',width:'100%',padding:"0px 0px 0px 0px"}}></div>
+     </div>
       </div>
       )
   }
 }
+
+const Teach_Index=Form.create()(Teach);
+function  mapStateToProps(state) {
+  return{
+     login_info:state.reducer_login.login_info,
+     createCourse_info:state.reducer_createcourse.createCourse_info,
+  };
+}
+function mapDispatchToProps(dispatch){
+  return{
+    setSsendupdatecourseid: (state) => dispatch(state),
+    setCreatecourseState: (state) => dispatch(state),
+  };
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Teach_Index);

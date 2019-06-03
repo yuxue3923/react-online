@@ -101,6 +101,7 @@ const dgraph=function(fh,fheart,fa){
         this.save = this.save.bind(this);
         this.showModal_preview=this.showModal_preview.bind(this);
         this.onCollapse=this.onCollapse.bind(this);
+        this.goTeach=this.goTeach.bind(this);
     }
  
     add(type,colorType){
@@ -119,6 +120,9 @@ const dgraph=function(fh,fheart,fa){
     }
     showModal_preview(){
       this.props.showModal_preview()
+    }
+    goTeach(){
+      this.props.goTeach()
     }
     save(){
       this.props.save()
@@ -201,6 +205,11 @@ const dgraph=function(fh,fheart,fa){
           <div style={{margin:'1px'}}>
                <Button type="primary" onClick={this.showModal_preview}>
                  <Icon className="iconsize" type="eye"/>
+               </Button>
+          </div>
+          <div style={{margin:'1px'}}>
+               <Button type="primary" onClick={this.goTeach}>
+                 <Icon className="iconsize" type="compass"/>
                </Button>
           </div> 
           <div style={{margin:'1px'}}>
