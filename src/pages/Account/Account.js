@@ -197,7 +197,9 @@ const FormItem = Form.Item;
   });
    
   }
-  
+  goTeach(){
+    this.context.router.history.push("/Teach");
+  }
   
   gotoSearchProject(projectId){
     const {setCreatecourseState} = this.props;
@@ -696,10 +698,10 @@ const FormItem = Form.Item;
                     <IconFont className="iconsize" type="icon-xiugai" onClick={this.showModal.bind(this,v._id)}/>
                   </Col>
                     {/* <Col span={4}><IconFont className="iconsize" type="icon-xin" onClick={this.collect.bind(this,v._id)}/>{v.isEdit?"已收藏":"未收藏"}</Col> */}
-                    <Col span={3}><IconFont className="iconsize" type="icon-xin" onClick={this.collectCourse.bind(this,v._id)}/></Col>
+                    {/* <Col span={3}><IconFont className="iconsize" type="icon-xin" onClick={this.collectCourse.bind(this,v._id)}/></Col> */}
                     <Col span={3}><IconFont className="iconsize" type="icon-shoucang" onClick={this.cancelcollectCourse.bind(this,v._id)}/></Col>
                     <Col span={3}><Icon className="iconsize" type="delete" onClick={this.showModal_delete.bind(this,v._id)}/></Col>
-                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test"/><IconFont className="iconsize" type="icon-icon-test2"/><IconFont className="iconsize" type="icon-icon-test1"/><IconFont className="iconsize" type="icon-icon-test-copy"/></Col>
+                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test" onClick={this.goTeach()}/></Col>
                   </Row>
                 </Card>
             </Col>

@@ -9,6 +9,7 @@ import srender from 'srenderlib'
 
 var isVisible = true;
 var srs= [];
+var total = 0;
 class Teach extends Component {
     static contextTypes = {
         router: PropTypes.object
@@ -52,10 +53,14 @@ class Teach extends Component {
 //         console.log(a, b, c);
 //       }
     next(){
-        
+        this.state.page<total-1&&this.setState((state,props)=>({
+            page:(state.page+1)
+        }))
     }
     prev(){
-       
+        this.state.page>1&&this.setState((state,props)=>({
+            page:(state.page-1)
+        }))
     }
     shrink(){
         if(isVisible) {
@@ -79,10 +84,12 @@ class Teach extends Component {
     }
     initialCanvas(){
         const { login_info,createCourse_info }=this.props;
+
         var content = createCourse_info.createCourse_info.slides.slide;
         var dom = document.getElementsByClassName('container')[0]
         srs[this.state.page-1]=srender.init(dom,{},login_info.userName,this.state.page-1)
         srs[this.state.page-1].initWithOthers(content[this.state.page-1].media)
+        total = content.length;
     }
     getcoursenamedata(e) {
         const { login_info,createCourse_info }=this.props;
