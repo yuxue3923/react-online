@@ -52,8 +52,7 @@ function Pen(flag,page){
 
 
 var isVisible = true;
-var srs= [];
-var total = 0;
+var total = 1;
 class Teach extends Component {
     static contextTypes = {
         router: PropTypes.object
@@ -97,7 +96,7 @@ class Teach extends Component {
 //         console.log(a, b, c);
 //       }
     next(){
-        this.state.page<total&&this.setState((state,props)=>({
+        this.state.page<total-1&&this.setState((state,props)=>({
             page:(state.page+1)
         }))
     }
@@ -117,18 +116,23 @@ class Teach extends Component {
         }
       
     }
+    componentWillMount(){
+        const { createCourse_info }=this.props;
+        var content = createCourse_info.createCourse_info.slides.slide;
+        total = content.length;
+    }
     componentDidMount(){
         this.getcoursenamedata();
-        this.updateCanvas(true);
+        this.updateCanvas();
         prePage = this.state.page;
 
     }
     componentDidUpdate(){
-        this.updateCanvas(false);
+        this.updateCanvas();
         prePage = this.state.page;
         
     }
-    updateCanvas(init=true){
+    updateCanvas(){
         const { login_info,createCourse_info }=this.props;
 
         var content = createCourse_info.createCourse_info.slides.slide;
@@ -140,7 +144,7 @@ class Teach extends Component {
        // if(this.props.page-prePage===0);
       
        dom.replaceChild(srs[this.state.page].painter._domRoot,dom.childNodes[0]);
-        total = content.length;
+       
     }
     getcoursenamedata(e) {
         const { createCourse_info }=this.props;
@@ -158,11 +162,11 @@ class Teach extends Component {
       </div> 
       <div style={{position:"absolute" ,height:"auto",bottom:"0%",right:"0",zIndex:"99"}} className="nav tool"> 
         <Button type="primary" size="small" block onClick={()=>this.prev()}><Icon type="appstore"/><div>上一页</div></Button>
-        <Button type="primary" size="small" block><Icon type="appstore"/><div>{this.state.currentpage}/5</div></Button>
+        <Button type="primary" size="small" block><Icon type="appstore"/><div>{this.state.page + 1}/{total}</div></Button>
         <Button type="primary" size="small" block className="at-right-border" onClick={()=>this.next()}><Icon type="appstore"/><div>下一页</div></Button>
       </div> 
      
-      <div style={{position:"absolute" ,height:"auto",top:"30%",right:"0",zIndex:"99"}}  ref="shrink" className="nav col tool" onClick={function(){console.log("yiwaii")}}> 
+      <div style={{position:"absolute" ,height:"auto",top:"30%",right:"0",zIndex:"99"}}  ref="shrink" className="nav col tool" > 
         <Button type="primary" size="small" block onClick={()=>Pen('pointer',this.state.page)}><Icon type="appstore"/><div>指针</div></Button>
         <Button type="primary" size="small" block onClick={()=>Pen('pen',this.state.page)}><Icon type="appstore"/><div>画笔</div></Button>
         <Button type="primary" size="small" block onClick={()=>Pen('eraser',this.state.page)}><Icon type="appstore"/><div>橡皮檫</div></Button>
