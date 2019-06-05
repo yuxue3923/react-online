@@ -197,7 +197,18 @@ const FormItem = Form.Item;
   });
    
   }
-  goTeach(){
+  goTeach(data){
+    const {setCreatecourseState} = this.props;
+     setCreatecourseState({
+      type:'createcourseSuccess',
+      payload:{
+          createCourse_info:data,
+          course_id:data._id,
+          // numchat:false,
+      }
+    }); 
+
+    //console.log(v)
     this.context.router.history.push("/Teach");
   }
   
@@ -701,7 +712,7 @@ const FormItem = Form.Item;
                     {/* <Col span={3}><IconFont className="iconsize" type="icon-xin" onClick={this.collectCourse.bind(this,v._id)}/></Col> */}
                     <Col span={3}><IconFont className="iconsize" type="icon-shoucang" onClick={this.cancelcollectCourse.bind(this,v._id)}/></Col>
                     <Col span={3}><Icon className="iconsize" type="delete" onClick={this.showModal_delete.bind(this,v._id)}/></Col>
-                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test" onClick={this.goTeach()}/></Col>
+                    <Col span={12}><IconFont className="iconsize" type="icon-icon-test" onClick={this.goTeach.bind(this,v)}/></Col>
                   </Row>
                 </Card>
             </Col>
