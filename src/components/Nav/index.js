@@ -3,7 +3,11 @@ import { Icon,Button,Popover,Drawer} from 'antd';
 import SndBtn from './SndBtn'
 import { mergeObjectArr as merge} from './util'
 
-const fileNameAndIconList = [{name:"新建",icon:"appstore"},{name:"保存",icon:"appstore"},{name:"分享",icon:"appstore"},{name:"导出",icon:"appstore"}];
+const MyIcon = Icon.createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/font_981127_k7yilt2ebjs.js',
+});
+
+const fileNameAndIconList = [{name:"新建",icon:"file-add"},{name:"保存",icon:"save"},{name:"分享",icon:"share-alt"},{name:"导出",icon:"import"}];
 const fileFns = [function(){console.log("I'm fileFn1")},function(){console.log("I'm fileFn2")},function(){console.log("I'm fileFn3")},function(){console.log("I'm fileFn4")}];
 //const fileMsg = fileNameAndIconList.reduce((acc,curr,i)=>acc.concat([Object.assign({},curr,{fn:fileFns[i]})]),[]);
 const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
@@ -11,14 +15,14 @@ const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
  * 文件按钮
  */
 const editNameList = [{name:'新增'},{name:'undo'},{name:'redo'}];
-const editIconList = ['appstore','appstore','appstore'];
+const editIconList = ['file-add','undo','redo'];
 const editFns = [];
 const editMsg = merge(merge(editNameList,editIconList,"icon"),editFns,"fns");
 /**
  * 编辑按钮
  */
 const imbortNameList = [{name:'PDF'},{name:'图片'},{name:'音视频'}];
-const imbortIconList = ['appstore','appstore','appstore'];
+const imbortIconList = ['file-pdf','picture','play-square'];
 const imbortFns = [];
 const imbortMsg = merge(merge(imbortNameList,imbortIconList,"icon"),imbortFns,"fns");
 /**
@@ -26,8 +30,8 @@ const imbortMsg = merge(merge(imbortNameList,imbortIconList,"icon"),imbortFns,"f
  */
 const shapeNameList = [{name:'矩形'},{name:'三角形'},{name:'圆形'}];
 const shapeIconList = ['appstore','appstore','appstore'];
-const shapeFns = [function(){this.add('rect')},function(){this.add('circle')},function(){this.add('circle')}];
-const shapeMsg = merge(merge(shapeNameList,shapeIconList,"icon"),shapeFns,"fn");
+const shapeFns = [function(){this.add('rect')},function(){this.add('tisogon')},function(){this.add('circle')}];
+const shapeMsg = merge(merge(shapeNameList,shapeIconList,"MyIcon"),shapeFns,"fn");
 /**
  * 形状按钮
  */
@@ -71,7 +75,7 @@ export default class Nav extends Component {
             <div className="nav" >
                 <Popover placement="bottomLeft" content={<SndBtn msgArr={fileMsg} add={this.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
-                        <Icon type="appstore"/>
+                        <Icon type="folder" />
                         <div>文件</div>
                     </Button>
                 </Popover>
@@ -94,7 +98,7 @@ export default class Nav extends Component {
                     </Button>
                 </Popover>
                 <Popover placement="bottomLeft" content={<SndBtn msgArr={penMsg} add={this.add}/>} overlayClassName="self-popover">
-                    <Button type="primary">
+                    <Button type="primary" onClick={this.add.bind(this,'pen')}>
                         <Icon type="appstore"/>
                         <div>画笔</div>
                     </Button>
