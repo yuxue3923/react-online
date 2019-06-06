@@ -253,7 +253,7 @@ const formItemLayout = {
                         // numchat:false,
                       }
                     });
-                    this.context.router.history.push("/APP");
+                    this.context.router.history.push("/Edit");
 
                 }
                 else {

@@ -5,6 +5,7 @@ import {createStore} from 'redux';
 import {Provider}from 'react-redux';
 import Reducer from '../reducers/index.js';
 import App from '../App'
+import Edit from '../pages/Edit'
 import Account from '../pages/Account/Account'
 import Access from '../pages/Access'
 import Register from '../pages/Register'
@@ -29,6 +30,7 @@ export default class RouterIndex extends Component {
                 <Route path="/Access" component={Access}></Route>
                 <Route path="/Account" component={Account}></Route>
                 <Route path="/APP" component={App}></Route>
+                <Route path="/Edit" component={Edit}></Route>
                 <Route path="/Previewcourse" component={Previewcourse}></Route>
                 <Route path="/Updatecourse" component={Updatecourse}></Route>
                 <Route path="/Createcourse" component={Createcourse}></Route>

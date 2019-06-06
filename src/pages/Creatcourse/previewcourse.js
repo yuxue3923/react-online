@@ -418,7 +418,7 @@ class Preview extends Component {
                             // numchat:false,
                         }
                       });
-                      this.context.router.history.push("/APP");
+                      this.context.router.history.push("/Edit");
                 }
                 else {
                     console.log('成功更新课件');
