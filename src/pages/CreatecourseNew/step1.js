@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../App.css';
-import { Button, Form,Input,Select,Divider,Drawer, Row ,Col, Tree,message } from 'antd';
+import { Modal,Button, Form,Input,Select,Divider,Drawer, Row ,Col, Tree,message } from 'antd';
 import PropTypes from "prop-types";
 import {Link} from 'react-router-dom'
 const Option = Select.Option;
@@ -19,6 +19,8 @@ for (let i = 0; i < dataSource_catalog.length; i++) {
 }
 
 class Step1 extends Component {
+  state = {visible:false, loading: false,};
+  
   static contextTypes = {
     router: PropTypes.object
 }
@@ -27,6 +29,7 @@ constructor(props, context) {
     this.state = {
         current: 0,
         visible: false,
+        modalvisible: false,
         coursename:"",
         class:"",
         catalog:"",
@@ -49,7 +52,9 @@ onClose = () => {
   });
 };
 onClick_next() {
-  this.setState({ current: 1 })
+  this.setState({ 
+    modalvisible:false,
+    current: 1 ,})
   setTimeout(() => {
       this.props.GetStates(this.state.current)
   }, 100);
@@ -60,7 +65,7 @@ handleSubmit(e) {
     if (!err) {
       if(this.state.releknowledgestr.length!=0){
         console.log('Received values of form: ', values);
-        this.onClick_next();
+        this.showModal();
       }else{
         message.error("关联知识点不能为空！");
       }
@@ -100,6 +105,19 @@ onSelect(selectedKeys, info) {
   })
 
 };
+
+showModal = () => {
+  this.setState({
+    modalvisible: true,
+  });
+};
+handleCancel = () => {
+  this.setState({ modalvisible: false });
+  this.context.router.history.push("/APP");
+};
+
+
+
   render() {
     console.log("转换后的字符串render",this.state.releknowledgestr);
     console.log("dddd",this.state.releknowledge)
@@ -217,8 +235,23 @@ onSelect(selectedKeys, info) {
       </div>
       <div style={{marginTop:"50px"}} className="App">
         {/* <div style={{fontSize:25,}}>步骤1</div> */}
-        <Button onClick={this.handleSubmit.bind(this)} type="primary">下一步</Button>
-       <Link to='/'><Button >返回</Button></Link>
+        <Button key="handsubmit" onClick={this.handleSubmit.bind(this)} type="primary">下一步</Button>
+        <Modal
+          visible={this.state.modalvisible}
+          onOk={this.onClick_next.bind(this)}
+          onCancel={this.handleCancel}
+          footer={[
+           <Button key="back" onClick={this.handleCancel}>
+            手动创建
+            </Button>,
+            <Button key="submit" type="primary" onClick={this.onClick_next.bind(this)}>
+             自动创建
+           </Button>
+          ]}
+        >
+          <p>确定创建该课件？</p>
+        </Modal>
+       <Link to='/Account'><Button >返回</Button></Link>
       </div>
       </div>
     );

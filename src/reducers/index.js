@@ -7,6 +7,21 @@ function  reducer_login(state = {},action) {
             return state;
     }
 }
+
+function reducer_echarts(state = {}, action) {
+    switch (action.type) {
+        case 'EchartsIndexName':
+            // console.log("EchartsIndexName_reducers");
+            // console.log(action.payload);
+            return {
+                EchartsIndexName: action.payload
+            };
+        default:
+            return state;
+    }
+}
+
+
 function  reducer_createcourse(state = {},action) {
     switch (action.type) {
         case 'createcourseSuccess':
@@ -34,6 +49,7 @@ function  reducer_previewcourseid(state = {},action) {
 }
 export default combineReducers({
     reducer_login,
+    reducer_echarts,
     reducer_createcourse,
     reducer_userupdatecourseid,
     reducer_previewcourseid,
