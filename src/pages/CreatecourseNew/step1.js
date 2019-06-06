@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import '../../App.css';
 import { Modal,Button, Form,Input,Select,Divider,Drawer, Row ,Col, Tree,message } from 'antd';
 import PropTypes from "prop-types";
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
+import $ from 'jquery';
+import { connect } from 'react-redux';
+import {localhost} from '../../config';
 const Option = Select.Option;
 const { TreeNode } = Tree;
 const { TextArea } = Input;
@@ -19,8 +22,6 @@ for (let i = 0; i < dataSource_catalog.length; i++) {
 }
 
 class Step1 extends Component {
-  state = {visible:false, loading: false,};
-  
   static contextTypes = {
     router: PropTypes.object
 }
@@ -36,11 +37,133 @@ constructor(props, context) {
         abstract:"",
         releknowledge:"",
         releknowledgestr:[],
+        knowledgelist:[],
     };
 
     Object.assign(this.state, this.props)
 }
+getknowledgeRel(value) {
+  const { login_info }=this.props;
+  console.log('进入knowledgeRel ajax');
+  console.log(login_info.access_token);
+  $.ajax({
+    url: "http://"+localhost+":3000/api/knowledgeRel",
+    data:"courseName="+value,
+    beforeSend:function(request){
+      request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+    },
+    type: "GET",
+    dataType: "json",
+    async:false,
+    success: function (data) {
+      if (data.errorCode === 0) {
+        console.log('获取关联知识点');
+        console.log(data);
+        if(data.msg){
+        this.setState({
+          knowledgelist:data.msg,
+        });
+      }
+      }
+      else {   
+        console.log('获取关联知识点2222');
+      }
+    }.bind(this),
+    error: function (xhr, status, err) {
+    }
+  });
+}
+creatcourse = () =>{
+  const { login_info }=this.props;
+  var data={
+   "user_id":login_info.user_id,
+    "courseName":this.state.coursename,
+    "grade": this.state.class,
+    "subject": this.state.catalog,
+    "descript":  this.state.abstract,
+    "knowledges":this.state.releknowledgestr,
+    // "isOpen": this.state.isOpen,
+    // "isEdit": 1,
+    // "name": "课件目录",
+    // "children":this.state.coursecatalog,
+    "templateId": 1,
+    "slide": [{
+        "pageId": 1,
+        "pageThumbnail": {
+            "pageurl": "./1.png",
+            "style": {
+                "pagewidth": "100px",
+                "pageheight": "100px"
+            }
+        },
+        "media":[
+            {
+                "id":2314,
+                "position":[0,0],
+                "rotation":0,
+                "scale":[1,1],
+                "shape":{"cx":100,"cy":100,"n":30,"z":40},
+                "style":{"fill":"none"},
+                "type":"house"
+            }
+        ]
+    }],     
+    "fileSize": "100M",
+    "scope": "k12教育",
+    "addTime": new Date(),
+    "views": 300,
+    "url": "D:/Graduate/11.jpg",
+    "width": "30px",
+    "height": "40px"
+};
+ 
+  //创建课件
+  console.log("进入ajax") 
+  const {setCreatecourseState} = this.props;
+  $.ajax({
+      url: "http://"+localhost+":3000/api/createCourse",
+      async:false,
+      type: "POST",
+      contentType:"application/json;charset=UTF-8",
+      accepts:"application/json;charset=UTF-8",
+      dataType: "json",
+      data:JSON.stringify(data),
+      beforeSend:function(request){
+        request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+      },
+      success: function (data) {
+          if (data.errorCode === 0) {
+              console.log('成功保存课件');
+              console.log(data.msg);
+              console.log(data.msg._id);
+              // message.success('成功创建课件！');
+             
+              setCreatecourseState({
+                type:'createcourseSuccess',
+                payload:{
+                  createCourse_info:data.msg,
+                  course_id:data.msg._id,
+                  // numchat:false,
+                }
+              });
+          }
+          else {
+              console.log('成功获取搜索资源');
+              // this.setState({ resource: data.msg });
+              console.log(data.msg);
+          }
+      }.bind(this),
+      error: function (xhr, status, err) {
+        console.log("取回课件数据错误")
+      }
+  });
+}
 showDrawer = () => {
+  if(this.state.coursename){
+    this.getknowledgeRel(this.state.coursename);
+  }else{
+    this.getknowledgeRel("ttt");
+  } 
   this.setState({
     visible: true,
   });
@@ -56,7 +179,8 @@ onClick_next() {
     modalvisible:false,
     current: 1 ,})
   setTimeout(() => {
-      this.props.GetStates(this.state.current)
+      this.props.GetStates(this.state.current);
+      this.creatcourse();
   }, 100);
 }
 handleSubmit(e) {
@@ -113,6 +237,7 @@ showModal = () => {
 };
 handleCancel = () => {
   this.setState({ modalvisible: false });
+  this.creatcourse();
   this.context.router.history.push("/APP");
 };
 
@@ -132,6 +257,11 @@ handleCancel = () => {
             sm: { span: 8 },
         },
     };
+    const treeList = this.state.knowledgelist.map((v, i) => {
+      return (
+        <TreeNode title={v.title} key={v.title} />
+      );}
+    )
     return (
       <div>
       <div style={{marginTop:"50px"}}>
@@ -216,7 +346,7 @@ handleCancel = () => {
           visible={this.state.visible}
         >
            <Tree showLine defaultExpandedKeys={['2']} onSelect={this.onSelect.bind(this)}>
-        <TreeNode title="parent 1" key={1}>
+        {/* <TreeNode title="parent 1" key={1}>
           <TreeNode title="parent 1-0" key={2}>
             <TreeNode title="leaf" key={1} />
             <TreeNode title="leaf" key={2} />
@@ -229,7 +359,8 @@ handleCancel = () => {
             <TreeNode title="leaf" key={1} />
             <TreeNode title="leaf" key={2} />
           </TreeNode>
-        </TreeNode>
+        </TreeNode> */}
+        {treeList}
       </Tree>
         </Drawer>
       </div>
@@ -258,4 +389,17 @@ handleCancel = () => {
   }
 }
 const Step11 = Form.create({ name: 'register' })(Step1);
-export default Step11;
+function  mapStateToProps(state) {
+  return{
+     login_info:state.reducer_login.login_info,
+  };
+}
+function mapDispatchToProps(dispatch){
+  return{
+    setCreatecourseState: (state) => dispatch(state),
+  };
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Step11);
