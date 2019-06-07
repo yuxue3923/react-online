@@ -276,6 +276,7 @@ import React, { Component } from 'react';
 import { Card, Row, Col,Icon ,Button,Form,Avatar,Divider, Comment, List, Input,message} from 'antd';
 import PropTypes from "prop-types";
 import $ from 'jquery';
+import {Link} from 'react-router-dom'
 import {localhost} from '../../config'
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -329,6 +330,10 @@ class Preview extends Component {
       step_content: [],
       recomcourselength:7,
       allcoursedata:[],
+      coursedata:{
+        createCourse_info:[],
+        course_id:"",
+      },
       comments: [],
      submitting: false,
      value: '',
@@ -353,12 +358,12 @@ class Preview extends Component {
         });
       }
       updatecourse = () =>{
-        const know=this.state.knowledgelist;
-        var knowsource=[];
-        for(var i=0;i<know.length;i++){
-           var obj=know[i];
-           knowsource.push(obj.title);
-        };
+        // const know=this.state.knowledgelist;
+        // var knowsource=[];
+        // for(var i=0;i<know.length;i++){
+        //    var obj=know[i];
+        //    knowsource.push(obj.title);
+        // };
         const { login_info }=this.props;
           var temp = deepClone(this.state.coursedata)
         var passbydata = this.state.coursedata.createCourse_info
@@ -373,7 +378,7 @@ class Preview extends Component {
       formData.grade=this.state.grade
       formData.subject=this.state.subject
       formData.descript=this.state.descript
-      formData.knowledges=knowsource
+      formData.knowledges=this.state.knowledges
       formData.children=this.state.coursecatalog
       formData.isOpen=this.state.isOpen
 
@@ -452,13 +457,13 @@ class Preview extends Component {
             if (data.errorCode === 0) {
               console.log('获取查询权限111');
               console.log(data);
-              const a=data.msg[0].knowledges;
-              const knowcontain=[];
-              for(var i=0;i<a.length;i++){
-              const coursecatalog1 = {};   
-              coursecatalog1['title'] = a[i];
-              knowcontain.push(coursecatalog1);
-              }
+              // const a=data.msg[0].knowledges;
+              // const knowcontain=[];
+              // for(var i=0;i<a.length;i++){
+              // const coursecatalog1 = {};   
+              // coursecatalog1['title'] = a[i];
+              // knowcontain.push(coursecatalog1);
+              // }
             
              data.msg&&data.msg[0]&&data.msg[0].catalog&&data.msg[0].catalog.children&&this.setState({
                 coursedata:{
@@ -471,8 +476,8 @@ class Preview extends Component {
                 grade: data.msg[0].grade,
                 subject: data.msg[0].subject,
                 descript: data.msg[0].descript,
-                // knowledges:data.msg[0].knowledges,
-                knowledgelist:knowcontain,
+                knowledges:data.msg[0].knowledges,
+                // knowledgelist:knowcontain,
                 templateId:data.msg[0].slides.templateId,
                 slide: data.msg[0].slides.slide,     
                 fileSize:data.msg[0].fileSize,
@@ -673,35 +678,35 @@ class Preview extends Component {
       });
     }, 1000);
   };
-  handleOk_preview = (id) => {
-    console.log("iiii",this.src)
-    const { sendpreviewcourseid} = this.props;
-    sendpreviewcourseid({
-      type: 'GetpreviewcourseidSuccess',
-      payload:{ 
-        project_id:id,
-        allcoursedata:this.state.allcoursedata,
-      },
+  magnify_preview = () => {
+    const { setCreatecourseState} = this.props;
+    setCreatecourseState({
+      type:'createcourseSuccess',
+      payload:{
+          createCourse_info:this.state.coursedata.createCourse_info,
+          course_id:this.state.coursedata.course_id,
+          // numchat:false,
+      }
     });
-    this.setState({
-      previewcourseid:{ 
-        project_id:id,
-        allcoursedata:this.state.allcoursedata,
-      },
-    });
-    setTimeout(() => {
-      this.getdata();
-      this.getuserdata();
-      this.getcoursedata();
-      // this.getallcoursedata();
-    }, 1000); 
   }
   handleChange = e => {
     this.setState({
       value: e.target.value,
     });
   };
-  
+  handleOk_preview = (id) => {
+    const { sendpreviewcourseid} = this.props;
+    sendpreviewcourseid({
+      type: 'GetpreviewcourseidSuccess',
+      payload:{ 
+        project_id:id,
+        allcoursedata:this.state.allcoursedata,
+        // thumbnail:this.state.thumbnail,
+        // cataloglist:this.state.cataloglist,
+      },
+    });
+    this.context.router.history.push("/Previewcourse");
+  }
   render() {
     const { comments, submitting, value } = this.state;
     const allcourseList = this.state.allcoursedata.map((v, i) => {
@@ -785,7 +790,7 @@ class Preview extends Component {
       <Col span={17} style={{textAlign:"right"}}>
       <img alt="example"src="https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png" height="550px"/>
       <div style={{position:"absolute",bottom:"0%",right:"1%",zIndex:"99",fontSize:"42px"}}> 
-       <Icon type="fullscreen" />
+       <Link to="/Teach"><Icon type="fullscreen" onClick={this.magnify_preview()}/></Link>
       </div>         
       </Col>
       <Col span={7} style={{textAlign:"left"}}>

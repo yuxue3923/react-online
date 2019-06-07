@@ -22,22 +22,6 @@
   background: rgba(255, 255, 255, 0.2);
   margin: 16px;
 }
-
-.sider-header{
-  margin:0 auto;
-}
-.sider-header .sider-menu {
-  float: left;
-  width: 48%;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-  color:#fff;
-  font-size: 18px;
-  font-family: Georgia,Times New Roman,Times,Songti SC,serif;
-  font-weight: 700;
-}
-
 .main-nav{
   display:flex;
   flex-direction:row;
@@ -50,10 +34,27 @@
   padding:0;
   height:100%;
 }
+.nav.col{
+  display:flex;
+  flex-direction:column;
+  padding:0;
+  height:100%;
+}
+.nav.col.tool{
+  margin-right:0;
+}
 .nav .ant-btn{
   height:100%;
   display:flex;
   flex-direction:row;
+  justify-content:center; 
+  align-items: center;
+  margin-right:1%;
+  
+}
+.nav.tool .ant-btn{
+  display:flex;
+  flex-direction:column;
   justify-content:center; 
   align-items: center;
   margin-right:1%
@@ -85,9 +86,20 @@
 .second-button .ant-btn-primary>div{
   margin-top: 0px;
 }
-/* .nav .ant-btn::after{
-  opacity: 0.1;
-} */
+.nav.tool .ant-btn{
+  background-color:rgb(227,227,227);
+  border-color: #fff #1DA569 #fff #fff;
+  width:68px;
+  border-radius:0;
+  margin-right:0;
+  color: #1DA569;
+}
+.nav.tool .ant-btn.at-right-border{ 
+  border-color: #fff;
+}
+.nav.tool .ant-btn .anticon{
+  color: #1DA569;
+}
 .nav .ant-btn>div{
    margin-bottom: 7%;
   font-size: 18px;
@@ -95,14 +107,29 @@
   align-self:center;
   
 }
+.nav.tool .ant-btn>div{
+  margin-bottom:0;
+  font-size: 10px;
+}
 .nav .ant-btn .anticon{
   font-size: 28px;
+  align-self:center;
+}
+.nav .ant-btn .anticon.shrink{
+  font-size: 8px;
   align-self:center;
 }
 /* .nav .anticon{
   align-self:center;
 } */
-
+.head_one{
+  font-size: 20px;
+  margin: 8px 8px 8px 8px;
+}
+.head_two{
+  font-size: 16px;
+  margin: 8px 8px 8px 8px;
+}
 .wid-content{
   width: 100%;
 }
@@ -142,8 +169,25 @@
   width:0;
   height: 0;
 }
-.add-content{
-  margin: 0;
-  padding: 0;
-  font-size:40px;
+.ant-carousel{
+  /* display: flex; */
+}
+
+  
+.ant-carousel .slick-list .slick-track .slick-slide {
+  display: flex;
+  /* text-align: center;  */
+  justify-content:center; 
+  align-items: center; 
+  height: 100%;
+  /* line-height: 160px; */
+  background: #364d79;
+  /* overflow: hidden; */
+}
+
+.ant-carousel .slick-slide img{
+  align-self: center;
+}
+.ant-carousel .slick-slide h3 {
+  color: #fff;
 }

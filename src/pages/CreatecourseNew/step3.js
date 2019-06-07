@@ -57,7 +57,7 @@ onClick_pre() {
   </div>
       <div className="App" style={{ padding: '15px' }}>
           {/* <div style={{fontSize:25,}}>步骤3</div> */}
-          <Link to='APP'><Button type="primary">完成</Button> </Link>
+          <Link to='/APP'><Button type="primary">完成</Button> </Link>
           <Button onClick={this.onClick_pre.bind(this)}>上一步</Button>
       </div>
       </div>

@@ -156,7 +156,7 @@ formData.templateId = deepClone(temp.createCourse_info.slides.templateId)
       success: function (data) {
           if (data.errorCode === 0) {
               console.log('成功更新课件:',data);
-              message.success('成功更新课件~');
+              // message.success('成功更新课件~');
               console.log(this.state.coursecatalog);
               setCreatecourseState({
                   type:'createcourseSuccess',
