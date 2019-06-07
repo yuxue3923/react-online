@@ -9,7 +9,7 @@ import srender from 'srenderlib'
 
 var isVisible = true;
 var srs= [];
-class Teach extends Component {
+class MagnifyPreview extends Component {
     static contextTypes = {
         router: PropTypes.object
     }
@@ -138,7 +138,7 @@ class Teach extends Component {
   }
 }
 
-const Teach_Index=Form.create()(Teach);
+const MagnifyPreview_Index=Form.create()(MagnifyPreview);
 function  mapStateToProps(state) {
   return{
      login_info:state.reducer_login.login_info,
@@ -152,4 +152,4 @@ function mapDispatchToProps(dispatch){
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Teach_Index);
+)(MagnifyPreview_Index);

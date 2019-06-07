@@ -790,7 +790,7 @@ class Preview extends Component {
       <Col span={17} style={{textAlign:"right"}}>
       <img alt="example"src="https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png" height="550px"/>
       <div style={{position:"absolute",bottom:"0%",right:"1%",zIndex:"99",fontSize:"42px"}}> 
-       <Link to="/Teach"><Icon type="fullscreen" onClick={this.magnify_preview()}/></Link>
+       <Link to="/MagnifyPreview"><Icon type="fullscreen" onClick={this.magnify_preview()}/></Link>
       </div>         
       </Col>
       <Col span={7} style={{textAlign:"left"}}>

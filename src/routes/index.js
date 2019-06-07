@@ -17,7 +17,7 @@ import User from '../pages/User'
 import Updatecourse from '../pages/Updatecourse'
 import Reviewcourse from '../pages/reviewcourse'
 import Page from './Page.js';
-import Teach from '../pages/Teach'
+import MagnifyPreview from '../pages/MagnifyPreview'
 const store=createStore(Reducer)
 export default class RouterIndex extends Component {
     render() {
@@ -35,7 +35,7 @@ export default class RouterIndex extends Component {
                 <Route path="/Updatecourse" component={Updatecourse}></Route>
                 <Route path="/Createcourse" component={Createcourse}></Route>
                 <Route path="/pagefirst" component={pagefirst}></Route>
-                <Route path="/Teach" component={Teach}></Route>
+                <Route path="/MagnifyPreview" component={MagnifyPreview}></Route>
                 <Route path="/Tempreview" component={Tempreview}></Route>
                 <Route path="/User" component={User}></Route>
                 <Route path="/Reviewcourse" component={Reviewcourse}></Route>
