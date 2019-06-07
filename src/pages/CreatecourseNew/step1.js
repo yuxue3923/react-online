@@ -178,9 +178,9 @@ onClick_next() {
   this.setState({ 
     modalvisible:false,
     current: 1 ,})
+    this.creatcourse();
   setTimeout(() => {
       this.props.GetStates(this.state.current);
-      this.creatcourse();
   }, 100);
 }
 handleSubmit(e) {

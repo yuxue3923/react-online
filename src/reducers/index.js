@@ -47,10 +47,20 @@ function  reducer_previewcourseid(state = {},action) {
             return state;
     }
 }
+function  reducer_echartsecdata(state = {},action) {
+    switch (action.type) {
+        case 'echartsecdataSuccess':
+            return { echartsecdata: action.payload};  
+        default:
+            return state;
+           
+    }  
+}   
 export default combineReducers({
     reducer_login,
     reducer_echarts,
     reducer_createcourse,
     reducer_userupdatecourseid,
     reducer_previewcourseid,
+    reducer_echartsecdata,
 })
