@@ -8,7 +8,7 @@ const MyIcon = Icon.createFromIconfontCN({
 });
 
 const fileNameAndIconList = [{name:"新建",icon:"file-add"},{name:"保存",icon:"save"},{name:"分享",icon:"share-alt"},{name:"导出",icon:"import"}];
-const fileFns = [function(){console.log("I'm fileFn1")},function(){console.log("I'm fileFn2")},function(){console.log("I'm fileFn3")},function(){console.log("I'm fileFn4")}];
+const fileFns = [function(){console.log("I'm fileFn%")},function(){console.log("I'm fileFn2")},function(){console.log("I'm fileFn3")},function(){console.log("I'm fileFn4")}];
 //const fileMsg = fileNameAndIconList.reduce((acc,curr,i)=>acc.concat([Object.assign({},curr,{fn:fileFns[i]})]),[]);
 const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
 /***
@@ -58,8 +58,8 @@ const attrMsg = merge(merge(attrNameList,attrIconList,"icon"),attrFns,"fns");
  */
 const groupNameList = [{name:'邀请'},{name:'交流'},{name:'授课'},{name:'人员'}];
 const groupIconList = ['appstore','appstore','appstore','appstore'];
-const groupFns = [];
-const groupMsg = merge(merge(groupNameList,groupIconList,"icon"),groupFns,"fns");
+const groupFns = [function(){console.log("邀请")},function(){console.log("交流")},function(){console.log("授课")},function(){console.log("人员")}];
+const groupMsg = merge(merge(groupNameList,groupIconList,"icon"),groupFns,"fn");
 /**
  * 团队按钮
  */
