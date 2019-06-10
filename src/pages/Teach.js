@@ -14,9 +14,10 @@ var prePage = 0;
 var s; //定义路径对象
 var sL = []; //路径数组
 var isDraw = false;
+var drawWidth = 2;
 function pen1(e) {
     isDraw = true; //表示正在画线了
-    s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke: 'rgba(220, 20, 60, 0.8)',lineWidth: 2},draggable:true,});//初始化线条
+    s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke: 'rgba(220, 20, 60, 0.8)',lineWidth: drawWidth},draggable:true,});//初始化线条
     srs[prePage].add(s); //将线条添加到图层上
     }
 function pen2(e) {
