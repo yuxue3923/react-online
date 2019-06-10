@@ -4,7 +4,7 @@ import SndBtn from './SndBtn'
 import { mergeObjectArr as merge} from './util'
 
 const fileNameAndIconList = [{name:"新建",icon:"file-add"},{name:"保存",icon:"save"},{name:"分享",icon:"share-alt"},{name:"导出",icon:"import"}];
-const fileFns = [function(){console.log("I'm fileFn1")},function(){console.log("I'm fileFn2")},function(){console.log("I'm fileFn3")},function(){console.log("I'm fileFn4")}];
+const fileFns = [function(){console.log("I'm fileFn%")},function(){console.log("I'm fileFn2")},function(){console.log("I'm fileFn3")},function(){console.log("I'm fileFn4")}];
 //const fileMsg = fileNameAndIconList.reduce((acc,curr,i)=>acc.concat([Object.assign({},curr,{fn:fileFns[i]})]),[]);
 const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
 /***
@@ -57,9 +57,15 @@ const attrMsg = merge(merge(attrNameList,attrIconList,"MyIcon"),attrPopos,"popo"
  * 属性按钮
  */
 const groupNameList = [{name:'邀请'},{name:'交流'},{name:'授课'},{name:'人员'}];
+
 const groupIconList = ['icon-useradd','icon-talk','icon-teach','icon-users'];
-const groupFns = [];
-const groupMsg = merge(merge(groupNameList,groupIconList,"MyIcon"),groupFns,"fn");
+const groupFns = [
+    function(){console.log("邀请")},
+    function(){console.log("交流")},
+    function(){console.log("授课"); this.linkTo("/Teach");/* this.context.router.history.push("/APP") */},
+    function(){console.log("人员")}
+];
+const groupMsg = merge(merge(groupNameList,groupIconList,"icon"),groupFns,"fn");
 /**
  * 团队按钮
  */
@@ -67,7 +73,9 @@ export default class Nav extends Component {
     add=(type,colortype)=>{
         this.props.add(type,colortype);
     }
-
+    linkTo=(url)=>{
+        this.props.linkTo(url)
+    }
     render() {
         return (
         <div className="main-nav">
@@ -116,7 +124,7 @@ export default class Nav extends Component {
                 </Popover>
             </div>
             <div className="nav reverse" style={{width:"100%"}}>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={groupMsg} add={this.add}/>} overlayClassName="self-popover">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={groupMsg} add={this.add} linkTo={this.linkTo}/>} overlayClassName="self-popover">
                     <Button type="primary">
                     <Icon type="team"/>
                         <div>团队</div>

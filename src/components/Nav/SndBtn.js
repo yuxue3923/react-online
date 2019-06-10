@@ -37,6 +37,9 @@ export default class SndBtn extends Component {
         }
     }
 
+    linkTo=(url)=>{
+        this.props.linkTo(url)
+    }
     render() {
         const len = this.props.msgArr.length;
         const list = this.props.msgArr.map((msg,i)=><div key={i} className="list-item">{this.choicePopover(msg,i,len)}</div>)
