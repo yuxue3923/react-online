@@ -58,7 +58,12 @@ const attrMsg = merge(merge(attrNameList,attrIconList,"icon"),attrFns,"fns");
  */
 const groupNameList = [{name:'邀请'},{name:'交流'},{name:'授课'},{name:'人员'}];
 const groupIconList = ['appstore','appstore','appstore','appstore'];
-const groupFns = [function(){console.log("邀请")},function(){console.log("交流")},function(){console.log("授课")},function(){console.log("人员")}];
+const groupFns = [
+    function(){console.log("邀请")},
+    function(){console.log("交流")},
+    function(){console.log("授课"); this.linkTo("/Teach");/* this.context.router.history.push("/APP") */},
+    function(){console.log("人员")}
+];
 const groupMsg = merge(merge(groupNameList,groupIconList,"icon"),groupFns,"fn");
 /**
  * 团队按钮
@@ -68,7 +73,9 @@ export default class Nav extends Component {
     add=(type,colortype)=>{
         this.props.add(type,colortype);
     }
-
+    linkTo=(url)=>{
+        this.props.linkTo(url)
+    }
     render() {
         return (
         <div className="main-nav">
@@ -117,7 +124,7 @@ export default class Nav extends Component {
                 </Popover>
             </div>
             <div className="nav reverse" style={{width:"100%"}}>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={groupMsg} add={this.add}/>} overlayClassName="self-popover">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={groupMsg} add={this.add} linkTo={this.linkTo}/>} overlayClassName="self-popover">
                     <Button type="primary">
                     <Icon type="appstore"/>
                         <div>团队</div>

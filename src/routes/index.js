@@ -5,7 +5,7 @@ import {createStore} from 'redux';
 import {Provider}from 'react-redux';
 import Reducer from '../reducers/index.js';
 import App from '../App'
-import Edit from '../pages/Edit'
+import Edit from '../pages/Edit/'
 import Account from '../pages/Account/Account'
 import Access from '../pages/Access'
 import Register from '../pages/Register'
