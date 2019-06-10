@@ -12,7 +12,20 @@
 .trigger:hover {
   color: #1890ff;
 }
-
+.sider-header{
+  margin:0 auto;
+}
+.sider-header .sider-menu {
+  float: left;
+  width: 48%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color:#fff;
+  font-size: 18px;
+  font-family: Georgia,Times New Roman,Times,Songti SC,serif;
+  font-weight: 700;
+}
 .single-viewer {
   height: 32px;
   margin: 16px;
