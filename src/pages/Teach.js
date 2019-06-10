@@ -143,7 +143,8 @@ class Teach extends Component {
             srs[this.state.page].initWithOthers(content[this.state.page].media);
         }
        // if(this.props.page-prePage===0);
-      
+      console.log(dom.childNodes.length)
+       if(dom.childNodes.length === 0) {this.componentWillMount();return}
        dom.replaceChild(srs[this.state.page].painter._domRoot,dom.childNodes[0]);
        
     }

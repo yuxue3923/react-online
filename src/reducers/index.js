@@ -1,5 +1,9 @@
 import { combineReducers } from "redux";
-function  reducer_login(state = {},action) {
+import defaultState from './defaultState'
+
+
+
+function  reducer_login(state = defaultState,action){
     switch (action.type) {
         case 'LoginSuccess':
             return { login_info: action.payload};          
