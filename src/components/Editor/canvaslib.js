@@ -132,7 +132,7 @@ function Pen(flag,page){
     srs[page].on('mousedown',pen1);
     srs[page].on('mousemove',pen2);
     srs[page].on('mouseup',pen3);
-    
+
 }
 /**画笔 */
 
@@ -184,7 +184,7 @@ function add(type,colorType,page,callback){
             break;
         case 'tisogon':
             Pen('tisogon',page)
-            var tisogon=new srender.Isogon({shape:{x:300,y:300,r:50,n:3},style:{fill: 'none',stroke: 'green'},draggable:true})
+            var tisogon=new srender.Isogon({shape:{x:300,y:300,r:50,n:3},style:{fill: 'none',stroke:(colorType?colorType:'green')},draggable:true})
             sr.add(tisogon);
             break;
         case 'fisogon':
@@ -234,9 +234,8 @@ function add(type,colorType,page,callback){
             console.log("Sorry,no shape to draw")
             return false
     } 
-    
-   
 }
+
 export default class Editor extends React.Component {
     constructor(props, context) {
         super(props, context)

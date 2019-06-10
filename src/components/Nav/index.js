@@ -3,10 +3,6 @@ import { Icon,Button,Popover,Drawer} from 'antd';
 import SndBtn from './SndBtn'
 import { mergeObjectArr as merge} from './util'
 
-const MyIcon = Icon.createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_981127_k7yilt2ebjs.js',
-});
-
 const fileNameAndIconList = [{name:"新建",icon:"file-add"},{name:"保存",icon:"save"},{name:"分享",icon:"share-alt"},{name:"导出",icon:"import"}];
 const fileFns = [function(){console.log("I'm fileFn1")},function(){console.log("I'm fileFn2")},function(){console.log("I'm fileFn3")},function(){console.log("I'm fileFn4")}];
 //const fileMsg = fileNameAndIconList.reduce((acc,curr,i)=>acc.concat([Object.assign({},curr,{fn:fileFns[i]})]),[]);
@@ -17,53 +13,56 @@ const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
 const editNameList = [{name:'新增'},{name:'undo'},{name:'redo'}];
 const editIconList = ['file-add','undo','redo'];
 const editFns = [];
-const editMsg = merge(merge(editNameList,editIconList,"icon"),editFns,"fns");
+const editMsg = merge(merge(editNameList,editIconList,"icon"),editFns,"fn");
 /**
  * 编辑按钮
  */
 const imbortNameList = [{name:'PDF'},{name:'图片'},{name:'音视频'}];
 const imbortIconList = ['file-pdf','picture','play-square'];
 const imbortFns = [];
-const imbortMsg = merge(merge(imbortNameList,imbortIconList,"icon"),imbortFns,"fns");
+const imbortMsg = merge(merge(imbortNameList,imbortIconList,"icon"),imbortFns,"fn");
 /**
  * 导入按钮
  */
 const shapeNameList = [{name:'矩形'},{name:'三角形'},{name:'圆形'}];
-const shapeIconList = ['appstore','appstore','appstore'];
+const shapeIconList = ['icon-juxing','icon-sanjiaoxing','icon-yuanxingweixuanzhong'];
 const shapeFns = [function(){this.add('rect')},function(){this.add('tisogon')},function(){this.add('circle')}];
 const shapeMsg = merge(merge(shapeNameList,shapeIconList,"MyIcon"),shapeFns,"fn");
+
 /**
  * 形状按钮
  */
 const textNameList = [{name:'边框'},{name:'填充'},{name:'字体'}];
-const textIconList = ['appstore','appstore','appstore'];
+const textIconList = ['icon-juxing-biankuang','icon-rect','icon-zitishezhi'];
 const textFns = [];
-const textMsg = merge(merge(textNameList,textIconList,"icon"),textFns,"fns");
+const textMsg = merge(merge(textNameList,textIconList,"MyIcon"),textFns,"fn");
 /**
  *文本按钮
  */
 const penNameList = [{name:'粗细'},{name:'颜色'},{name:'橡皮'}];
-const penIconList = ['appstore','appstore','appstore'];
+const penIconList = ['icon-cuxi','icon-yanse','icon-xiangpi'];
 const penFns = [];
-const penMsg = merge(merge(penNameList,penIconList,"icon"),penFns,"fns");
+const penMsg = merge(merge(penNameList,penIconList,"MyIcon"),penFns,"fn");
 /**
  * 画笔按钮
  */
-const attrNameList = [{name:'颜色'},{name:'透明度'},{name:'大小'},{name:'角度'}];
-const attrIconList = ['appstore','appstore','appstore','appstore'];
-const attrFns = [];
-const attrMsg = merge(merge(attrNameList,attrIconList,"icon"),attrFns,"fns");
+const attrNameList = [{name:'颜色'},{name:'透明度'},{name:'大小'},{name:'粗细'},{name:'角度'}];
+const attrIconList = ['icon-yanse','icon-icon204','icon-daxiao','icon-cuxi','icon-angle'];
+//const attrFns = [function(){},function(){},function(){},function(){},function(){}];
+const attrPopos = ['color','diaphaneity','size','thickness','angel'];
+const attrMsg = merge(merge(attrNameList,attrIconList,"MyIcon"),attrPopos,"popo");
+
+
 /**
  * 属性按钮
  */
 const groupNameList = [{name:'邀请'},{name:'交流'},{name:'授课'},{name:'人员'}];
-const groupIconList = ['appstore','appstore','appstore','appstore'];
+const groupIconList = ['icon-useradd','icon-talk','icon-teach','icon-users'];
 const groupFns = [];
-const groupMsg = merge(merge(groupNameList,groupIconList,"icon"),groupFns,"fns");
+const groupMsg = merge(merge(groupNameList,groupIconList,"MyIcon"),groupFns,"fn");
 /**
  * 团队按钮
  */
-
 export default class Nav extends Component {
     add=(type,colortype)=>{
         this.props.add(type,colortype);
@@ -81,37 +80,37 @@ export default class Nav extends Component {
                 </Popover>
                 <Popover placement="bottomLeft" content={<SndBtn msgArr={editMsg} add={this.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
-                        <Icon type="appstore"/>
+                        <Icon type="form"/>
                         <div>编辑</div>
                     </Button>
                 </Popover>
                 <Popover placement="bottomLeft" content={<SndBtn msgArr={imbortMsg} add={this.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
-                        <Icon type="appstore"/>
+                        <Icon type="import"/>
                         <div>导入</div>
                     </Button>
                 </Popover>
                 <Popover placement="bottomLeft" content={<SndBtn msgArr={shapeMsg} add={this.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
-                        <Icon type="appstore"/>
+                        <Icon type="bulb"/>
                         <div>形状</div>
                     </Button>
                 </Popover>
                 <Popover placement="bottomLeft" content={<SndBtn msgArr={penMsg} add={this.add}/>} overlayClassName="self-popover">
                     <Button type="primary" onClick={this.add.bind(this,'pen')}>
-                        <Icon type="appstore"/>
+                        <Icon type="edit"/>
                         <div>画笔</div>
                     </Button>
                 </Popover>
                 <Popover placement="bottomLeft" content={<SndBtn msgArr={textMsg} add={this.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
-                        <Icon type="appstore"/>
+                        <Icon type="font-size"/>
                         <div>文本</div>
                     </Button>
                 </Popover>
                 <Popover placement="bottomLeft" content={<SndBtn msgArr={attrMsg} add={this.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
-                        <Icon type="appstore"/>
+                        <Icon type="setting"/>
                         <div>属性</div>
                     </Button>
                 </Popover>
@@ -119,16 +118,16 @@ export default class Nav extends Component {
             <div className="nav reverse" style={{width:"100%"}}>
                 <Popover placement="bottomLeft" content={<SndBtn msgArr={groupMsg} add={this.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
-                    <Icon type="appstore"/>
+                    <Icon type="team"/>
                         <div>团队</div>
                     </Button>
                 </Popover>
                 <Button type="primary" >
-                    <Icon type="appstore"/>
+                    <Icon type="user"/>
                     <div> 个人 </div>
                 </Button>
                 <Button type="primary" style={{marginLeft:"10%"}} onClick={this.props.showResource}>
-                    <Icon type="appstore"/>
+                    <Icon type="hdd"/>
                     <div> 资源 </div>
                 </Button>
                 <Drawer
