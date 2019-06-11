@@ -222,8 +222,8 @@ onClick_pre() {
 }
   render() {
     return (
-      <div>
-        <div >
+      <div style={{overflow:"scroll",height:window.screen.availHeight-250,width:window.screen.availWidth}}>
+        <div>
 
 {/* Echarts—Tree添加节点        */}
 <Layout style={{ padding: '10px 0', background: '#fff' }}>

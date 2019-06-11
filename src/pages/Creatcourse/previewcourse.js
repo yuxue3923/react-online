@@ -651,7 +651,7 @@ class Preview extends Component {
           this.getuserdata();
           this.getcoursedata();
           // this.getallcoursedata();
-        }, 1000); 
+        }, 100); 
       }
   handleSubmit = () => {
     if (!this.state.value) {
@@ -705,7 +705,15 @@ class Preview extends Component {
         // cataloglist:this.state.cataloglist,
       },
     });
-    this.context.router.history.push("/Previewcourse");
+    
+        setTimeout(() => {
+          this.getprops();
+          this.getdata();
+          this.getuserdata();
+          this.getcoursedata();
+          // this.getallcoursedata();
+        }, 100); 
+    // this.context.router.history.push("/Previewcourse");
   }
   render() {
     const { comments, submitting, value } = this.state;
@@ -784,8 +792,8 @@ class Preview extends Component {
     //   }
 
     return (
-      <div style={{overflow:"scroll"}}>
-      <Row style={{margin:"20px 20px 0px 20px",height:"100%"}}>
+      <div style={{overflow:"scroll",height:window.screen.availHeight-50,width:window.screen.availWidth}}>
+      <Row style={{margin:"20px 20px 0px 20px"}}>
     
       <Col span={17} style={{textAlign:"right"}}>
       <img alt="example"src="https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png" height="550px"/>
@@ -875,7 +883,7 @@ class Preview extends Component {
        </Col>
       </Row>
       </Row>
-      <Row>
+      <Row  style={{margin:"0px 10px 0px 10px"}}>
       <Divider>相关评论</Divider>  
       <div>
         {comments.length > 0 && <CommentList comments={comments} />}

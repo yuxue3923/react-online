@@ -238,7 +238,7 @@ showModal = () => {
 handleCancel = () => {
   this.setState({ modalvisible: false });
   this.creatcourse();
-  this.context.router.history.push("/APP");
+  this.context.router.history.push("/Edit");
 };
 
 
@@ -373,10 +373,10 @@ handleCancel = () => {
           onCancel={this.handleCancel}
           footer={[
            <Button key="back" onClick={this.handleCancel}>
-            手动创建
+            自动创建
             </Button>,
             <Button key="submit" type="primary" onClick={this.onClick_next.bind(this)}>
-             自动创建
+             手动创建
            </Button>
           ]}
         >

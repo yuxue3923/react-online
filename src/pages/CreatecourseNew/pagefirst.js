@@ -27,7 +27,7 @@ class pagefirst extends Component {
   constructor(props,context){
     super(props,context);
     this.state = {
-      current: 0,
+      current:0,
       step_content: [],
     };
     Object.assign(this.state, this.props)

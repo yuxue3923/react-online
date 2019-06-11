@@ -30,7 +30,7 @@ onClick_pre() {
       </Card>
     );
     return (
-      <div>
+      <div style={{overflow:"scroll",height:window.screen.availHeight-250,width:window.screen.availWidth}}> 
         <div style={{ background: '#ECECEC', padding: '30px' }}>
     <Row gutter={16} style={{ padding: '15px' }}>
       <Col span={8}>
@@ -57,7 +57,7 @@ onClick_pre() {
   </div>
       <div className="App" style={{ padding: '15px' }}>
           {/* <div style={{fontSize:25,}}>步骤3</div> */}
-          <Link to='/APP'><Button type="primary">完成</Button> </Link>
+          <Link to='/Edit'><Button type="primary">完成</Button> </Link>
           <Button onClick={this.onClick_pre.bind(this)}>上一步</Button>
       </div>
       </div>
