@@ -33,7 +33,9 @@ class EditWithBar extends Component {
             return { sourceVisible:!preState.sourceVisible }
         });
     };
-
+    linkTo=(url)=>{
+        this.props.linkTo(url);
+    }
     add=(type,colorType)=>{
         isButton=true;
         this.setState({addType:type,tag:colorType||""})
@@ -75,7 +77,7 @@ class EditWithBar extends Component {
         return (
             <Layout>
                 <Header style={{ background: ' #1DA569', padding:0,}} >
-                    <Nav add={this.add} sourceVisible={this.state.sourceVisible} showResource={this.showResource}></Nav>
+                    <Nav add={this.add} linkTo={this.linkTo} sourceVisible={this.state.sourceVisible} showResource={this.showResource}></Nav>
                 </Header>
                 
                 <Layout style={{padding: ' 24px', margin:'0 3px 0 0'}}>
@@ -120,3 +122,4 @@ class EditWithBar extends Component {
   }
 
   export default EditWithBar;
+

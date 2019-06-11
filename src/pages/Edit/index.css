@@ -12,7 +12,20 @@
 .trigger:hover {
   color: #1890ff;
 }
-
+.sider-header{
+  margin:0 auto;
+}
+.sider-header .sider-menu {
+  float: left;
+  width: 48%;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color:#fff;
+  font-size: 18px;
+  font-family: Georgia,Times New Roman,Times,Songti SC,serif;
+  font-weight: 700;
+}
 .single-viewer {
   height: 32px;
   margin: 16px;
@@ -65,6 +78,7 @@
 }
 .second-button{
   padding:5px;
+  display: inline-block;
 }
 .second-button .ant-btn-primary{
   background-color:#fff;
@@ -74,12 +88,40 @@
   font-family: Georgia,Times New Roman,Times,Songti SC,serif;
   font-weight: 700;
 }
-.second-button .ant-btn-primary.at-right-border{
+.second-button .ant-btn-primary .at-right-border{
+  margin: 0%;
+  padding: 0%;
   background-color:#fff;
   border-color: #fff;
   color: #1DA569;
   border-radius:0;
 }
+.third-button{
+  padding:5px;
+  display: inline-block;
+}
+.third-button .ant-btn-primary{
+  background-color:#fff;
+  border-color: #fff #1DA569 #fff #fff;
+  color: #1DA569;
+  border-radius:0;
+}
+.third-button .ant-btn-primary .at-right-border{
+  margin: 0%;
+  padding: 0%;
+  background-color:#fff;
+  border-color: #fff;
+  color: #1DA569;
+  border-radius:0;
+}
+
+.second-button .list-item{
+  margin: 0%;
+  padding: 0%;
+  border-radius:0;
+  float:left;
+}
+
 .second-button .ant-btn-primary .anticon{
   color: #1DA569;
 }
@@ -101,11 +143,10 @@
   color: #1DA569;
 }
 .nav .ant-btn>div{
-   margin-bottom: 7%;
+  margin-bottom: 7%;
   font-size: 18px;
   font-family: Georgia,Times New Roman,Times,Songti SC,serif;
   align-self:center;
-  
 }
 .nav.tool .ant-btn>div{
   margin-bottom:0;

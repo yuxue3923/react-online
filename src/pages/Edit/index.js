@@ -7,7 +7,7 @@ import {localhost} from '../../config'
 import EditWithBar from '../../components/Editor'
 import DrawView from '../../components/ZoomPic/drawerview'
 import io from 'socket.io-client'
-
+import PropTypes from "prop-types"
 const { Header, Sider} = Layout;
 
 var MyDeck = []
@@ -25,6 +25,9 @@ function deepClone(obj){
 }
 
 class Edit extends Component {
+  static contextTypes={
+    router:PropTypes.object
+  }
   constructor(props, context) {
     super(props, context)
     // this.initPie = this.initPie.bind(this)
@@ -472,6 +475,10 @@ class Edit extends Component {
   });
 
   }
+  linkTo=(url)=>{
+    console.log(this)
+    this.context.router.history.push(url)
+  }
   sync(objectList){
   //  console.log(objectList)
   // console.log(MyDeck) ; //浅复制不太对
@@ -861,6 +868,7 @@ class Edit extends Component {
           </DrawView>
         </Sider>
         <EditWithBar
+          linkTo={this.linkTo}
           onCollapse={this.onCollapse}
           pageLength={MyDeck.length}
           newSlide={this.newSlide}
@@ -884,7 +892,7 @@ class Edit extends Component {
     );
   }
 }
-const App_Index=Form.create()(Edit);
+const Edit_Index=Form.create()(Edit);
 function  mapStateToProps(state) {
   return{
     login_info:state.reducer_login.login_info,
@@ -900,4 +908,4 @@ function mapDispatchToProps(dispatch){
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(App_Index);
+)(Edit_Index);
