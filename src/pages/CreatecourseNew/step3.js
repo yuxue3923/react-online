@@ -25,7 +25,7 @@ onClick_pre() {
  
   render() {
     return (
-      <div>
+      <div  style={{overflow:"scroll",height:window.screen.availHeight-200,width:window.screen.availWidth}}>
       <div style={{ background: '#ECECEC', padding: '30px' }}>
   <Row gutter={16} style={{ padding: '15px' }}>
   <Col span={8}>
