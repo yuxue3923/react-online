@@ -796,7 +796,7 @@ class Preview extends Component {
       <Row style={{margin:"20px 20px 0px 20px"}}>
     
       <Col span={17} style={{textAlign:"right"}}>
-      <img alt="example"src="https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png" height="550px"/>
+      <img alt="example"src="http://img.1ppt.com/uploads/allimg/1811/1_181110204527_1.jpg" width="900px" height="550px"/>
       <div style={{position:"absolute",bottom:"0%",right:"1%",zIndex:"99",fontSize:"42px"}}> 
        <Link to="/MagnifyPreview"><Icon type="fullscreen" onClick={this.magnify_preview()}/></Link>
       </div>         
