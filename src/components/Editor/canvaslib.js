@@ -228,10 +228,11 @@ function add(type,colorType,page,callback){
         case 'thickness':
             Pen('thickness',page)
             callback().attr({style: {lineWidth: colorType}})
+            break;
         case 'undo':
             //  Pen('undo')
             sr.undo();
-            break
+            break;
         case 'redo':
             //   Pen('redo')
             sr.redo();
