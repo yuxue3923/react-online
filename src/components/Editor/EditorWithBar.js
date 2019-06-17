@@ -203,7 +203,7 @@ const dgraph=function(fh,fheart,fa){
               <Button type="primary">
                  <Icon className="iconsize" type="eye"/>
                </Button>
-          </div> 
+          </div>
           <div style={{margin:'1px'}}>
                <Button type="primary" onClick = {this.add.bind(this,'redo')}>
                  <Icon className="iconsize" type="redo" />
@@ -216,13 +216,9 @@ const dgraph=function(fh,fheart,fa){
           </div> 
           </div>
           </Col>
-       <Col span={23}> <Editor pageLength={this.props.pageLength} page={this.props.page} userName={this.props.userName} newSlide={this.props.newSlide} pageChoose={this.props.pageChoose} type={isButton&&this.state.addType} tag={this.state.tag}  getToServePage={this.props.getToServePage} pageChange={this.props.pageChange} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent}  stack={isflush&&this.props.initStack} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode}   shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now} dispatchState = {this.props.dispatchState}/></Col>   
+        <Col span={23}> <Editor pageLength={this.props.pageLength} page={this.props.page} userName={this.props.userName} newSlide={this.props.newSlide} pageChoose={this.props.pageChoose} type={isButton&&this.state.addType} tag={this.state.tag}  getToServePage={this.props.getToServePage} pageChange={this.props.pageChange} getThumbnail={this.handleThumbnail} objectList={isflush&&this.props.initContent}  stack={isflush&&this.props.initStack} sync = {this.props.sync} isSingleMode ={this.props.isSingleMode}   shouldCreateSocket = {this.props.shouldCreateSocket} effect_createSocket = {this.props.effect_createSocket} project_id_now = {this.props.project_id_now} dispatchState = {this.props.dispatchState}/></Col>   
       </Row> 
         </div>
-     
-   
-    
-     
     );
     
     }

@@ -38,7 +38,7 @@ class Edit extends Component {
     this.save = this.save.bind(this);
     this.showModal_preview=this.showModal_preview.bind(this);
     this.onCollapse = this.onCollapse.bind(this);
-    this.sendsource = this.sendsource.bind(this);
+    this.getSource = this.getSource.bind(this);
     this.passbyJudge = this.passbyJudge.bind(this)
     this.passbyStack = this.passbyStack.bind(this)
     this.newSlide = this.newSlide.bind(this)
@@ -88,7 +88,7 @@ class Edit extends Component {
       previewvisible: true,
     });
   }
-  sendsource=(source)=>{
+  getSource=(source)=>{
     this.setState({
       source:{
         "r_id":source.r_id,
@@ -813,7 +813,7 @@ class Edit extends Component {
     // project_id_now = createCourse_info.course_id
     console.log("测试多人聊天");
     this.numchat(createCourse_info.course_id);
-    console.log("初次加载课件目录:",createCourse_info.createCourse_info.catalog.children) 
+    console.log("初次加载课件目录:",createCourse_info.createCourse_info.catalog.children)
     this.setcatalog();
   }
 
@@ -864,8 +864,7 @@ class Edit extends Component {
             page={this.state.page}
             thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide}
             newSlide={this.newSlide}
-          >
-          </DrawView>
+          />
         </Sider>
         <EditWithBar
           linkTo={this.linkTo}
@@ -887,7 +886,10 @@ class Edit extends Component {
           shouldCreateSocket={this.state.shouldCreateSocket}
           effect_createSocket={this.effect_createSocket}
           project_id_now={project_id_now||createCourse_info.course_id}
-          dispatchState={this.dispatchState}/>
+          dispatchState={this.dispatchState}
+          resourcelist={this.state.resourcelist}
+          getSource={this.getSource}
+        />
       </Layout>
     );
   }

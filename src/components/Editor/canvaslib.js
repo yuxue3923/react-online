@@ -50,7 +50,6 @@ function resolve(msg,page){
                     sr.attr(el,tag,true)
                     break;
                 case 'style':
-                    
                   //  sr.attr(el,tag)
                     sr.attr(el,"style",false,el.style);
                     break;
@@ -100,9 +99,9 @@ var srs=[];
 var s; //定义路径对象
 var sL = []; //路径数组
 var isDraw = false;
-function pen1(e) {
+function pen1(penSize,penColor) {
     isDraw = true; //表示正在画线了
-    s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke: 'rgba(220, 20, 60, 0.8)',lineWidth: 2},draggable:true,});//初始化线条
+    s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke:penColor?penColor:'rgba(220, 20, 60, 0.8)',lineWidth: penSize?penSize:2},draggable:true,});//初始化线条
     srs[prePage].add(s); //将线条添加到图层上
     }
 function pen2(e) {
@@ -118,8 +117,8 @@ function pen3(e) {
     sL = []; //清空线条路经,若不清空将会和上次画线连接到一起
              // s=null;    //清空线条对象
     }
-         
-function Pen(flag,page){
+
+function Pen(flag,page,penSize,penColor){
     if(!srs[page]) return
     if(flag!=='pen'){
         srs[page].disableDrag(true);
@@ -129,11 +128,11 @@ function Pen(flag,page){
         return;
     }
     srs[page].disableDrag(false);
-    srs[page].on('mousedown',pen1);
+    srs[page].on('mousedown',pen1(penSize,penColor));
     srs[page].on('mousemove',pen2);
     srs[page].on('mouseup',pen3);
-
 }
+
 /**画笔 */
 
 function add(type,colorType,page,callback){
@@ -143,7 +142,7 @@ function add(type,colorType,page,callback){
         page = colorType;
         callback = page;
     } */
-   
+
     if(!srs[page]) return
     else sr = srs[page]
     console.log("instance:",srs[page])
@@ -162,6 +161,12 @@ function add(type,colorType,page,callback){
             Pen('pen',page)
         //    callback()
             break;
+        case 'penSize':
+            Pen('pen',page,colorType)
+            break;
+        case 'penColor':
+            Pen('pen',page,null,colorType)
+            break;
         case 'image':
             Pen('image',page)
             console.log("Sorry,image module to be done")
@@ -174,12 +179,12 @@ function add(type,colorType,page,callback){
             return true;
         case 'house':
             Pen('house',page)
-            var house=new srender.House({shape:{cx:500,cy:300},style:{fill: 'none',stroke: 'green'},draggable:true})
+            var house=new srender.House({shape:{cx:500,cy:300},style:{fill: 'none',stroke:(colorType?colorType:'none')},draggable:true})
             sr.add(house);
             return true;
         case 'apple':
             Pen('apple',page)
-            var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill: 'red',stroke: 'none'},draggable:true})
+            var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill: 'red',stroke:(colorType?colorType:'none')},draggable:true})
             sr.add(apple);
             break;
         case 'tisogon':
@@ -189,21 +194,32 @@ function add(type,colorType,page,callback){
             break;
         case 'fisogon':
             Pen('fisogon',page)
-            var fisogon=new srender.Isogon({shape:{x:400,y:300,r:50,n:5},style:{fill: 'none',stroke: 'blue'}})
+            var fisogon=new srender.Isogon({shape:{x:400,y:300,r:50,n:5},style:{fill: 'none',stroke:(colorType?colorType:'none')}})
             sr.add(fisogon);
             break;
         case 'heart':
             Pen('heart',page)
-            var heart=new srender.Heart({shape:{cx:200,cy:600,width:50,height:50},style:{fill: 'red',stroke: 'none'}})
+            var heart=new srender.Heart({shape:{cx:200,cy:600,width:50,height:50},style:{fill: 'red',stroke:(colorType?colorType:'none')}})
             sr.add(heart);
             break;
+        case 'strokeColor':
+            Pen('color')
+            nowShape=sr.getNowShape()
+            console.log('nowShape:',nowShape)
+            console.log('callback:',callback())
+            sr.changeStrokeColor(callback(),colorType)
+            break;
+        case 'fillColor':
+            Pen('color')
+            nowShape=sr.getNowShape()
+            sr.changeFillColor(callback(),colorType)
+            break;
         case 'undo':
-          //  Pen('undo')
-            console.log("发起撤销")
+            //  Pen('undo')
             sr.undo();
             break
         case 'redo':
-         //   Pen('redo')
+            //   Pen('redo')
             sr.redo();
             break
         case 'color':
@@ -214,18 +230,18 @@ function add(type,colorType,page,callback){
                Pen('text',page)
                var text=new srender.Text({
                 draggable:true,
-                 style:{
-                     x:500,
-                     y:500,
-                     text: '默认文字',
-                     textAlign: 'center',
-                     textVerticalAlign: 'middle',
-                     fontSize: 200,
-                     fontFamily: 'Lato',
-                     fontWeight: 'bolder',
-                     textFill: '#0ff',
-                     blend: 'lighten'
-                 }})
+                style:{
+                    x:500,
+                    y:500,
+                    text: '默认文字',
+                    textAlign: 'center',
+                    textVerticalAlign: 'middle',
+                    fontSize: 200,
+                    fontFamily: 'Lato',
+                    fontWeight: 'bolder',
+                    textFill: '#0ff',
+                    blend: 'lighten'
+                }})
                sr.add(text);
              //  sr.redo(true);
                break
@@ -272,10 +288,8 @@ export default class Editor extends React.Component {
             socket.emit('update page',JSON.stringify(msg))
          }
          var username = 'bing';
-         
-        
            socket.emit('add user', username);
-         
+
            socket.on('login',(data)=>{
                  console.log("client numOfUsers is "+JSON.stringify(data));
                  console.log("client socket.id is"+socket.id);
@@ -306,7 +320,6 @@ export default class Editor extends React.Component {
             sourceXY.x = e.zrX
             sourceXY.y = e.zrY
         })
-
    
         if(this.props.isSingleMode){
 

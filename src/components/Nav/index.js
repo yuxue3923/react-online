@@ -2,9 +2,14 @@ import React, { Component } from 'react';
 import { Icon,Button,Popover,Drawer} from 'antd';
 import SndBtn from './SndBtn'
 import { mergeObjectArr as merge} from './util'
+import Bodysider from '../../components/Resource/sider';
 
 const fileNameAndIconList = [{name:"新建",icon:"file-add"},{name:"保存",icon:"save"},{name:"分享",icon:"share-alt"},{name:"导出",icon:"import"}];
-const fileFns = [function(){console.log("I'm fileFn%")},function(){console.log("I'm fileFn2")},function(){console.log("I'm fileFn3")},function(){console.log("I'm fileFn4")}];
+const fileFns = [function(){this.props.linkTo('pagefirst')},
+                 function(){this.props.save()},
+                 function(){console.log("I'm fileFn3")},
+                 function(){console.log("I'm fileFn4")}
+                ];
 //const fileMsg = fileNameAndIconList.reduce((acc,curr,i)=>acc.concat([Object.assign({},curr,{fn:fileFns[i]})]),[]);
 const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
 /***
@@ -12,7 +17,10 @@ const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
  */
 const editNameList = [{name:'新增'},{name:'undo'},{name:'redo'}];
 const editIconList = ['file-add','undo','redo'];
-const editFns = [];
+const editFns = [function(){},
+                 function(){this.props.add('undo')},
+                 function(){this.props.add('redo')}
+                ];
 const editMsg = merge(merge(editNameList,editIconList,"icon"),editFns,"fn");
 /**
  * 编辑按钮
@@ -26,97 +34,88 @@ const imbortMsg = merge(merge(imbortNameList,imbortIconList,"icon"),imbortFns,"f
  */
 const shapeNameList = [{name:'矩形'},{name:'三角形'},{name:'圆形'}];
 const shapeIconList = ['icon-juxing','icon-sanjiaoxing','icon-yuanxingweixuanzhong'];
-const shapeFns = [function(){this.add('rect')},function(){this.add('tisogon')},function(){this.add('circle')}];
+const shapeFns = [function(){this.props.add('rect')},
+                  function(){this.props.add('tisogon')},
+                  function(){this.props.add('circle')}
+                 ];
 const shapeMsg = merge(merge(shapeNameList,shapeIconList,"MyIcon"),shapeFns,"fn");
-
 /**
  * 形状按钮
  */
 const textNameList = [{name:'边框'},{name:'填充'},{name:'字体'}];
 const textIconList = ['icon-juxing-biankuang','icon-rect','icon-zitishezhi'];
-const textFns = [];
-const textMsg = merge(merge(textNameList,textIconList,"MyIcon"),textFns,"fn");
+const textPopos = ['strokeColor','fillColor','font'];
+const textMsg = merge(merge(textNameList,textIconList,"MyIcon"),textPopos,"popo");
 /**
  *文本按钮
  */
 const penNameList = [{name:'粗细'},{name:'颜色'},{name:'橡皮'}];
 const penIconList = ['icon-cuxi','icon-yanse','icon-xiangpi'];
-const penFns = [];
-const penMsg = merge(merge(penNameList,penIconList,"MyIcon"),penFns,"fn");
+const penPopos = ['penSize','penColor','font'];
+const penMsg = merge(merge(penNameList,penIconList,"MyIcon"),penPopos,"popo");
 /**
  * 画笔按钮
  */
-const attrNameList = [{name:'颜色'},{name:'透明度'},{name:'大小'},{name:'粗细'},{name:'角度'}];
+const attrNameList = [{name:'边框颜色'},{name:'透明度'},{name:'大小'},{name:'粗细'},{name:'角度'}];
 const attrIconList = ['icon-yanse','icon-icon204','icon-daxiao','icon-cuxi','icon-angle'];
-//const attrFns = [function(){},function(){},function(){},function(){},function(){}];
-const attrPopos = ['color','diaphaneity','size','thickness','angel'];
+const attrPopos = ['strokeColor','diaphaneity','size','thickness','angel'];
 const attrMsg = merge(merge(attrNameList,attrIconList,"MyIcon"),attrPopos,"popo");
-
-
 /**
  * 属性按钮
  */
 const groupNameList = [{name:'邀请'},{name:'交流'},{name:'授课'},{name:'人员'}];
-
 const groupIconList = ['icon-useradd','icon-talk','icon-teach','icon-users'];
-const groupFns = [
-    function(){console.log("邀请")},
-    function(){console.log("交流")},
-    function(){console.log("授课"); this.linkTo("/Teach");/* this.context.router.history.push("/APP") */},
-    function(){console.log("人员")}
-];
-const groupMsg = merge(merge(groupNameList,groupIconList,"icon"),groupFns,"fn");
+const groupFns = [function(){console.log("邀请")},
+                  function(){console.log("交流")},
+                  function(){this.props.linkTo("/Teach");},
+                  function(){console.log("人员")}
+                 ];
+const groupMsg = merge(merge(groupNameList,groupIconList,"MyIcon"),groupFns,"fn");
 /**
  * 团队按钮
  */
 export default class Nav extends Component {
-    add=(type,colortype)=>{
-        this.props.add(type,colortype);
-    }
-    linkTo=(url)=>{
-        this.props.linkTo(url)
-    }
     render() {
         return (
         <div className="main-nav">
             <div className="nav" >
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={fileMsg} add={this.add}/>} overlayClassName="self-popover">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={fileMsg} add={this.props.add} save={this.props.save}/>} overlayClassName="self-popover">
                     <Button type="primary">
                         <Icon type="folder" />
                         <div>文件</div>
                     </Button>
                 </Popover>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={editMsg} add={this.add}/>} overlayClassName="self-popover">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={editMsg} add={this.props.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
                         <Icon type="form"/>
                         <div>编辑</div>
                     </Button>
                 </Popover>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={imbortMsg} add={this.add}/>} overlayClassName="self-popover">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={imbortMsg} add={this.props.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
                         <Icon type="import"/>
                         <div>导入</div>
                     </Button>
                 </Popover>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={shapeMsg} add={this.add}/>} overlayClassName="self-popover">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={shapeMsg} add={this.props.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
                         <Icon type="bulb"/>
                         <div>形状</div>
                     </Button>
                 </Popover>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={penMsg} add={this.add}/>} overlayClassName="self-popover">
-                    <Button type="primary" onClick={this.add.bind(this,'pen')}>
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={penMsg} add={this.props.add}/>} overlayClassName="self-popover">
+                    <Button type="primary" onClick={this.props.add.bind(this,'pen')}>
                         <Icon type="edit"/>
                         <div>画笔</div>
                     </Button>
                 </Popover>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={textMsg} add={this.add}/>} overlayClassName="self-popover">
-                    <Button type="primary">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={textMsg} add={this.props.add}/>} overlayClassName="self-popover">
+                    <Button type="primary" onClick={this.props.add.bind(this,'text')}>
                         <Icon type="font-size"/>
                         <div>文本</div>
                     </Button>
                 </Popover>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={attrMsg} add={this.add}/>} overlayClassName="self-popover">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={attrMsg} add={this.props.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
                         <Icon type="setting"/>
                         <div>属性</div>
@@ -124,7 +123,7 @@ export default class Nav extends Component {
                 </Popover>
             </div>
             <div className="nav reverse" style={{width:"100%"}}>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={groupMsg} add={this.add} linkTo={this.linkTo}/>} overlayClassName="self-popover">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={groupMsg} add={this.props.add} linkTo={this.props.linkTo}/>} overlayClassName="self-popover">
                     <Button type="primary">
                     <Icon type="team"/>
                         <div>团队</div>
@@ -148,7 +147,7 @@ export default class Nav extends Component {
                     mask={false}
                     visible={this.props.sourceVisible}
                 >
-                    ........Drawer
+                    <Bodysider resourcelist={this.props.resourcelist} getSource={this.props.getSource}/>
                 </Drawer>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {Layout,Icon,Input,Button,Drawer} from 'antd'
+import {Layout,Input} from 'antd'
 import Editor from './canvaslib'
 import './editbutton.css';
 import Nav from '../Nav'
@@ -8,7 +8,7 @@ import Nav from '../Nav'
 var isButton=false;
 var isflush = true;
 const {TextArea} = Input;
-const { Header, Sider, Content ,Footer} = Layout;
+const { Header, Content ,Footer} = Layout;
 
 class EditWithBar extends Component {
     constructor() {
@@ -36,10 +36,13 @@ class EditWithBar extends Component {
     linkTo=(url)=>{
         this.props.linkTo(url);
     }
+    getSource=(source)=>{
+        this.props.getSource(source);
+    }
     add=(type,colorType)=>{
         isButton=true;
         this.setState({addType:type,tag:colorType||""})
-        //  this.flush(true)
+        //this.flush(true)
     }
     handleThumbnail(src){
         this.props.thumbnail(src)
@@ -53,13 +56,13 @@ class EditWithBar extends Component {
     save(){
       this.props.save()
     }
-    shouldComponentUpdate(nextProps,nextState){
-        //  console.log(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))
-        // console.log(nextProps.initContent === this.props.initContent)
+    shouldComponentUpdate(nextProps,preState,nextState){
+        //console.log(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))
+        //console.log(nextProps.initContent === this.props.initContent)
         //console.log("1:",!(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode))
-        //     console.log("2:",nextProps.message)
+        //console.log("2:",nextProps.message)
         //||(this.props.shouldCreateSocket&&nextProps.shouldCreateSocket!==this.props.shouldCreateSocket)
-       return (isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)===JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode)
+        return (nextProps.resourcelist != this.props.resourcelist)||(preState.sourceVisible != this.state.sourceVisible)||(isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)===JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode)
     }
     componentWillReceiveProps(nextProps){
         //   console.log(nextProps)
@@ -77,7 +80,7 @@ class EditWithBar extends Component {
         return (
             <Layout>
                 <Header style={{ background: ' #1DA569', padding:0,}} >
-                    <Nav add={this.add} linkTo={this.linkTo} sourceVisible={this.state.sourceVisible} showResource={this.showResource}></Nav>
+                    <Nav resourcelist={this.props.resourcelist} getSource={this.getSource} add={this.add} save={this.save} linkTo={this.linkTo} sourceVisible={this.state.sourceVisible} showResource={this.showResource}></Nav>
                 </Header>
                 
                 <Layout style={{padding: ' 24px', margin:'0 3px 0 0'}}>
@@ -109,7 +112,8 @@ class EditWithBar extends Component {
                             shouldCreateSocket={this.props.shouldCreateSocket}
                             effect_createSocket={this.props.effect_createSocket}
                             project_id_now={this.props.project_id_now}
-                            dispatchState={this.props.dispatchState}/>
+                            dispatchState={this.props.dispatchState}
+                            />
                     </Content>
                 </Layout>
                 <Footer style={{ background: '#fff', padding:10 ,margin:10}} className={this.state.sourceVisible?"wid-shrink":"wid-footer"}>
@@ -117,7 +121,6 @@ class EditWithBar extends Component {
                 </Footer>
             </Layout>
         );
-    
     }
   }
 
