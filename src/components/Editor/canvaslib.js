@@ -128,7 +128,7 @@ function Pen(flag,page,penSize,penColor){
         return;
     }
     srs[page].disableDrag(false);
-    srs[page].on('mousedown',pen1(penSize,penColor));
+    srs[page].on('mousedown',pen1.bind(this,penSize,penColor));
     srs[page].on('mousemove',pen2);
     srs[page].on('mouseup',pen3);
 }
@@ -203,17 +203,21 @@ function add(type,colorType,page,callback){
             sr.add(heart);
             break;
         case 'strokeColor':
-            Pen('color')
+            Pen('color',page)
             nowShape=sr.getNowShape()
             console.log('nowShape:',nowShape)
             console.log('callback:',callback())
-            sr.changeStrokeColor(callback(),colorType)
+            sr.changeStrokeColor(nowShape,colorType)
             break;
         case 'fillColor':
-            Pen('color')
+            Pen('color',page)
             nowShape=sr.getNowShape()
             sr.changeFillColor(callback(),colorType)
             break;
+
+        case 'thickness':
+            Pen('thickness',page)
+            callback().attr({style: {lineWidth: colorType}})
         case 'undo':
             //  Pen('undo')
             sr.undo();
@@ -223,7 +227,7 @@ function add(type,colorType,page,callback){
             sr.redo();
             break
         case 'color':
-               Pen('color')
+               Pen('color',page)
                sr.changeFillColor(callback(),colorType);
                break
         case 'text':
@@ -323,7 +327,7 @@ export default class Editor extends React.Component {
    
         if(this.props.isSingleMode){
 
-             !this.props.objectList&&srs[this.props.page].clear()
+            !this.props.objectList&&srs[this.props.page].clear()
        
             this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList)
         }
