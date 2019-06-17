@@ -46,7 +46,7 @@ export default class RouterIndex extends Component {
             <Page>
            {/*  {<Redirect to="/Access"/>} */}
             <Switch>
-                <Route path="/Access" component={Access}></Route>
+                <Route exact path="/" component={Access}> </Route>
                 <Route path="/Account" component={Account}></Route>
                 <Route path="/APP" component={App}></Route>
                 <Route path="/Teach" component={Teach}></Route>
