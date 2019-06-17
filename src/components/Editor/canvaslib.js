@@ -99,10 +99,17 @@ var srs=[];
 var s; //定义路径对象
 var sL = []; //路径数组
 var isDraw = false;
+const penState = {
+    penColor:"rgba(220, 20, 60, 0.8)",
+    penSize:2
+}
 function pen1(penSize,penColor) {
     isDraw = true; //表示正在画线了
-    s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke:penColor?penColor:'rgba(220, 20, 60, 0.8)',lineWidth: penSize?penSize:2},draggable:true,});//初始化线条
+    penState.penColor = penColor?penColor:penState.penColor ;
+    penState.penSize = penSize?penSize:penState.penSize;
+    s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke:penState.penColor,lineWidth: penState.penSize},draggable:true,});//初始化线条
     srs[prePage].add(s); //将线条添加到图层上
+  //  srs[prePage].disableDrag(false);
     }
 function pen2(e) {
     if (isDraw) { //判断是否是画线状态
@@ -111,8 +118,10 @@ function pen2(e) {
         sL.push([x, y]); //将位置存入数组
         s.attr({shape: {pointList: sL,}})
         }
+        srs[prePage].disableDrag(false);
     }
 function pen3(e) {
+   
     isDraw = false; //退出画线状态
     sL = []; //清空线条路经,若不清空将会和上次画线连接到一起
              // s=null;    //清空线条对象
@@ -127,8 +136,8 @@ function Pen(flag,page,penSize,penColor){
         srs[page].off('mouseup',pen3);
         return;
     }
-    srs[page].disableDrag(false);
-    srs[page].on('mousedown',pen1(penSize,penColor));
+    
+    srs[page].on('mousedown',pen1.bind(this,penSize,penColor));
     srs[page].on('mousemove',pen2);
     srs[page].on('mouseup',pen3);
 }
@@ -204,9 +213,10 @@ function add(type,colorType,page,callback){
             break;
         case 'strokeColor':
             Pen('color')
-            nowShape=sr.getNowShape()
             console.log('nowShape:',nowShape)
             console.log('callback:',callback())
+            nowShape=sr.getNowShape()
+            
             sr.changeStrokeColor(callback(),colorType)
             break;
         case 'fillColor':
