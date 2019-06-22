@@ -53,6 +53,11 @@ class EditWithBar extends Component {
     showModal_preview(){
       this.props.showModal_preview()
     }
+    showModal=(type)=>
+    {
+        this.props.showModal(type);
+    }
+
     save(){
       this.props.save()
     }
@@ -80,7 +85,7 @@ class EditWithBar extends Component {
         return (
             <Layout>
                 <Header style={{ background: ' #1DA569', padding:0,}} >
-                    <Nav resourcelist={this.props.resourcelist} getSource={this.getSource} add={this.add} save={this.save} linkTo={this.linkTo} sourceVisible={this.state.sourceVisible} showResource={this.showResource}></Nav>
+                    <Nav resourcelist={this.props.resourcelist} getSource={this.getSource} add={this.add} save={this.save} linkTo={this.linkTo} showModal={this.showModal} showDrawer={this.props.showDrawer} popoverVisibleChange={this.props.popoverVisibleChange} sourceVisible={this.state.sourceVisible} showResource={this.showResource}></Nav>
                 </Header>
                 
                 <Layout style={{padding: ' 24px', margin:'0 3px 0 0'}}>
