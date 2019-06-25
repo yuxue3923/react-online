@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
 import './index.css'
 import $ from 'jquery'
-import {Form,Layout,message} from 'antd'
+import {Form,Layout,message,Badge,Avatar,Modal,Drawer,Input,Icon,Button,Card,Popover} from 'antd'
+import {Link} from 'react-router-dom';
 import {connect} from 'react-redux'
 import {localhost} from '../../config'
 import EditWithBar from '../../components/Editor'
 import DrawView from '../../components/ZoomPic/drawerview'
 import io from 'socket.io-client'
 import PropTypes from "prop-types"
+import Content_Modal from '../../components/Synergy/ContentModal'
+import ChatContent from '../../components/Synergy/Content'
 const { Header, Sider} = Layout;
 
 var MyDeck = []
@@ -15,6 +18,10 @@ var thumbnail = []
 var toServePage = null;
 var project_id_now = 0;
 var share_code_now = 0;
+const {  Content } = Layout;
+const IconAvator = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1009791_ev29rcbfmfr.js',
+});
 
 function handleChange(value) {
   console.log(`selected ${value}`);
@@ -42,6 +49,8 @@ class Edit extends Component {
     this.passbyJudge = this.passbyJudge.bind(this)
     this.passbyStack = this.passbyStack.bind(this)
     this.newSlide = this.newSlide.bind(this)
+    this.showModal = this.showModal.bind(this)
+    this.popoverVisibleChange=this.popoverVisibleChange.bind(this)
   }
   state = {
     collapsed: false,
@@ -82,6 +91,8 @@ class Edit extends Component {
     source:{},
     // templatecourseid:"",
   };
+
+
   //课件预览弹出框
   showModal_preview () {
     this.setState({
@@ -619,7 +630,9 @@ class Edit extends Component {
   });
   }
   popoverVisibleChange = (popoverVisible) => {
-    this.setState({ popoverVisible });
+    console.log("popoverVisibleChange");
+    this.setState({ popoverVisible:!this.state.popoverVisible });
+    console.log(this.state.popoverVisible);
   }
   setModal2Visible = (modal2Visible)=> {
     const{createCourse_info}=this.props;
@@ -628,6 +641,7 @@ class Edit extends Component {
       modal2Visible:modal2Visible,
       popoverVisible:false //选择后让气泡框消失
     });
+
   }
   handleCancel = (e) => {
     console.log(e);
@@ -640,6 +654,7 @@ class Edit extends Component {
     this.setState({ collapsed: !this.state.collapsed, });
   }
   showDrawer = () => {
+    console.log("showDrawer");
     this.setState({
       visible: true,
     });
@@ -801,6 +816,45 @@ class Edit extends Component {
       // });         
     }
   }
+  showModal = (type) => {
+    console.log("showModal")
+    const { createCourse_info,login_info } = this.props;
+    const course_id = createCourse_info.createCourse_info._id;
+    if(project_id_now !== course_id){
+      project_id_now = course_id;
+      if(type === "invite"){
+        $.ajax({
+          url: "http://"+localhost+":3000/api/generateTinyCode?project_id="+course_id,
+          async:false,
+          type: "GET",
+          contentType:"application/json;charset=UTF-8",
+          accepts:"application/json;charset=UTF-8",
+          dataType: "json",
+          beforeSend:function(request){
+            request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+          },
+          success: function (data) {
+              if (data) {
+                  console.log('成功生成短码'+data);
+                  share_code_now = data;
+              }
+              else {
+                  console.log('生成短码失败');
+              }
+          },
+          error: function (xhr, status, err) {
+            console.log("分享失败")
+          }
+      });
+      }
+    }
+  
+    
+    share_code_now&&this.setState({
+      code:share_code_now,
+      modalvisible: true,
+    });
+  }
   componentWillMount(){
     console.log("ss",this.state.thumbnailBase64)
     this.getProjectUserList();
@@ -836,6 +890,32 @@ class Edit extends Component {
 
   render() {
     const {createCourse_info,login_info} = this.props;
+    const text =
+    <div>
+      <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} onClick={this.quitchat.bind(this,createCourse_info.course_id)} size="large" >U</Avatar>
+      </Link><span style={{fontSize:15}}> 当前用户</span>
+      
+    </div>;
+    const userList = this.state.cooperuserlist.map((v, i) => {
+      return (
+        <div style={{margin:'2px'}} >
+             <IconAvator type={this.state.Avatartype[i%5]} className="iconsize"/>
+            <span style={{fontSize:15}}>{v.user_name}</span>
+        </div>
+      );}
+    )
+    const menu = function(param){
+      // const {func1,func2,func3} = param
+      return <Card title="当前在线协同者">
+        {userList}
+      <div style={{margin:'2px'}} onClick={param}>
+        <Icon type="frown" className="iconsize" theme="twoTone"/>
+         <span style={{fontSize:15}}> Join</span>   
+      </div>
+    </Card>
+    }
+
+    
     return (
       <Layout style={{width: '100%', height: '100vh'}}>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed} collapsedWidth={0} breakpoint="xxl" defaultCollapsed width={249}
@@ -868,6 +948,9 @@ class Edit extends Component {
         </Sider>
         <EditWithBar
           linkTo={this.linkTo}
+          showModal={this.showModal}
+          showDrawer={this.showDrawer}
+          popoverVisibleChange={this.popoverVisibleChange}
           onCollapse={this.onCollapse}
           pageLength={MyDeck.length}
           newSlide={this.newSlide}
@@ -890,8 +973,41 @@ class Edit extends Component {
           resourcelist={this.state.resourcelist}
           getSource={this.getSource}
         />
+   
+        <Modal
+         title="邀请成员"
+         visible={this.state.modalvisible}
+         onOk={this.handleOk}
+         onCancel={this.handleCancel}
+       //  footer={null}
+      >
+        <Content_Modal code = {this.state.code} searchuser={this.searchuser.bind(this)} createrelationship={this.createrelationship.bind(this)} />
+      </Modal>
+      <Drawer
+                width={500}
+                title="交流区间"
+                //placement="right"
+                closable={false}
+                onClose={this.onClose}
+                visible={this.state.visible}
+              >
+                <ChatContent coursecatalog={this.state.coursecatalog} Avatartype={this.state.Avatartype} updatechatdata={this.updatechatdata.bind(this)} handlePlus={this.handlePlus.bind(this)}/>
+            
+                
+              </Drawer>
+              <Popover placement="bottomLeft" title={text} content={menu(this.setModal2Visible.bind(this,true))} trigger="click"  visible={this.state.popoverVisible} onVisibleChange={this.popoverVisibleChange}>
+           {//第三个
+           }
+           <Button type="dashed" shape="circle" className="iconsize" >
+            <Icon type="ellipsis" className="iconsize"/>
+           </Button>
+         
+
+         </Popover>
       </Layout>
+
     );
+    
   }
 }
 const Edit_Index=Form.create()(Edit);

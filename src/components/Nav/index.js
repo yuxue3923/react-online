@@ -73,10 +73,10 @@ const attrMsg = merge(merge(attrNameList,attrIconList,"MyIcon"),attrPopos,"popo"
  */
 const groupNameList = [{name:'邀请'},{name:'交流'},{name:'授课'},{name:'人员'}];
 const groupIconList = ['icon-useradd','icon-talk','icon-teach','icon-users'];
-const groupFns = [function(){console.log("邀请")},
-                  function(){console.log("交流")},
+const groupFns = [function(){this.props.showModal("invite")},
+                  function(){this.props.showDrawer()},
                   function(){this.props.linkTo("/Teach");},
-                  function(){console.log("人员")}
+                  function(){this.props.popoverVisibleChange()}
                  ];
 const groupMsg = merge(merge(groupNameList,groupIconList,"MyIcon"),groupFns,"fn");
 /**
@@ -131,7 +131,7 @@ export default class Nav extends Component {
                 </Popover>
             </div>
             <div className="nav reverse" style={{width:"100%"}}>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={groupMsg} add={this.props.add} linkTo={this.props.linkTo}/>} overlayClassName="self-popover">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={groupMsg} add={this.props.add} linkTo={this.props.linkTo} showModal={this.props.showModal} showDrawer={this.props.showDrawer} popoverVisibleChange={this.props.popoverVisibleChange} />} overlayClassName="self-popover">
                     <Button type="primary">
                     <Icon type="team"/>
                         <div>团队</div>
