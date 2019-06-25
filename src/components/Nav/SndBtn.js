@@ -4,7 +4,7 @@ import TrdBtn from './TrdBtn'
 
 
 const MyIcon = Icon.createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_1231848_lebbqw1r21m.js',
+    scriptUrl: '//at.alicdn.com/t/font_1231848_522d6c9esog.js',
 });
 
 export default class SndBtn extends Component {
@@ -33,10 +33,6 @@ export default class SndBtn extends Component {
                         <div>{msg.name}</div>
                     </Button>
         }
-    }
-
-    linkTo=(url)=>{
-        this.props.linkTo(url)
     }
 
     render() {

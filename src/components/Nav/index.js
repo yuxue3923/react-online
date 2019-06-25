@@ -25,18 +25,26 @@ const editMsg = merge(merge(editNameList,editIconList,"icon"),editFns,"fn");
 /**
  * 编辑按钮
  */
-const imbortNameList = [{name:'PDF'},{name:'图片'},{name:'音视频'}];
-const imbortIconList = ['file-pdf','picture','play-square'];
-const imbortFns = [];
-const imbortMsg = merge(merge(imbortNameList,imbortIconList,"icon"),imbortFns,"fn");
+const importNameList = [{name:'PDF'},{name:'图片'},{name:'音视频'}];
+const importIconList = ['file-pdf','picture','play-square'];
+const importFns = [function(){this.props.add('')},
+                   function(){this.props.add('')},
+                   function(){this.props.add('video')}
+                  ];
+const importMsg = merge(merge(importNameList,importIconList,"icon"),importFns,"fn");
 /**
  * 导入按钮
  */
-const shapeNameList = [{name:'矩形'},{name:'三角形'},{name:'圆形'}];
-const shapeIconList = ['icon-juxing','icon-sanjiaoxing','icon-yuanxingweixuanzhong'];
+const shapeNameList = [{name:''},{name:''},{name:''},{name:''},{name:''},{name:''},{name:''},{name:''}];
+const shapeIconList = ['icon-juxing','icon-sanjiaoxing','icon-yuanxingweixuanzhong','icon-star','icon-pingguo','icon-fangzi','icon-aixin','icon-wubianxing'];
 const shapeFns = [function(){this.props.add('rect')},
                   function(){this.props.add('tisogon')},
-                  function(){this.props.add('circle')}
+                  function(){this.props.add('circle')},
+                  function(){this.props.add('star')},
+                  function(){this.props.add('apple')},
+                  function(){this.props.add('house')},
+                  function(){this.props.add('heart')},
+                  function(){this.props.add('fisogon')}
                  ];
 const shapeMsg = merge(merge(shapeNameList,shapeIconList,"MyIcon"),shapeFns,"fn");
 /**
@@ -91,7 +99,7 @@ export default class Nav extends Component {
                         <div>编辑</div>
                     </Button>
                 </Popover>
-                <Popover placement="bottomLeft" content={<SndBtn msgArr={imbortMsg} add={this.props.add}/>} overlayClassName="self-popover">
+                <Popover placement="bottomLeft" content={<SndBtn msgArr={importMsg} add={this.props.add}/>} overlayClassName="self-popover">
                     <Button type="primary">
                         <Icon type="import"/>
                         <div>导入</div>

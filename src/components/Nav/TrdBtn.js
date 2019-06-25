@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { mergeObjectArr as merge} from './util'
-import { Icon,Button} from 'antd';
+import { Icon,Button,Slider,InputNumber,Row,Col} from 'antd';
 
 const MyIcon = Icon.createFromIconfontCN({
-    scriptUrl: '//at.alicdn.com/t/font_1231848_lebbqw1r21m.js',
+    scriptUrl: '//at.alicdn.com/t/font_1231848_522d6c9esog.js',
 });
 
 //边框颜色属性
@@ -17,20 +17,20 @@ const strokeColorFns = [function(){this.props.add('strokeColor','white')},
                        ];
 const strokeColorMsg = merge(strokeColorBtn,strokeColorFns,"fn");
 
-//透明度属性
-const diaphaneityBtn = [{MyIcon:'icon-yuanxingweixuanzhong'},{MyIcon:'icon-red'},{MyIcon:'icon-yellow'},{MyIcon:'icon-blue'},{MyIcon:'icon-green'},{MyIcon:'icon-black'}];
-const diaphaneityFns = [function(){this.props.add('diaphaneity','white')},
-                        function(){this.props.add('diaphaneity','red')},
-                        function(){this.props.add('diaphaneity','yellow')},
-                        function(){this.props.add('tisogon','blue')},
-                        function(){this.props.add('tisogon','green')},
-                        function(){this.props.add('tisogon','black')}
-                       ];
-const diaphaneityMsg = merge(diaphaneityBtn,diaphaneityFns,"fn");
+//填充颜色属性
+const fillColorBtn = [{MyIcon:'icon-white'},{MyIcon:'icon-red'},{MyIcon:'icon-yellow'},{MyIcon:'icon-blue'},{MyIcon:'icon-green'},{MyIcon:'icon-black'}];
+const fillColorFns = [function(){this.props.add('fillColor','white')},
+                      function(){this.props.add('fillColor','red')},
+                      function(){this.props.add('fillColor','yellow')},
+                      function(){this.props.add('fillColor','blue')},
+                      function(){this.props.add('fillColor','green')},
+                      function(){this.props.add('fillColor','black')}
+                     ];
+const fillColorMsg = merge(fillColorBtn,fillColorFns,"fn");
 
 //大小属性
 const thicknessBtn = [{MyIcon:'icon-size1'},{MyIcon:'icon-size2'},{MyIcon:'icon-size3'},{MyIcon:'icon-size4'},{MyIcon:'icon-size5'}];
-const thicknessFns = [function(){this.props.add('size',2)},
+const thicknessFns = [function(){this.props.add('thickness',2)},
                       function(){this.props.add('thickness',4)},
                       function(){this.props.add('thickness',6)},
                       function(){this.props.add('thickness',8)},
@@ -60,6 +60,25 @@ const penColorFns = [function(){this.props.add('penColor','white')},
 const penColorMsg = merge(penColorBtn,penColorFns,"fn");
 
 export default class TrdBtn extends Component {
+    state = {
+        opacityValue: 0,
+        sizeValue: 0,
+    };
+
+    opacityOnChange = value => {
+        this.props.add('opacity',value)
+        this.setState({
+            opacityValue: value,
+        });
+    };
+
+    sizeOnChange = value => {
+        this.props.add('size',value)
+        this.setState({
+            sizeValue: value,
+        });
+    };
+
     choiceIcon=(msg)=>{
         if(msg.icon){
             return <Icon type={msg.icon}/>
@@ -76,8 +95,35 @@ export default class TrdBtn extends Component {
                 {this.choiceIcon(msg)}
             </Button>)
         }
+        if(this.props.popo=='fillColor'){
+            const len = fillColorMsg.length;
+            list = fillColorMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
+                {this.choiceIcon(msg)}
+            </Button>)
+        }
         else if(this.props.popo=='diaphaneity'){
-            //用滑动器设置透明度
+            const inputValue = this.state.opacityValue;
+            return(
+                <Row>
+                    <Col span={12}>
+                        <Slider min={0} max={1} onChange={this.opacityOnChange} value={typeof inputValue === 'number' ? inputValue : 0} step={0.01}/>
+                    </Col>
+                    <Col span={4}>
+                        <InputNumber min={0} max={1} style={{ marginLeft: 16 }} step={0.01} value={inputValue} onChange={this.opacityOnChange}/>
+                    </Col>
+                </Row>)
+        }
+        else if(this.props.popo=='size'){
+            const inputValue = this.state.sizeValue;
+            return(
+                <Row>
+                    <Col span={12}>
+                        <Slider min={1} max={100} onChange={this.sizeOnChange} value={typeof inputValue === 'number' ? inputValue : 0} />
+                    </Col>
+                    <Col span={4}>
+                        <InputNumber min={1} max={100} style={{ marginLeft: 16 }} value={inputValue} onChange={this.sizeOnChange}/>
+                    </Col>
+                </Row>)
         }
         else if(this.props.popo=='penSize'){
             const len = penSizeMsg.length;

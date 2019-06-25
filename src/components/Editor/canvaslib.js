@@ -3,6 +3,8 @@ import srender from 'srenderlib'
 import React from 'react'
 import {localhost} from '../../config'
 import io from 'socket.io-client'
+import {playOrPauseVideo,beginChangeMenu,endChangeMenu,createOrShowMenu,hiddenMenu} from './videoFunc'
+
 function dClone(obj){
     let _obj = JSON.stringify(obj);
     return JSON.parse(_obj)
@@ -121,7 +123,6 @@ function pen2(e) {
         srs[prePage].disableDrag(false);
     }
 function pen3(e) {
-   
     isDraw = false; //退出画线状态
     sL = []; //清空线条路经,若不清空将会和上次画线连接到一起
              // s=null;    //清空线条对象
@@ -185,49 +186,56 @@ function add(type,colorType,page,callback){
             Pen('star',page)
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,draggable:true})
             sr.add(star);
-            return true;
+            break;
         case 'house':
             Pen('house',page)
-            var house=new srender.House({shape:{cx:500,cy:300},style:{fill: 'none',stroke:(colorType?colorType:'none')},draggable:true})
+            var house=new srender.House({shape:{cx:500,cy:300},style:{fill:'none',stroke:(colorType?colorType:'black')},draggable:true})
             sr.add(house);
-            return true;
+            break;
         case 'apple':
             Pen('apple',page)
-            var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill: 'red',stroke:(colorType?colorType:'none')},draggable:true})
+            var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill:'red',stroke:(colorType?colorType:'none')},draggable:true})
             sr.add(apple);
             break;
         case 'tisogon':
             Pen('tisogon',page)
-            var tisogon=new srender.Isogon({shape:{x:300,y:300,r:50,n:3},style:{fill: 'none',stroke:(colorType?colorType:'green')},draggable:true})
+            var tisogon=new srender.Isogon({shape:{x:300,y:300,r:50,n:3},style:{fill:'none',stroke:(colorType?colorType:'green')},draggable:true})
             sr.add(tisogon);
             break;
         case 'fisogon':
             Pen('fisogon',page)
-            var fisogon=new srender.Isogon({shape:{x:400,y:300,r:50,n:5},style:{fill: 'none',stroke:(colorType?colorType:'none')}})
+            var fisogon=new srender.Isogon({shape:{x:400,y:300,r:50,n:5},style:{fill:'none',stroke:(colorType?colorType:'red')}})
             sr.add(fisogon);
             break;
         case 'heart':
             Pen('heart',page)
-            var heart=new srender.Heart({shape:{cx:200,cy:600,width:50,height:50},style:{fill: 'red',stroke:(colorType?colorType:'none')}})
+            var heart=new srender.Heart({shape:{cx:200,cy:600,width:50,height:50},style:{fill:'red',stroke:(colorType?colorType:'red')}})
             sr.add(heart);
             break;
         case 'strokeColor':
             Pen('color')
-            console.log('nowShape:',nowShape)
-            console.log('callback:',callback())
-            nowShape=sr.getNowShape()
-            
             sr.changeStrokeColor(callback(),colorType)
             break;
         case 'fillColor':
             Pen('color',page)
-            nowShape=sr.getNowShape()
             sr.changeFillColor(callback(),colorType)
             break;
-
         case 'thickness':
             Pen('thickness',page)
-            callback().attr({style: {lineWidth: colorType}})
+            sr.changeLineWidth(callback(),colorType)
+            // if(callback()){
+            //     callback().attr({style: {lineWidth: colorType}})
+            // }
+            break;
+        case 'size':
+            Pen('size',page)
+            sr.resize(callback(),colorType)
+            break;
+        case 'opacity':
+            Pen('opacity',page)
+            if(callback()){
+                callback().attr({style: {opacity: colorType}})
+            }
             break;
         case 'undo':
             //  Pen('undo')
@@ -236,35 +244,46 @@ function add(type,colorType,page,callback){
         case 'redo':
             //   Pen('redo')
             sr.redo();
-            break
-        case 'color':
-               Pen('color',page)
-               sr.changeFillColor(callback(),colorType);
-               break
+            break;
         case 'text':
-               Pen('text',page)
-               var text=new srender.Text({
-                draggable:true,
-                style:{
-                    x:500,
-                    y:500,
-                    text: '默认文字',
-                    textAlign: 'center',
-                    textVerticalAlign: 'middle',
-                    fontSize: 200,
-                    fontFamily: 'Lato',
-                    fontWeight: 'bolder',
-                    textFill: '#0ff',
-                    blend: 'lighten'
-                }})
-               sr.add(text);
-             //  sr.redo(true);
-               break
+            Pen('text',page)
+            var text=new srender.Text({
+            draggable:true,
+            style:{
+                x:500,
+                y:500,
+                text: '默认文字',
+                textAlign: 'center',
+                textVerticalAlign: 'middle',
+                fontSize: 200,
+                fontFamily: 'Lato',
+                fontWeight: 'bolder',
+                textFill: '#0ff',
+                blend: 'lighten'
+            }})
+            sr.add(text);
+            //  sr.redo(true);
+            break;
+        case 'video':
+            Pen('video',page)
+            var video = new srender.Video({style:{videosrc:require('./../../video.ogv')},shape:{width:600,height:480}});
+            sr.add(video);
+            //video.brush()
+            // let x = document.getElementsByClassName('container')[0].clientX;
+            // let y = document.getElementsByClassName('container')[0].clientY;
+            // video.on('click',playOrPauseVideo.bind(this,video));
+            // video.on('mousedown',beginChangeMenu.bind(this,video,x,y));
+            // video.on('mouseup',endChangeMenu.bind(this,video));
+            // video.on('mouseover',createOrShowMenu.bind(this,video,x,y));
+            // video.on('mouseout',hiddenMenu.bind(this,video));
+            
+            console.log('video:',video)
+            break;
         default:
             Pen('none')
             console.log("Sorry,no shape to draw")
             return false
-    } 
+    }
 }
 
 export default class Editor extends React.Component {
@@ -291,28 +310,28 @@ export default class Editor extends React.Component {
     }
     createSocket=(projectId)=>{
        
-         var url = "http://"+localhost+":3001"
-         let param = `/${projectId}` 
-       
-         var socket = io(url,{path:param});//无论页面怎样切换，用户应当只获取该socket
-        
-         toServe = function(page=0,msg){
-           socket.emit('update data', JSON.stringify({id:page,body:msg}));   //sr用以初始化向外界传递消息的回调函数
-         }//在唯一一次创建socket时被赋值，但是可以被多个画布使用，前提在于画布有自己的id来区分
-         toServePage = function(msg){
-            socket.emit('update page',JSON.stringify(msg))
-         }
-         var username = 'bing';
-           socket.emit('add user', username);
+        var url = "http://"+localhost+":3001"
+        let param = `/${projectId}` 
+    
+        var socket = io(url,{path:param});//无论页面怎样切换，用户应当只获取该socket
+    
+        toServe = function(page=0,msg){
+        socket.emit('update data', JSON.stringify({id:page,body:msg}));   //sr用以初始化向外界传递消息的回调函数
+        }//在唯一一次创建socket时被赋值，但是可以被多个画布使用，前提在于画布有自己的id来区分
+        toServePage = function(msg){
+        socket.emit('update page',JSON.stringify(msg))
+        }
+        var username = 'bing';
+            socket.emit('add user', username);
 
-           socket.on('login',(data)=>{
-                 console.log("client numOfUsers is "+JSON.stringify(data));
-                 console.log("client socket.id is"+socket.id);
+            socket.on('login',(data)=>{
+                console.log("client numOfUsers is "+JSON.stringify(data));
+                console.log("client socket.id is"+socket.id);
              });
          
-             socket.on('user joined',(data)=>{
-                 console.log(data.username+" come in");
-             });
+            socket.on('user joined',(data)=>{
+                console.log(data.username+" come in");
+            });
             socket.on('update page',(data)=>{
                 var msg = JSON.parse(data)
                 if(msg.choose){this.props.pageChoose(msg.choose)}
@@ -433,7 +452,7 @@ export default class Editor extends React.Component {
         return (
 
             <div>
-            <div className="container" style={{height:'100vh',width:'100%',padding:"0px 0px 0px 0px"}} onDrop={drop} onDragOver={allowDrop}></div>
+            <div className="container" style={{height:'100vh',width:'100%',border:"0px 0px 0px 0px",padding:"0px 0px 0px 0px"}} onDrop={drop} onDragOver={allowDrop}></div>
             </div>
 
         )
