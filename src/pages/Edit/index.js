@@ -995,12 +995,10 @@ class Edit extends Component {
             
                 
               </Drawer>
-              <Popover placement="bottomLeft" title={text} content={menu(this.setModal2Visible.bind(this,true))} trigger="click"  visible={this.state.popoverVisible} onVisibleChange={this.popoverVisibleChange}>
+              <Popover placement="bottomRight" title={text} content={menu(this.setModal2Visible.bind(this,true))} trigger="click"  visible={this.state.popoverVisible} onVisibleChange={this.popoverVisibleChange}>
            {//第三个
            }
-           <Button type="dashed" shape="circle" className="iconsize" >
-            <Icon type="ellipsis" className="iconsize"/>
-           </Button>
+          
          
 
          </Popover>
