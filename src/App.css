@@ -70,6 +70,10 @@
 .ant-popover-placement-bottom, .ant-popover-placement-bottomLeft, .ant-popover-placement-bottomRight {
   padding-top: 0px;
 }
+
+.ant-list-vertical .ant-list-item-meta-title{
+  margin-left:1rem
+}
 .ant-popover-arrow {
   background: #00000000;
   width: 0;

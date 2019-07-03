@@ -26,7 +26,7 @@
     "srenderlib": "^1.7.9"
   },
   "scripts": {
-    "start": "set PORT=8000&&react-app-rewired start",
+    "start": "set PORT=9000 && react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"

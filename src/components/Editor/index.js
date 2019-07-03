@@ -83,7 +83,7 @@ class EditWithBar extends Component {
     render() {
         console.log(this.props.initContent)
         return (
-            <Layout>
+            <Layout style={{overflow:"hidden"}}>
                 <Header style={{ background: ' #1DA569', padding:0,}} >
                     <Nav resourcelist={this.props.resourcelist} getSource={this.getSource} add={this.add} save={this.save} linkTo={this.linkTo} showModal={this.showModal} showDrawer={this.props.showDrawer} popoverVisibleChange={this.props.popoverVisibleChange} sourceVisible={this.state.sourceVisible} showResource={this.showResource}></Nav>
                 </Header>
@@ -94,8 +94,8 @@ class EditWithBar extends Component {
                         padding:24,
                         background: '#fff',
                         //  width: '100%',
-                        height: '100vh', 
-                        
+                        height: '100vh',
+                        boxShadow:"3px 3px 20px #888888"
                         }}
                         className={this.state.sourceVisible?"wid-shrink":"wid-content"}
                     >
