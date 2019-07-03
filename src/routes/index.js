@@ -4,7 +4,6 @@ import {BrowserRouter} from 'react-router-dom';
 import {createStore} from 'redux';
 import {Provider}from 'react-redux';
 import Reducer from '../reducers/index.js';
-import App from '../App'
 import Edit from '../pages/Edit/'
 import Account from '../pages/Account/Account'
 import Access from '../pages/Access'
@@ -48,7 +47,6 @@ export default class RouterIndex extends Component {
             <Switch>
                 <Route exact path="/" component={Access}> </Route>
                 <Route path="/Account" component={Account}></Route>
-                <Route path="/APP" component={App}></Route>
                 <Route path="/Teach" component={Teach}></Route>
                 <Route path="/Edit" component={Edit}></Route>
                 <Route path="/Previewcourse" component={Previewcourse}></Route>

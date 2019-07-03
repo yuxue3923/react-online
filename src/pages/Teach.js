@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../NewUI.css';
+//import '../NewUI.css';
 import PropTypes from "prop-types";
 import { Button,Input, Icon ,Carousel,Form} from 'antd';
 import $ from 'jquery';
