@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import {Layout,Input} from 'antd'
 import Editor from './canvaslib'
-import './editbutton.css';
 import Nav from '../Nav'
 
 var isButton=false;
@@ -24,7 +23,9 @@ class EditWithBar extends Component {
         this.onCollapse=this.onCollapse.bind(this);
     }
     state = {
+        propertyVisible: false,
         sourceVisible:false,
+        propertyMsg:'attr',
         flag:10
     }
     
@@ -33,6 +34,17 @@ class EditWithBar extends Component {
             return { sourceVisible:!preState.sourceVisible }
         });
     };
+
+    showProperty = () => {
+        this.setState(function(preState,props){
+            return { propertyVisible:!preState.propertyVisible }
+        });
+    };
+
+    handleVisibleChange = propertyVisible => {
+        this.setState({ propertyVisible });
+    };
+
     linkTo=(url)=>{
         this.props.linkTo(url);
     }
@@ -67,7 +79,7 @@ class EditWithBar extends Component {
         //console.log("1:",!(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode))
         //console.log("2:",nextProps.message)
         //||(this.props.shouldCreateSocket&&nextProps.shouldCreateSocket!==this.props.shouldCreateSocket)
-        return (nextProps.resourcelist != this.props.resourcelist)||(preState.sourceVisible != this.state.sourceVisible)||(isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)===JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode)
+        return (nextProps.resourcelist != this.props.resourcelist)||(preState.propertyVisible != this.state.propertyVisible)||(preState.sourceVisible != this.state.sourceVisible)||(isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)===JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode)
     }
     componentWillReceiveProps(nextProps){
         //   console.log(nextProps)
@@ -84,8 +96,22 @@ class EditWithBar extends Component {
         console.log(this.props.initContent)
         return (
             <Layout>
-                <Header style={{ background: ' #1DA569', padding:0,}} >
-                    <Nav resourcelist={this.props.resourcelist} getSource={this.getSource} add={this.add} save={this.save} linkTo={this.linkTo} showModal={this.showModal} showDrawer={this.props.showDrawer} popoverVisibleChange={this.props.popoverVisibleChange} sourceVisible={this.state.sourceVisible} showResource={this.showResource}></Nav>
+                <Header style={{ background: '#1DA57A', padding:0,}} >
+                    <Nav
+                        resourcelist={this.props.resourcelist}
+                        getSource={this.getSource}
+                        propertyMsg={this.state.propertyMsg}
+                        add={this.add}
+                        save={this.save}
+                        linkTo={this.linkTo}
+                        showModal={this.showModal}
+                        showDrawer={this.props.showDrawer}
+                        popoverVisibleChange={this.props.popoverVisibleChange}
+                        sourceVisible={this.state.sourceVisible}
+                        showResource={this.showResource}
+                        propertyVisible={this.state.propertyVisible}
+                        handleVisibleChange={this.handleVisibleChange}>
+                    </Nav>
                 </Header>
                 
                 <Layout style={{padding: ' 24px', margin:'0 3px 0 0'}}>
@@ -118,6 +144,7 @@ class EditWithBar extends Component {
                             effect_createSocket={this.props.effect_createSocket}
                             project_id_now={this.props.project_id_now}
                             dispatchState={this.props.dispatchState}
+                            showProperty={this.showProperty}
                             />
                     </Content>
                 </Layout>

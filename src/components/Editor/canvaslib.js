@@ -3,7 +3,7 @@ import srender from 'srenderlib'
 import React from 'react'
 import {localhost} from '../../config'
 import io from 'socket.io-client'
-import {playOrPauseVideo,beginChangeMenu,endChangeMenu,createOrShowMenu,hiddenMenu} from './videoFunc'
+//import {playOrPauseVideo,beginChangeMenu,endChangeMenu,createOrShowMenu,hiddenMenu} from './videoFunc'
 
 function dClone(obj){
     let _obj = JSON.stringify(obj);
@@ -145,7 +145,7 @@ function Pen(flag,page,penSize,penColor){
 
 /**画笔 */
 
-function add(type,colorType,page,callback){
+function add(type,colorType,page,callback,that){
     var sr;
 
     /* if(typeof colorType === "number"){
@@ -186,6 +186,8 @@ function add(type,colorType,page,callback){
             Pen('star',page)
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,draggable:true})
             sr.add(star);
+            console.log('this:',that.props)
+            star.on('click',that.props.showProperty.bind(that,'shape'));
             break;
         case 'house':
             Pen('house',page)
@@ -209,7 +211,7 @@ function add(type,colorType,page,callback){
             break;
         case 'heart':
             Pen('heart',page)
-            var heart=new srender.Heart({shape:{cx:200,cy:600,width:50,height:50},style:{fill:'red',stroke:(colorType?colorType:'red')}})
+            var heart=new srender.Heart({shape:{cx:200,cy:100,width:50,height:50},style:{fill:'red',stroke:(colorType?colorType:'red')}})
             sr.add(heart);
             break;
         case 'strokeColor':
@@ -306,7 +308,7 @@ export default class Editor extends React.Component {
         this.props.dispatchState();
     }
     flush(state){
-     //   this.props.flush(state);
+        //this.props.flush(state);
     }
     createSocket=(projectId)=>{
        
@@ -402,12 +404,11 @@ export default class Editor extends React.Component {
         }
        
         if(this.props.isSingleMode){
-           
-         if(this.props.page-prePage===0||srs.length === this.props.pageLength);
-         else{
-            srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
-        //    srs[this.props.page].on("mouseup",function(e){ console.log("I'm here");sourceXY.x = e.zrX;sourceXY.y = e.zrY})  
-        }
+            if(this.props.page-prePage===0||srs.length === this.props.pageLength);
+            else{
+                srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
+                //srs[this.props.page].on("mouseup",function(e){ console.log("I'm here");sourceXY.x = e.zrX;sourceXY.y = e.zrY})  
+            }
         }
         else{
             if((this.props.page-prePage===0||srs.length === this.props.pageLength)&&hasInitCb);
@@ -423,12 +424,8 @@ export default class Editor extends React.Component {
        
         }
         prePage = this.props.page;
-        add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]));
+        add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]),this);
         dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
-       
-      
-      
-       
 
         this.props.shouldCreateSocket&&this.props.effect_createSocket(false)
 
@@ -443,7 +440,6 @@ export default class Editor extends React.Component {
         },'image/png')
        
         //this.props.type&&
-       
        
        this.sync({media: srs[this.props.page].getObjectList(),pageThumbnail:base64});
      //   this.dispatchState({thumbnail:url},{sync:{media:sr.getObjectList(),pageThumbnail:base64}})

@@ -192,7 +192,7 @@
 //       return (
 //       <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
 //         <div className="flowbar" style={{right:10,top:20}}>      
-//         <Link to='/App'><Button type="primary" >
+//         <Link to='/Edit'><Button type="primary" >
 //            <Icon type="edit" className="iconsize"/>
 //          </Button></Link>
 //         </div>

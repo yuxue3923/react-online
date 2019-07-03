@@ -102,8 +102,8 @@
 }
 .third-button .ant-btn-primary{
   background-color:#fff;
-  border-color: #fff #1DA569 #fff #fff;
-  color: #1DA569;
+  border-color: #fff #1DA57A #fff #fff;
+  color: #1DA57A;
   border-radius:0;
 }
 .third-button .ant-btn-primary .at-right-border{
@@ -111,7 +111,7 @@
   padding: 0%;
   background-color:#fff;
   border-color: #fff;
-  color: #1DA569;
+  color: #1DA57A;
   border-radius:0;
 }
 
@@ -130,17 +130,17 @@
 }
 .nav.tool .ant-btn{
   background-color:rgb(227,227,227);
-  border-color: #fff #1DA569 #fff #fff;
+  border-color: #fff #1DA57A #fff #fff;
   width:68px;
   border-radius:0;
   margin-right:0;
-  color: #1DA569;
+  color: #1DA57A;
 }
 .nav.tool .ant-btn.at-right-border{ 
   border-color: #fff;
 }
 .nav.tool .ant-btn .anticon{
-  color: #1DA569;
+  color: #1DA57A;
 }
 .nav .ant-btn>div{
   margin-bottom: 7%;

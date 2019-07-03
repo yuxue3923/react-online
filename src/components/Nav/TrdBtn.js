@@ -89,13 +89,13 @@ export default class TrdBtn extends Component {
     }
     render() {
         var list=null;
-        if(this.props.popo=='strokeColor'){
+        if(this.props.popo==='strokeColor'){
             const len = strokeColorMsg.length;
             list = strokeColorMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
                 {this.choiceIcon(msg)}
             </Button>)
         }
-        if(this.props.popo=='fillColor'){
+        if(this.props.popo==='fillColor'){
             const len = fillColorMsg.length;
             list = fillColorMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
                 {this.choiceIcon(msg)}
