@@ -259,10 +259,10 @@ function add(type,colorType,page,callback,that){
                 text:colorType,
                 textAlign: 'center',
                 textVerticalAlign: 'middle',
-                fontSize: 200,
+                fontSize: 20,
                 fontFamily: 'Lato',
                 fontWeight: 'bolder',
-                textFill: '#0ff',
+                textFill: '#000',
                 blend: 'lighten'
             }})
             sr.add(text);

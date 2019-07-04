@@ -50,10 +50,12 @@ const shapeMsg = merge(merge(shapeNameList,shapeIconList,"MyIcon"),shapeFns,"fn"
 /**
  * 形状按钮
  */
-const textNameList = [{name:'边框'},{name:'填充'},{name:'字体'}];
-const textIconList = ['icon-juxing-biankuang','icon-rect','icon-zitishezhi'];
-const textPopos = ['strokeColor','fillColor','font'];
-const textMsg = merge(merge(textNameList,textIconList,"MyIcon"),textPopos,"popo");
+// const textNameList = [{name:'边框'},{name:'填充'},{name:'字体'}];
+// const textIconList = ['icon-juxing-biankuang','icon-rect','icon-zitishezhi'];
+// const textPopos = ['strokeColor','fillColor','font'];
+// const textMsg = merge(merge(textNameList,textIconList,"MyIcon"),textPopos,"popo");
+const textMsg = [{text:'文本'}]
+
 /**
  *文本按钮
  */
@@ -64,9 +66,9 @@ const penMsg = merge(merge(penNameList,penIconList,"MyIcon"),penPopos,"popo");
 /**
  * 画笔按钮
  */
-const attrNameList = [{name:'边框颜色'},{name:'透明度'},{name:'大小'},{name:'粗细'},{name:'角度'}];
-const attrIconList = ['icon-yanse','icon-icon204','icon-daxiao','icon-cuxi','icon-angle'];
-const attrPopos = ['strokeColor','diaphaneity','size','thickness','angel'];
+const attrNameList = [{name:'边框颜色'},{name:'填充'},{name:'透明度'},{name:'大小'},{name:'粗细'},{name:'角度'},{name:'字体'}];
+const attrIconList = ['icon-juxing-biankuang','icon-rect','icon-icon204','icon-daxiao','icon-cuxi','icon-angle','icon-zitishezhi'];
+const attrPopos = ['strokeColor','fillColor','diaphaneity','size','thickness','angel','fillColor','font'];
 const attrMsg = merge(merge(attrNameList,attrIconList,"MyIcon"),attrPopos,"popo");
 /**
  * 属性按钮
@@ -134,7 +136,7 @@ export default class Nav extends Component {
                     </Button>
                 </Popover>
                 <Popover trigger="click" placement="bottomLeft" content={<SndBtn msgArr={textMsg} add={this.props.add}/>} overlayClassName="self-popover">
-                    <Button type="primary" onClick={this.props.add.bind(this,'text')}>
+                    <Button type="primary">
                         <Icon type="font-size"/>
                         <div>文本</div>
                     </Button>
