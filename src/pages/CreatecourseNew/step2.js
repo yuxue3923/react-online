@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../../App.css';
-import { Button,Layout, Card,message } from 'antd';
+import { Button,Layout, Card,message ,Row, Col} from 'antd';
 // import {Link} from 'react-router-dom'
 import $ from 'jquery';
 import EchartsTest from '../../Echarts/EchartsTest';
@@ -222,24 +222,22 @@ onClick_pre() {
 }
   render() {
     return (
-      <div style={{overflow:"scroll",height:window.screen.availHeight-250,width:window.screen.availWidth}}>
+      <div >
         <div>
 
-{/* Echarts—Tree添加节点        */}
-<Layout style={{ padding: '10px 0', background: '#fff' }}>
-  <Sider width={900} style={{ background: '#fff', paddingLeft: '15px', paddingTop: '30px' }}>
-    <Card>
+        <div>
+    <Row>
+      <Col span={12}> <Card>
       <EchartsTest eventsOption={this.state.echartsoption}></EchartsTest>
       {/* <EchartsTest/> */}
     </Card>
-  </Sider>
+</Col>
+      <Col span={12}>  <AddKnowledge handleAdd={this.handleAdd.bind(this)} handleDelete={this.handleDelete.bind(this)}></AddKnowledge  >
+      </Col>
+    </Row>
+    </div>
 
-  <Content width={500} style={{ padding: '0 24px', minHeight: 450 }}>
-    <AddKnowledge handleAdd={this.handleAdd.bind(this)} handleDelete={this.handleDelete.bind(this)}></AddKnowledge  >
-    {/* <AddKnowledge/>  */}
 
-  </Content>
-</Layout>
 </div>
       <div className="App">
           <Button onClick={this.onClick_next.bind(this)} type="primary">下一步</Button>
