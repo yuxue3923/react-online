@@ -186,9 +186,8 @@ function add(type,colorType,page,callback,that){
             Pen('star',page)
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,draggable:true})
             sr.add(star);
-            //sr.dealPropertyMenu(that.props.showProperty)
             //console.log('this:',that.props.showProperty)
-            star.on('click',that.props.showProperty.bind(that,'shape'));
+           // star.on('click',that.props.showProperty.bind(that,'shape'));
             break;
         case 'house':
             Pen('house',page)
@@ -358,7 +357,8 @@ export default class Editor extends React.Component {
             sourceXY.x = e.zrX
             sourceXY.y = e.zrY
         })
-   
+        srs[this.props.page].dealPropertyMenu(this.props.showProperty)
+
         if(this.props.isSingleMode){
 
             !this.props.objectList&&srs[this.props.page].clear()
@@ -368,6 +368,7 @@ export default class Editor extends React.Component {
         else{
         this.createSocket(this.props.project_id_now);
         srs[this.props.page].initWithCb(toServe)
+
         this.props.objectList&& srs[this.props.page].initWithOthers(this.props.objectList)
         hasInitCb = true;//
         }
@@ -425,6 +426,8 @@ export default class Editor extends React.Component {
           //  this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
        
         }
+        srs[this.props.page].dealPropertyMenu(this.props.showProperty)
+
         prePage = this.props.page;
         add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]),this);
         dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
