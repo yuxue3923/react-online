@@ -186,8 +186,8 @@ function add(type,colorType,page,callback,that){
             Pen('star',page)
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,draggable:true})
             sr.add(star);
-            console.log('this:',that.props)
-            star.on('click',that.props.showProperty.bind(that,'shape'));
+            //console.log('this:',that.props.showProperty)
+           // star.on('click',that.props.showProperty.bind(that,'shape'));
             break;
         case 'house':
             Pen('house',page)
@@ -198,6 +198,7 @@ function add(type,colorType,page,callback,that){
             Pen('apple',page)
             var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill:'red',stroke:(colorType?colorType:'none')},draggable:true})
             sr.add(apple);
+            //sr.dealPropertyMenu(that.props.showProperty);
             break;
         case 'tisogon':
             Pen('tisogon',page)
@@ -252,15 +253,15 @@ function add(type,colorType,page,callback,that){
             var text=new srender.Text({
             draggable:true,
             style:{
-                x:500,
-                y:500,
-                text: '默认文字',
+                x:600,
+                y:100,
+                text:colorType,
                 textAlign: 'center',
                 textVerticalAlign: 'middle',
-                fontSize: 200,
+                fontSize: 20,
                 fontFamily: 'Lato',
                 fontWeight: 'bolder',
-                textFill: '#0ff',
+                textFill: '#000',
                 blend: 'lighten'
             }})
             sr.add(text);
@@ -356,7 +357,8 @@ export default class Editor extends React.Component {
             sourceXY.x = e.zrX
             sourceXY.y = e.zrY
         })
-   
+        srs[this.props.page].dealPropertyMenu(this.props.showProperty)
+
         if(this.props.isSingleMode){
 
             !this.props.objectList&&srs[this.props.page].clear()
@@ -366,6 +368,7 @@ export default class Editor extends React.Component {
         else{
         this.createSocket(this.props.project_id_now);
         srs[this.props.page].initWithCb(toServe)
+
         this.props.objectList&& srs[this.props.page].initWithOthers(this.props.objectList)
         hasInitCb = true;//
         }
@@ -423,6 +426,8 @@ export default class Editor extends React.Component {
           //  this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
        
         }
+        srs[this.props.page].dealPropertyMenu(this.props.showProperty)
+
         prePage = this.props.page;
         add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]),this);
         dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
