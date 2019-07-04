@@ -186,7 +186,8 @@ function add(type,colorType,page,callback,that){
             Pen('star',page)
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,draggable:true})
             sr.add(star);
-            console.log('this:',that.props)
+            //sr.dealPropertyMenu(that.props.showProperty)
+            //console.log('this:',that.props.showProperty)
             star.on('click',that.props.showProperty.bind(that,'shape'));
             break;
         case 'house':
@@ -198,6 +199,7 @@ function add(type,colorType,page,callback,that){
             Pen('apple',page)
             var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill:'red',stroke:(colorType?colorType:'none')},draggable:true})
             sr.add(apple);
+            //sr.dealPropertyMenu(that.props.showProperty);
             break;
         case 'tisogon':
             Pen('tisogon',page)
@@ -252,9 +254,9 @@ function add(type,colorType,page,callback,that){
             var text=new srender.Text({
             draggable:true,
             style:{
-                x:500,
-                y:500,
-                text: '默认文字',
+                x:600,
+                y:100,
+                text:colorType,
                 textAlign: 'center',
                 textVerticalAlign: 'middle',
                 fontSize: 200,

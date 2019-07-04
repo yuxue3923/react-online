@@ -35,9 +35,12 @@ class EditWithBar extends Component {
         });
     };
 
-    showProperty = () => {
-        this.setState(function(preState,props){
-            return { propertyVisible:!preState.propertyVisible }
+    showProperty = (attr) => {
+        console.log('showProperty!')
+        this.setState(function(){
+            return { propertyVisible:true,
+                     propertyMsg:attr,
+            }
         });
     };
 
