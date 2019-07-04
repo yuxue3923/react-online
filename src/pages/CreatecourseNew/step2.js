@@ -220,32 +220,34 @@ onClick_pre() {
       this.props.GetStates(this.state.current)
   }, 100);
 }
-  render() {
-    return (
-      <div >
-        <div>
+render() {
+  return (
+    <div style={{overflow:"auto",height:window.screen.availHeight-250,width:window.screen.availWidth}}>
+      <div>
 
-        <div>
-    <Row>
-      <Col span={12}> <Card>
-      <EchartsTest eventsOption={this.state.echartsoption}></EchartsTest>
-      {/* <EchartsTest/> */}
-    </Card>
-</Col>
-      <Col span={12}>  <AddKnowledge handleAdd={this.handleAdd.bind(this)} handleDelete={this.handleDelete.bind(this)}></AddKnowledge  >
-      </Col>
-    </Row>
-    </div>
+{/* Echarts—Tree添加节点        */}
+<Layout style={{ padding: '10px 0', background: '#fff' }}>
+<Sider width={900} height={550} style={{ background: '#fff', paddingLeft: '15px', paddingTop: '30px' }}>
+  <Card>
+    <EchartsTest eventsOption={this.state.echartsoption}></EchartsTest>
+    {/* <EchartsTest/> */}
+  </Card>
+</Sider>
 
+<Content width={500} height={550} style={{ padding: '0 24px', minHeight: 450 }}>
+  <AddKnowledge handleAdd={this.handleAdd.bind(this)} handleDelete={this.handleDelete.bind(this)}></AddKnowledge  >
+  {/* <AddKnowledge/>  */}
 
+</Content>
+</Layout>
 </div>
-      <div className="App">
-          <Button onClick={this.onClick_next.bind(this)} type="primary">下一步</Button>
-          <Button onClick={this.onClick_pre.bind(this)} >上一步</Button>
-      </div>
-      </div>
-    );
-  }
+    <div className="App">
+        <Button onClick={this.onClick_next.bind(this)} type="primary">下一步</Button>
+        <Button onClick={this.onClick_pre.bind(this)} >上一步</Button>
+    </div>
+    </div>
+  );
+}
 }
 function mapStateToProps(state) {
   return {
