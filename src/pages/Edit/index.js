@@ -920,7 +920,8 @@ class Edit extends Component {
       <Layout style={{width: '100%', height: '100vh'}}>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed} collapsedWidth={0} breakpoint="xxl" defaultCollapsed width={249}
           style={{
-              //  minHeight:893,
+            //overflow:"scroll",
+               // height:893,
               //  minWidth:2490
               background:'rgb(249,249,249)',
               minHeight:"100%",

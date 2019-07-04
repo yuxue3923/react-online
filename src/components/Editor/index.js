@@ -98,7 +98,8 @@ class EditWithBar extends Component {
     render() {
         console.log(this.props.initContent)
         return (
-            <Layout>
+            <Layout style={{overflow:"hidden"}}>
+               
                 <Header style={{ background: '#1DA57A', padding:0,}} >
                     <Nav
                         resourcelist={this.props.resourcelist}
@@ -123,8 +124,8 @@ class EditWithBar extends Component {
                         padding:24,
                         background: '#fff',
                         //  width: '100%',
-                        height: '100vh', 
-                        
+                        height: '100vh',
+                        boxShadow:"3px 3px 20px #888888"
                         }}
                         className={this.state.sourceVisible?"wid-shrink":"wid-content"}
                     >
