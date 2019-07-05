@@ -23,20 +23,21 @@ class EditWithBar extends Component {
         this.onCollapse=this.onCollapse.bind(this);
     }
     state = {
-        propertyVisible: false,
-        sourceVisible:false,
-        propertyMsg:'attr',
+        propertyVisible: false,     //属性栏可见性
+        sourceVisible:false,        //资源栏可见性
+        propertyMsg:'attr',         //属性值
         flag:10
     }
     
+    //展示/隐藏资源菜单
     showResource = () => {
         this.setState(function(preState,props){
             return { sourceVisible:!preState.sourceVisible }
         });
     };
 
+    //展示属性菜单
     showProperty = (attr) => {
-        console.log('showProperty!')
         this.setState(function(){
             return { propertyVisible:true,
                      propertyMsg:attr,

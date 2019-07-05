@@ -101,7 +101,7 @@ export default class TrdBtn extends Component {
                 {this.choiceIcon(msg)}
             </Button>)
         }
-        else if(this.props.popo=='diaphaneity'){
+        else if(this.props.popo==='diaphaneity'){
             const inputValue = this.state.opacityValue;
             return(
                 <Row>
@@ -113,7 +113,7 @@ export default class TrdBtn extends Component {
                     </Col>
                 </Row>)
         }
-        else if(this.props.popo=='size'){
+        else if(this.props.popo==='size'){
             const inputValue = this.state.sizeValue;
             return(
                 <Row>
@@ -125,19 +125,19 @@ export default class TrdBtn extends Component {
                     </Col>
                 </Row>)
         }
-        else if(this.props.popo=='penSize'){
+        else if(this.props.popo==='penSize'){
             const len = penSizeMsg.length;
             list = penSizeMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
                 {this.choiceIcon(msg)}
             </Button>)
         }
-        else if(this.props.popo=='penColor'){
+        else if(this.props.popo==='penColor'){
             const len = penColorMsg.length;
             list = penColorMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
                 {this.choiceIcon(msg)}
             </Button>)
         }
-        else if(this.props.popo=='thickness'){
+        else if(this.props.popo==='thickness'){
             const len = thicknessMsg.length;
             list = thicknessMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
                 {this.choiceIcon(msg)}

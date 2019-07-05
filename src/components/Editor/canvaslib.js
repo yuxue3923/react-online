@@ -145,7 +145,7 @@ function Pen(flag,page,penSize,penColor){
 
 /**画笔 */
 
-function add(type,colorType,page,callback,that){
+function add(type,colorType,page,callback){
     var sr;
 
     /* if(typeof colorType === "number"){
@@ -186,8 +186,6 @@ function add(type,colorType,page,callback,that){
             Pen('star',page)
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,draggable:true})
             sr.add(star);
-            //console.log('this:',that.props.showProperty)
-           // star.on('click',that.props.showProperty.bind(that,'shape'));
             break;
         case 'house':
             Pen('house',page)
@@ -226,13 +224,12 @@ function add(type,colorType,page,callback,that){
         case 'thickness':
             Pen('thickness',page)
             sr.changeLineWidth(callback(),colorType)
-            // if(callback()){
-            //     callback().attr({style: {lineWidth: colorType}})
-            // }
             break;
         case 'size':
             Pen('size',page)
-            sr.resize(callback(),colorType)
+            if(callback()){
+                callback().attr({style: {rotate: colorType}})
+            }
             break;
         case 'opacity':
             Pen('opacity',page)
@@ -284,7 +281,6 @@ function add(type,colorType,page,callback,that){
             break;
         default:
             Pen('none')
-            console.log("Sorry,no shape to draw")
             return false
     }
 }
@@ -429,7 +425,7 @@ export default class Editor extends React.Component {
         srs[this.props.page].dealPropertyMenu(this.props.showProperty)
 
         prePage = this.props.page;
-        add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]),this);
+        add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]));
         dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
 
         this.props.shouldCreateSocket&&this.props.effect_createSocket(false)
