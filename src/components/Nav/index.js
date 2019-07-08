@@ -16,9 +16,9 @@ const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
 /***
  * 文件按钮
  */
-const editNameList = [{name:'新增'},{name:'undo'},{name:'redo'},{name:'删除'},{name:'清空'},{name:'指针'}];
+const editNameList = [/* {name:'新增'}, */{name:'undo'},{name:'redo'},{name:'删除'},{name:'清空'},{name:'指针'}];
 const editIconList = ['file-add','undo','redo','delete','switcher','arrow-left'];
-const editFns = [function(){},
+const editFns = [/* function(){}, */
                  function(){this.props.add('undo')},
                  function(){this.props.add('redo')},
                  function(){this.props.add('remove')},
@@ -115,7 +115,7 @@ export default class Nav extends Component {
         return (
         <div className="main-nav">
             <div className="nav" >
-                <Popover trigger="click" placement="bottomLeft" content={<SndBtn msgArr={fileMsg} add={this.props.add} save={this.props.save}/>} overlayClassName="self-popover">
+                <Popover trigger="click" placement="bottomLeft" content={<SndBtn msgArr={fileMsg} add={this.props.add} save={this.props.save} linkTo={this.props.linkTo}/>} overlayClassName="self-popover">
                     <Button type="primary">
                         <Icon type="folder" />
                         <div>文件</div>
@@ -172,7 +172,7 @@ export default class Nav extends Component {
                         <div>团队</div>
                     </Button>
                 </Popover>
-                <Button type="primary" >
+                <Button type="primary" onClick={()=>this.props.linkTo('User')}>
                     <Icon type="user"/>
                     <div> 个人 </div>
                 </Button>
@@ -180,7 +180,7 @@ export default class Nav extends Component {
                     <Icon type="hdd"/>
                     <div> 资源 </div>
                 </Button>
-                <Button type="primary" onClick={this.props.showResource}>
+                <Button type="primary" onClick={()=>this.props.linkTo('Account')}>
                     <Icon type="home"/>
                     <div>主页</div>
                 </Button>
