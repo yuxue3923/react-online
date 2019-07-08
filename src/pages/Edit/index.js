@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './index.css'
 import $ from 'jquery'
-import {Form,Layout,message,Badge,Avatar,Modal,Drawer,Input,Icon,Button,Card,Popover} from 'antd'
+import {Form,Layout,message,Avatar,Modal,Drawer,Icon,Card,Popover} from 'antd'
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux'
 import {localhost} from '../../config'
@@ -18,7 +18,7 @@ var thumbnail = []
 var toServePage = null;
 var project_id_now = 0;
 var share_code_now = 0;
-const {  Content } = Layout;
+
 const IconAvator = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1009791_ev29rcbfmfr.js',
 });
@@ -58,9 +58,9 @@ class Edit extends Component {
     page:1,                   //课件页面
     thumbnail:[],             //课件内容？
     thumbnailBase64:[],       //this.props.createCourse_info.createCourse_info.slides.slide,
-    trick:false,              //是否需要刷新
+   
     isSingle:true,            //判断是否处于协同模式
-    pageChange:false,
+    pageChange:false,             //0代表无变化，0增加， 1减少
 
     updatecontent:[],
     tempochatdata: "",
@@ -74,17 +74,16 @@ class Edit extends Component {
     modalvisible:false,
     modal2Visible:false,
     shouldCreateSocket:false,
-    page:1,
+  
     MyDeck:MyDeck,
     canvasFlush:false,
-    thumbnail:[],
-    thumbnailBase64:[],//this.props.createCourse_info.createCourse_info.slides.slide,
+ 
     PopoverVisible:false,
-    isSingle:true, //判断是否处于协同模式
+   
     resourcelist:0,
     cooperuserlist:[],
     Avatartype:["icon-touxiangnvhai","icon-icon-test3","icon-icon-test1","icon-icon-test","icon-icon-test2"],
-    pageChange:false,
+  
     trick:false, //只让缩略图组件使用，用于传递socket而不引发视图（EditorWithBar canvaslib）的渲染
     base64Thumbnail:[],
     chatsocketid:"",
@@ -167,13 +166,14 @@ class Edit extends Component {
       console.log(MyDeck)
     }
     else{
-      if(page === 1&&thumbnail.length === 1){
+      if(page === 1 && thumbnail.length === 1){
         is = false;
         
         thumbnail = [];
         MyDeck[0].media = []; //为了同步componentWillUpdate的浅复制
       }
       else{
+        console.log("page:",page)
         thumbnail.splice(page-1,1)
         MyDeck.splice(page-1,1) //删除页面时，页面跳转到上（下）一个页面
       } 
@@ -181,14 +181,17 @@ class Edit extends Component {
     let oldPage = this.state.page//这个指的当前页面
   // let length = thumbnail.length 如果新增始终增加在最后，采取该值无问题
     this.setState({
+      pageChange:flag?0:1,
       page:flag?oldPage+1:(is?oldPage-1:oldPage)
     })
   }
   passbyJudge(){
     if(typeof MyDeck[this.state.page-1] !== "undefined"){
+      console.log("now media:",MyDeck[this.state.page-1])
       return typeof MyDeck[this.state.page-1].media === "undefined"?[]:MyDeck[this.state.page-1].media
     }
     else{
+      
       return (typeof MyDeck[this.state.page] !== "undefined")?MyDeck[this.state.page].media:[] //当删去的一页为首页时 //有问题
     }
   }

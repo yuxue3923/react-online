@@ -3,15 +3,6 @@ import { List, Icon,Button} from 'antd';
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_988038_ej9e5sv8svd.js',
 });
-// var imgSrc = null;
-
-
-// const IconText = ({ type, text }) => (
-//   <span>
-//     <Icon type={type} style={{ marginRight: 8 }} />
-//     {text}
-//   </span>
-// );
 
 class Drawerview extends Component {
     constructor(props, context) {
@@ -25,12 +16,7 @@ class Drawerview extends Component {
   }
   newSlide(i,page,e){  //i true for add false for delete
       this.props.newSlide(i,page)
-      console.log("isSingel:",this.props.isSingle)
       !this.props.isSingle&&this.props.socketFn({add:i,page:page})
-  }
-  componentWillMount(){
-   // listData[0].title=this.props.thumbnail
-    
   }
 
     render() {

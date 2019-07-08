@@ -405,11 +405,33 @@ export default class Editor extends React.Component {
             console.log("建立socket")
             this.createSocket(this.props.project_id_now);
         }
-       
+       console.log(this.props.page)
         if(this.props.isSingleMode){
-            if(this.props.page-prePage===0||srs.length === this.props.pageLength);
+            if(this.props.pageChange!==1&&(this.props.page-prePage===0||srs.length === this.props.pageLength));
             else{
-                srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
+                if(this.props.pageChange){
+                    console.log("这里3")
+                    if(this.props.pageLength===1) {
+                        srs = [];
+                        srs[0] = srender.init(dom,{},false,this.props.userName,this.props.page)
+                    }
+                    else{
+                        if(this.props.page) {
+                            console.log("这里1")
+                            srs.splice(this.props.page-1,this.props.pageChange)
+                        }
+                        else {  srs.shift() 
+                            console.log("这里2");
+                        }
+                    }
+
+                    
+                }
+                else{
+                    srs.splice(this.props.page,this.props.pageChange,srender.init(dom,{},false,this.props.userName,this.props.page))
+                }
+                
+              //  srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
                 //srs[this.props.page].on("mouseup",function(e){ console.log("I'm here");sourceXY.x = e.zrX;sourceXY.y = e.zrY})  
             }
         }
@@ -426,27 +448,29 @@ export default class Editor extends React.Component {
           //  this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
        
         }
-        srs[this.props.page].dealPropertyMenu(this.props.showProperty)
+        
 
         prePage = this.props.page;
+        console.log("srs:",srs)
+        srs[prePage].dealPropertyMenu(this.props.showProperty)
         add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]),this);
-        dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
+        dom.replaceChild(srs[prePage].painter._domRoot,dom.childNodes[0]);
 
         this.props.shouldCreateSocket&&this.props.effect_createSocket(false)
 
         var newImg = new Image();
         newImg.setAttribute('crossOrigin', 'anonymous');
-        var base64 =  srs[this.props.page].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
+        var base64 =  srs[prePage].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
      
-        srs[this.props.page].painter.getRenderedCanvas('black').toBlob((blob)=>{
+        srs[prePage].painter.getRenderedCanvas('black').toBlob((blob)=>{
              var url = URL.createObjectURL(blob);
              newImg.src=url;
              this.props.type!=='none'&&this.handleGetThumbnail(newImg.src,base64);//应该是缩略图有变化就该传递
         },'image/png')
        
-        //this.props.type&&
+      
        
-       this.sync({media: srs[this.props.page].getObjectList(),pageThumbnail:base64});
+       this.sync({media: srs[prePage].getObjectList(),pageThumbnail:base64});
      //   this.dispatchState({thumbnail:url},{sync:{media:sr.getObjectList(),pageThumbnail:base64}})
     }
     render() {
