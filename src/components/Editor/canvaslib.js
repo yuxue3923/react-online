@@ -228,7 +228,13 @@ function add(type,colorType,page,callback){
         case 'size':
             Pen('size',page)
             if(callback()){
-                callback().attr({style: {rotate: colorType}})
+                callback().attr({scale: [colorType,colorType]})
+            }
+            break;
+        case 'angle':
+            Pen('size',page)
+            if(callback()){
+                callback().attr({rotation:[colorType*Math.PI,0]})
             }
             break;
         case 'opacity':
@@ -244,6 +250,12 @@ function add(type,colorType,page,callback){
         case 'redo':
             //   Pen('redo')
             sr.redo();
+            break;
+        case 'remove':
+            sr.remove(callback())
+            break;
+        case 'clear':
+            sr.remove()
             break;
         case 'text':
             Pen('text',page)
@@ -280,7 +292,7 @@ function add(type,colorType,page,callback){
             console.log('video:',video)
             break;
         default:
-            Pen('none')
+            Pen('none',page)
             return false
     }
 }

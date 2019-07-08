@@ -16,11 +16,14 @@ const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
 /***
  * 文件按钮
  */
-const editNameList = [{name:'新增'},{name:'undo'},{name:'redo'}];
-const editIconList = ['file-add','undo','redo'];
+const editNameList = [{name:'新增'},{name:'undo'},{name:'redo'},{name:'删除'},{name:'清空'},{name:'指针'}];
+const editIconList = ['file-add','undo','redo','delete','switcher','arrow-left'];
 const editFns = [function(){},
                  function(){this.props.add('undo')},
-                 function(){this.props.add('redo')}
+                 function(){this.props.add('redo')},
+                 function(){this.props.add('remove')},
+                 function(){this.props.add('clear')},
+                 function(){this.props.add('none')}
                 ];
 const editMsg = merge(merge(editNameList,editIconList,"icon"),editFns,"fn");
 /**
@@ -68,12 +71,12 @@ const penMsg = merge(merge(penNameList,penIconList,"MyIcon"),penPopos,"popo");
  * 画笔按钮
  */
 const attrNameList = [{name:'颜色'},{name:'填充'},{name:'透明度'},{name:'大小'},{name:'粗细'},{name:'角度'},{name:'字体'}];
-const attrIconList = ['icon-juxing-biankuang','icon-rect','icon-icon204','icon-daxiao','icon-cuxi','icon-angle','icon-zitishezhi'];
+const attrIconList = ['icon-yanse','icon-rect','icon-icon204','icon-daxiao','icon-cuxi','icon-angle','icon-zitishezhi'];
 const attrPopos = ['strokeColor','fillColor','diaphaneity','size','thickness','angel','font'];
 const attrMsg = merge(merge(attrNameList,attrIconList,"MyIcon"),attrPopos,"popo");
 
 const shapePropertyMsg = [attrMsg[0],attrMsg[1],attrMsg[2],attrMsg[3],attrMsg[4],attrMsg[5]]
-const textPropertyMsg = [attrMsg[1],attrMsg[2],attrMsg[3],attrMsg[4],attrMsg[5]]
+const textPropertyMsg = [attrMsg[0],attrMsg[2],attrMsg[3],attrMsg[4],attrMsg[5],attrMsg[6]]
 const penPropertyMsg = [attrMsg[0],attrMsg[2],attrMsg[4]]
 
 /**
@@ -94,13 +97,13 @@ export default class Nav extends Component {
 
     choicePropertyMsg=()=>{
         console.log('msg:',this.props.propertyMsg);
-        if(['star','dbcircle','circle','house','rect','heart','isogon'].indexOf(this.props.propertyMsg)!=-1){
+        if(['star','dbcircle','circle','house','rect','heart','isogon'].indexOf(this.props.propertyMsg)!==-1){
             return shapePropertyMsg
         }
-        else if(['text'].indexOf(this.props.propertyMsg)!=-1){
+        else if(['text'].indexOf(this.props.propertyMsg)!==-1){
             return textPropertyMsg
         }
-        else if(['polyline'].indexOf(this.props.propertyMsg)!=-1){
+        else if(['polyline'].indexOf(this.props.propertyMsg)!==-1){
             return penPropertyMsg
         }
         else{
