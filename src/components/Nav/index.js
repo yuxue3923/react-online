@@ -4,8 +4,9 @@ import SndBtn from './SndBtn'
 import { mergeObjectArr as merge} from './util'
 import Bodysider from '../../components/Resource/sider';
 
-const fileNameAndIconList = [{name:"新建",icon:"file-add"},{name:"保存",icon:"save"},{name:"分享",icon:"share-alt"},{name:"导出",icon:"import"}];
+const fileNameAndIconList = [{name:"新建",icon:"file-add"},{name:"保存",icon:"save"},{name:"存为模板",icon:"save"},{name:"分享",icon:"share-alt"},{name:"导出",icon:"import"}];
 const fileFns = [function(){this.props.linkTo('pagefirst')},
+                 function(){this.props.save()},
                  function(){this.props.save()},
                  function(){console.log("I'm fileFn3")},
                  function(){console.log("I'm fileFn4")}
@@ -15,11 +16,14 @@ const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
 /***
  * 文件按钮
  */
-const editNameList = [{name:'新增'},{name:'undo'},{name:'redo'}];
-const editIconList = ['file-add','undo','redo'];
+const editNameList = [{name:'新增'},{name:'undo'},{name:'redo'},{name:'删除'},{name:'清空'},{name:'指针'}];
+const editIconList = ['file-add','undo','redo','delete','switcher','arrow-left'];
 const editFns = [function(){},
                  function(){this.props.add('undo')},
-                 function(){this.props.add('redo')}
+                 function(){this.props.add('redo')},
+                 function(){this.props.add('remove')},
+                 function(){this.props.add('clear')},
+                 function(){this.props.add('none')}
                 ];
 const editMsg = merge(merge(editNameList,editIconList,"icon"),editFns,"fn");
 /**
@@ -66,10 +70,15 @@ const penMsg = merge(merge(penNameList,penIconList,"MyIcon"),penPopos,"popo");
 /**
  * 画笔按钮
  */
-const attrNameList = [{name:'边框颜色'},{name:'填充'},{name:'透明度'},{name:'大小'},{name:'粗细'},{name:'角度'},{name:'字体'}];
-const attrIconList = ['icon-juxing-biankuang','icon-rect','icon-icon204','icon-daxiao','icon-cuxi','icon-angle','icon-zitishezhi'];
-const attrPopos = ['strokeColor','fillColor','diaphaneity','size','thickness','angel','fillColor','font'];
+const attrNameList = [{name:'颜色'},{name:'填充'},{name:'透明度'},{name:'大小'},{name:'粗细'},{name:'角度'},{name:'字体'}];
+const attrIconList = ['icon-yanse','icon-rect','icon-icon204','icon-daxiao','icon-cuxi','icon-angle','icon-zitishezhi'];
+const attrPopos = ['strokeColor','fillColor','diaphaneity','size','thickness','angel','font'];
 const attrMsg = merge(merge(attrNameList,attrIconList,"MyIcon"),attrPopos,"popo");
+
+const shapePropertyMsg = [attrMsg[0],attrMsg[1],attrMsg[2],attrMsg[3],attrMsg[4],attrMsg[5]]
+const textPropertyMsg = [attrMsg[0],attrMsg[2],attrMsg[3],attrMsg[4],attrMsg[5],attrMsg[6]]
+const penPropertyMsg = [attrMsg[0],attrMsg[2],attrMsg[4]]
+
 /**
  * 属性按钮
  */
@@ -87,18 +96,19 @@ const groupMsg = merge(merge(groupNameList,groupIconList,"MyIcon"),groupFns,"fn"
 export default class Nav extends Component {
 
     choicePropertyMsg=()=>{
-        //if(this.props.PropertyMsg=='shape'){
-           // return shapePropertyMsg
-        //}
-        // else if(this.props.PropertyMsg=='text'){
-        //     return textPropertyMsg
-        // }
-        // else if(this.props.PropertyMsg=='pen'){
-        //     return penPropertyMsg
-        // }
-        //else{
-            return attrMsg
-        //}
+        console.log('msg:',this.props.propertyMsg);
+        if(['star','dbcircle','circle','house','rect','heart','isogon'].indexOf(this.props.propertyMsg)!==-1){
+            return shapePropertyMsg
+        }
+        else if(['text'].indexOf(this.props.propertyMsg)!==-1){
+            return textPropertyMsg
+        }
+        else if(['polyline'].indexOf(this.props.propertyMsg)!==-1){
+            return penPropertyMsg
+        }
+        else{
+            return []
+        }
     }
 
     render() {
@@ -146,7 +156,7 @@ export default class Nav extends Component {
                     placement="bottomLeft"
                     visible={this.props.propertyVisible}
                     onVisibleChange={this.props.handleVisibleChange}
-                    content={<SndBtn msgArr={attrMsg} add={this.props.add}/>}
+                    content={<SndBtn msgArr={this.choicePropertyMsg()} add={this.props.add}/>}
                     overlayClassName="self-popover"
                 >
                     <Button type="primary">
@@ -166,9 +176,13 @@ export default class Nav extends Component {
                     <Icon type="user"/>
                     <div> 个人 </div>
                 </Button>
-                <Button type="primary" style={{marginLeft:"10%"}} onClick={this.props.showResource}>
+                <Button type="primary" onClick={this.props.showResource}>
                     <Icon type="hdd"/>
                     <div> 资源 </div>
+                </Button>
+                <Button type="primary" onClick={this.props.showResource}>
+                    <Icon type="home"/>
+                    <div>主页</div>
                 </Button>
                 <Drawer
                     // style={{ margin: '3.8% 0 8px 0px'}}

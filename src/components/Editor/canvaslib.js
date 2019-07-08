@@ -145,7 +145,7 @@ function Pen(flag,page,penSize,penColor){
 
 /**画笔 */
 
-function add(type,colorType,page,callback,that){
+function add(type,colorType,page,callback){
     var sr;
 
     /* if(typeof colorType === "number"){
@@ -186,8 +186,6 @@ function add(type,colorType,page,callback,that){
             Pen('star',page)
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,draggable:true})
             sr.add(star);
-            //console.log('this:',that.props.showProperty)
-           // star.on('click',that.props.showProperty.bind(that,'shape'));
             break;
         case 'house':
             Pen('house',page)
@@ -226,13 +224,18 @@ function add(type,colorType,page,callback,that){
         case 'thickness':
             Pen('thickness',page)
             sr.changeLineWidth(callback(),colorType)
-            // if(callback()){
-            //     callback().attr({style: {lineWidth: colorType}})
-            // }
             break;
         case 'size':
             Pen('size',page)
-            sr.resize(callback(),colorType)
+            if(callback()){
+                callback().attr({scale: [colorType,colorType]})
+            }
+            break;
+        case 'angle':
+            Pen('size',page)
+            if(callback()){
+                callback().attr({rotation:[colorType*Math.PI,0]})
+            }
             break;
         case 'opacity':
             Pen('opacity',page)
@@ -247,6 +250,12 @@ function add(type,colorType,page,callback,that){
         case 'redo':
             //   Pen('redo')
             sr.redo();
+            break;
+        case 'remove':
+            sr.remove(callback())
+            break;
+        case 'clear':
+            sr.remove()
             break;
         case 'text':
             Pen('text',page)
@@ -283,8 +292,7 @@ function add(type,colorType,page,callback,that){
             console.log('video:',video)
             break;
         default:
-            Pen('none')
-            console.log("Sorry,no shape to draw")
+            Pen('none',page)
             return false
     }
 }
@@ -445,8 +453,8 @@ export default class Editor extends React.Component {
 
         prePage = this.props.page;
         console.log("srs:",srs)
-        srs[prePage].dealPropertyMenu(this.props.showProperty)
-        add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]),this);
+        srs[prePage].dealPropertyMenu(this.props.showProperty)//
+        add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]),this);//
         dom.replaceChild(srs[prePage].painter._domRoot,dom.childNodes[0]);
 
         this.props.shouldCreateSocket&&this.props.effect_createSocket(false)

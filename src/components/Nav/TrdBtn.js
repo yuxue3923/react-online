@@ -61,8 +61,9 @@ const penColorMsg = merge(penColorBtn,penColorFns,"fn");
 
 export default class TrdBtn extends Component {
     state = {
-        opacityValue: 0,
-        sizeValue: 0,
+        opacityValue: 1,
+        sizeValue: 1,
+        angleValue: 0
     };
 
     opacityOnChange = value => {
@@ -76,6 +77,13 @@ export default class TrdBtn extends Component {
         this.props.add('size',value)
         this.setState({
             sizeValue: value,
+        });
+    };
+
+    angleOnChange = value => {
+        this.props.add('angle',value)
+        this.setState({
+            angleValue: value,
         });
     };
 
@@ -101,43 +109,55 @@ export default class TrdBtn extends Component {
                 {this.choiceIcon(msg)}
             </Button>)
         }
-        else if(this.props.popo=='diaphaneity'){
-            const inputValue = this.state.opacityValue;
+        else if(this.props.popo==='diaphaneity'){
+            const opacityValue = this.state.opacityValue;
             return(
                 <Row>
                     <Col span={12}>
-                        <Slider min={0} max={1} onChange={this.opacityOnChange} value={typeof inputValue === 'number' ? inputValue : 0} step={0.01}/>
+                        <Slider min={0} max={1} onChange={this.opacityOnChange} value={typeof opacityValue === 'number' ? opacityValue : 0} step={0.01}/>
                     </Col>
                     <Col span={4}>
-                        <InputNumber min={0} max={1} style={{ marginLeft: 16 }} step={0.01} value={inputValue} onChange={this.opacityOnChange}/>
+                        <InputNumber min={0} max={1} style={{ marginLeft: 16 }} step={0.01} value={opacityValue} onChange={this.opacityOnChange}/>
                     </Col>
                 </Row>)
         }
-        else if(this.props.popo=='size'){
-            const inputValue = this.state.sizeValue;
+        else if(this.props.popo==='size'){
+            const sizeValue = this.state.sizeValue;
             return(
                 <Row>
                     <Col span={12}>
-                        <Slider min={1} max={100} onChange={this.sizeOnChange} value={typeof inputValue === 'number' ? inputValue : 0} />
+                        <Slider min={0.1} max={2} onChange={this.sizeOnChange} value={typeof sizeValue === 'number' ? sizeValue : 0} step={0.1}/>
                     </Col>
                     <Col span={4}>
-                        <InputNumber min={1} max={100} style={{ marginLeft: 16 }} value={inputValue} onChange={this.sizeOnChange}/>
+                        <InputNumber min={0.1} max={2} style={{ marginLeft: 16 }} value={sizeValue} onChange={this.sizeOnChange} step={0.1}/>
                     </Col>
                 </Row>)
         }
-        else if(this.props.popo=='penSize'){
+        else if(this.props.popo==='angel'){
+            const angleValue = this.state.angleValue;
+            return(
+                <Row>
+                    <Col span={12}>
+                        <Slider min={0} max={2} onChange={this.angleOnChange} value={typeof angleValue === 'number' ? angleValue : 0} step={0.1}/>
+                    </Col>
+                    <Col span={4}>
+                        <InputNumber min={0} max={2} style={{ marginLeft: 16 }} value={angleValue} onChange={this.angleOnChange} step={0.1}/>
+                    </Col>
+                </Row>)
+        }
+        else if(this.props.popo==='penSize'){
             const len = penSizeMsg.length;
             list = penSizeMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
                 {this.choiceIcon(msg)}
             </Button>)
         }
-        else if(this.props.popo=='penColor'){
+        else if(this.props.popo==='penColor'){
             const len = penColorMsg.length;
             list = penColorMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
                 {this.choiceIcon(msg)}
             </Button>)
         }
-        else if(this.props.popo=='thickness'){
+        else if(this.props.popo==='thickness'){
             const len = thicknessMsg.length;
             list = thicknessMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
                 {this.choiceIcon(msg)}
