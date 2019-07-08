@@ -402,33 +402,26 @@ export default class Editor extends React.Component {
         var dom=document.getElementsByClassName('container')[0];
       //  console.log(srs[this.props.page].stack._undoList)
         if(this.props.shouldCreateSocket&&!this.props.isSingleMode){
-            console.log("建立socket")
             this.createSocket(this.props.project_id_now);
         }
-       console.log(this.props.page)
+       
         if(this.props.isSingleMode){
             if(this.props.pageChange!==1&&(this.props.page-prePage===0||srs.length === this.props.pageLength));
             else{
-                if(this.props.pageChange){
-                    console.log("这里3")
-                    if(this.props.pageLength===1) {
+                if(this.props.pageChange){//删除
+                    if(srs.length===1) { //this.props.pageLength===1
                         srs = [];
                         srs[0] = srender.init(dom,{},false,this.props.userName,this.props.page)
                     }
                     else{
-                        if(this.props.page) {
-                            console.log("这里1")
-                            srs.splice(this.props.page-1,this.props.pageChange)
-                        }
-                        else {  srs.shift() 
-                            console.log("这里2");
-                        }
+                        /* if(this.props.page) {//page为零既可能是删除首页，但state无变化，也有可能是删除第二页，page为（2-1）-1 */
+                            console.log("这里prePage:",prePage,this.props.page)
+                            prePage?srs.splice(this.props.page+1,1):srs.splice(this.props.page,1);
+                            if(!srs&&!prePage) srs[0] = srender.init(dom,{},false,this.props.userName,0);  
                     }
-
-                    
                 }
-                else{
-                    srs.splice(this.props.page,this.props.pageChange,srender.init(dom,{},false,this.props.userName,this.props.page))
+                else if(this.props.pageChange===0){//增加
+                    srs.splice(this.props.page,0,srender.init(dom,{},false,this.props.userName,this.props.page))
                 }
                 
               //  srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
@@ -465,7 +458,7 @@ export default class Editor extends React.Component {
         srs[prePage].painter.getRenderedCanvas('black').toBlob((blob)=>{
              var url = URL.createObjectURL(blob);
              newImg.src=url;
-             this.props.type!=='none'&&this.handleGetThumbnail(newImg.src,base64);//应该是缩略图有变化就该传递
+             this.props.type!=='none'&&this.handleGetThumbnail(newImg.src,base64);//应该是缩略图有变化就该传递 //通过该函数改变pageChange?
         },'image/png')
        
       

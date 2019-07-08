@@ -159,7 +159,7 @@ class Edit extends Component {
   newSlide(flag,page){
     let is = true; //处理删除只剩一页的特例
     if(flag){
-      console.log("newSlide:",page)
+      console.log("newSlide:",page)//这是增加删除前的当前的页数，未更新
       thumbnail.splice(page,0,{meida:[],pageThumbnail:"whiteBoard"})//增加页面时，页面跳转到新增空白页面
       console.log(thumbnail.length)
       MyDeck.splice(page,0,{})
@@ -167,8 +167,7 @@ class Edit extends Component {
     }
     else{
       if(page === 1 && thumbnail.length === 1){
-        is = false;
-        
+        is = false;       
         thumbnail = [];
         MyDeck[0].media = []; //为了同步componentWillUpdate的浅复制
       }
@@ -179,10 +178,10 @@ class Edit extends Component {
       } 
     }
     let oldPage = this.state.page//这个指的当前页面
-  // let length = thumbnail.length 如果新增始终增加在最后，采取该值无问题
+  // let length = thumbnail.length 如果新增始终增加在最后，采取该值无问题,首页1删除应该不改变page state
     this.setState({
       pageChange:flag?0:1,
-      page:flag?oldPage+1:(is?oldPage-1:oldPage)
+      page:flag?oldPage+1:((is&&oldPage!==1)?oldPage-1:oldPage)
     })
   }
   passbyJudge(){
@@ -512,7 +511,7 @@ class Edit extends Component {
     _thumbnail.splice(this.state.page-1,1,src)
     thumbnail.splice(this.state.page-1,1,src)//这个变量用于缩略图显示blob
     thumbnailBase64.splice(this.state.page-1,1,base64)//这个变量用于数据库存储
-    this.setState({thumbnailBase64})//这种格式可以？thumbnail:thumbnail,:thumbnailBase64
+    this.setState({thumbnailBase64,pageChange:false})//这种格式可以？thumbnail:thumbnail,:thumbnailBase64
   }
   pageChoose = (Xst) => {
     this.setState({
