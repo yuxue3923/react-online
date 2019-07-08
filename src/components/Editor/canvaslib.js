@@ -12,7 +12,7 @@ function dClone(obj){
 var toServe = null;
 var toServePage = null;
 var prePage = 0;
-var nowShape = null;
+
 var hasInitCb = false;
 const elementStyle={
     stroke: '#ccc',
@@ -316,8 +316,14 @@ export default class Editor extends React.Component {
     dispatchState(){
         this.props.dispatchState();
     }
-    flush(state){
-        //this.props.flush(state);
+    flushThumbnail(base64){
+        var newImg = new Image();
+        newImg.setAttribute('crossOrigin', 'anonymous');
+        srs[prePage].painter.getRenderedCanvas('black').toBlob((blob)=>{
+            var url = URL.createObjectURL(blob);
+            newImg.src=url;
+            ((this.props.type!=='none'))&&this.handleGetThumbnail(newImg.src,base64);//应该是缩略图有变化就该传递 //通过该函数改变pageChange?
+       },'image/png')
     }
     createSocket=(projectId)=>{
        
@@ -362,6 +368,7 @@ export default class Editor extends React.Component {
         srs[this.props.page]=srender.init(dom,{},!this.props.isSingleMode,this.props.userName,this.props.page)
         srs[this.props.page].on("mouseup",function(e){
             console.log("I'm here")
+          //  change = true;
             sourceXY.x = e.zrX
             sourceXY.y = e.zrY
         })
@@ -434,6 +441,7 @@ export default class Editor extends React.Component {
                 
               //  srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
                 //srs[this.props.page].on("mouseup",function(e){ console.log("I'm here");sourceXY.x = e.zrX;sourceXY.y = e.zrY})  
+               
             }
         }
         else{
@@ -443,10 +451,9 @@ export default class Editor extends React.Component {
                 srs[this.props.page].initWithCb(toServe);
                 hasInitCb = true;
                 this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
-                
+    
             }
-           // srs[this.props.page].initWithCb(toServe);
-          //  this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
+          
        
         }
         
@@ -458,21 +465,11 @@ export default class Editor extends React.Component {
         dom.replaceChild(srs[prePage].painter._domRoot,dom.childNodes[0]);
 
         this.props.shouldCreateSocket&&this.props.effect_createSocket(false)
-
-        var newImg = new Image();
-        newImg.setAttribute('crossOrigin', 'anonymous');
         var base64 =  srs[prePage].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
-     
-        srs[prePage].painter.getRenderedCanvas('black').toBlob((blob)=>{
-             var url = URL.createObjectURL(blob);
-             newImg.src=url;
-             this.props.type!=='none'&&this.handleGetThumbnail(newImg.src,base64);//应该是缩略图有变化就该传递 //通过该函数改变pageChange?
-        },'image/png')
-       
-      
+        srs[this.props.page].on("mouseup",()=>{this.flushThumbnail(base64)})//缩略图更新
+        this.props.type!=='none'&&this.flushThumbnail(base64);
        
        this.sync({media: srs[prePage].getObjectList(),pageThumbnail:base64});
-     //   this.dispatchState({thumbnail:url},{sync:{media:sr.getObjectList(),pageThumbnail:base64}})
     }
     render() {
         return (

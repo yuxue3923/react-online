@@ -72,7 +72,8 @@ class Drawerview extends Component {
               style={{display:"flex",alignSelf:'flex-start'}}
             />
             
-            <img  style={{/* boxShadow:"3px 3px 20px #888888", */
+            <img  style={this.props.page===item.Xst?{ borderStyle:'solid',borderColor:"rgb(196,49,29)",
+            borderWidth:"1px"}:{/* boxShadow:"3px 3px 20px #888888", */
             borderStyle:'solid',borderColor:"rgb(219,219,219)",
             borderWidth:"1px"}} 
             width={220} height={150} alt="logo" 
