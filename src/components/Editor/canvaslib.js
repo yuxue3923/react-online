@@ -12,7 +12,7 @@ function dClone(obj){
 var toServe = null;
 var toServePage = null;
 var prePage = 0;
-var nowShape = null;
+
 var hasInitCb = false;
 const elementStyle={
     stroke: '#ccc',
@@ -145,7 +145,7 @@ function Pen(flag,page,penSize,penColor){
 
 /**画笔 */
 
-function add(type,colorType,page,callback,that){
+function add(type,colorType,page,callback){
     var sr;
 
     /* if(typeof colorType === "number"){
@@ -186,8 +186,6 @@ function add(type,colorType,page,callback,that){
             Pen('star',page)
             var star=new srender.Star({shape:{cx:200,cy:200,n:5,r:40},style:elementStyle,draggable:true})
             sr.add(star);
-            console.log('this:',that.props)
-            star.on('click',that.props.showProperty.bind(that,'shape'));
             break;
         case 'house':
             Pen('house',page)
@@ -198,6 +196,7 @@ function add(type,colorType,page,callback,that){
             Pen('apple',page)
             var apple=new srender.DbCircle({shape:{cx:400,cy:300,r:50},style:{fill:'red',stroke:(colorType?colorType:'none')},draggable:true})
             sr.add(apple);
+            //sr.dealPropertyMenu(that.props.showProperty);
             break;
         case 'tisogon':
             Pen('tisogon',page)
@@ -225,13 +224,18 @@ function add(type,colorType,page,callback,that){
         case 'thickness':
             Pen('thickness',page)
             sr.changeLineWidth(callback(),colorType)
-            // if(callback()){
-            //     callback().attr({style: {lineWidth: colorType}})
-            // }
             break;
         case 'size':
             Pen('size',page)
-            sr.resize(callback(),colorType)
+            if(callback()){
+                callback().attr({scale: [colorType,colorType]})
+            }
+            break;
+        case 'angle':
+            Pen('size',page)
+            if(callback()){
+                callback().attr({rotation:[colorType*Math.PI,0]})
+            }
             break;
         case 'opacity':
             Pen('opacity',page)
@@ -247,20 +251,26 @@ function add(type,colorType,page,callback,that){
             //   Pen('redo')
             sr.redo();
             break;
+        case 'remove':
+            sr.remove(callback())
+            break;
+        case 'clear':
+            sr.remove()
+            break;
         case 'text':
             Pen('text',page)
             var text=new srender.Text({
             draggable:true,
             style:{
-                x:500,
-                y:500,
-                text: '默认文字',
+                x:600,
+                y:100,
+                text:colorType,
                 textAlign: 'center',
                 textVerticalAlign: 'middle',
-                fontSize: 200,
+                fontSize: 20,
                 fontFamily: 'Lato',
                 fontWeight: 'bolder',
-                textFill: '#0ff',
+                textFill: '#000',
                 blend: 'lighten'
             }})
             sr.add(text);
@@ -282,8 +292,7 @@ function add(type,colorType,page,callback,that){
             console.log('video:',video)
             break;
         default:
-            Pen('none')
-            console.log("Sorry,no shape to draw")
+            Pen('none',page)
             return false
     }
 }
@@ -307,8 +316,14 @@ export default class Editor extends React.Component {
     dispatchState(){
         this.props.dispatchState();
     }
-    flush(state){
-        //this.props.flush(state);
+    flushThumbnail(base64){
+        var newImg = new Image();
+        newImg.setAttribute('crossOrigin', 'anonymous');
+        srs[prePage].painter.getRenderedCanvas('black').toBlob((blob)=>{
+            var url = URL.createObjectURL(blob);
+            newImg.src=url;
+            ((this.props.type!=='none'))&&this.handleGetThumbnail(newImg.src,base64);//应该是缩略图有变化就该传递 //通过该函数改变pageChange?
+       },'image/png')
     }
     createSocket=(projectId)=>{
        
@@ -353,10 +368,12 @@ export default class Editor extends React.Component {
         srs[this.props.page]=srender.init(dom,{},!this.props.isSingleMode,this.props.userName,this.props.page)
         srs[this.props.page].on("mouseup",function(e){
             console.log("I'm here")
+          //  change = true;
             sourceXY.x = e.zrX
             sourceXY.y = e.zrY
         })
-   
+        srs[this.props.page].dealPropertyMenu(this.props.showProperty)
+
         if(this.props.isSingleMode){
 
             !this.props.objectList&&srs[this.props.page].clear()
@@ -366,6 +383,7 @@ export default class Editor extends React.Component {
         else{
         this.createSocket(this.props.project_id_now);
         srs[this.props.page].initWithCb(toServe)
+
         this.props.objectList&& srs[this.props.page].initWithOthers(this.props.objectList)
         hasInitCb = true;//
         }
@@ -399,15 +417,31 @@ export default class Editor extends React.Component {
         var dom=document.getElementsByClassName('container')[0];
       //  console.log(srs[this.props.page].stack._undoList)
         if(this.props.shouldCreateSocket&&!this.props.isSingleMode){
-            console.log("建立socket")
             this.createSocket(this.props.project_id_now);
         }
        
         if(this.props.isSingleMode){
-            if(this.props.page-prePage===0||srs.length === this.props.pageLength);
+            if(this.props.pageChange!==1&&(this.props.page-prePage===0||srs.length === this.props.pageLength));
             else{
-                srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
+                if(this.props.pageChange){//删除
+                    if(srs.length===1) { //this.props.pageLength===1
+                        srs = [];
+                        srs[0] = srender.init(dom,{},false,this.props.userName,this.props.page)
+                    }
+                    else{
+                        /* if(this.props.page) {//page为零既可能是删除首页，但state无变化，也有可能是删除第二页，page为（2-1）-1 */
+                            console.log("这里prePage:",prePage,this.props.page)
+                            prePage?srs.splice(this.props.page+1,1):srs.splice(this.props.page,1);
+                            if(!srs&&!prePage) srs[0] = srender.init(dom,{},false,this.props.userName,0);  
+                    }
+                }
+                else if(this.props.pageChange===0){//增加
+                    srs.splice(this.props.page,0,srender.init(dom,{},false,this.props.userName,this.props.page))
+                }
+                
+              //  srs[this.props.page]=srender.init(dom,{},false,this.props.userName,this.props.page);
                 //srs[this.props.page].on("mouseup",function(e){ console.log("I'm here");sourceXY.x = e.zrX;sourceXY.y = e.zrY})  
+               
             }
         }
         else{
@@ -417,32 +451,25 @@ export default class Editor extends React.Component {
                 srs[this.props.page].initWithCb(toServe);
                 hasInitCb = true;
                 this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
-                
+    
             }
-           // srs[this.props.page].initWithCb(toServe);
-          //  this.props.objectList&&srs[this.props.page].initWithOthers(this.props.objectList);
+          
        
         }
+        
+
         prePage = this.props.page;
-        add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]),this);
-        dom.replaceChild(srs[this.props.page].painter._domRoot,dom.childNodes[0]);
+        console.log("srs:",srs)
+        srs[prePage].dealPropertyMenu(this.props.showProperty)//
+        add(this.props.type,this.props.tag,prePage,srs[prePage].getNowShape.bind(srs[prePage]),this);//
+        dom.replaceChild(srs[prePage].painter._domRoot,dom.childNodes[0]);
 
         this.props.shouldCreateSocket&&this.props.effect_createSocket(false)
-
-        var newImg = new Image();
-        newImg.setAttribute('crossOrigin', 'anonymous');
-        var base64 =  srs[this.props.page].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
-     
-        srs[this.props.page].painter.getRenderedCanvas('black').toBlob((blob)=>{
-             var url = URL.createObjectURL(blob);
-             newImg.src=url;
-             this.props.type!=='none'&&this.handleGetThumbnail(newImg.src,base64);//应该是缩略图有变化就该传递
-        },'image/png')
+        var base64 =  srs[prePage].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
+        srs[this.props.page].on("mouseup",()=>{this.flushThumbnail(base64)})//缩略图更新
+        this.props.type!=='none'&&this.flushThumbnail(base64);
        
-        //this.props.type&&
-       
-       this.sync({media: srs[this.props.page].getObjectList(),pageThumbnail:base64});
-     //   this.dispatchState({thumbnail:url},{sync:{media:sr.getObjectList(),pageThumbnail:base64}})
+       this.sync({media: srs[prePage].getObjectList(),pageThumbnail:base64});
     }
     render() {
         return (

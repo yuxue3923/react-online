@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 //import '../NewUI.css';
 import PropTypes from "prop-types";
-import { Button,Input, Icon ,Carousel,Form} from 'antd';
-import $ from 'jquery';
-import {localhost} from '../config';
+import { Button, Icon ,Form} from 'antd';
+
 import { connect } from 'react-redux';
 import srender from 'srenderlib'
-import Editor from '../components/Editor/canvaslib'
+
 
 var srs=[];
 var prePage = 0;
@@ -123,7 +122,7 @@ class Teach extends Component {
         total = content.length;
     }
     componentDidMount(){
-        this.getcoursenamedata();
+        this.getCourseNameData();
         this.updateCanvas();
         prePage = this.state.page;
 
@@ -138,17 +137,20 @@ class Teach extends Component {
 
         var content = createCourse_info.createCourse_info.slides.slide;
         var dom = document.getElementsByClassName('container')[0]
+        if(dom.childNodes.length === 0) {dom.appendChild(document.createElement('div')); srs[this.state.page]=srender.init(dom,{},login_info.userName,this.state.page);
+        srs[this.state.page].initWithOthers(content[this.state.page].media);}
         if(!srs[this.state.page]) {
             srs[this.state.page]=srender.init(dom,{},login_info.userName,this.state.page);
             srs[this.state.page].initWithOthers(content[this.state.page].media);
         }
-       // if(this.props.page-prePage===0);
+       
+    
       console.log(dom.childNodes.length)
-       if(dom.childNodes.length === 0) {this.componentWillMount();return}
+       /* if(dom.childNodes.length === 0) {/* this.componentWillMount();return *//*dom.appendChild(document.createElement('div'))} */
        dom.replaceChild(srs[this.state.page].painter._domRoot,dom.childNodes[0]);
        
     }
-    getcoursenamedata(e) {
+    getCourseNameData(e) {
         const { createCourse_info }=this.props;
         console.log('授课页面信息');
         console.log(createCourse_info)
@@ -159,8 +161,8 @@ class Teach extends Component {
       <div onMouseMove={(e)=>this.displayNav(e)} ref="page" style={{overflow:"hidden"}}>
        <div style={{position:"absolute" ,height:"auto",bottom:"0%",left:"0%",zIndex:"99"}} className="nav tool"> 
         <Button type="primary" size="small" block><Icon type="appstore"/><div>菜 单</div></Button>
-        <Button type="primary" size="small" block><Icon type="appstore"/><div>最小化</div></Button>
-        <Button type="primary" size="small" block className="at-right-border"><Icon type="appstore"/><div>用 户</div></Button>
+        <Button type="primary" size="small" block onClick={()=>{this.context.router.history.push('./Edit')}}><Icon type="appstore"/><div>编辑修改</div></Button>
+        <Button type="primary" size="small" block onClick={()=>{this.context.router.history.push('./Account')}} className="at-right-border"><Icon type="appstore"/><div>用 户</div></Button>
       </div> 
       <div style={{position:"absolute" ,height:"auto",bottom:"0%",right:"0",zIndex:"99"}} className="nav tool"> 
         <Button type="primary" size="small" block onClick={()=>this.prev()}><Icon type="appstore"/><div>上一页</div></Button>

@@ -264,7 +264,7 @@ handleCancel = () => {
     )
     return (
       <div>
-      <div style={{marginTop:"50px"}}>
+      <div style={{overflow:"auto",marginTop:"50px"}}>
         <Form>
           <Form.Item {...formItemLayout} style={{ marginBottom: '0px' }} label={<span style={{ fontWeight: 'bold' }}>课件名称</span>}  >
                         {getFieldDecorator('coursename', {

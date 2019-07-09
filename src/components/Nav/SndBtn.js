@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Icon,Button,Popover} from 'antd';
+import { Icon,Button,Popover,Input} from 'antd';
 import TrdBtn from './TrdBtn'
 
+const { Search } = Input;
 
 const MyIcon = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_1231848_522d6c9esog.js',
@@ -26,6 +27,14 @@ export default class SndBtn extends Component {
                             <div>{msg.name}</div>
                         </Button>
                     </Popover>
+        }
+        else if(msg.text){
+            return <Search
+                        placeholder="输入要添加的文字"
+                        enterButton="添加"
+                        size="large" 
+                        onSearch={value => this.props.add('text',value)}
+                    />
         }
         else{
             return <Button type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>

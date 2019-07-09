@@ -3,15 +3,6 @@ import { List, Icon,Button} from 'antd';
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_988038_ej9e5sv8svd.js',
 });
-// var imgSrc = null;
-
-
-// const IconText = ({ type, text }) => (
-//   <span>
-//     <Icon type={type} style={{ marginRight: 8 }} />
-//     {text}
-//   </span>
-// );
 
 class Drawerview extends Component {
     constructor(props, context) {
@@ -25,12 +16,7 @@ class Drawerview extends Component {
   }
   newSlide(i,page,e){  //i true for add false for delete
       this.props.newSlide(i,page)
-      console.log("isSingel:",this.props.isSingle)
       !this.props.isSingle&&this.props.socketFn({add:i,page:page})
-  }
-  componentWillMount(){
-   // listData[0].title=this.props.thumbnail
-    
   }
 
     render() {
@@ -86,7 +72,8 @@ class Drawerview extends Component {
               style={{display:"flex",alignSelf:'flex-start'}}
             />
             
-            <img  style={{/* boxShadow:"3px 3px 20px #888888", */
+            <img  style={this.props.page===item.Xst?{ borderStyle:'solid',borderColor:"rgb(196,49,29)",
+            borderWidth:"1px"}:{/* boxShadow:"3px 3px 20px #888888", */
             borderStyle:'solid',borderColor:"rgb(219,219,219)",
             borderWidth:"1px"}} 
             width={220} height={150} alt="logo" 
