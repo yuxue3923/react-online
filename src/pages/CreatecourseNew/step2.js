@@ -157,7 +157,7 @@ formData.templateId = deepClone(temp.createCourse_info.slides.templateId)
           if (data.errorCode === 0) {
               console.log('成功更新课件:',data);
               // message.success('成功更新课件~');
-              console.log(this.state.coursecatalog);
+              // console.log(this.state.coursecatalog);
               setCreatecourseState({
                   type:'createcourseSuccess',
                   payload:{
@@ -222,7 +222,7 @@ onClick_pre() {
 }
   render() {
     return (
-      <div style={{overflow:"scroll",height:window.screen.availHeight-250,width:window.screen.availWidth}}>
+      <div style={{overflow:"auto",height:window.screen.availHeight-250,width:window.screen.availWidth}}>
         <div>
 
 {/* Echarts—Tree添加节点        */}
