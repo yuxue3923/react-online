@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Card ,Divider} from 'antd';
+import { Form, Input, Button, Card ,Divider, message} from 'antd';
 import { connect } from 'react-redux';
 
 const FormItem = Form.Item;
@@ -38,11 +38,19 @@ class AddKnowledge extends Component {
   }
   handleClick_delete() {
     const { EchartsIndexName } = this.props;
-    this.props.handleDelete(EchartsIndexName.index, EchartsIndexName.name, EchartsIndexName.id);
+    if (EchartsIndexName){
+      this.props.handleDelete(EchartsIndexName.index, EchartsIndexName.name, EchartsIndexName.id);
+    }else{
+      message.error("请选择节点~")
+    }
   }
   handleClick() {
     const { EchartsIndexName } = this.props;
-    this.props.handleAdd(EchartsIndexName.index, EchartsIndexName.name, EchartsIndexName.id, this.state.newname);
+    if (EchartsIndexName){
+      this.props.handleAdd(EchartsIndexName.index, EchartsIndexName.name, EchartsIndexName.id, this.state.newname);
+    }else{
+      message.error("请选择节点~")
+    }
   }
 
   componentWillReceiveProps(nextProps) {

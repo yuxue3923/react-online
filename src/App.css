@@ -111,3 +111,7 @@
     transform: rotate(360deg);
   }
 }
+
+.step2Col{
+  height: 100%;
+}
