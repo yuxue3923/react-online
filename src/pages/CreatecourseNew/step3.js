@@ -4,6 +4,8 @@ import { Button, Card, Col, Row } from 'antd';
 import {Link} from 'react-router-dom'
 import {connect} from 'react-redux';
 import PropTypes from "prop-types";
+import {localhost} from '../../config'
+import axios from 'axios'
 class Step3 extends Component {
   static contextTypes = {
     router: PropTypes.object
@@ -22,7 +24,16 @@ onClick_pre() {
       this.props.GetStates(this.state.current)
   }, 100);
 }
- 
+ componentWillMount(){
+    const { login_info } = this.props;
+    axios.get("http://"+localhost+":3000/api/allTemplates",{headers: {"Authorization":'Bearer '+login_info.access_token}})
+    .then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+ }
   render() {
     return (
       <div  style={{overflow:"auto",height:window.screen.availHeight-200,width:window.screen.availWidth}}>
@@ -76,4 +87,19 @@ onClick_pre() {
 }
 
 
-  export default Step3;
+function  mapStateToProps(state) {
+  return{
+    login_info:state.reducer_login.login_info,
+    createCourse_info:state.reducer_createcourse.createCourse_info,
+  };
+}
+function mapDispatchToProps(dispatch){
+  return{
+    setCreatecourseState: (state) => dispatch(state),
+    sendpreviewcourseid: (state) => dispatch(state),
+  };
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Step3);

@@ -108,6 +108,7 @@ class EditWithBar extends Component {
                         propertyMsg={this.state.propertyMsg}
                         add={this.add}
                         save={this.save}
+                        saveTmp={this.props.saveTmp}
                         linkTo={this.linkTo}
                         showModal={this.showModal}
                         showDrawer={this.props.showDrawer}

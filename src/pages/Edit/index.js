@@ -43,6 +43,7 @@ class Edit extends Component {
     this.flush=this.flush.bind(this);
     this.getToServePage=this.getToServePage.bind(this);
     this.save = this.save.bind(this);
+    this.saveTmp = this.saveTmp.bind(this);
     this.showModal_preview=this.showModal_preview.bind(this);
     this.onCollapse = this.onCollapse.bind(this);
     this.getSource = this.getSource.bind(this);
@@ -432,6 +433,49 @@ class Edit extends Component {
       error: function (xhr, status, err) {
       }
     });
+  }
+  saveTmp(){
+    const {createCourse_info,login_info} = this.props;
+    var temp = deepClone(createCourse_info)
+    var passbydata = createCourse_info.createCourse_info 
+    var formData = deepClone(passbydata)
+    delete formData.slides
+    delete formData.thumbnail
+    formData.user_id=login_info.user_id
+    formData.children = temp.createCourse_info.catalog.children
+    formData.name = temp.createCourse_info.catalog.name
+    formData.width = temp.createCourse_info.thumbnail.style.width
+    formData.height = temp.createCourse_info.thumbnail.style.height
+    formData.url = temp.createCourse_info.thumbnail.url
+    formData.slide =  [...temp.createCourse_info.slides.slide]
+    formData.templateId = deepClone(temp.createCourse_info.slides.templateId) 
+    console.log(JSON.stringify(formData))
+    $.ajax({
+      url: "http://"+localhost+":3000/api/createTemplate",
+      type: "POST",
+      async:false,
+      dataType: "json",
+      contentType:"application/json;charset=UTF-8",
+      accepts:"application/json;charset=UTF-8",
+      data:JSON.stringify(formData),//如果直接传会发生this.extend的错误
+      beforeSend:function(request){
+        request.setRequestHeader("Authorization",'Bearer '+login_info.access_token);
+      },
+      success: function (data) {
+          if (data.errorCode !== 0) {
+            message.error("保存模板失败");  
+          }
+          else {
+            message.success('保存模板');
+              console.log("模板数据",data);
+              
+            
+          }
+      },
+      error: function (xhr, status, err) {
+        message.error("链接异常");
+      }
+  });
   }
   save(){
     
@@ -968,6 +1012,7 @@ class Edit extends Component {
           page={this.state.page-1}
           thumbnail={this.thumbnail}
           save={this.save}
+          saveTmp={this.saveTmp}
           isSingleMode={(typeof createCourse_info.isSingle === "undefined"?this.state.isSingle:this.state.isSingle&&createCourse_info.isSingle)}
           shouldCreateSocket={this.state.shouldCreateSocket}
           effect_createSocket={this.effect_createSocket}
