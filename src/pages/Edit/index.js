@@ -490,6 +490,7 @@ class Edit extends Component {
 
     delete formData.thumbnail
     
+   
 
     formData.children = temp.createCourse_info.catalog.children
     formData.name = temp.createCourse_info.catalog.name
@@ -497,12 +498,12 @@ class Edit extends Component {
 
     formData.height = temp.createCourse_info.thumbnail.style.height
 
-    formData.url = temp.createCourse_info.thumbnail.url
+    /* formData.url = temp.createCourse_info.slides.slide[0].pageThumbnail */
 
     formData.slide =  [...temp.createCourse_info.slides.slide]
 
     formData.templateId = deepClone(temp.createCourse_info.slides.templateId) 
-
+    console.log("slides:",temp.createCourse_info.slides.slide[0].pageThumbnail)
     console.log(JSON.stringify(formData))
     $.ajax({
       url: "http://"+localhost+":3000/api/updateCourse",
