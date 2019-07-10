@@ -7,7 +7,7 @@ import Bodysider from '../../components/Resource/sider';
 const fileNameAndIconList = [{name:"新建",icon:"file-add"},{name:"保存",icon:"save"},{name:"存为模板",icon:"save"},{name:"分享",icon:"share-alt"},{name:"导出",icon:"import"}];
 const fileFns = [function(){this.props.linkTo('pagefirst')},
                  function(){this.props.save()},
-                 function(){this.props.save()},
+                 function(){this.props.saveTmp()},
                  function(){console.log("I'm fileFn3")},
                  function(){console.log("I'm fileFn4")}
                 ];
@@ -115,7 +115,7 @@ export default class Nav extends Component {
         return (
         <div className="main-nav">
             <div className="nav" >
-                <Popover trigger="click" placement="bottomLeft" content={<SndBtn msgArr={fileMsg} add={this.props.add} save={this.props.save} linkTo={this.props.linkTo}/>} overlayClassName="self-popover">
+                <Popover trigger="click" placement="bottomLeft" content={<SndBtn msgArr={fileMsg} add={this.props.add} save={this.props.save} saveTmp={this.props.saveTmp} linkTo={this.props.linkTo}/>} overlayClassName="self-popover">
                     <Button type="primary">
                         <Icon type="folder" />
                         <div>文件</div>
