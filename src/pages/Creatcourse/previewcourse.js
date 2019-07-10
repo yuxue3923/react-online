@@ -809,7 +809,7 @@ class Preview extends Component {
     //   }
 
     return (
-      <div style={{overflow:"scroll",height:window.screen.availHeight-50,width:window.screen.availWidth}}>
+      <div style={{overflow:"auto",height:window.screen.availHeight-50,width:window.screen.availWidth}}>
       <input style={{position:"absolute",bottom:"70%",right:"70%",zIndex:"-2"}} type="text" id="inputText" value={this.state.copyBtnCuipiUrl}/>
       <Row style={{margin:"20px 20px 0px 20px"}}>
     

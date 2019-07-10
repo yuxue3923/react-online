@@ -263,8 +263,8 @@ handleCancel = () => {
       );}
     )
     return (
-      <div>
-      <div style={{overflow:"auto",marginTop:"50px"}}>
+      <div style={{overflow:"auto",height:window.screen.availHeight-250,width:window.screen.availWidth}}>
+      <div >
         <Form>
           <Form.Item {...formItemLayout} style={{ marginBottom: '0px' }} label={<span style={{ fontWeight: 'bold' }}>课件名称</span>}  >
                         {getFieldDecorator('coursename', {
