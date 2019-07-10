@@ -792,7 +792,7 @@ class Preview extends Component {
     //   }
 
     return (
-      <div style={{overflow:"scroll",height:window.screen.availHeight-50,width:window.screen.availWidth}}>
+      <div style={{overflow:"auto",height:window.screen.availHeight-50,width:window.screen.availWidth}}>
       <Row style={{margin:"20px 20px 0px 20px"}}>
     
       <Col span={17} style={{textAlign:"right"}}>

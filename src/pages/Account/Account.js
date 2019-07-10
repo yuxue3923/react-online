@@ -825,7 +825,7 @@ const FormItem = Form.Item;
       var ownMap=(list,current)=>{
        for(let i=(current-1)*11;i<list.length;){
         
-         return  <div>
+         return  <div style={{overflow:"auto",height:window.screen.availHeight-250,width:window.screen.availWidth}}> 
          <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
            <Col span={4}>{cardBasic_creat}</Col>
            <Col span={4}>{list[i]}</Col>
