@@ -17,7 +17,7 @@ const fileMsg = merge(fileNameAndIconList,fileFns,"fn");
  * 文件按钮
  */
 const editNameList = [/* {name:'新增'}, */{name:'undo'},{name:'redo'},{name:'删除'},{name:'清空'},{name:'指针'}];
-const editIconList = ['file-add','undo','redo','delete','switcher','arrow-left'];
+const editIconList = [/* 'file-add', */'undo','redo','delete','switcher','arrow-left'];
 const editFns = [/* function(){}, */
                  function(){this.props.add('undo')},
                  function(){this.props.add('redo')},
