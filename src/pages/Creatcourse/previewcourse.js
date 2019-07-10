@@ -285,7 +285,6 @@ function deepClone(obj){
   return JSON.parse(_obj)
 }
 const TextArea = Input.TextArea;
-
 const { Meta } = Card;
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -327,6 +326,8 @@ class Preview extends Component {
     super(props,context);
     this.state = {
       current: 0,
+      like:false,
+      copyBtnCuipiUrl:"http://localhost:9000",
       step_content: [],
       recomcourselength:7,
       allcoursedata:[],
@@ -356,6 +357,22 @@ class Preview extends Component {
           },
           allcoursedata:previewcourseid.allcoursedata,
         });
+      }
+      triggerlike = () => {
+        this.setState({
+          like: !this.state.like,
+        });
+      };
+      copyUrl() {
+        let inputText = document.getElementById('inputText');
+        let currentFocus = document.activeElement;
+        inputText.focus();
+        inputText.setSelectionRange(0, inputText.value.length);
+        document.execCommand('copy', true);
+        currentFocus.focus();
+        if (document.execCommand('copy', true)) {
+         message.success("链接复制成功~");
+        }
       }
       updatecourse = () =>{
         // const know=this.state.knowledgelist;
@@ -793,10 +810,11 @@ class Preview extends Component {
 
     return (
       <div style={{overflow:"scroll",height:window.screen.availHeight-50,width:window.screen.availWidth}}>
+      <input style={{position:"absolute",bottom:"70%",right:"70%",zIndex:"-2"}} type="text" id="inputText" value={this.state.copyBtnCuipiUrl}/>
       <Row style={{margin:"20px 20px 0px 20px"}}>
     
       <Col span={17} style={{textAlign:"right"}}>
-      <img alt="example"src="http://img.1ppt.com/uploads/allimg/1811/1_181110204527_1.jpg" width="900px" height="550px"/>
+      <img alt="example"src="http://img.1ppt.com/uploads/allimg/1811/1_181110204527_1.jpg" width="1000px" height="550px"/>
       <div style={{position:"absolute",bottom:"0%",right:"1%",zIndex:"99",fontSize:"42px"}}> 
        <Link to="/MagnifyPreview"><Icon type="fullscreen" onClick={this.magnify_preview()}/></Link>
       </div>         
@@ -846,11 +864,19 @@ class Preview extends Component {
           <div>下载</div>
          </Col>
          <Col span={4} style={{textAlign:"center",fontSize:"14px"}}>
-         <Icon type="like" style={{fontSize:"20px"}}/>
+         <Icon 
+            type='like' 
+            theme={this.state.like?'filled':""}
+            style={{fontSize:"20px"}}
+            onClick={this.triggerlike}
+          />
           <div>点赞</div>
          </Col>
          <Col span={4} style={{textAlign:"center",fontSize:"14px"}}>
-         <Icon type="share-alt"  style={{fontSize:"20px"}}/>
+         {/* <input className="copyUrlInput" type="text" id="inputText" value={this.state.copyBtnCuipiUrl}/> */}
+          <Icon type="share-alt"  style={{fontSize:"20px"}} onClick={this.copyUrl}/> 
+         {/* <Paragraph copyable={{ text: 'http://localhost:9000' }}><Icon type="share-alt"  style={{fontSize:"20px"}}/></Paragraph> */}
+         {/* <Icon type="share-alt"  style={{fontSize:"20px"}}/> */}
           <div>分享</div>
          </Col>
          <Col span={4} style={{textAlign:"center",fontSize:"14px"}}>
