@@ -885,7 +885,7 @@ class Preview extends Component {
          </Col>
          <Col span={4} style={{textAlign:"center",fontSize:"14px"}}>
          <Icon type="double-left"  style={{fontSize:"20px"}}  
-         onClick={() => {this.props.history.push('/Account')}}/>
+         onClick={() => {this.props.history.push('')}}/>
           <div>返回</div>
          </Col>
        </Row>
