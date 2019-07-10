@@ -883,6 +883,11 @@ class Preview extends Component {
          <Icon type="edit" style={{fontSize:"20px"}} onClick={this.updatecourse}/>
           <div>编辑</div>
          </Col>
+         <Col span={4} style={{textAlign:"center",fontSize:"14px"}}>
+         <Icon type="double-left"  style={{fontSize:"20px"}}  
+         onClick={() => {this.props.history.push('/Account')}}/>
+          <div>返回</div>
+         </Col>
        </Row>
       </Col>
       </Row>
