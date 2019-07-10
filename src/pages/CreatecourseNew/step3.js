@@ -36,10 +36,10 @@ onClick_pre() {
  complete=(i)=>{
   const {setCreatecourseState,login_info,createCourse_info} = this.props;
   var temp = deepClone(createCourse_info.createCourse_info);
-  console.log(initialData[i].slides)
-  temp.slides=initialData[i].slides
+  
+  temp.slides=initialData[i] && initialData[i].slides
   /* axios.post("http://"+localhost+":3000/api/createCourse",{headers: {"Authorization":'Bearer '+login_info.access_token}}) */
-  setCreatecourseState({
+  initialData[i] && setCreatecourseState({
     type:'createcourseSuccess',
     payload:{
       createCourse_info:temp
