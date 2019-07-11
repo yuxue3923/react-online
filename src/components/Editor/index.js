@@ -83,7 +83,7 @@ class EditWithBar extends Component {
         //console.log("1:",!(JSON.stringify(nextProps.initContent)==JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode))
         //console.log("2:",nextProps.message)
         //||(this.props.shouldCreateSocket&&nextProps.shouldCreateSocket!==this.props.shouldCreateSocket)
-        return (nextProps.resourcelist != this.props.resourcelist)||(preState.propertyVisible != this.state.propertyVisible)||(preState.sourceVisible != this.state.sourceVisible)||(isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)===JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode)
+        return (nextProps.resourcelist !== this.props.resourcelist)||(preState.propertyVisible !== this.state.propertyVisible)||(preState.sourceVisible !== this.state.sourceVisible)||(isButton)||!(nextProps.page === this.props.page)||!(JSON.stringify(nextProps.initContent)===JSON.stringify(this.props.initContent))||(this.props.isSingleMode!==nextProps.isSingleMode)
     }
     componentWillReceiveProps(nextProps){
         //   console.log(nextProps)
@@ -108,6 +108,7 @@ class EditWithBar extends Component {
                         propertyMsg={this.state.propertyMsg}
                         add={this.add}
                         save={this.save}
+                        saveTmp={this.props.saveTmp}
                         linkTo={this.linkTo}
                         showModal={this.showModal}
                         showDrawer={this.props.showDrawer}

@@ -12,7 +12,9 @@ function dClone(obj){
 var toServe = null;
 var toServePage = null;
 var prePage = 0;
-
+const control = {
+    base64:null
+}
 var hasInitCb = false;
 const elementStyle={
     stroke: '#ccc',
@@ -316,13 +318,14 @@ export default class Editor extends React.Component {
     dispatchState(){
         this.props.dispatchState();
     }
-    flushThumbnail(base64){
+    flushThumbnail(){
         var newImg = new Image();
         newImg.setAttribute('crossOrigin', 'anonymous');
-        srs[prePage].painter.getRenderedCanvas('black').toBlob((blob)=>{
+        control.base64 = srs[prePage].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
+        srs[prePage].painter.getRenderedCanvas({backgroundColor:"transparent"}).toBlob((blob)=>{
             var url = URL.createObjectURL(blob);
             newImg.src=url;
-            ((this.props.type!=='none'))&&this.handleGetThumbnail(newImg.src,base64);//应该是缩略图有变化就该传递 //通过该函数改变pageChange?
+            ((this.props.type!=='none'))&&this.handleGetThumbnail(newImg.src,control.base64);//应该是缩略图有变化就该传递 //通过该函数改变pageChange?
        },'image/png')
     }
     createSocket=(projectId)=>{
@@ -396,7 +399,7 @@ export default class Editor extends React.Component {
         var base64 =  srs[this.props.page].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
         var newImg = new Image();
         newImg.setAttribute('crossOrigin', 'anonymous');
-        srs[this.props.page].painter.getRenderedCanvas('black').toBlob((blob)=>{
+        srs[this.props.page].painter.getRenderedCanvas('').toBlob((blob)=>{
             var url = URL.createObjectURL(blob);
             newImg.src=url; 
             this.handleGetThumbnail(newImg.src,base64);
@@ -465,11 +468,11 @@ export default class Editor extends React.Component {
         dom.replaceChild(srs[prePage].painter._domRoot,dom.childNodes[0]);
 
         this.props.shouldCreateSocket&&this.props.effect_createSocket(false)
-        var base64 =  srs[prePage].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
-        srs[this.props.page].on("mouseup",()=>{this.flushThumbnail(base64)})//缩略图更新
-        this.props.type!=='none'&&this.flushThumbnail(base64);
+       // var base64 =  srs[prePage].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
+        srs[this.props.page].on("mouseup",()=>{this.flushThumbnail()})//缩略图更新
+        this.props.type!=='none'&&this.flushThumbnail();
        
-       this.sync({media: srs[prePage].getObjectList(),pageThumbnail:base64});
+       this.sync({media: srs[prePage].getObjectList(),pageThumbnail:control.base64});
     }
     render() {
         return (

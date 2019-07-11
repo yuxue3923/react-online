@@ -187,7 +187,7 @@ handleSubmit(e) {
   e.preventDefault();
   this.props.form.validateFieldsAndScroll((err, values) => {
     if (!err) {
-      if(this.state.releknowledgestr.length!=0){
+      if(this.state.releknowledgestr.length!==0){
         console.log('Received values of form: ', values);
         this.showModal();
       }else{
