@@ -6,6 +6,7 @@ import { Button,Input, Icon ,Carousel,Form} from 'antd';
 // import {localhost} from '../config';
 import { connect } from 'react-redux';
 import srender from 'srenderlib'
+import {Link} from 'react-router-dom'
 
 var isVisible = true;
 var srs= [];
@@ -115,6 +116,9 @@ class MagnifyPreview extends Component {
         <Button type="primary" size="small" block><Icon type="appstore"/><div>最小化</div></Button>
         <Button type="primary" size="small" block className="at-right-border"><Icon type="appstore"/><div>用 户</div></Button>
       </div>  */}
+      <div style={{position:"fixed",top: "10px",right:"5px",zIndex:"99"}}>
+      <Link to="/Previewcourse"><Button type="primary">返回</Button></Link>
+      </div>
       <div style={{position:"absolute" ,height:"auto",bottom:"0%",right:"0",zIndex:"99"}} className="nav tool"> 
         <Button type="primary" size="small" block onClick={()=>this.prev()}><Icon type="appstore"/><div>上一页</div></Button>
         <Button type="primary" size="small" block><Icon type="appstore"/><div>{this.state.page}/{this.state.totalpage}</div></Button>
