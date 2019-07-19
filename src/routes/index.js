@@ -24,6 +24,7 @@ import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet'
 import {PersistGate} from 'redux-persist/lib/integration/react';
+import NewAccount from '../pages/NewAccount.js';
 const persistConfig = {
     key: 'root',
     storage: storage,
@@ -45,7 +46,8 @@ export default class RouterIndex extends Component {
             <Page>
            {/*  {<Redirect to="/Access"/>} */}
             <Switch>
-                <Route exact path="/" component={Access}> </Route>
+                <Route exact path="/" component={NewAccount}> </Route>
+                <Route path="/Access" component={Access}></Route>
                 <Route path="/Account" component={Account}></Route>
                 <Route path="/Teach" component={Teach}></Route>
                 <Route path="/Edit" component={Edit}></Route>
@@ -58,6 +60,7 @@ export default class RouterIndex extends Component {
                 <Route path="/User" component={User}></Route>
                 <Route path="/Reviewcourse" component={Reviewcourse}></Route>
                 <Route path="/Register" component={Register}></Route>
+                <Route path="/NewAccount" component={NewAccount}></Route>
             </Switch>
             </Page>
             </BrowserRouter>

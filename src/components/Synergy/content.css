@@ -1,0 +1,9 @@
+.left{
+    height: 185px;
+    width: 500px;
+    overflow: auto;
+}
+.right{
+    position: relative;
+    top:10px;
+}

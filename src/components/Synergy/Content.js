@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import {Input,Button} from 'antd'
 import UpdateContent from './UpdateContent'
-
+import './content.css'
 class ChatContent extends Component{
     constructor(){
         super()
@@ -16,9 +16,9 @@ class ChatContent extends Component{
                   <UpdateContent coursecatalog={this.props.coursecatalog} Avatartype={this.props.Avatartype}/>
                </p> 
             </div>
-            <div className="right">
-              <Input placeholder="发送消息"  onChange={this.props.updatechatdata} style={{ width: 300 }}/>
-               <Button type="primary" onClick={this.props.handlePlus}>发送</Button>
+            <div className="right" >
+              <Input placeholder="发送消息"  onChange={this.props.updatechatdata} style={ {width: 300 }}/>
+               <Button type="primary" onClick={this.props.handlePlus} >发送</Button>
             </div>  
             {/* </Card> */}
             </div>

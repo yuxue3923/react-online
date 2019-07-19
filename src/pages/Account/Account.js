@@ -252,7 +252,7 @@ const FormItem = Form.Item;
                 numchat:true,
               }
             });
-            this.context.router.history.push("/APP");
+            this.context.router.history.push("/Edit");
           }
           else {   
             console.log('获取查询权限2222');
