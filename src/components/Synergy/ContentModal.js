@@ -27,7 +27,7 @@ class ContentModal extends Component{
           <a style={{float:"left"}}>https://ant.design/components/icon-cn/</a>
           <Button style={{float:"right"}} type="primary" >分享</Button>
         </Row>
-      <Row style={{margin: '8px 8px 8px 16px'}}>
+      <Row style={{margin: '8px 8px 8px 16px',}}>
       <Menu.Divider />
       </Row>
       <Row style={{margin: '8px 8px 8px 16px'}}>

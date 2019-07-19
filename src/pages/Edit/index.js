@@ -8,9 +8,11 @@ import {localhost} from '../../config'
 import EditWithBar from '../../components/Editor'
 import DrawView from '../../components/ZoomPic/drawerview'
 import io from 'socket.io-client'
-import PropTypes from "prop-types"
+import PropTypes, { element } from "prop-types"
 import Content_Modal from '../../components/Synergy/ContentModal'
-import ChatContent from '../../components/Synergy/Content'
+import DragContent from '../../components/Synergy/MyDragModal'
+import { relative } from 'path';
+import { read } from 'fs';
 const { Header, Sider} = Layout;
 
 var MyDeck = []
@@ -708,6 +710,7 @@ class Edit extends Component {
   };
 
   onClose = () => {
+    console.log('onClose');
     this.setState({
       visible: false,
     });
@@ -982,6 +985,8 @@ class Edit extends Component {
                 <div className="sider-menu">树状</div>
             </div>
           </Header>
+
+              <DragContent visible={this.state.visible} onClose={this.onClose.bind(this)}  coursecatalog={this.state.coursecatalog} Avatartype={this.state.Avatartype} updatechatdata={this.updatechatdata.bind(this)} handlePlus={this.handlePlus.bind(this)}  />
           <DrawView
             cataloglist={this.state.cataloglist}
             mask={false}
@@ -993,6 +998,7 @@ class Edit extends Component {
             thumbnail={thumbnail||createCourse_info.createCourse_info.slides.slide}
             newSlide={this.newSlide}
           />
+   
         </Sider>
         <EditWithBar
           linkTo={this.linkTo}
@@ -1022,8 +1028,9 @@ class Edit extends Component {
           resourcelist={this.state.resourcelist}
           getSource={this.getSource}
         />
-   
+       
         <Modal
+         
          title="邀请成员"
          visible={this.state.modalvisible}
          onOk={this.handleOk}
@@ -1032,25 +1039,15 @@ class Edit extends Component {
       >
         <Content_Modal code = {this.state.code} searchuser={this.searchuser.bind(this)} createrelationship={this.createrelationship.bind(this)} />
       </Modal>
-      <Drawer
-                width={500}
-                title="交流区间"
-                //placement="right"
-                closable={false}
-                onClose={this.onClose}
-                visible={this.state.visible}
-              >
-                <ChatContent coursecatalog={this.state.coursecatalog} Avatartype={this.state.Avatartype} updatechatdata={this.updatechatdata.bind(this)} handlePlus={this.handlePlus.bind(this)}/>
-            
-                
-              </Drawer>
-              <Popover placement="bottomRight" title={text} content={menu(this.setModal2Visible.bind(this,true))} trigger="click"  visible={this.state.popoverVisible} onVisibleChange={this.popoverVisibleChange}>
+      
+              <Popover id='myPopoverTest' placement="bottomRight"   content={menu(this.setModal2Visible.bind(this,true))} trigger="click"  visible={this.state.popoverVisible} onVisibleChange={this.popoverVisibleChange}>
            {//第三个
            }
           
          
 
          </Popover>
+       
       </Layout>
 
     );

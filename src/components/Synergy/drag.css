@@ -1,0 +1,28 @@
+.connectModal{
+    background-color:rgba(36, 109, 204, 0.288);
+    position: relative;
+    left: 100px;
+    top: 100px;
+    height: 300px;
+    width: 500px;
+  }
+  .draggerElem{
+    position: relative;
+    z-index:  999 ;
+  }
+  .title{
+      text-align:center;
+      color:rgb(29, 165, 105);
+      font-size: 130%;
+  }
+  .closeBtn{
+      position: relative;
+      top:-30px;
+      left: 465px;
+  }
+  .show {
+    display: block;
+}
+.hidden {
+    display: none;
+}
