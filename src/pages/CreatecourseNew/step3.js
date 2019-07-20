@@ -46,7 +46,7 @@ onClick_pre() {
       // numchat:true,
     }
   }); 
-  this.context.router.history.push("/Edit");
+  this.context.router.history.push("/Index/Edit");
  }
  componentWillMount(){
     const { login_info } = this.props;

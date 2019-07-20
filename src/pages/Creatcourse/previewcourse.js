@@ -440,7 +440,7 @@ class Preview extends Component {
                             // numchat:false,
                         }
                       });
-                      this.context.router.history.push("/Edit");
+                      this.context.router.history.push("/Index/Edit");
                 }
                 else {
                     console.log('成功更新课件');
@@ -816,7 +816,7 @@ class Preview extends Component {
       <Col span={17} style={{textAlign:"right"}}>
       <img alt="example"src="http://img.1ppt.com/uploads/allimg/1811/1_181110204527_1.jpg" width="1000px" height="550px"/>
       <div style={{position:"absolute",bottom:"0%",right:"1%",zIndex:"99",fontSize:"42px"}}> 
-       <Link to="/MagnifyPreview"><Icon type="fullscreen" onClick={this.magnify_preview()}/></Link>
+       <Link to="/Index/MagnifyPreview"><Icon type="fullscreen" onClick={this.magnify_preview()}/></Link>
       </div>         
       </Col>
       <Col span={7} style={{textAlign:"left"}}>
@@ -885,7 +885,7 @@ class Preview extends Component {
          </Col>
          <Col span={4} style={{textAlign:"center",fontSize:"14px"}}>
          <Icon type="double-left"  style={{fontSize:"20px"}}  
-         onClick={() => {this.props.history.push('')}}/>
+         onClick={() => {this.props.history.push('/Index/Account')}}/>
           <div>返回</div>
          </Col>
        </Row>

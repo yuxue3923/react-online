@@ -4,6 +4,7 @@ import {BrowserRouter} from 'react-router-dom';
 import {createStore} from 'redux';
 import {Provider}from 'react-redux';
 import Reducer from '../reducers/index.js';
+import Headerindex from '../head.js';
 import Edit from '../pages/Edit/'
 import Account from '../pages/Account/Account'
 import Access from '../pages/Access'
@@ -25,6 +26,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet'
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import NewAccount from '../pages/NewAccount.js';
+
 const persistConfig = {
     key: 'root',
     storage: storage,
@@ -47,20 +49,23 @@ export default class RouterIndex extends Component {
            {/*  {<Redirect to="/Access"/>} */}
             <Switch>
                 <Route exact path="/" component={NewAccount}> </Route>
-                <Route path="/Access" component={Access}></Route>
-                <Route path="/Account" component={Account}></Route>
-                <Route path="/Teach" component={Teach}></Route>
-                <Route path="/Edit" component={Edit}></Route>
-                <Route path="/Previewcourse" component={Previewcourse}></Route>
-                <Route path="/Updatecourse" component={Updatecourse}></Route>
-                <Route path="/Createcourse" component={Createcourse}></Route>
-                <Route path="/pagefirst" component={pagefirst}></Route>
-                <Route path="/MagnifyPreview" component={MagnifyPreview}></Route>
-                <Route path="/Tempreview" component={Tempreview}></Route>
-                <Route path="/User" component={User}></Route>
-                <Route path="/Reviewcourse" component={Reviewcourse}></Route>
-                <Route path="/Register" component={Register}></Route>
-                <Route path="/NewAccount" component={NewAccount}></Route>
+                <Headerindex path="/Index">
+                   <Switch>
+                   <Route path="/Index/Access" component={Access}></Route>
+                    <Route path="/Index/Account" component={Account}></Route>
+                    <Route path="/Index/Teach" component={Teach}></Route>
+                    <Route path="/Index/Edit" component={Edit}></Route>
+                    <Route path="/Index/Previewcourse" component={Previewcourse}></Route>
+                    <Route path="/Index/Updatecourse" component={Updatecourse}></Route>
+                    <Route path="/Index/Createcourse" component={Createcourse}></Route>
+                    <Route path="/Index/pagefirst" component={pagefirst}></Route>
+                    <Route path="/Index/MagnifyPreview" component={MagnifyPreview}></Route>
+                    <Route path="/Index/Tempreview" component={Tempreview}></Route>
+                    <Route path="/Index/User" component={User}></Route>
+                    <Route path="/Index/Reviewcourse" component={Reviewcourse}></Route>
+                    <Route path="/Index/Register" component={Register}></Route>
+                    </Switch>
+                </Headerindex>
             </Switch>
             </Page>
             </BrowserRouter>

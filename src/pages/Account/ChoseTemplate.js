@@ -56,7 +56,7 @@ const IconFont = Icon.createFromIconfontCN({
                       <br/>
                       <Row>
                         <Col span={18}>
-                            <Link to='/Tempreview'><Icon type="eye"/> 预览模版</Link>
+                            <Link to='/Index/Tempreview'><Icon type="eye"/> 预览模版</Link>
                         </Col>
                       </Row>
                     </Card>
@@ -88,7 +88,7 @@ const IconFont = Icon.createFromIconfontCN({
                       <br/>
                       <Row>
                         <Col span={18}>
-                            <Link to='/Tempreview'><Icon type="eye"/> 预览模版</Link>
+                            <Link to='/Index/Tempreview'><Icon type="eye"/> 预览模版</Link>
                         </Col>
                       </Row>
                     </Card>
@@ -121,7 +121,7 @@ const IconFont = Icon.createFromIconfontCN({
                       <br />
                       <Row>
                         <Col span={18}>
-                            <Link to='/Tempreview'><Icon type="eye"/> 预览模版</Link>
+                            <Link to='/Index/Tempreview'><Icon type="eye"/> 预览模版</Link>
                         </Col>
                       </Row>
                     </Card>
@@ -149,7 +149,7 @@ const IconFont = Icon.createFromIconfontCN({
             >
              <p className="right">
                 <Button key="return" onClick={this.handleCancel}>取消</Button>
-                <Link to='/Createcourse'><Button key="next" type="primary"> 确定 </Button></Link>
+                <Link to='/Index/Createcourse'><Button key="next" type="primary"> 确定 </Button></Link>
              </p>
             </Modal> 
             {coursetemplate}

@@ -1,9 +1,15 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import Swiper from 'swiper/dist/js/swiper.js'
-import 'swiper/dist/css/swiper.min.css'
+// import 'swiper/dist/css/swiper.min.css'
+import './NewAccount.css'
 import { Row, Col,PageHeader,Typography,Divider,Layout,Icon,Button, Card } from 'antd';
-
+import picurl from '../hd_logo.jpg'
+import pic1 from '.././Systemjpg/1.png'
+import pic2 from '.././Systemjpg/2.png'
+import pic3 from '.././Systemjpg/3.jpg'
+import pic4 from '.././Systemjpg/4.jpg'
+import pic5 from '.././Systemjpg/5.png'
 const { Title } = Typography;
 const { Text } = Typography;
 const { Header, Footer, Sider, Content } = Layout;
@@ -38,20 +44,29 @@ class NewAccount extends Component {
 
   render() {
     return (
-      <div className='background'>
-      <Row>
+      <div>
+      {/* <Row> */}
       {/* <Title  level={3} className='title'><Icon type="usergroup-delete" />  在线协同研习系统</Title>  */}
-      <img className='title' src="http://m.qpic.cn/psb?/V11ktFxG4N4JjT/zQdtr.UmthenR7cxUevyS0rS3fYWqrujYjU.k1*skR4!/b/dL4AAAAAAAAA&amp;bo=5wBPAAAAAAARF4g!&amp;rf=viewer_4"  height="60px" width="220px"  />
+      {/* <img className='title' src="http://m.qpic.cn/psb?/V11ktFxG4N4JjT/zQdtr.UmthenR7cxUevyS0rS3fYWqrujYjU.k1*skR4!/b/dL4AAAAAAAAA&amp;bo=5wBPAAAAAAARF4g!&amp;rf=viewer_4"  height="60px" width="220px"  />
 
-      <Divider />
-      </Row>
+      <Divider /> */}
+       <Row style={{ background: "#1DA57A", width: "100%" }}>
+          <Col span={12} style={{ textAlign: 'right' }}>  <img alt="logo" src={picurl} /> </Col>
+          <Col span={12} style={{ textAlign: 'left', marginTop: '25px' }}>
+            <span style={{ fontSize: '45px', color: '#fff', fontFamily: 'STKaiti', fontWeight: 'bold' }}>  在线协同研习系统</span>
+          </Col>
+        </Row>
+      {/* </Row> */}
       <Row>
-        <Col span={12} >
-        <div class="swiper-container"   >
+        <Col span={16} >
+        <div class="swiper-container">
          <div class="swiper-wrapper">
-         <div class="swiper-slide"> <img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&amp;quality=100&amp;size=b4000_4000&amp;sec=1563513818&amp;di=9db25b0e759f6d6a384c931b26345032&amp;src=http://txt22262.book118.com/2017/0210/book89853/89852984.jpg" width="100%" height="85%"/></div>
-         <div class="swiper-slide">Slide 2</div>
-         <div class="swiper-slide">Slide 3</div>
+         
+         <div class="swiper-slide"> <img src={pic5} width="100%"/></div>
+         <div class="swiper-slide"> <img src={pic1} width="100%"/></div>
+         <div class="swiper-slide"> <img src={pic2} width="100%"/></div>
+         <div class="swiper-slide"> <img src={pic3} width="100%"/></div>
+         <div class="swiper-slide"> <img src={pic4} width="100%"/></div>
          </div>
     
     
@@ -60,9 +75,9 @@ class NewAccount extends Component {
         <div class="swiper-button-next"></div>
         </div>
         </Col>
-        <Col span={12} >
-        <div className="Signup"><Link to='/Register'><Button size="large" type="primary">Sign Up</Button></Link></div>
-        <div className="Login"><Link to='/Access'><Button size="large" type="primary">Log In</Button></Link></div>
+        <Col span={8} >
+        <div className="Signup"><Link to='/Index/Register'><Button size="large" type="primary">注册</Button></Link></div>
+        <div className="Login"><Link to='/Index/Access'><Button size="large" type="primary">登录</Button></Link></div>
         
 
         </Col>

@@ -117,7 +117,7 @@ const Option =Select.Option;
           <Button onClick={this.handleClick.bind(this)} type="primary" htmlType="submit" className="login-form-button">
             注册
           </Button>
-          <Link to='/Access'><a>使用已有账户登录</a></Link>
+          <Link to='/Index/Access'><a>使用已有账户登录</a></Link>
         </FormItem>
       </Form>
       </div>

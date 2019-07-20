@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './index.css'
 import $ from 'jquery'
-import {Form,Layout,message,Avatar,Modal,Drawer,Icon,Card,Popover} from 'antd'
+import {Form,Layout,message,Avatar,Modal,Drawer,Icon,Card,Popover,Row,Col} from 'antd'
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux'
 import {localhost} from '../../config'
@@ -13,6 +13,7 @@ import Content_Modal from '../../components/Synergy/ContentModal'
 import DragContent from '../../components/Synergy/MyDragModal'
 import { relative } from 'path';
 import { read } from 'fs';
+import picurl from '../../hd_logo.jpg'
 const { Header, Sider} = Layout;
 
 var MyDeck = []
@@ -123,7 +124,7 @@ class Edit extends Component {
         cataloglist:this.state.cataloglist,
       },
     });
-    this.context.router.history.push("/Previewcourse");
+    this.context.router.history.push("/Index/Previewcourse");
   }
   handleCancel_preview = () => {
     this.setState({
@@ -942,7 +943,7 @@ class Edit extends Component {
     const {createCourse_info,login_info} = this.props;
     const text =
     <div>
-      <Link to='/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} onClick={this.quitchat.bind(this,createCourse_info.course_id)} size="large" >U</Avatar>
+      <Link to='/Index/Account'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} onClick={this.quitchat.bind(this,createCourse_info.course_id)} size="large" >U</Avatar>
       </Link><span style={{fontSize:15}}> 当前用户</span>
       
     </div>;
@@ -967,6 +968,7 @@ class Edit extends Component {
 
     
     return (
+     
       <Layout style={{width: '100%', height: '100vh'}}>
         <Sider trigger={null} collapsible collapsed={this.state.collapsed} collapsedWidth={0} breakpoint="xxl" defaultCollapsed width={249}
           style={{

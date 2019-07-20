@@ -238,7 +238,7 @@ showModal = () => {
 handleCancel = () => {
   this.setState({ modalvisible: false });
   this.creatcourse();
-  this.context.router.history.push("/Edit");
+  this.context.router.history.push("/Index/Edit");
 };
 
 
@@ -382,7 +382,7 @@ handleCancel = () => {
         >
           <p>确定创建该课件？</p>
         </Modal>
-       <Link to='/Account'><Button >返回</Button></Link>
+       <Link to='/Index/Account'><Button >返回</Button></Link>
       </div>
       </div>
     );

@@ -317,7 +317,7 @@ const formItemLayout = {
         const pageHeaderContent = (
             <Row gutter={16}>
               <Col span={2}>
-              <Link to='/Account'><Avatar style={{width:70,height:70}}
+              <Link to='/Index/Account'><Avatar style={{width:70,height:70}}
                   size="large"
                   src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"
                 /></Link>

@@ -228,7 +228,7 @@ const formItemLayout = {
                             // numchat:false,
                         }
                       });
-                      this.context.router.history.push("/Edit");
+                      this.context.router.history.push("/Index/Edit");
                 }
                 else {
                     console.log('成功更新课件');
@@ -429,7 +429,7 @@ const formItemLayout = {
       return (
         <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
          <div className='flowbar' style={{right:30,top:20}}>
-        <Link to='/User'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar></Link>
+        <Link to='/Index/User'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar></Link>
         <span style={{padding:10,fontSize:15}}>当前用户</span>
         </div>
          

@@ -86,7 +86,7 @@ const groupNameList = [{name:'邀请'},{name:'交流'},{name:'授课'},{name:'�
 const groupIconList = ['icon-useradd','icon-talk','icon-teach','icon-users'];
 const groupFns = [function(){this.props.showModal("invite")},
                   function(){this.props.showDrawer()},
-                  function(){this.props.linkTo("/Teach");},
+                  function(){this.props.linkTo("/Index/Teach");},
                   function(){this.props.popoverVisibleChange()}
                  ];
 const groupMsg = merge(merge(groupNameList,groupIconList,"MyIcon"),groupFns,"fn");

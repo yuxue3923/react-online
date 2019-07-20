@@ -59,7 +59,7 @@ const FormItem = Form.Item;
                         user_id:data.user_id,
                       }
                     });
-                    this.context.router.history.push("/Account");
+                    this.context.router.history.push("/Index/Account");
                 }
             }.bind(this),
             error: function (xhr, status, err) {
@@ -83,7 +83,7 @@ const FormItem = Form.Item;
             <Button onClick={this.handleClick.bind(this)} type="primary" htmlType="submit" className="login-form-button">
               登录
             </Button>
-            <Link to='/Register'><a >注册账户!</a></Link>
+            <Link to='/Index/Register'><a >注册账户!</a></Link>
           </FormItem>
       </Form>
       </div>
