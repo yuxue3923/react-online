@@ -123,7 +123,7 @@
 }
 
 .second-button .ant-btn-primary .anticon{
-  color: #1DA569;
+  color: #1da569;
 }
 .second-button .ant-btn-primary>div{
   margin-top: 0px;
@@ -228,3 +228,15 @@
 .ant-carousel .slick-slide h3 {
   color: #fff;
 }
+.ant-btn cancelBtn{
+  display: none
+  
+}
+#myPopoverTest{
+  position:fixed;
+   top: 100px!important; 
+   right:10px;
+}
+
+
+

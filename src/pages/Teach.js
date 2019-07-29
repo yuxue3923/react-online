@@ -161,8 +161,8 @@ class Teach extends Component {
       <div onMouseMove={(e)=>this.displayNav(e)} ref="page" style={{overflow:"hidden"}}>
        <div style={{position:"absolute" ,height:"auto",bottom:"0%",left:"0%",zIndex:"99"}} className="nav tool"> 
         <Button type="primary" size="small" block><Icon type="appstore"/><div>菜 单</div></Button>
-        <Button type="primary" size="small" block onClick={()=>{this.context.router.history.push('./Edit')}}><Icon type="appstore"/><div>编辑修改</div></Button>
-        <Button type="primary" size="small" block onClick={()=>{this.context.router.history.push('./Account')}} className="at-right-border"><Icon type="appstore"/><div>用 户</div></Button>
+        <Button type="primary" size="small" block onClick={()=>{this.context.router.history.push('/Index/Edit')}}><Icon type="appstore"/><div>编辑修改</div></Button>
+        <Button type="primary" size="small" block onClick={()=>{this.context.router.history.push('/Index/Account')}} className="at-right-border"><Icon type="appstore"/><div>用 户</div></Button>
       </div> 
       <div style={{position:"absolute" ,height:"auto",bottom:"0%",right:"0",zIndex:"99"}} className="nav tool"> 
         <Button type="primary" size="small" block onClick={()=>this.prev()}><Icon type="appstore"/><div>上一页</div></Button>

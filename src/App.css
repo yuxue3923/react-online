@@ -1,3 +1,34 @@
+/* .background {
+ background: #99CC99 ;
+} */
+.title {
+  position: relative;
+  top:15px;
+  /* bottom: 15px; */
+  /* left: 20px; */
+  
+}
+.Signup {
+  position: relative;
+  top:350px;
+  left:200px;
+}
+.Login {
+  position: relative;
+  top:310px;
+  left:380px;
+}
+.swiper-container {
+  position: relative;
+  text-align: center;
+  width: 100%;
+  height: 750px;
+}  
+.swiper-wrapper {
+  width: 100%;
+  height: 300px
+}
+
 .App {
   text-align: center;
 }
