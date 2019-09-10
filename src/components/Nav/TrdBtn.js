@@ -59,6 +59,16 @@ const penColorFns = [function(){this.props.add('penColor','white')},
                     ];
 const penColorMsg = merge(penColorBtn,penColorFns,"fn");
 
+//橡皮大小属性
+const eraserSizeBtn = [{MyIcon:'icon-size1'},{MyIcon:'icon-size2'},{MyIcon:'icon-size3'},{MyIcon:'icon-size4'},{MyIcon:'icon-size5'}];
+const eraserSizeFns = [function(){this.props.add('eraser',2)},
+                    function(){this.props.add('eraser',4)},
+                    function(){this.props.add('eraser',6)},
+                    function(){this.props.add('eraser',8)},
+                    function(){this.props.add('eraser',10)},
+                   ];
+const eraserSizeMsg = merge(eraserSizeBtn,eraserSizeFns,"fn");
+
 export default class TrdBtn extends Component {
     state = {
         opacityValue: 1,
@@ -154,6 +164,12 @@ export default class TrdBtn extends Component {
         else if(this.props.popo==='penColor'){
             const len = penColorMsg.length;
             list = penColorMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
+                {this.choiceIcon(msg)}
+            </Button>)
+        }
+        else if(this.props.popo==='eraser'){
+            const len = eraserSizeMsg.length;
+            list = eraserSizeMsg.map((msg,i)=><Button key={i} type="primary" size="large" onClick={msg.fn&&msg.fn.bind(this)} className={len===i+1?"at-right-border":"normal"}>
                 {this.choiceIcon(msg)}
             </Button>)
         }

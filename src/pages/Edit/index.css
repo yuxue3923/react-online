@@ -77,7 +77,7 @@
   height:100%;
 }
 .second-button{
-  padding:5px;
+  padding:0px;
   display: inline-block;
 }
 .second-button .ant-btn-primary{
@@ -97,7 +97,7 @@
   border-radius:0;
 }
 .third-button{
-  padding:5px;
+  padding:0px;
   display: inline-block;
 }
 .third-button .ant-btn-primary{

@@ -98,6 +98,52 @@ function resolve(msg,page){
     }
 }
 
+ //****************eraser************
+ var isEraser = false;
+ var lockEraser=false;
+ function down(){
+    isEraser = true;
+ }
+ function sweep(e,eraserSize,cb){
+    if (isEraser) { //判断是否是画线状态
+        var x = e.event.zrX;
+        var y = e.event.zrY; 
+        var circle=new srender.Circle({shape:{cx:x,cy:y,r:eraserSize},style: elementStyle,draggable:true})
+        cb().setClipPath(circle)
+
+        // const ctx = sr.painter.getLayers()[0].ctx;
+        // ctx.save()
+        // ctx.beginPath()
+        // ctx.arc(x,y,10,0,2*Math.PI);
+        // ctx.clip()
+        // ctx.save()
+        // ctx.fillStyle = 'white';
+        // ctx.fillRect(0,0,sr.getWidth(),sr.getHeight());
+        // ctx.restore();
+        // ctx.restore();
+    }
+ }
+function up(){
+    isEraser = false;
+}
+function eraser(e,page,eraserSize,cb){
+    if(!srs[page]) return
+    srs[page].disableDrag(false)
+    if(lockEraser){
+        lockEraser=false;
+        srs[page].off('mousedown',down);
+        srs[page].off('mousemove',sweep);
+        srs[page].off('mouseup',up);
+        srs[page].disableDrag(true)
+        return;
+    }
+    srs[page].on('mousedown',down);
+    srs[page].on('mousemove',sweep.bind(this,e,eraserSize,cb));
+    srs[page].on('mouseup',up);
+    lockEraser=true;
+}
+//**********************************
+
 var srs=[];
 /**这段较长的代码为画笔，由于作用域暂时无法封装为文件 */
 var s; //定义路径对象
@@ -107,13 +153,21 @@ const penState = {
     penColor:"rgba(220, 20, 60, 0.8)",
     penSize:2
 }
-function pen1(penSize,penColor) {
+function pen1(penSize,penColor,cb) {
     isDraw = true; //表示正在画线了
     penState.penColor = penColor?penColor:penState.penColor ;
     penState.penSize = penSize?penSize:penState.penSize;
-    s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke:penState.penColor,lineWidth: penState.penSize},draggable:true,});//初始化线条
-    srs[prePage].add(s); //将线条添加到图层上
-  //  srs[prePage].disableDrag(false);
+    if(penColor!=='eraser'){
+        s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke:penState.penColor,lineWidth: penState.penSize},draggable:true,});//初始化线条
+        srs[prePage].add(s); //将线条添加到图层上
+    }
+    else{
+        console.log('eraser');
+        s = new srender.Polyline({shape:{points: sL,smooth: 'spline',},style: {stroke:null,lineWidth:penState.penSize},draggable:false,});//初始化线条
+        s.callback = cb();
+        //cb().setClipPath(s) //将线条添加到图层上
+    }
+    //  srs[prePage].disableDrag(false);
     }
 function pen2(e) {
     if (isDraw) { //判断是否是画线状态
@@ -121,16 +175,19 @@ function pen2(e) {
         var y = e.event.zrY; //获取鼠标位置
         sL.push([x, y]); //将位置存入数组
         s.attr({shape: {pointList: sL,}})
+        if(s.callback){
+            s.callback.setClipPath(s)
         }
-        srs[prePage].disableDrag(false);
     }
+    srs[prePage].disableDrag(false);
+}
 function pen3(e) {
     isDraw = false; //退出画线状态
     sL = []; //清空线条路经,若不清空将会和上次画线连接到一起
              // s=null;    //清空线条对象
     }
 
-function Pen(flag,page,penSize,penColor){
+function Pen(flag,page,penSize,penColor,cb){
     if(!srs[page]) return
     if(flag!=='pen'){
         srs[page].disableDrag(true);
@@ -140,7 +197,7 @@ function Pen(flag,page,penSize,penColor){
         return;
     }
     
-    srs[page].on('mousedown',pen1.bind(this,penSize,penColor));
+    srs[page].on('mousedown',pen1.bind(this,penSize,penColor,cb));
     srs[page].on('mousemove',pen2);
     srs[page].on('mouseup',pen3);
 }
@@ -178,6 +235,9 @@ function add(type,colorType,page,callback){
             break;
         case 'penColor':
             Pen('pen',page,null,colorType)
+            break;
+        case 'eraser':
+            Pen('pen',page,colorType,'eraser',callback)
             break;
         case 'image':
             Pen('image',page)
@@ -230,13 +290,15 @@ function add(type,colorType,page,callback){
         case 'size':
             Pen('size',page)
             if(callback()){
-                callback().attr({scale: [colorType,colorType]})
+                let pa = callback().getBoundingRect();
+                callback().attr({scale:[colorType, colorType], origin: [pa.x, pa.y]})
             }
             break;
         case 'angle':
             Pen('size',page)
             if(callback()){
-                callback().attr({rotation:[colorType*Math.PI,0]})
+                let pa = callback().getBoundingRect();
+                callback().attr({rotation:[colorType *Math.PI,0], origin: [pa.x+(pa.width/2), pa.y+(pa.height/2)]})
             }
             break;
         case 'opacity':
@@ -258,6 +320,16 @@ function add(type,colorType,page,callback){
             break;
         case 'clear':
             sr.remove()
+            break;
+        case 'eraserwqw':
+            Pen('eraser',page);
+            console.log('zasdsdasdasdsadas');
+            var circle=new srender.Circle({shape:{cx:100,cy:100,r:100},style: elementStyle,draggable:true})
+            if(callback()){
+                //circle.setClipPath(callback());
+                eraser(page,colorType,callback());
+                //callback().setClipPath(circle);
+            }
             break;
         case 'text':
             Pen('text',page)
@@ -329,7 +401,6 @@ export default class Editor extends React.Component {
        },'image/png')
     }
     createSocket=(projectId)=>{
-       
         var url = "http://"+localhost+":3001"
         let param = `/${projectId}` 
     
@@ -347,8 +418,8 @@ export default class Editor extends React.Component {
             socket.on('login',(data)=>{
                 console.log("client numOfUsers is "+JSON.stringify(data));
                 console.log("client socket.id is"+socket.id);
-             });
-         
+            });
+        
             socket.on('user joined',(data)=>{
                 console.log(data.username+" come in");
             });

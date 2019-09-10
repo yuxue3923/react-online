@@ -37,10 +37,10 @@ class EditWithBar extends Component {
     };
 
     //展示属性菜单
-    showProperty = (attr) => {
+    showProperty = (clicktarget) => {
         this.setState(function(){
             return { propertyVisible:true,
-                     propertyMsg:attr,
+                     propertyMsg:clicktarget,
             }
         });
     };

@@ -65,7 +65,7 @@ const textMsg = [{text:'文本'}]
  */
 const penNameList = [{name:'粗细'},{name:'颜色'},{name:'橡皮'}];
 const penIconList = ['icon-cuxi','icon-yanse','icon-xiangpi'];
-const penPopos = ['penSize','penColor','font'];
+const penPopos = ['penSize','penColor','eraser'];
 const penMsg = merge(merge(penNameList,penIconList,"MyIcon"),penPopos,"popo");
 /**
  * 画笔按钮
