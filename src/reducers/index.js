@@ -1,5 +1,9 @@
 import { combineReducers } from "redux";
-function  reducer_login(state = {},action) {
+import defaultState from './defaultState'
+
+
+
+function  reducer_login(state = defaultState,action){
     switch (action.type) {
         case 'LoginSuccess':
             return { login_info: action.payload};          
@@ -7,6 +11,21 @@ function  reducer_login(state = {},action) {
             return state;
     }
 }
+
+function reducer_echarts(state = {}, action) {
+    switch (action.type) {
+        case 'EchartsIndexName':
+            // console.log("EchartsIndexName_reducers");
+            // console.log(action.payload);
+            return {
+                EchartsIndexName: action.payload
+            };
+        default:
+            return state;
+    }
+}
+
+
 function  reducer_createcourse(state = {},action) {
     switch (action.type) {
         case 'createcourseSuccess':
@@ -32,9 +51,20 @@ function  reducer_previewcourseid(state = {},action) {
             return state;
     }
 }
+function  reducer_echartsecdata(state = {},action) {
+    switch (action.type) {
+        case 'echartsecdataSuccess':
+            return { echartsecdata: action.payload};  
+        default:
+            return state;
+           
+    }  
+}   
 export default combineReducers({
     reducer_login,
+    reducer_echarts,
     reducer_createcourse,
     reducer_userupdatecourseid,
     reducer_previewcourseid,
+    reducer_echartsecdata,
 })

@@ -192,7 +192,7 @@
 //       return (
 //       <Layout style={{ backgroundColor: '#fff',height:'100%',width:'100%' }}> 
 //         <div className="flowbar" style={{right:10,top:20}}>      
-//         <Link to='/App'><Button type="primary" >
+//         <Link to='/Edit'><Button type="primary" >
 //            <Icon type="edit" className="iconsize"/>
 //          </Button></Link>
 //         </div>
@@ -276,6 +276,7 @@ import React, { Component } from 'react';
 import { Card, Row, Col,Icon ,Button,Form,Avatar,Divider, Comment, List, Input,message} from 'antd';
 import PropTypes from "prop-types";
 import $ from 'jquery';
+import {Link} from 'react-router-dom'
 import {localhost} from '../../config'
 import { connect } from 'react-redux';
 import moment from 'moment';
@@ -284,7 +285,6 @@ function deepClone(obj){
   return JSON.parse(_obj)
 }
 const TextArea = Input.TextArea;
-
 const { Meta } = Card;
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -326,9 +326,15 @@ class Preview extends Component {
     super(props,context);
     this.state = {
       current: 0,
+      like:false,
+      copyBtnCuipiUrl:"http://localhost:9000",
       step_content: [],
       recomcourselength:7,
       allcoursedata:[],
+      coursedata:{
+        createCourse_info:[],
+        course_id:"",
+      },
       comments: [],
      submitting: false,
      value: '',
@@ -352,13 +358,29 @@ class Preview extends Component {
           allcoursedata:previewcourseid.allcoursedata,
         });
       }
+      triggerlike = () => {
+        this.setState({
+          like: !this.state.like,
+        });
+      };
+      copyUrl() {
+        let inputText = document.getElementById('inputText');
+        let currentFocus = document.activeElement;
+        inputText.focus();
+        inputText.setSelectionRange(0, inputText.value.length);
+        document.execCommand('copy', true);
+        currentFocus.focus();
+        if (document.execCommand('copy', true)) {
+         message.success("链接复制成功~");
+        }
+      }
       updatecourse = () =>{
-        const know=this.state.knowledgelist;
-        var knowsource=[];
-        for(var i=0;i<know.length;i++){
-           var obj=know[i];
-           knowsource.push(obj.title);
-        };
+        // const know=this.state.knowledgelist;
+        // var knowsource=[];
+        // for(var i=0;i<know.length;i++){
+        //    var obj=know[i];
+        //    knowsource.push(obj.title);
+        // };
         const { login_info }=this.props;
           var temp = deepClone(this.state.coursedata)
         var passbydata = this.state.coursedata.createCourse_info
@@ -373,7 +395,7 @@ class Preview extends Component {
       formData.grade=this.state.grade
       formData.subject=this.state.subject
       formData.descript=this.state.descript
-      formData.knowledges=knowsource
+      formData.knowledges=this.state.knowledges
       formData.children=this.state.coursecatalog
       formData.isOpen=this.state.isOpen
 
@@ -418,7 +440,7 @@ class Preview extends Component {
                             // numchat:false,
                         }
                       });
-                      this.context.router.history.push("/APP");
+                      this.context.router.history.push("/Index/Edit");
                 }
                 else {
                     console.log('成功更新课件');
@@ -452,13 +474,13 @@ class Preview extends Component {
             if (data.errorCode === 0) {
               console.log('获取查询权限111');
               console.log(data);
-              const a=data.msg[0].knowledges;
-              const knowcontain=[];
-              for(var i=0;i<a.length;i++){
-              const coursecatalog1 = {};   
-              coursecatalog1['title'] = a[i];
-              knowcontain.push(coursecatalog1);
-              }
+              // const a=data.msg[0].knowledges;
+              // const knowcontain=[];
+              // for(var i=0;i<a.length;i++){
+              // const coursecatalog1 = {};   
+              // coursecatalog1['title'] = a[i];
+              // knowcontain.push(coursecatalog1);
+              // }
             
              data.msg&&data.msg[0]&&data.msg[0].catalog&&data.msg[0].catalog.children&&this.setState({
                 coursedata:{
@@ -471,8 +493,8 @@ class Preview extends Component {
                 grade: data.msg[0].grade,
                 subject: data.msg[0].subject,
                 descript: data.msg[0].descript,
-                // knowledges:data.msg[0].knowledges,
-                knowledgelist:knowcontain,
+                knowledges:data.msg[0].knowledges,
+                // knowledgelist:knowcontain,
                 templateId:data.msg[0].slides.templateId,
                 slide: data.msg[0].slides.slide,     
                 fileSize:data.msg[0].fileSize,
@@ -646,7 +668,7 @@ class Preview extends Component {
           this.getuserdata();
           this.getcoursedata();
           // this.getallcoursedata();
-        }, 1000); 
+        }, 100); 
       }
   handleSubmit = () => {
     if (!this.state.value) {
@@ -673,35 +695,43 @@ class Preview extends Component {
       });
     }, 1000);
   };
-  handleOk_preview = (id) => {
-    console.log("iiii",this.src)
-    const { sendpreviewcourseid} = this.props;
-    sendpreviewcourseid({
-      type: 'GetpreviewcourseidSuccess',
-      payload:{ 
-        project_id:id,
-        allcoursedata:this.state.allcoursedata,
-      },
+  magnify_preview = () => {
+    const { setCreatecourseState} = this.props;
+    setCreatecourseState({
+      type:'createcourseSuccess',
+      payload:{
+          createCourse_info:this.state.coursedata.createCourse_info,
+          course_id:this.state.coursedata.course_id,
+          // numchat:false,
+      }
     });
-    this.setState({
-      previewcourseid:{ 
-        project_id:id,
-        allcoursedata:this.state.allcoursedata,
-      },
-    });
-    setTimeout(() => {
-      this.getdata();
-      this.getuserdata();
-      this.getcoursedata();
-      // this.getallcoursedata();
-    }, 1000); 
   }
   handleChange = e => {
     this.setState({
       value: e.target.value,
     });
   };
-  
+  handleOk_preview = (id) => {
+    const { sendpreviewcourseid} = this.props;
+    sendpreviewcourseid({
+      type: 'GetpreviewcourseidSuccess',
+      payload:{ 
+        project_id:id,
+        allcoursedata:this.state.allcoursedata,
+        // thumbnail:this.state.thumbnail,
+        // cataloglist:this.state.cataloglist,
+      },
+    });
+    
+        setTimeout(() => {
+          this.getprops();
+          this.getdata();
+          this.getuserdata();
+          this.getcoursedata();
+          // this.getallcoursedata();
+        }, 100); 
+    // this.context.router.history.push("/Previewcourse");
+  }
   render() {
     const { comments, submitting, value } = this.state;
     const allcourseList = this.state.allcoursedata.map((v, i) => {
@@ -779,13 +809,14 @@ class Preview extends Component {
     //   }
 
     return (
-      <div >
-      <Row style={{margin:"20px 20px 0px 20px",height:"100%"}}>
+      <div style={{overflow:"auto",height:window.screen.availHeight-50,width:window.screen.availWidth}}>
+      <input style={{position:"absolute",bottom:"70%",right:"70%",zIndex:"-2"}} type="text" id="inputText" value={this.state.copyBtnCuipiUrl}/>
+      <Row style={{margin:"20px 20px 0px 20px"}}>
     
       <Col span={17} style={{textAlign:"right"}}>
-      <img alt="example"src="https://gw.alipayobjects.com/zos/rmsportal/uVZonEtjWwmUZPBQfycs.png" height="550px"/>
+      <img alt="example"src="http://img.1ppt.com/uploads/allimg/1811/1_181110204527_1.jpg" width="1000px" height="550px"/>
       <div style={{position:"absolute",bottom:"0%",right:"1%",zIndex:"99",fontSize:"42px"}}> 
-       <Icon type="fullscreen" />
+       <Link to="/Index/MagnifyPreview"><Icon type="fullscreen" onClick={this.magnify_preview()}/></Link>
       </div>         
       </Col>
       <Col span={7} style={{textAlign:"left"}}>
@@ -833,16 +864,29 @@ class Preview extends Component {
           <div>下载</div>
          </Col>
          <Col span={4} style={{textAlign:"center",fontSize:"14px"}}>
-         <Icon type="like" style={{fontSize:"20px"}}/>
+         <Icon 
+            type='like' 
+            theme={this.state.like?'filled':""}
+            style={{fontSize:"20px"}}
+            onClick={this.triggerlike}
+          />
           <div>点赞</div>
          </Col>
          <Col span={4} style={{textAlign:"center",fontSize:"14px"}}>
-         <Icon type="share-alt"  style={{fontSize:"20px"}}/>
+         {/* <input className="copyUrlInput" type="text" id="inputText" value={this.state.copyBtnCuipiUrl}/> */}
+          <Icon type="share-alt"  style={{fontSize:"20px"}} onClick={this.copyUrl}/> 
+         {/* <Paragraph copyable={{ text: 'http://localhost:9000' }}><Icon type="share-alt"  style={{fontSize:"20px"}}/></Paragraph> */}
+         {/* <Icon type="share-alt"  style={{fontSize:"20px"}}/> */}
           <div>分享</div>
          </Col>
          <Col span={4} style={{textAlign:"center",fontSize:"14px"}}>
          <Icon type="edit" style={{fontSize:"20px"}} onClick={this.updatecourse}/>
           <div>编辑</div>
+         </Col>
+         <Col span={4} style={{textAlign:"center",fontSize:"14px"}}>
+         <Icon type="double-left"  style={{fontSize:"20px"}}  
+         onClick={() => {this.props.history.push('/Index/Account')}}/>
+          <div>返回</div>
          </Col>
        </Row>
       </Col>
@@ -870,7 +914,7 @@ class Preview extends Component {
        </Col>
       </Row>
       </Row>
-      <Row>
+      <Row  style={{margin:"0px 10px 0px 10px"}}>
       <Divider>相关评论</Divider>  
       <div>
         {comments.length > 0 && <CommentList comments={comments} />}

@@ -1,17 +1,8 @@
 import React, { Component } from 'react';
-import { List, Avatar, Icon,Button} from 'antd';
+import { List, Icon,Button} from 'antd';
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_988038_ej9e5sv8svd.js',
 });
-// var imgSrc = null;
-
-
-// const IconText = ({ type, text }) => (
-//   <span>
-//     <Icon type={type} style={{ marginRight: 8 }} />
-//     {text}
-//   </span>
-// );
 
 class Drawerview extends Component {
     constructor(props, context) {
@@ -25,12 +16,7 @@ class Drawerview extends Component {
   }
   newSlide(i,page,e){  //i true for add false for delete
       this.props.newSlide(i,page)
-      console.log("isSingel:",this.props.isSingle)
       !this.props.isSingle&&this.props.socketFn({add:i,page:page})
-  }
-  componentWillMount(){
-   // listData[0].title=this.props.thumbnail
-    
   }
 
     render() {
@@ -49,9 +35,15 @@ class Drawerview extends Component {
         });
       }
       return (
+        <div style={{
+          overflowY:"auto",
+          height:"893px"}}>
+        
         <List
         itemLayout="vertical"
         size="large"
+        split = {false}
+       
         /*pagination={{
           onChange: (page) => {
             console.log(page);
@@ -72,17 +64,27 @@ class Drawerview extends Component {
             key={item.title}
             // actions={[<IconText type="star-o" text="156" />, <IconText type="like-o" text="156" />, <IconText type="message" text="2" />]}
             // extra={<img width={200} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />}
-            
+            style = {{display:"flex",flexDirection:'column',alignItems:"center"}}
           >
+          
             <List.Item.Meta
-              avatar={<Avatar style={{ backgroundColor: '#fde3cf' }}> <Icon type='tags'/></Avatar>}
               title={item.title}
-            //   description={item.description}
+              style={{display:"flex",alignSelf:'flex-start'}}
             />
-            <img width={150} height={150} alt="logo" src={typeof this.props.thumbnail[item.Xst-1].pageThumbnail !== "undefined"?this.props.thumbnail[item.Xst-1].pageThumbnail:this.props.thumbnail[item.Xst-1]} onClick={this.pageChoose.bind(this,item.Xst)}/>
+            
+            <img  style={this.props.page===item.Xst?{ borderStyle:'solid',borderColor:"rgb(196,49,29)",
+            borderWidth:"1px"}:{/* boxShadow:"3px 3px 20px #888888", */
+            borderStyle:'solid',borderColor:"rgb(219,219,219)",
+            borderWidth:"1px"}} 
+            width={220} height={150} alt="logo" 
+            src={typeof this.props.thumbnail[item.Xst-1].pageThumbnail !== "undefined"?this.props.thumbnail[item.Xst-1].pageThumbnail:this.props.thumbnail[item.Xst-1]} 
+            onClick={this.pageChoose.bind(this,item.Xst)}/>
+           
           </List.Item>
+         
         )}
       />
+      </div>
       );
     }
   }

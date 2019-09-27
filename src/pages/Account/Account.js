@@ -9,6 +9,8 @@ import $ from 'jquery';
 import PropTypes from "prop-types"
 import { connect } from 'react-redux';
 import {localhost} from '../../config'
+//import pagefirst from '../CreatecourseNew/pagefirst'
+
 const IconFont = Icon.createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_1006980_3sv6ir3jo3x.js',
 });
@@ -77,7 +79,7 @@ const FormItem = Form.Item;
           // cataloglist:this.state.cataloglist,
         },
       });
-      this.context.router.history.push("/Previewcourse");
+      this.context.router.history.push("/Index/Previewcourse");
     }
     //Modal事件
     showModal = (id) => {
@@ -105,11 +107,11 @@ const FormItem = Form.Item;
       });
     }
      //课件模版选择确认弹出框
-     showModal_template = () => {
-      this.setState({
-        templatevisible: true,
-      });
-    }
+     //showModal_template = () => {
+      //this.setState({
+      //  templatevisible: true,
+     // });
+    //}
   
     handleOk_template = (e) => {
       console.log(e);
@@ -250,7 +252,7 @@ const FormItem = Form.Item;
                 numchat:true,
               }
             });
-            this.context.router.history.push("/APP");
+            this.context.router.history.push("/Index/Edit");
           }
           else {   
             console.log('获取查询权限2222');
@@ -787,7 +789,7 @@ const FormItem = Form.Item;
                   className="cardparent"
                 >
                   <Row className="cardself" >
-                    <p style={{fontSize:'35px'}}><IconFont  onClick={this.showModal_template} type="icon-jia" /></p>
+                    <p style={{fontSize:'35px'}}><Link to='pagefirst'><IconFont  type="icon-jia" /></Link></p>
                     <p>创建新课件</p>
                   </Row>
                 </Card>
@@ -823,7 +825,7 @@ const FormItem = Form.Item;
       var ownMap=(list,current)=>{
        for(let i=(current-1)*11;i<list.length;){
         
-         return  <div>
+         return  <div style={{overflow:"auto",height:window.screen.availHeight-350,width:window.screen.availWidth}}> 
          <Row gutter={24} style={{ margin: '8px 8px 8px 0'}}>
            <Col span={4}>{cardBasic_creat}</Col>
            <Col span={4}>{list[i]}</Col>
@@ -1002,7 +1004,7 @@ const FormItem = Form.Item;
      
         </div>
         <div className='flowbar-account' style={{right:30,top:20}}>
-        <Link to='/User'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar></Link>
+        <Link to='/Index/User'><Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }} size="large" >U</Avatar></Link>
         <span style={{padding:10,fontSize:15}}>当前用户</span>
         </div>
         </Header>
@@ -1015,8 +1017,8 @@ const FormItem = Form.Item;
         >
          <p>你可以选择查看课件，也可以编辑修改课件哟~</p>
         <p className="right">
-            <Link to='/Reviewcourse'><Button key="return" >查看课件</Button></Link>
-           <Link to='/Updatecourse'><Button key="next" type="primary"> 编辑课件 </Button></Link>
+            <Link to='/Index/Reviewcourse'><Button key="return" >查看课件</Button></Link>
+           <Link to='/Index/Updatecourse'><Button key="next" type="primary"> 编辑课件 </Button></Link>
         </p>
         </Modal>
         <Modal
