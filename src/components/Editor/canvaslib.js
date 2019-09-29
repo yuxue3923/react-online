@@ -441,7 +441,7 @@ export default class Editor extends React.Component {
         var dom = document.getElementsByClassName('container')[0]
         srs[this.props.page]=srender.init(dom,{},!this.props.isSingleMode,this.props.userName,this.props.page)
         srs[this.props.page].on("mouseup",function(e){
-            console.log("I'm here")
+          //  console.log("I'm here")
           //  change = true;
             sourceXY.x = e.zrX
             sourceXY.y = e.zrY
@@ -540,7 +540,7 @@ export default class Editor extends React.Component {
 
         this.props.shouldCreateSocket&&this.props.effect_createSocket(false)
        // var base64 =  srs[prePage].painter.getRenderedCanvas().toDataURL("image/jpeg", 0.5)
-        srs[this.props.page].on("mouseup",()=>{this.flushThumbnail()})//缩略图更新
+       // srs[this.props.page].on("mouseup",()=>{this.flushThumbnail()})//缩略图更新
         this.props.type!=='none'&&this.flushThumbnail();
        
        this.sync({media: srs[prePage].getObjectList(),pageThumbnail:control.base64});
